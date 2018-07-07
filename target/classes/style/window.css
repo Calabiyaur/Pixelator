@@ -1,0 +1,92 @@
+.draggable-pane {
+    -fx-background-color: #FFFFFF;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.text {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 0.33em 0.33em 0.33em 0.66em;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.close-button {
+    -fx-background-color: #FFFFFF;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.close-button:hover {
+    -fx-background-color: #D81123;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.close-button:armed {
+    -fx-background-color: #FF8888;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.close-button:selected {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.default-button {
+    -fx-background-color: #FFFFFF;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.default-button:hover {
+    -fx-background-color: #CCCCCC;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.default-button:armed {
+    -fx-background-color: #AAAAAA;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.default-button:selected {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.content {
+    -fx-background-color: #DDDDDD;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.scroll-bar-horizontal {
+    -fx-background-color: #AAAAAA;
+    -fx-background-insets: 0 0 -1 0;
+}
+
+.scroll-bar-horizontal:pressed {
+    -fx-background-color: #BBBBBB;
+    -fx-background-insets: 0 0 -1 0;
+}
+
+.scroll-bar-vertical {
+    -fx-background-color: #AAAAAA;
+}
+
+.scroll-bar-vertical:pressed {
+    -fx-background-color: #BBBBBB;
+}

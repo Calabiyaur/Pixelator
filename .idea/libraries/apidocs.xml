@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="apidocs">
+    <CLASSES>
+      <root url="jar://C:/Program Files/Java/commons-lang3-3.7-bin/commons-lang3-3.7/commons-lang3-3.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ideaLibSources/commons-lang3-3.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
