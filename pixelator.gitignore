@@ -1,6 +1,6 @@
-.idea
-hooks
-info
-config
-description
-HEAD
+/.idea/
+/hooks/
+/info/
+/config
+/description
+/HEAD
