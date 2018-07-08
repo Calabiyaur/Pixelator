@@ -223,6 +223,13 @@ public class BasicScrollPane extends BorderPane {
         return vBar.getMaxWidth() != 0;
     }
 
+    public void translateContent(double h, double v) { //FIXME
+        double hFactor = (getWidthOfCenter() - hBar.getWidth()) / content.getWidth();
+        double vFactor = (getHeightOfCenter() - vBar.getHeight()) / content.getHeight();
+        hBar.setTranslateX(hBar.getTranslateX() + h * hFactor);
+        vBar.setTranslateY(vBar.getTranslateY() + v * vFactor);
+    }
+
     public void setScrollByMouse(boolean scrollByMouse) {
         if (scrollByMouse) {
             setOnRawScroll(e -> scrollVertically(e));

@@ -7,6 +7,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -41,7 +42,7 @@ public class ImageWindow extends BasicWindow {
         setGraphic(imageEditor);
         setPrefSize(400, 400); //TODO: Use preferences from .pix file
 
-        getContent().setOnRawScroll(e -> getImageView().scroll(e));
+        getContent().setOnRawScroll(e -> onScroll(e));
         setOnMouseClicked(e -> mouseClick(e));
         addOnMouseMoved(e -> mouseMoved(e));
         addOnMouseDragged(e -> mouseMoved(e));
@@ -59,6 +60,20 @@ public class ImageWindow extends BasicWindow {
         ImageButton popup = new ImageButton(Images.POPUP);
         addButton(popup);
         popup.setOnAction(e -> popupAction());
+    }
+
+    private void onScroll(ScrollEvent e) {
+        // Step 1. Get mouse position
+        //Point mousePosition = getEditor().getMousePosition(e.getX(), e.getY());
+        // Step 2. Scroll image
+        getImageView().scroll(e);
+        // Step 3. Translate image to match mouse position //FIXME
+        //Platform.runLater(() -> {
+        //    Point newMousePosition = getEditor().getMousePosition(e.getX(), e.getY());
+        //    double h = (newMousePosition.getX() - mousePosition.getX()) * getImageView().getScaleX();
+        //    double v = (newMousePosition.getY() - mousePosition.getY()) * getImageView().getScaleY();
+        //    getContent().translateContent(h, v);
+        //});
     }
 
     public void zoomIn() {
@@ -127,7 +142,7 @@ public class ImageWindow extends BasicWindow {
         BasicScrollPane root = new BasicScrollPane(imageEditor);
         stage.setScene(new Scene(root));
 
-        root.setOnRawScroll(e -> getImageView().scroll(e));
+        root.setOnRawScroll(e -> onScroll(e));
         root.setOnMouseClicked(e -> mouseClick(e));
         root.setOnMouseMoved(e -> mouseMoved(e));
         root.setOnMouseDragged(e -> mouseMoved(e));

@@ -229,12 +229,16 @@ public class ImageEditor extends Editor {
     }
 
     public Point updateMousePosition(double x, double y) {
+        mousePosition.set(getMousePosition(x, y));
+        return mousePosition.get();
+    }
+
+    public Point getMousePosition(double x, double y) {
         int imageOriginX = (int) Math.round((getWidth() - width.get() * getImageView().getScaleX()) / 2);
         int imageOriginY = (int) Math.round((getHeight() - height.get() * getImageView().getScaleY()) / 2);
         int imageX = (int) Math.floor((x - imageOriginX) / getImageView().getScaleX());
         int imageY = (int) Math.floor((y - imageOriginY) / getImageView().getScaleY());
-        mousePosition.set(new Point(imageX, imageY));
-        return mousePosition.get();
+        return new Point(imageX, imageY);
     }
 
     private void paintPixel(int x, int y, Color color, boolean replace) {
