@@ -37,11 +37,6 @@ public class BasicColorField extends BasicControl<Color> {
     }
 
     @Override
-    public Color getValue() {
-        return colorField.getColor();
-    }
-
-    @Override
     public void setValue(Color value) {
         if (value != null) {
             colorField.setColor(value);

@@ -22,16 +22,6 @@ public class BasicCheckBox extends BasicControl<Boolean> {
         return checkBox;
     }
 
-    @Override
-    public Boolean getValue() {
-        return checkBox.isSelected();
-    }
-
-    @Override
-    public void setValue(Boolean value) {
-        checkBox.setSelected(value);
-    }
-
     @Override public BooleanProperty valueProperty() {
         return checkBox.selectedProperty();
     }

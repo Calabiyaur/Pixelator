@@ -69,9 +69,13 @@ public abstract class BasicControl<T> extends GridPane {
         adjustWidth();
     }
 
-    public abstract T getValue();
+    public T getValue() {
+        return valueProperty().getValue();
+    }
 
-    public abstract void setValue(T value);
+    public void setValue(T value) {
+        valueProperty().setValue(value);
+    }
 
     public abstract Property<T> valueProperty();
 

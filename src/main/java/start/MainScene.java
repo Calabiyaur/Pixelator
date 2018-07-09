@@ -32,6 +32,7 @@ import main.java.view.dialog.MoveImageDialog;
 import main.java.view.dialog.NewImageDialog;
 import main.java.view.dialog.OutlineDialog;
 import main.java.view.dialog.ResizeDialog;
+import main.java.view.dialog.StretchDialog;
 import main.java.view.editor.ImageEditor;
 import main.java.view.editor.ImageWindowContainer;
 import main.java.view.palette.PaletteMaster;
@@ -65,6 +66,7 @@ import static main.java.start.ActionManager.Action.SAVE;
 import static main.java.start.ActionManager.Action.SAVE_AS;
 import static main.java.start.ActionManager.Action.SAVE_PALETTE;
 import static main.java.start.ActionManager.Action.SELECT_ALL;
+import static main.java.start.ActionManager.Action.STRETCH;
 import static main.java.start.ActionManager.Action.UNDO;
 import static main.java.start.ActionManager.Action.UNDO_PALETTE;
 
@@ -171,9 +173,10 @@ public class MainScene extends Scene {
                 imageContainer.imageSelectedProperty());
         imageContainer.showCrossHairProperty().addListener((ov, o, n) -> crossHairItem.setSelected(n));
 
-        BasicMenu imageMenu = new BasicMenu("Image"); // Stretch, Center
+        BasicMenu imageMenu = new BasicMenu("Image"); // Center
         imageMenu.addItem(MOVE_IMAGE, "Move image", e -> moveAction(), imageContainer.imageSelectedProperty());
         imageMenu.addItem(RESIZE, "Resize", e -> resizeAction(), imageContainer.imageSelectedProperty());
+        imageMenu.addItem(STRETCH, "Stretch", e -> stretchAction(), imageContainer.imageSelectedProperty());
         imageMenu.addItem(CROP, "Crop", e -> getEditor().crop(), imageContainer.imageSelectedProperty());
         imageMenu.addSeparator();
         imageMenu.addItem(FLIP_HORIZONTALLY, "Flip horizontally", e -> getEditor().flipHorizontally(),
@@ -301,6 +304,20 @@ public class MainScene extends Scene {
                 return;
             }
             getEditor().resizeCanvas(w, h, bias);
+            dialog.close();
+        });
+        dialog.showAndFocus();
+    }
+
+    private void stretchAction() {
+        StretchDialog dialog = new StretchDialog(getEditor().getImageWidth(), getEditor().getImageHeight());
+        dialog.setOnOk(e -> {
+            Integer w = dialog.getNewWidth();
+            Integer h = dialog.getNewHeight();
+            if (w == null || h == null) {
+                return;
+            }
+            getEditor().stretchImage(w, h);
             dialog.close();
         });
         dialog.showAndFocus();

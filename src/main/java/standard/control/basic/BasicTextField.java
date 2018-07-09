@@ -31,16 +31,6 @@ public class BasicTextField extends BasicControl<String> {
         return textField;
     }
 
-    @Override
-    public String getValue() {
-        return textField.getText();
-    }
-
-    @Override
-    public void setValue(String value) {
-        textField.setText(value);
-    }
-
     @Override public Property<String> valueProperty() {
         return textField.textProperty();
     }

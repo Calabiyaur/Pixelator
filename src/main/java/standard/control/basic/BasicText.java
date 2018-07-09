@@ -30,16 +30,6 @@ public class BasicText extends BasicControl<String> {
         return text;
     }
 
-    @Override
-    public String getValue() {
-        return text.getText();
-    }
-
-    @Override
-    public void setValue(String value) {
-        text.setText(value);
-    }
-
     @Override public Property<String> valueProperty() {
         return text.textProperty();
     }

@@ -393,6 +393,28 @@ public class ImageEditor extends Editor {
         writeAndRegister(pixels);
     }
 
+    public void stretchImage(int w, int h) {
+        currentTool.lockAndReset();
+
+        WritableImage newImage = new WritableImage(w, h);
+        writer = newImage.getPixelWriter();
+
+        Image oldImage = getImage();
+        for (int i = 0; i < w; i++) {
+            int oldI = (int) oldImage.getWidth() * i / w;
+            for (int j = 0; j < h; j++) {
+                int oldJ = (int) oldImage.getHeight() * j / h;
+                writer.setColor(i, j, reader.getColor(oldI, oldJ));
+            }
+        }
+
+        ImageChange imageChange = new ImageChange(getImageView(), oldImage, newImage);
+        register(imageChange);
+
+        getImageView().setImage(newImage);
+        updateDirty();
+    }
+
     public void resizeCanvas(int w, int h, Direction bias) {
         currentTool.lockAndReset();
 

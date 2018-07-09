@@ -90,6 +90,7 @@ public class ActionManager {
         SAVE_AS(true, true, false, KeyCode.S),
         SAVE_PALETTE(true, false, true, KeyCode.S),
         SELECT_ALL(true, false, false, KeyCode.A),
+        STRETCH(),
         SWITCH_TAB(true, false, false, KeyCode.TAB),
         UNDO(true, false, false, KeyCode.Z),
         UNDO_PALETTE(true, false, true, KeyCode.Z),

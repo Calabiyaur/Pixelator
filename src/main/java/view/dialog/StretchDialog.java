@@ -1,40 +1,26 @@
 package main.java.view.dialog;
 
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.layout.GridPane;
-
-import main.java.standard.control.basic.BasicCheckBox;
 import main.java.standard.control.basic.BasicDialog;
 import main.java.standard.control.basic.BasicTextField;
-import main.java.standard.control.BiasButton;
-import main.java.standard.Direction;
 
-public class ResizeDialog extends BasicDialog {
+public class StretchDialog extends BasicDialog {
 
     private BasicTextField widthField;
     private BasicTextField heightField;
-    private BiasButton biasButton;
 
-    public ResizeDialog(int width, int height) {
-        setTitle("Resize");
-        setOkText("Resize");
+    public StretchDialog(int width, int height) {
+        setTitle("Stretch");
+        setOkText("Stretch");
 
         ResizeComponents resizeComponents = new ResizeComponents(width, height);
         widthField = resizeComponents.getWidthField();
         heightField = resizeComponents.getHeightField();
-        BasicCheckBox keepRatio = resizeComponents.getKeepRatio();
-        biasButton = resizeComponents.getBiasButton();
-        keepRatio.setValue(true);
 
         addContent(resizeComponents.getWPercentField(), 0, 0);
         addContent(resizeComponents.getHPercentField(), 0, 1);
         addContent(widthField, 1, 0);
         addContent(heightField, 1, 1);
-        addContent(keepRatio, 0, 2);
-        addContent(biasButton, 1, 2);
-        GridPane.setValignment(keepRatio, VPos.TOP);
-        GridPane.setHalignment(biasButton, HPos.CENTER);
+        addContent(resizeComponents.getKeepRatio(), 0, 2);
     }
 
     @Override public void focus() {
@@ -47,10 +33,6 @@ public class ResizeDialog extends BasicDialog {
 
     public Integer getNewHeight() {
         return heightField.getIntValue();
-    }
-
-    public Direction getBias() {
-        return biasButton.getBias();
     }
 
 }
