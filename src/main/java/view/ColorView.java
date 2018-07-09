@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -26,7 +27,7 @@ import main.java.start.ActionManager;
 import main.java.start.Main;
 import main.java.view.palette.PaletteSelection;
 
-public class ColorView extends VBox {
+public class ColorView extends BorderPane {
 
     private static ColorView instance;
     private static ColorSelection colorSelection;
@@ -57,7 +58,7 @@ public class ColorView extends VBox {
             box.getChildren().add(paletteSelection);
 
             initConfig();
-            instance.getChildren().add(box);
+            instance.setCenter(box);
         }
         return instance;
     }

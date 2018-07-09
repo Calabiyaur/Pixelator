@@ -3,7 +3,6 @@ package main.java.view.palette;
 import java.io.File;
 import java.util.List;
 
-import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.HPos;
@@ -21,7 +20,6 @@ import main.java.files.Files;
 import main.java.files.PaletteFile;
 import main.java.res.Images;
 import main.java.standard.control.ImageButton;
-import main.java.util.FileUtil;
 import main.java.view.ColorView;
 import main.java.view.dialog.NewPaletteDialog;
 
@@ -59,6 +57,7 @@ public class PaletteSelection extends BorderPane {
 
         tabPane.setOnMouseEntered(e -> setCursor(Cursor.DEFAULT));
         setCenter(tabPane);
+        VBox.setVgrow(this, Priority.ALWAYS);
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
             paletteSelected.set(n != null);
@@ -71,7 +70,6 @@ public class PaletteSelection extends BorderPane {
                 PaletteEditor editor = n.getEditor();
                 undoEnabled.bind(editor.undoEnabledProperty());
                 redoEnabled.bind(editor.redoEnabledProperty());
-                Platform.runLater(() -> tabPane.setMinHeight(editor.getActualHeight() + 37));
             }
         });
 
@@ -110,7 +108,7 @@ public class PaletteSelection extends BorderPane {
     public void addPalette(PaletteFile file) {
         PaletteEditor paletteEditor = new PaletteEditor(file);
         PaletteTab tab = new PaletteTab(paletteEditor);
-        tabPane.addTab(tab, file.isNew() ? "New Palette" : FileUtil.removeType(file.getName()));
+        tabPane.addTab(tab, file.isNew() ? "New Palette" : file.getName());
     }
 
     public Image getPalette() {

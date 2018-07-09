@@ -7,15 +7,17 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public abstract class AbstractTabPane<T extends BasicTab> extends BorderPane {
 
     private HBox northBox = new HBox();
-    private HBox westBox = new HBox();
+    private VBox westBox = new VBox();
 
     private StackPane stackPane = new StackPane();
     private ObservableList<T> tabs = FXCollections.observableArrayList();
@@ -44,8 +46,6 @@ public abstract class AbstractTabPane<T extends BasicTab> extends BorderPane {
         westBox.setSpacing(6);
         setTop(new Group(northBox));
         setLeft(new Group(westBox));
-
-        westBox.setRotate(270);
 
         toggleGroup.selectedToggleProperty().addListener((ov, o, n) -> {
             if (n == null) {
@@ -83,6 +83,12 @@ public abstract class AbstractTabPane<T extends BasicTab> extends BorderPane {
         toggle.selectedProperty().addListener((ov, o, n) -> {
             if (n) {
                 selectionModel.select(tab);
+            }
+        });
+
+        toggle.setOnMouseClicked(e -> {
+            if (MouseButton.MIDDLE.equals(e.getButton()) && toggle.isClosable()) {
+                tabs.remove(tab);
             }
         });
 

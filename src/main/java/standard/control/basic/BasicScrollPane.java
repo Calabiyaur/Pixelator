@@ -239,10 +239,12 @@ public class BasicScrollPane extends BorderPane {
     }
 
     private void scrollHorizontally(ScrollEvent e) {
+        //TODO: Move content instead of scroll bars
         hBar.setTranslateX(hBar.getTranslateX() - e.getDeltaX());
     }
 
     private void scrollVertically(ScrollEvent e) {
+        //TODO: Move content instead of scroll bars
         vBar.setTranslateY(vBar.getTranslateY() - e.getDeltaY());
     }
 

@@ -45,6 +45,7 @@ public class PaletteTab extends BasicTab {
 
         public PaletteToggle() {
             super(Direction.WEST);
+            setClosable(true);
         }
 
     }
