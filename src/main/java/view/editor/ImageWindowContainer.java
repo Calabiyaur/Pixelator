@@ -55,6 +55,7 @@ public class ImageWindowContainer extends Pane {
                 dirty.bind(window.dirtyProperty());
                 updateImage(window);
                 window.toFront();
+                window.adjustSize();
             }
         });
     }

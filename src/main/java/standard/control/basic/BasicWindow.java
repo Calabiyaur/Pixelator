@@ -124,7 +124,7 @@ public class BasicWindow extends DraggablePane {
     }
 
     public double getHeaderHeight() {
-        return buttonBox.getHeight();
+        return buttonBox.getHeight() == 0 ? 26 : buttonBox.getHeight();
     }
 
     public void setText(String text) {
