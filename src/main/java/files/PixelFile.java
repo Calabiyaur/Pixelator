@@ -3,6 +3,10 @@ package main.java.files;
 import java.io.File;
 import java.util.List;
 
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 
@@ -14,7 +18,7 @@ public abstract class PixelFile {
     private final Category category;
     private File file;
     private Image image;
-    private String name;
+    private StringProperty name = new SimpleStringProperty();
     private Extension extension;
 
     public PixelFile(Category category, File file, Image image) {
@@ -28,7 +32,7 @@ public abstract class PixelFile {
 
     public final void setFile(File file) {
         this.file = file;
-        this.name = file == null ? "New Image" : file.getName();
+        this.name.set(file == null ? "New Image" : file.getName());
         this.extension = FileUtil.getExtension(file);
     }
 
@@ -53,7 +57,13 @@ public abstract class PixelFile {
     }
 
     public final String getName() {
-        return name;
+        return name.get();
+    }
+
+    public ReadOnlyStringProperty nameProperty() {
+        ReadOnlyStringWrapper readOnlyStringWrapper = new ReadOnlyStringWrapper();
+        readOnlyStringWrapper.bind(name);
+        return readOnlyStringWrapper.getReadOnlyProperty();
     }
 
     public final Extension getExtension() {

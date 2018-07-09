@@ -39,6 +39,7 @@ public class ImageWindow extends BasicWindow {
         imageView.imageProperty().addListener((ov, o, n) -> this.imageFile.setImage(n));
         imageEditor = new ImageEditor(imageView);
         setText(imageFile.getName());
+        imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
         setGraphic(imageEditor);
         setPrefSize(400, 400); //TODO: Use preferences from .pix file
 
