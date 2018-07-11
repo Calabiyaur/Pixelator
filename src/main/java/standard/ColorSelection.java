@@ -83,7 +83,7 @@ public class ColorSelection extends BorderPane {
         colorBox.setPadding(new Insets(6, 0, 6, 0));
         setCenter(colorBox);
         setBottom(tabPane);
-        BorderPane.setMargin(colorBox, new Insets(0, 0, 0, -2));
+        BorderPane.setMargin(colorBox, new Insets(0, 0, 2, -2));
 
         bind();
         rgbTab.getToggle().fire();
