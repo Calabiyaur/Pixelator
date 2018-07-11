@@ -12,8 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -35,7 +35,7 @@ public class ColorPicker extends VBox {
     public ColorPicker() {
         getStyleClass().add("my-custom-color");
 
-        VBox box = new VBox();
+        HBox box = new HBox();
         box.getStyleClass().add("color-rect-pane");
 
         colorRectIndicator = new Region();
@@ -106,13 +106,13 @@ public class ColorPicker extends VBox {
                 sat.multiply(colorRect.widthProperty()));
         colorRectIndicator.layoutYProperty().bind(
                 Bindings.subtract(1, bright).multiply(colorRect.heightProperty()));
-        colorBarIndicator.layoutXProperty().bind(
-                hue.divide(360).multiply(colorBar.widthProperty()));
+        colorBarIndicator.layoutYProperty().bind(
+                hue.divide(360).multiply(colorBar.heightProperty()));
         colorRectOpacityContainer.opacityProperty().bind(alpha);
 
         EventHandler<MouseEvent> barMouseHandler = event -> {
-            final double x = event.getX();
-            hue.set(clamp(x / colorRect.getWidth()) * 360);
+            final double y = event.getY();
+            hue.set(clamp(y / colorBar.getHeight()) * 360);
         };
 
         colorBar.setOnMouseDragged(barMouseHandler);
@@ -121,7 +121,6 @@ public class ColorPicker extends VBox {
         colorBar.getChildren().setAll(colorBarIndicator);
         colorRectOpacityContainer.getChildren().setAll(colorRectHue, colorRectOverlayOne, colorRectOverlayTwo);
         colorRect.getChildren().setAll(colorRectOpacityContainer, colorRectBlackBorder, colorRectIndicator);
-        VBox.setVgrow(colorRect, Priority.SOMETIMES);
         box.getChildren().addAll(colorBar, colorRect);
 
         getChildren().add(box);
@@ -130,7 +129,6 @@ public class ColorPicker extends VBox {
             colorProperty.set(Color.TRANSPARENT);
         }
         updateValues();
-
     }
 
     private static double clamp(double value) {
@@ -145,7 +143,7 @@ public class ColorPicker extends VBox {
             int h = (int) ((x / 255.0) * 360);
             stops[x] = new Stop(offset, Color.hsb(h, 1.0, 1.0));
         }
-        return new LinearGradient(0f, 0f, 1f, 0f, true, CycleMethod.NO_CYCLE, stops);
+        return new LinearGradient(0f, 0f, 0f, 1f, true, CycleMethod.NO_CYCLE, stops);
     }
 
     private void updateValues() {

@@ -22,8 +22,8 @@ import main.java.view.undo.PixelChange;
 
 public class PaletteEditor extends Editor {
 
-    public static int DEFAULT_WIDTH = 10;
-    public static int DEFAULT_HEIGHT = 6;
+    public static int DEFAULT_WIDTH = 6;
+    public static int DEFAULT_HEIGHT = 4;
     private Point selected;
     private Rectangle selection;
     private PaletteFile file;

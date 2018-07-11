@@ -2,19 +2,15 @@ package main.java.view;
 
 import java.io.File;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import main.java.files.PaletteFile;
@@ -48,9 +44,7 @@ public class ColorView extends BorderPane {
             popup.setOnAction(e -> popupAction());
 
             colorSelection = new ColorSelection();
-            colorSelection.setAlignment(Pos.TOP_RIGHT);
             box.getChildren().add(colorSelection);
-            GridPane.setHgrow(colorSelection, Priority.ALWAYS);
 
             box.getChildren().add(new Separator());
 
@@ -100,10 +94,6 @@ public class ColorView extends BorderPane {
 
     public static void setColor(Color color) {
         colorSelection.setColor(color);
-    }
-
-    public static ObjectProperty<Paint> colorProperty() {
-        return colorSelection.colorProperty();
     }
 
     public static PaletteSelection getPaletteSelection() {

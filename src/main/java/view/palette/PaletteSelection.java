@@ -19,20 +19,22 @@ import javafx.scene.layout.VBox;
 import main.java.files.Files;
 import main.java.files.PaletteFile;
 import main.java.res.Images;
+import main.java.standard.Direction;
 import main.java.standard.control.ImageButton;
+import main.java.standard.control.basic.BasicTabPane;
 import main.java.view.ColorView;
 import main.java.view.dialog.NewPaletteDialog;
 
 public class PaletteSelection extends BorderPane {
 
-    private PaletteTabPane tabPane;
+    private BasicTabPane<PaletteTab> tabPane;
     private BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty paletteSelected = new SimpleBooleanProperty(false);
 
     public PaletteSelection() {
         Label title = new Label("PALETTE");
-        tabPane = new PaletteTabPane();
+        tabPane = new BasicTabPane<>(Direction.NORTH, Direction.NORTH);
         ImageButton create = new ImageButton(Images.NEW);
         ImageButton open = new ImageButton(Images.OPEN);
         ImageButton save = new ImageButton(Images.SAVE);

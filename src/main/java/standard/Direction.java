@@ -2,15 +2,21 @@ package main.java.standard;
 
 public enum Direction {
 
-    NONE,
-    EAST,
-    NORTH_EAST,
-    NORTH,
-    NORTH_WEST,
-    WEST,
-    SOUTH_WEST,
-    SOUTH,
-    SOUTH_EAST;
+    NONE(null),
+    EAST(90d),
+    NORTH_EAST(45d),
+    NORTH(0d),
+    NORTH_WEST(315d),
+    WEST(270d),
+    SOUTH_WEST(225d),
+    SOUTH(180d),
+    SOUTH_EAST(135d);
+
+    private Double rotate;
+
+    Direction(Double rotate) {
+        this.rotate = rotate;
+    }
 
     public static Direction getDirection(boolean east, boolean north, boolean west, boolean south) {
         if (east && west || north && south) {
@@ -40,6 +46,23 @@ public enum Direction {
         return null;
     }
 
+    public boolean isSimple() {
+        switch(this) {
+            case EAST:
+            case NORTH:
+            case WEST:
+            case SOUTH:
+                return true;
+            case NONE:
+            case NORTH_EAST:
+            case NORTH_WEST:
+            case SOUTH_WEST:
+            case SOUTH_EAST:
+            default:
+                return false;
+        }
+    }
+
     public boolean isEast() {
         return this == EAST || this == NORTH_EAST || this == SOUTH_EAST;
     }
@@ -56,21 +79,16 @@ public enum Direction {
         return this == SOUTH || this == SOUTH_EAST || this == SOUTH_WEST;
     }
 
-    public boolean isSimple() {
-        switch(this) {
-            case EAST:
-            case NORTH:
-            case WEST:
-            case SOUTH:
-                return true;
-            case NONE:
-            case NORTH_EAST:
-            case NORTH_WEST:
-            case SOUTH_WEST:
-            case SOUTH_EAST:
-            default:
-                return false;
-        }
+    public boolean isVertical() {
+        return isNorth() || isSouth();
+    }
+
+    public boolean isHorizontal() {
+        return isEast() || isWest();
+    }
+
+    public Double getRotate() {
+        return rotate;
     }
 
 }

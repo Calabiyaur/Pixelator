@@ -14,10 +14,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public abstract class AbstractTabPane<T extends BasicTab> extends BorderPane {
+import main.java.standard.Direction;
 
-    private HBox northBox = new HBox();
-    private VBox westBox = new VBox();
+public class BasicTabPane<T extends BasicTab> extends BorderPane {
+
+    private Pane northBox;
+    private Pane westBox;
 
     private StackPane stackPane = new StackPane();
     private ObservableList<T> tabs = FXCollections.observableArrayList();
@@ -31,10 +33,10 @@ public abstract class AbstractTabPane<T extends BasicTab> extends BorderPane {
             return tabs.size();
         }
     };
-    
-    public AbstractTabPane() {
+
+    public BasicTabPane(Direction rotateNorth, Direction rotateWest) {
         setCenter(stackPane);
-        BorderPane.setMargin(stackPane, new Insets(0, 0, 0, 6));
+        setSpacing(0, 0, 0, 6);
         tabs.addListener((ListChangeListener<T>) c -> {
             while (c.next()) {
                 c.getAddedSubList().forEach(added -> onTabAdded(added));
@@ -42,16 +44,42 @@ public abstract class AbstractTabPane<T extends BasicTab> extends BorderPane {
             }
         });
 
-        northBox.setSpacing(6);
-        westBox.setSpacing(6);
-        setTop(new Group(northBox));
-        setLeft(new Group(westBox));
+        initNorth(rotateNorth);
+        initWest(rotateWest);
 
         toggleGroup.selectedToggleProperty().addListener((ov, o, n) -> {
             if (n == null) {
                 o.setSelected(true);
             }
         });
+    }
+
+    public void setSpacing(double top, double right, double bottom, double left) {
+        BorderPane.setMargin(stackPane, new Insets(top, right, bottom, left));
+    }
+
+    private void initNorth(Direction rotate) {
+        if (rotate.isVertical()) {
+            northBox = new VBox();
+            ((VBox) northBox).setSpacing(6);
+        } else if (rotate.isHorizontal()) {
+            northBox = new HBox();
+            ((HBox) northBox).setSpacing(6);
+        }
+        northBox.setRotate(rotate.getRotate());
+        setTop(new Group(northBox));
+    }
+
+    private void initWest(Direction rotate) {
+        if (rotate.isVertical()) {
+            westBox = new VBox();
+            ((VBox) westBox).setSpacing(6);
+        } else if (rotate.isHorizontal()) {
+            westBox = new HBox();
+            ((HBox) westBox).setSpacing(6);
+        }
+        westBox.setRotate(rotate.getRotate());
+        setLeft(new Group(westBox));
     }
 
     public void addTab(T tab, String text) {

@@ -2,36 +2,33 @@ package main.java.standard;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.util.StringConverter;
 
-import main.java.standard.control.ToggleImageButton;
+import main.java.standard.control.basic.BasicTabPane;
 import main.java.standard.control.basic.BasicTextField;
 import main.java.util.ColorUtil;
 
-public class ColorSelection extends GridPane {
+public class ColorSelection extends BorderPane {
 
+    private static final int LABEL_WIDTH = 70;
+    private static final int TEXT_WIDTH = 50;
     private ColorPicker colorPicker = new ColorPicker();
-    private Rectangle colorPreview = new Rectangle(100, 50);
-    private BasicTextField hexField;
+    private Pane colorPreview = new Pane();
+    private TextField hexField;
     private StringConverter<Number> stringConverter;
     private boolean convertingColorFormats = false;
     private DoubleProperty red = new SimpleDoubleProperty(0.0);
@@ -57,10 +54,10 @@ public class ColorSelection extends GridPane {
     private Slider alphaSlider = new Slider(0, 1, 1);
 
     public ColorSelection() {
-        setHgap(6);
-
         colorPreview.getStyleClass().add("color-rect");
+        colorPreview.setMinSize(80, 50);
         colorPicker.setColor(getColor());
+        updatePreview(getColor());
 
         Label title = new Label("COLOR");
         ToggleGroup tg = new ToggleGroup();
@@ -69,71 +66,70 @@ public class ColorSelection extends GridPane {
                 tg.selectToggle(o);
             }
         });
-        ToggleButton rgbToggle = new ToggleImageButton(tg, "RGB");
-        ToggleButton hsbToggle = new ToggleImageButton(tg, "HSB");
-        hexField = new BasicTextField(null, "0x000000FF");
-        hexField.getControl().setPrefWidth(100);
-        hexField.setMinWidth(100);
-        HBox toggleBox = new HBox(rgbToggle, hsbToggle);
-        Group toggleGroup = new Group(toggleBox);
-        toggleBox.setSpacing(4);
-        toggleBox.setRotate(270);
+        hexField = new TextField("0x000000FF");
 
-        GridPane rgbGrid = createRgbGrid();
-        GridPane hsbGrid = createHsbGrid();
+        BasicTabPane<ColorTab> tabPane = new BasicTabPane<>(Direction.NORTH, Direction.WEST);
+        tabPane.setSpacing(0, 0, 0, 8);
+        tabPane.addTab(new ColorTab(createHsbPane()), "HSB");
+        ColorTab rgbTab = new ColorTab(createRgbPane());
+        tabPane.addTab(rgbTab, "RGB");
 
-        Pane tabPane = new StackPane();
-        tabPane.getChildren().addAll(rgbGrid, hsbGrid);
-
-        rgbToggle.setOnAction(e -> rgbGrid.toFront());
-        hsbToggle.setOnAction(e -> hsbGrid.toFront());
-
-        add(title, 1, 0);
-        add(new VBox(colorPreview, hexField), 1, 1);
-        add(colorPicker, 2, 0, 1, 3);
-        add(toggleGroup, 0, 3);
-        add(tabPane, 1, 3, 2, 1);
-
-        GridPane.setHalignment(colorPicker, HPos.RIGHT);
-        GridPane.setMargin(title, new Insets(0, 0, 12, 0));
-        GridPane.setMargin(colorPicker, new Insets(0, 0, 12, 0));
-        GridPane.setHgrow(tabPane, Priority.ALWAYS);
-        GridPane.setHalignment(tabPane, HPos.RIGHT);
-        GridPane.setValignment(toggleGroup, VPos.BOTTOM);
+        setTop(title);
+        VBox vBox = new VBox(colorPreview, hexField);
+        HBox colorBox = new HBox(new Group(colorPicker), vBox);
+        HBox.setHgrow(vBox, Priority.ALWAYS);
+        colorBox.setSpacing(6);
+        colorBox.setPadding(new Insets(6, 0, 6, 0));
+        setCenter(colorBox);
+        setBottom(tabPane);
+        BorderPane.setMargin(colorBox, new Insets(0, 0, 0, -2));
 
         bind();
-        rgbToggle.fire();
+        rgbTab.getToggle().fire();
     }
 
-    private GridPane createRgbGrid() {
+    private Pane createRgbPane() {
         GridPane rgbGrid = new GridPane();
         rgbGrid.setStyle("-fx-background-color: #f4f4f4");
         rgbGrid.setHgap(6);
         rgbGrid.addRow(0, redField, redSlider);
-        GridPane.setHgrow(redSlider, Priority.ALWAYS);
-        redSlider.setPrefWidth(128);
         rgbGrid.addRow(1, greenField, greenSlider);
-        greenSlider.setPrefWidth(128);
         rgbGrid.addRow(2, blueField, blueSlider);
-        blueSlider.setPrefWidth(128);
         rgbGrid.addRow(3, alphaField, alphaSlider);
-        alphaSlider.setPrefWidth(128);
+
+        GridPane.setHgrow(redSlider, Priority.ALWAYS);
+
+        redField.getFrontLabel().setMinWidth(LABEL_WIDTH);
+        greenField.getFrontLabel().setMinWidth(LABEL_WIDTH);
+        blueField.getFrontLabel().setMinWidth(LABEL_WIDTH);
+        alphaField.getFrontLabel().setMinWidth(LABEL_WIDTH);
+
+        redField.getControl().setMaxWidth(TEXT_WIDTH);
+        greenField.getControl().setMaxWidth(TEXT_WIDTH);
+        blueField.getControl().setMaxWidth(TEXT_WIDTH);
+        alphaField.getControl().setMaxWidth(TEXT_WIDTH);
 
         return rgbGrid;
     }
 
-    private GridPane createHsbGrid() {
+    private Pane createHsbPane() {
         GridPane hsbGrid = new GridPane();
         hsbGrid.setStyle("-fx-background-color: #f4f4f4");
         hsbGrid.setHgap(6);
         hsbGrid.addRow(0, hueField, hueSlider);
-        GridPane.setHgrow(hueSlider, Priority.ALWAYS);
-        hueSlider.setPrefWidth(128);
         hsbGrid.addRow(1, satField, satSlider);
-        satSlider.setPrefWidth(128);
         hsbGrid.addRow(2, brightField, brightSlider);
-        brightSlider.setPrefWidth(128);
-        return hsbGrid;
+        GridPane.setHgrow(hueSlider, Priority.ALWAYS);
+
+        hueField.getFrontLabel().setMinWidth(LABEL_WIDTH);
+        satField.getFrontLabel().setMinWidth(LABEL_WIDTH);
+        brightField.getFrontLabel().setMinWidth(LABEL_WIDTH);
+
+        hueField.getControl().setMaxWidth(TEXT_WIDTH);
+        satField.getControl().setMaxWidth(TEXT_WIDTH);
+        brightField.getControl().setMaxWidth(TEXT_WIDTH);
+
+        return new VBox(hsbGrid, new GridPane());
     }
 
     private void bind() {
@@ -156,7 +152,7 @@ public class ColorSelection extends GridPane {
         Bindings.bindBidirectional(alphaSlider.valueProperty(), alpha);
 
         // Convert rgb <-> hsb <-> hex
-        hexField.valueProperty().addListener(e -> onChangeHex());
+        hexField.textProperty().addListener(e -> onChangeHex());
         red.addListener(e -> onChangeRGB());
         green.addListener(e -> onChangeRGB());
         blue.addListener(e -> onChangeRGB());
@@ -176,15 +172,18 @@ public class ColorSelection extends GridPane {
         return Color.color(red.get(), green.get(), blue.get(), alpha.get());
     }
 
-    public ObjectProperty<Paint> colorProperty() {
-        return colorPreview.fillProperty();
+    public void setColor(Color color) {
+        red.set(color.getRed());
+        green.set(color.getGreen());
+        blue.set(color.getBlue());
+        alpha.set(color.getOpacity());
     }
 
     private void onChangeHex() {
         if (convertingColorFormats) {
             return;
         }
-        Color color = ColorUtil.valueOf(hexField.getValue());
+        Color color = ColorUtil.valueOf(hexField.getText());
         if (color == null) {
             return;
         }
@@ -201,20 +200,13 @@ public class ColorSelection extends GridPane {
         updatePreview(color);
     }
 
-    public void setColor(Color color) {
-        red.set(color.getRed());
-        green.set(color.getGreen());
-        blue.set(color.getBlue());
-        alpha.set(color.getOpacity());
-    }
-
     private void onChangeRGB() {
         if (convertingColorFormats) {
             return;
         }
         Color color = getColor();
         convertingColorFormats = true;
-        hexField.setValue(ColorUtil.toString(color));
+        hexField.setText(ColorUtil.toString(color));
         hue.set(color.getHue());
         sat.set(color.getSaturation());
         bright.set(color.getBrightness());
@@ -229,7 +221,7 @@ public class ColorSelection extends GridPane {
         }
         Color color = Color.hsb(hue.get(), sat.get(), bright.get(), alpha.get());
         convertingColorFormats = true;
-        hexField.setValue(ColorUtil.toString(color));
+        hexField.setText(ColorUtil.toString(color));
         red.set(color.getRed());
         green.set(color.getGreen());
         blue.set(color.getBlue());
@@ -244,14 +236,14 @@ public class ColorSelection extends GridPane {
         }
         Color color = getColor();
         convertingColorFormats = true;
-        hexField.setValue(ColorUtil.toString(color));
+        hexField.setText(ColorUtil.toString(color));
         convertingColorFormats = false;
 
         updatePreview(color);
     }
 
     private void updatePreview(Color color) {
-        colorPreview.setFill(color);
+        colorPreview.setStyle("-fx-background-color: " + ColorUtil.toString(color));
     }
 
     private StringConverter<Number> getString255Converter() {

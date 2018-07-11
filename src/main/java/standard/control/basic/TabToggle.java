@@ -1,5 +1,6 @@
 package main.java.standard.control.basic;
 
+import javafx.scene.Cursor;
 import javafx.scene.control.ToggleButton;
 
 import main.java.standard.Direction;
@@ -11,6 +12,8 @@ public abstract class TabToggle extends ToggleButton {
 
     public TabToggle(Direction direction) {
         setDirection(direction);
+        setOnMouseEntered(event -> setCursor(Cursor.DEFAULT));
+        // Add close button (getChildren().add(...))
     }
 
     public final Direction getDirection() {
