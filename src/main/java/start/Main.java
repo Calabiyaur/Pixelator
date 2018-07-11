@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import main.java.logging.Logger;
 import main.java.res.Config;
 import main.java.res.Images;
-import main.java.view.ColorView;
 
 public class Main extends Application {
 
@@ -73,10 +72,6 @@ public class Main extends Application {
                 Config.putDouble(Config.HEIGHT, height);
             }
             Config.putBoolean(Config.FULLSCREEN, fullscreen);
-            Config.putDouble(Config.RED, ColorView.getColor().getRed());
-            Config.putDouble(Config.GREEN, ColorView.getColor().getGreen());
-            Config.putDouble(Config.BLUE, ColorView.getColor().getBlue());
-            Config.putDouble(Config.OPACITY, ColorView.getColor().getOpacity());
         } catch (Exception e) {
             Logger.log(e.getMessage() + "\nError while trying to close application. Closing anyway.");
         }

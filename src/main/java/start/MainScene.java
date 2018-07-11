@@ -305,6 +305,8 @@ public class MainScene extends Scene {
             }
             getEditor().resizeCanvas(w, h, bias);
             dialog.close();
+            Config.putBoolean(Config.RESIZE_KEEP_RATIO, dialog.isKeepRatio());
+            Config.putString(Config.RESIZE_BIAS, dialog.getBias().name());
         });
         dialog.showAndFocus();
     }
@@ -319,6 +321,7 @@ public class MainScene extends Scene {
             }
             getEditor().stretchImage(w, h);
             dialog.close();
+            Config.putBoolean(Config.STRETCH_KEEP_RATIO, dialog.isKeepRatio());
         });
         dialog.showAndFocus();
     }

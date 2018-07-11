@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
+import main.java.res.Config;
 import main.java.standard.control.basic.BasicTabPane;
 import main.java.standard.control.basic.BasicTextField;
 import main.java.util.ColorUtil;
@@ -56,7 +57,7 @@ public class ColorSelection extends BorderPane {
     public ColorSelection() {
         colorPreview.getStyleClass().add("color-rect");
         colorPreview.setMinSize(80, 50);
-        colorPicker.setColor(getColor());
+        colorPicker.setColor(Color.valueOf(Config.getString(Config.COLOR, "#000000")));
         updatePreview(getColor());
 
         Label title = new Label("COLOR");
@@ -244,6 +245,7 @@ public class ColorSelection extends BorderPane {
 
     private void updatePreview(Color color) {
         colorPreview.setStyle("-fx-background-color: " + ColorUtil.toString(color));
+        Config.putString(Config.COLOR, color.toString());
     }
 
     private StringConverter<Number> getString255Converter() {

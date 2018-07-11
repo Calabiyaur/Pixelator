@@ -18,7 +18,4 @@ public enum Tools {
         return name();
     }
 
-    public static Tools fromString(String string) {
-        return Tools.valueOf(Tools.class, string);
-    }
 }

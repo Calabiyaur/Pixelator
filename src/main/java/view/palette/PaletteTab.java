@@ -26,7 +26,9 @@ public class PaletteTab extends BasicTab {
         imageView.translateYProperty().bind(image.heightProperty()
                 .multiply(imageView.scaleYProperty()).subtract(image.heightProperty()).divide(2));
 
-        ((BasicScrollPane) getContent()).setScrollByMouse(true);
+        BasicScrollPane content = (BasicScrollPane) getContent();
+        content.setStyle("-fx-background-color: #f4f4f4");
+        content.setScrollByMouse(true);
     }
 
     @Override protected TabToggle createToggle() {

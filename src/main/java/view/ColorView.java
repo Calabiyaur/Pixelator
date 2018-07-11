@@ -46,23 +46,16 @@ public class ColorView extends BorderPane {
             colorSelection = new ColorSelection();
             box.getChildren().add(colorSelection);
 
-            box.getChildren().add(new Separator());
+            Separator halfSeparator = new Separator();
+            halfSeparator.setPadding(new Insets(0, 0, -6, 0));
+            box.getChildren().add(halfSeparator);
 
             paletteSelection = new PaletteSelection();
             box.getChildren().add(paletteSelection);
 
-            initConfig();
             instance.setCenter(box);
         }
         return instance;
-    }
-
-    private static void initConfig() {
-        double red = Config.getDouble(Config.RED, 1);
-        double green = Config.getDouble(Config.GREEN, 1);
-        double blue = Config.getDouble(Config.BLUE, 1);
-        double opacity = Config.getDouble(Config.OPACITY, 1);
-        setColor(Color.color(red, green, blue, opacity));
     }
 
     private static void popupAction() {

@@ -55,8 +55,44 @@ public class BiasButton extends GridPane {
         c.fire();
     }
 
-    public Direction getBias() {
+    public Direction getValue() {
         return bias;
+    }
+
+    public void setValue(Direction bias) {
+        int index;
+        switch(bias) {
+            case EAST:
+                index = 5;
+                break;
+            case NORTH_EAST:
+                index = 2;
+                break;
+            case NORTH:
+                index = 1;
+                break;
+            case NORTH_WEST:
+                index = 0;
+                break;
+            case WEST:
+                index = 3;
+                break;
+            case SOUTH_WEST:
+                index = 6;
+                break;
+            case SOUTH:
+                index = 7;
+                break;
+            case SOUTH_EAST:
+                index = 8;
+                break;
+            case NONE:
+            default:
+                index = 4;
+        }
+        ToggleButton button = (ToggleButton) getChildren().get(index);
+        button.setSelected(true);
+        button.fire();
     }
 
 }

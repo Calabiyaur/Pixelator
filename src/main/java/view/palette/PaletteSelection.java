@@ -8,11 +8,11 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.HPos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -50,7 +50,7 @@ public class PaletteSelection extends BorderPane {
         redo.setOnAction(e -> redo());
 
         GridPane titlePane = new GridPane();
-        HBox buttonBox = new HBox(create, open, save, undo, redo);
+        ToolBar buttonBox = new ToolBar(create, open, save, undo, redo);
         titlePane.add(title, 0, 0);
         titlePane.add(buttonBox, 1, 0);
         GridPane.setHgrow(title, Priority.ALWAYS);

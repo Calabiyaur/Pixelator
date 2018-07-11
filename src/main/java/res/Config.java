@@ -2,25 +2,19 @@ package main.java.res;
 
 import java.util.prefs.Preferences;
 
-import main.java.view.tool.Tools;
-
 public enum Config {
 
-    BLUE,
+    COLOR,
     FILL_SHAPE,
     FULLSCREEN,
-    GREEN,
     HEIGHT,
     IMAGE_DIRECTORY,
-    OPACITY,
     PALETTE_DIRECTORY,
-    RED,
     REPLACE,
+    RESIZE_BIAS,
+    RESIZE_KEEP_RATIO,
+    STRETCH_KEEP_RATIO,
     WIDTH;
-
-    public static Tools fromString(String string) {
-        return Tools.valueOf(Tools.class, string);
-    }
 
     public String toString() {
         return name();
