@@ -1,6 +1,7 @@
 package main.java.files;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,9 +72,10 @@ public class Files {
         }
 
         PixelFileWriter writer = getWriter(pixelFile.getExtension());
-        boolean success = writer.save(pixelFile);
-        if (!success) {
-            throw new RuntimeException("Failed to save file " + pixelFile);
+        try {
+            writer.write(pixelFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save file " + pixelFile, e);
         }
     }
 

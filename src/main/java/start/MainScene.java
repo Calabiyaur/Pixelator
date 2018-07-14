@@ -21,6 +21,7 @@ import main.java.files.Files;
 import main.java.files.ImageFile;
 import main.java.files.PaletteFile;
 import main.java.files.PixelFile;
+import main.java.res.Action;
 import main.java.res.Config;
 import main.java.res.Images;
 import main.java.standard.Direction;
@@ -38,37 +39,37 @@ import main.java.view.editor.ImageWindowContainer;
 import main.java.view.palette.PaletteMaster;
 import main.java.view.palette.PaletteSelection;
 
-import static main.java.start.ActionManager.Action.CLOSE;
-import static main.java.start.ActionManager.Action.CLOSE_PALETTE;
-import static main.java.start.ActionManager.Action.COPY;
-import static main.java.start.ActionManager.Action.CREATE_FROM_CLIPBOARD;
-import static main.java.start.ActionManager.Action.CROP;
-import static main.java.start.ActionManager.Action.CROSSHAIR;
-import static main.java.start.ActionManager.Action.CUT;
-import static main.java.start.ActionManager.Action.DELETE;
-import static main.java.start.ActionManager.Action.EXTRACT_PALETTE;
-import static main.java.start.ActionManager.Action.FLIP_HORIZONTALLY;
-import static main.java.start.ActionManager.Action.FLIP_VERTICALLY;
-import static main.java.start.ActionManager.Action.GRID;
-import static main.java.start.ActionManager.Action.MOVE_IMAGE;
-import static main.java.start.ActionManager.Action.NEW;
-import static main.java.start.ActionManager.Action.NEW_PALETTE;
-import static main.java.start.ActionManager.Action.OPEN;
-import static main.java.start.ActionManager.Action.OPEN_PALETTE;
-import static main.java.start.ActionManager.Action.OUTLINE;
-import static main.java.start.ActionManager.Action.PASTE;
-import static main.java.start.ActionManager.Action.REDO;
-import static main.java.start.ActionManager.Action.REDO_PALETTE;
-import static main.java.start.ActionManager.Action.RESIZE;
-import static main.java.start.ActionManager.Action.ROTATE_CLOCKWISE;
-import static main.java.start.ActionManager.Action.ROTATE_COUNTER_CLOCKWISE;
-import static main.java.start.ActionManager.Action.SAVE;
-import static main.java.start.ActionManager.Action.SAVE_AS;
-import static main.java.start.ActionManager.Action.SAVE_PALETTE;
-import static main.java.start.ActionManager.Action.SELECT_ALL;
-import static main.java.start.ActionManager.Action.STRETCH;
-import static main.java.start.ActionManager.Action.UNDO;
-import static main.java.start.ActionManager.Action.UNDO_PALETTE;
+import static main.java.res.Action.CLOSE;
+import static main.java.res.Action.CLOSE_PALETTE;
+import static main.java.res.Action.COPY;
+import static main.java.res.Action.CREATE_FROM_CLIPBOARD;
+import static main.java.res.Action.CROP;
+import static main.java.res.Action.CROSSHAIR;
+import static main.java.res.Action.CUT;
+import static main.java.res.Action.DELETE;
+import static main.java.res.Action.EXTRACT_PALETTE;
+import static main.java.res.Action.FLIP_HORIZONTALLY;
+import static main.java.res.Action.FLIP_VERTICALLY;
+import static main.java.res.Action.GRID;
+import static main.java.res.Action.MOVE_IMAGE;
+import static main.java.res.Action.NEW;
+import static main.java.res.Action.NEW_PALETTE;
+import static main.java.res.Action.OPEN;
+import static main.java.res.Action.OPEN_PALETTE;
+import static main.java.res.Action.OUTLINE;
+import static main.java.res.Action.PASTE;
+import static main.java.res.Action.REDO;
+import static main.java.res.Action.REDO_PALETTE;
+import static main.java.res.Action.RESIZE;
+import static main.java.res.Action.ROTATE_CLOCKWISE;
+import static main.java.res.Action.ROTATE_COUNTER_CLOCKWISE;
+import static main.java.res.Action.SAVE;
+import static main.java.res.Action.SAVE_AS;
+import static main.java.res.Action.SAVE_PALETTE;
+import static main.java.res.Action.SELECT_ALL;
+import static main.java.res.Action.STRETCH;
+import static main.java.res.Action.UNDO;
+import static main.java.res.Action.UNDO_PALETTE;
 
 public class MainScene extends Scene {
 
@@ -229,15 +230,15 @@ public class MainScene extends Scene {
     }
 
     private void createKeyListener() {
-        ActionManager.registerAction(ActionManager.Action.ESCAPE, e -> imageContainer.escape());
-        ActionManager.registerAction(ActionManager.Action.PLUS, e -> imageContainer.zoomIn());
-        ActionManager.registerAction(ActionManager.Action.MINUS, e -> imageContainer.zoomOut());
-        ActionManager.registerAction(ActionManager.Action.RIGHT, e -> getEditor().moveSelection(1, 0));
-        ActionManager.registerAction(ActionManager.Action.UP, e -> getEditor().moveSelection(0, -1));
-        ActionManager.registerAction(ActionManager.Action.LEFT, e -> getEditor().moveSelection(-1, 0));
-        ActionManager.registerAction(ActionManager.Action.DOWN, e -> getEditor().moveSelection(0, 1));
-        ActionManager.registerAction(ActionManager.Action.SWITCH_TAB, e -> imageContainer.selectNextWindow());
-        ActionManager.registerAction(ActionManager.Action.FIT_WINDOW, e -> imageContainer.fitWindow());
+        ActionManager.registerAction(Action.ESCAPE, e -> imageContainer.escape());
+        ActionManager.registerAction(Action.PLUS, e -> imageContainer.zoomIn());
+        ActionManager.registerAction(Action.MINUS, e -> imageContainer.zoomOut());
+        ActionManager.registerAction(Action.RIGHT, e -> getEditor().moveSelection(1, 0));
+        ActionManager.registerAction(Action.UP, e -> getEditor().moveSelection(0, -1));
+        ActionManager.registerAction(Action.LEFT, e -> getEditor().moveSelection(-1, 0));
+        ActionManager.registerAction(Action.DOWN, e -> getEditor().moveSelection(0, 1));
+        ActionManager.registerAction(Action.SWITCH_TAB, e -> imageContainer.selectNextWindow());
+        ActionManager.registerAction(Action.FIT_WINDOW, e -> imageContainer.fitWindow());
     }
 
     public void openFiles(Collection<String> files) {

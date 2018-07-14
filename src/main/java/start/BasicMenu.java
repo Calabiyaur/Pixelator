@@ -10,7 +10,7 @@ import javafx.scene.control.SeparatorMenuItem;
 
 import main.java.res.Images;
 
-import static main.java.start.ActionManager.Action;
+import main.java.res.Action;
 
 public class BasicMenu extends Menu {
 

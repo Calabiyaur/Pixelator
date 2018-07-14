@@ -3,8 +3,6 @@ package main.java.res;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import main.java.start.ActionManager;
-
 public enum Images {
 
     ARROW_C,
@@ -86,7 +84,7 @@ public enum Images {
         }
     }
 
-    public static ImageView get(ActionManager.Action action) {
+    public static ImageView get(Action action) {
         ImageView imageView = new ImageView();
         try {
             imageView.setImage(Images.valueOf(action.name()).getImage());

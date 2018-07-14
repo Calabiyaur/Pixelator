@@ -3,8 +3,12 @@ package main.java.files.io;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 import main.java.files.PixelFile;
+import main.java.files.zip.ZipUtil;
+import main.java.logging.Logger;
+import main.java.util.FileUtil;
 
 public class PIXImageWriter extends BasicImageWriter {
 
@@ -12,27 +16,41 @@ public class PIXImageWriter extends BasicImageWriter {
         File output = pixelFile.getFile();
 
         // Delete the old PIX file
-        if (!output.delete()) {
-            throw new IOException();
+        if (output.exists() && !output.delete()) {
+            throw new IOException("Failed to delete old PIX file");
         }
 
         // Create parent folder
-        File parentFolder = new File(output.getPath());
-        if (!parentFolder.createNewFile()) {
-            throw new IOException();
+        String outputPath = FileUtil.removeType(output.getPath());
+        File parentFolder = new File(outputPath + "_tmp");
+        if (!parentFolder.mkdir()) {
+            throw new IOException("Failed to create temporary PIX folder");
         }
 
         // Create image file
-        File imageDirectory = new File(parentFolder.getPath() + File.pathSeparator + "image.png");
+        File imageDirectory = new File(parentFolder.getPath() + File.separator + "image.png");
+        if (!imageDirectory.createNewFile()) {
+            throw new IOException("Failed to create image file");
+        }
         super.saveImage(pixelFile.getImage(), imageDirectory);
 
         // Create config file
-        File configDirectory = new File(parentFolder.getPath() + File.pathSeparator + "config.txt");
-        FileOutputStream outputStream = new FileOutputStream(pixelFile.getProperties())
-        // TODO: 12.07.2018
+        Properties config = pixelFile.getProperties();
+        File configDirectory = new File(parentFolder.getPath() + File.separator + "config.properties");
+        if (!configDirectory.createNewFile()) {
+            throw new IOException("Failed to create config file");
+        }
+        FileOutputStream outputStream = new FileOutputStream(configDirectory);
+        config.store(outputStream, "");
+        outputStream.close();
+        Logger.log("Store config", pixelFile.getName(), config);
 
-        // ZIP the parent folder
-        // TODO: 12.07.2018
+        // Zip and then delete the parent folder
+        File zipFile = new File(outputPath + ".pix");
+        ZipUtil.pack(parentFolder, zipFile);
+        if (!zipFile.exists() || !super.deleteRecursive(parentFolder)) {
+            throw new IOException();
+        }
     }
 
 }
