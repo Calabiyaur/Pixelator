@@ -10,7 +10,7 @@ import main.java.files.zip.ZipUtil;
 import main.java.logging.Logger;
 import main.java.util.FileUtil;
 
-public class PIXImageWriter extends BasicImageWriter {
+public final class PIXImageWriter extends PixelFileWriter {
 
     public void write(PixelFile pixelFile) throws IOException {
         File output = pixelFile.getFile();
@@ -22,7 +22,7 @@ public class PIXImageWriter extends BasicImageWriter {
 
         // Create parent folder
         String outputPath = FileUtil.removeType(output.getPath());
-        File parentFolder = new File(outputPath + "_tmp");
+        File parentFolder = new File(outputPath + "_tmp_write");
         if (!parentFolder.mkdir()) {
             throw new IOException("Failed to create temporary PIX folder");
         }
@@ -48,7 +48,7 @@ public class PIXImageWriter extends BasicImageWriter {
         // Zip and then delete the parent folder
         File zipFile = new File(outputPath + ".pix");
         ZipUtil.pack(parentFolder, zipFile);
-        if (!zipFile.exists() || !super.deleteRecursive(parentFolder)) {
+        if (!zipFile.exists() || !FileUtil.deleteRecursive(parentFolder)) {
             throw new IOException();
         }
     }

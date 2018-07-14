@@ -9,8 +9,9 @@ import javax.imageio.ImageIO;
 
 import main.java.files.PixelFile;
 
-public class BasicImageWriter extends PixelFileWriter {
+public final class BasicImageWriter extends PixelFileWriter {
 
+    @Override
     public void write(PixelFile pixelFile) throws IOException {
         BufferedImage bImage = SwingFXUtils.fromFXImage(pixelFile.getImage(), null);
         if (!ImageIO.write(bImage, pixelFile.getExtension().name(), pixelFile.getFile())) {

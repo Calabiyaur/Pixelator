@@ -2,7 +2,6 @@ package main.java.files;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,23 +9,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 
+import main.java.files.io.BasicImageReader;
 import main.java.files.io.BasicImageWriter;
+import main.java.files.io.PIXImageReader;
 import main.java.files.io.PIXImageWriter;
+import main.java.files.io.PixelFileReader;
 import main.java.files.io.PixelFileWriter;
 import main.java.start.Main;
 import main.java.util.FileUtil;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class Files {
 
     private static Files instance = new Files();
     private static Map<Extension, PixelFileWriter> writers = new HashMap<>();
+    private static Map<Extension, PixelFileReader> readers = new HashMap<>();
+
     static {
         writers.put(null, new BasicImageWriter());
         writers.put(Extension.PIX, new PIXImageWriter());
+    }
+
+    static {
+        readers.put(null, new BasicImageReader());
+        readers.put(Extension.PIX, new PIXImageReader());
     }
 
     private Files() {
@@ -100,35 +107,25 @@ public class Files {
         }
 
         updateDirectory(category, files.get(0));
-        files.forEach(file -> {
-            Pair<File, Image> pair = openFile(file);
-            if (pair != null) {
-                result.add(FileUtil.createFile(category, pair.getRight(), pair.getLeft()));
-            }
-        });
+        files.forEach(file -> result.add(openFile(file)));
 
         return result;
     }
 
-    private Pair<File, Image> openFile(File file) {
+    private PixelFile openFile(File file) {
+        PixelFileReader reader = getReader(FileUtil.getExtension(file));
         try {
-            Image image = new Image(file.toURI().toURL().toString());
-            return Pair.of(file, image);
-        } catch (MalformedURLException e) {
-            System.out.println(e.getMessage() + "\nMalformed URL: " + file.getPath());
+            return reader.read(file);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read file " + file, e);
         }
-        return null;
     }
 
     public List<PixelFile> openByName(Collection<String> files) {
         List<PixelFile> result = new ArrayList<>();
         for (String path : files) {
             File file = new File(path);
-            Pair<File, Image> pair = openFile(file);
-            if (pair != null) {
-                PixelFile pixelFile = FileUtil.createFile(pair.getRight(), pair.getLeft());
-                result.add(pixelFile);
-            }
+            result.add(openFile(file));
         }
         return result;
     }
@@ -143,6 +140,15 @@ public class Files {
             return writers.get(null);
         } else {
             return writer;
+        }
+    }
+
+    private PixelFileReader getReader(Extension extension) {
+        PixelFileReader reader = readers.get(extension);
+        if (reader == null) {
+            return readers.get(null);
+        } else {
+            return reader;
         }
     }
 

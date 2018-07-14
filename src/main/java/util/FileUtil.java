@@ -2,13 +2,7 @@ package main.java.util;
 
 import java.io.File;
 
-import javafx.scene.image.Image;
-
-import main.java.files.Category;
 import main.java.files.Extension;
-import main.java.files.ImageFile;
-import main.java.files.PaletteFile;
-import main.java.files.PixelFile;
 import org.apache.commons.lang3.StringUtils;
 
 public class FileUtil {
@@ -22,26 +16,22 @@ public class FileUtil {
             return null;
         } else {
             String extension = StringUtils.substringAfter(file.getName(), ".");
-            return Extension.valueOf(extension.toUpperCase());
+            try {
+                return Extension.valueOf(extension.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
         }
     }
 
-    public static PixelFile createFile(Image image, File file) {
-        if (Category.PALETTE.getExtensions().contains(getExtension(file).getSuffix())) {
-            return createFile(Category.PALETTE, image, file);
+    public static boolean deleteRecursive(File file) {
+        boolean success = true;
+        if (file.isDirectory()) {
+            for (File child : file.listFiles()) {
+                success = success && deleteRecursive(child);
+            }
         }
-        return createFile(Category.IMAGE, image, file);
-    }
-
-    public static PixelFile createFile(Category category, Image image, File file) {
-        switch(category) {
-            case IMAGE:
-                return new ImageFile(file, image);
-            case PALETTE:
-                return new PaletteFile(file, image);
-            default:
-                throw new IllegalStateException();
-        }
+        return success && file.delete();
     }
 
 }

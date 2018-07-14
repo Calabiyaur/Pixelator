@@ -16,21 +16,11 @@ public abstract class PixelFileWriter {
 
     public abstract void write(PixelFile pixelFile) throws IOException;
 
-    void saveImage(Image image, File file) throws IOException {
+    final void saveImage(Image image, File file) throws IOException {
         BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
         if (!ImageIO.write(bImage, Extension.PNG.name(), file)) {
             throw new IOException();
         }
-    }
-
-    boolean deleteRecursive(File file) {
-        boolean success = true;
-        if (file.isDirectory()) {
-            for (File child : file.listFiles()) {
-                success = success && deleteRecursive(child);
-            }
-        }
-        return success && file.delete();
     }
 
 }
