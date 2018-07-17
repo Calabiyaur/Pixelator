@@ -44,7 +44,7 @@ public final class PIXImageWriter extends PixelFileWriter {
         FileOutputStream outputStream = new FileOutputStream(configDirectory);
         config.store(outputStream, "");
         outputStream.close();
-        Logger.log("config", "store", pixelFile);
+        Logger.log("config", "store", config);
 
         // Zip and then delete the parent folder
         File zipFile = new File(outputPath + ".pix");
@@ -63,7 +63,7 @@ public final class PIXImageWriter extends PixelFileWriter {
         FileOutputStream outputStream = new FileOutputStream(config);
         pixelFile.getProperties().store(outputStream, "");
         outputStream.close();
-        Logger.log("config", "store", pixelFile);
+        Logger.log("config", "store", pixelFile.getProperties());
         ZipUtil.pack(temp, zipFile);
         if (!FileUtil.deleteRecursive(temp)) {
             throw new IOException("Failed to delete temporary PIX folder");

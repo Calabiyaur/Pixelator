@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 
 import main.java.files.ImageFile;
 import main.java.files.PixelFile;
+import main.java.res.ImageConfig;
 import main.java.standard.image.ScalableImageView;
 import main.java.view.InfoView;
 import main.java.view.ToolView;
@@ -104,13 +105,17 @@ public class ImageWindowContainer extends Pane {
             getChildren().remove(window);
         });
         ImageWindow current = currentWindow.get();
+
+        String configXString = window.getConfig(ImageConfig.X);
+        String configYString = window.getConfig(ImageConfig.Y);
         if (current != null) {
-            window.setTranslateX(current.getTranslateX() + 32);
-            window.setTranslateY(current.getTranslateY() + 32);
+            window.setTranslateX(configXString == null ? current.getTranslateX() + 32 : Double.valueOf(configXString));
+            window.setTranslateY(configYString == null ? current.getTranslateY() + 32 : Double.valueOf(configYString));
         } else {
-            window.setTranslateX(32 - getTranslateX());
-            window.setTranslateY(32 - getTranslateY());
+            window.setTranslateX(configXString == null ? 32 - getTranslateX() : Double.valueOf(configXString));
+            window.setTranslateY(configYString == null ? 32 - getTranslateY() : Double.valueOf(configYString));
         }
+
         setCurrentWindow(window);
         window.getImageView().imageProperty().addListener((ov, o, n) -> updateImage(window));
         return window;

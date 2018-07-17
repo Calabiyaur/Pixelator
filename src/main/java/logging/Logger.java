@@ -13,7 +13,7 @@ public class Logger {
 
     public static final int SUBJECT_LENGTH = 15;
     public static final int WHO_LENGTH = 16;
-    public static final int WHAT_LENGTH = 40;
+    public static final int WHAT_LENGTH = 4000;
 
     public static void log(Object message) {
         LOGGER.info(message);
@@ -89,7 +89,7 @@ public class Logger {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             String key = entry.getKey() == null ? "null" : entry.getKey().toString();
             String value = entry.getValue() == null ? "null" : entry.getValue().toString();
-            out.append(String.format("[%s -> %s]\n", key, value));
+            out.append(String.format("[%s -> %s] ", key, value));
         }
         return out.toString();
     }

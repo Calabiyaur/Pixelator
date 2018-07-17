@@ -3,7 +3,6 @@ package main.java.files.io;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
@@ -27,7 +26,6 @@ public abstract class PixelFileWriter {
     }
 
     File findConfig(File directory) {
-        Properties properties = new Properties();
         for (File file : directory.listFiles()) {
             if (file.getName().contains(".properties")) {
                 return file;

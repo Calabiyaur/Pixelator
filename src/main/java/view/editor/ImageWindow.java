@@ -65,17 +65,31 @@ public class ImageWindow extends BasicWindow {
     }
 
     public void initConfig() {
-        String value = getConfig(ImageConfig.ZOOM_LEVEL);
-        getImageView().setScaleX(Double.valueOf(value));
-        getImageView().setScaleY(Double.valueOf(value));
+        String zoom = getConfig(ImageConfig.ZOOM_LEVEL);
+        getImageView().setScaleX(zoom == null ? 1 : Double.valueOf(zoom));
+        getImageView().setScaleY(zoom == null ? 1 : Double.valueOf(zoom));
+        String width = getConfig(ImageConfig.WIDTH);
+        setPrefWidth(width == null ? -1 : Double.valueOf(width));
+        String height = getConfig(ImageConfig.HEIGHT);
+        setPrefHeight(height == null ? -1 : Double.valueOf(height));
     }
 
-    public void putConfig(ImageConfig config, String value) {
-        getFile().getProperties().put(config.name(), value);
+    private void updateConfig() {
+        putConfig(ImageConfig.ZOOM_LEVEL, String.valueOf(imageEditor.getImageView().getScaleX()));
+        putConfig(ImageConfig.X, String.valueOf(getTranslateX()));
+        putConfig(ImageConfig.Y, String.valueOf(getTranslateY()));
+        putConfig(ImageConfig.WIDTH, String.valueOf(getWidth()));
+        putConfig(ImageConfig.HEIGHT, String.valueOf(getHeight()));
+        putConfig(ImageConfig.H_SCROLL, String.valueOf(getContent().getHBar().getTranslateX()));
+        putConfig(ImageConfig.V_SCROLL, String.valueOf(getContent().getVBar().getTranslateY()));
     }
 
     public String getConfig(ImageConfig config) {
         return getFile().getProperties().getProperty(config.name());
+    }
+
+    private void putConfig(ImageConfig config, String value) {
+        getFile().getProperties().put(config.name(), value);
     }
 
     private void onScroll(ScrollEvent e) {
@@ -200,10 +214,6 @@ public class ImageWindow extends BasicWindow {
         updateConfig();
         Files.get().save(getFile());
         undirty();
-    }
-
-    private void updateConfig() {
-        putConfig(ImageConfig.ZOOM_LEVEL, String.valueOf(imageEditor.getImageView().getScaleX()));
     }
 
     public void saveAndClose() {
