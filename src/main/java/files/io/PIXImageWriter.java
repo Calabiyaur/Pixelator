@@ -49,8 +49,8 @@ public final class PIXImageWriter extends PixelFileWriter {
         // Zip and then delete the parent folder
         File zipFile = new File(outputPath + ".pix");
         ZipUtil.pack(parentFolder, zipFile);
-        if (!zipFile.exists() || !FileUtil.deleteRecursive(parentFolder)) {
-            throw new IOException("Failed to delete temporary PIX folder");
+        if (!zipFile.exists()) {
+            FileUtil.deleteRecursive(parentFolder);
         }
     }
 
@@ -65,9 +65,7 @@ public final class PIXImageWriter extends PixelFileWriter {
         outputStream.close();
         Logger.log("config", "store", pixelFile.getProperties());
         ZipUtil.pack(temp, zipFile);
-        if (!FileUtil.deleteRecursive(temp)) {
-            throw new IOException("Failed to delete temporary PIX folder");
-        }
+        FileUtil.deleteRecursive(temp);
     }
 
 }

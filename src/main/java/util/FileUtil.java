@@ -1,6 +1,8 @@
 package main.java.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import main.java.files.Extension;
 import org.apache.commons.lang3.StringUtils;
@@ -24,14 +26,13 @@ public class FileUtil {
         }
     }
 
-    public static boolean deleteRecursive(File file) {
-        boolean success = true;
+    public static void deleteRecursive(File file) throws IOException {
         if (file.isDirectory()) {
             for (File child : file.listFiles()) {
-                success = success && deleteRecursive(child);
+                deleteRecursive(child);
             }
         }
-        return success && file.delete();
+        Files.delete(file.toPath());
     }
 
 }

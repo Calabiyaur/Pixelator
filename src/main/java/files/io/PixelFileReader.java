@@ -34,6 +34,7 @@ public abstract class PixelFileReader {
                 try {
                     InputStream inputStream = new FileInputStream(file);
                     properties.load(inputStream);
+                    inputStream.close();
                 } catch (IOException e) {
                     Logger.error(e);
                 }

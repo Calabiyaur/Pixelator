@@ -8,8 +8,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
 
-import main.java.logging.Logger;
-
 public class BasicScrollPane extends BorderPane {
 
     public static double SCROLL_BAR_WIDTH = 9;
@@ -55,7 +53,7 @@ public class BasicScrollPane extends BorderPane {
         heightProperty().addListener((ov, o, n) -> update());
 
         setOnScroll(e -> {
-            Logger.logEvent(e, "SCROLL");
+            //Logger.logEvent(e, "SCROLL");
             if (e.isControlDown()) {
                 if (e.isShiftDown()) {
                     scrollHorizontally(e);
