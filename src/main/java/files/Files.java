@@ -86,6 +86,15 @@ public class Files {
         }
     }
 
+    public void saveConfig(PixelFile pixelFile) {
+        PixelFileWriter writer = getWriter(pixelFile.getExtension());
+        try {
+            writer.writeConfig(pixelFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save config " + pixelFile, e);
+        }
+    }
+
     public List<ImageFile> openImages() {
         return open(Category.IMAGE).stream().map(f -> (ImageFile) f).collect(Collectors.toList());
     }
@@ -107,15 +116,17 @@ public class Files {
         }
 
         updateDirectory(category, files.get(0));
-        files.forEach(file -> result.add(openFile(file)));
+        files.forEach(file -> result.add(openFile(file, category)));
 
         return result;
     }
 
-    private PixelFile openFile(File file) {
+    private PixelFile openFile(File file, Category category) {
         PixelFileReader reader = getReader(FileUtil.getExtension(file));
         try {
-            return reader.read(file);
+            PixelFileBuilder builder = reader.read(file);
+            builder.setCategory(category);
+            return builder.build();
         } catch (IOException e) {
             throw new RuntimeException("Failed to read file " + file, e);
         }
@@ -125,7 +136,7 @@ public class Files {
         List<PixelFile> result = new ArrayList<>();
         for (String path : files) {
             File file = new File(path);
-            result.add(openFile(file));
+            result.add(openFile(file, Category.IMAGE));
         }
         return result;
     }

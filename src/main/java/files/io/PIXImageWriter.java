@@ -12,6 +12,7 @@ import main.java.util.FileUtil;
 
 public final class PIXImageWriter extends PixelFileWriter {
 
+    @Override
     public void write(PixelFile pixelFile) throws IOException {
         File output = pixelFile.getFile();
 
@@ -43,13 +44,29 @@ public final class PIXImageWriter extends PixelFileWriter {
         FileOutputStream outputStream = new FileOutputStream(configDirectory);
         config.store(outputStream, "");
         outputStream.close();
-        Logger.log("Store config", pixelFile.getName(), config);
+        Logger.log("config", "store", pixelFile);
 
         // Zip and then delete the parent folder
         File zipFile = new File(outputPath + ".pix");
         ZipUtil.pack(parentFolder, zipFile);
         if (!zipFile.exists() || !FileUtil.deleteRecursive(parentFolder)) {
-            throw new IOException();
+            throw new IOException("Failed to delete temporary PIX folder");
+        }
+    }
+
+    @Override
+    public void writeConfig(PixelFile pixelFile) throws IOException {
+        File zipFile = pixelFile.getFile();
+        File temp = new File(FileUtil.removeType(zipFile.getPath()) + "_tmp_config");
+        ZipUtil.unpack(zipFile, temp);
+        File config = findConfig(temp);
+        FileOutputStream outputStream = new FileOutputStream(config);
+        pixelFile.getProperties().store(outputStream, "");
+        outputStream.close();
+        Logger.log("config", "store", pixelFile);
+        ZipUtil.pack(temp, zipFile);
+        if (!FileUtil.deleteRecursive(temp)) {
+            throw new IOException("Failed to delete temporary PIX folder");
         }
     }
 

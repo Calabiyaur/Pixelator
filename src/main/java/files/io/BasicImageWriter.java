@@ -19,4 +19,8 @@ public final class BasicImageWriter extends PixelFileWriter {
         }
     }
 
+    @Override
+    public void writeConfig(PixelFile pixelFile) {
+        // Basic images do not have a config file.
+    }
 }

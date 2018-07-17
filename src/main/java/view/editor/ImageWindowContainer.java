@@ -77,10 +77,11 @@ public class ImageWindowContainer extends Pane {
     }
 
     public void addImage(ImageFile imageFile) {
-        addImage(new ScalableImageView(imageFile.getImage()), imageFile);
+        ImageWindow imageWindow = addImage(new ScalableImageView(imageFile.getImage()), imageFile);
+        imageWindow.initConfig();
     }
 
-    private void addImage(ScalableImageView imageView, ImageFile imageFile) {
+    private ImageWindow addImage(ScalableImageView imageView, ImageFile imageFile) {
         ImageWindow window = new ImageWindow(imageView, imageFile);
         window.setMinX(0);
         window.setMinY(0);
@@ -112,6 +113,7 @@ public class ImageWindowContainer extends Pane {
         }
         setCurrentWindow(window);
         window.getImageView().imageProperty().addListener((ov, o, n) -> updateImage(window));
+        return window;
     }
 
     void setCurrentWindow(ImageWindow window) {

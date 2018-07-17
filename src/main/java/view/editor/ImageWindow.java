@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 import main.java.files.Files;
 import main.java.files.ImageFile;
+import main.java.res.ImageConfig;
 import main.java.res.Images;
 import main.java.standard.Point;
 import main.java.standard.control.ImageButton;
@@ -61,6 +62,20 @@ public class ImageWindow extends BasicWindow {
         ImageButton popup = new ImageButton(Images.POPUP);
         addButton(popup);
         popup.setOnAction(e -> popupAction());
+    }
+
+    public void initConfig() {
+        String value = getConfig(ImageConfig.ZOOM_LEVEL);
+        getImageView().setScaleX(Double.valueOf(value));
+        getImageView().setScaleY(Double.valueOf(value));
+    }
+
+    public void putConfig(ImageConfig config, String value) {
+        getFile().getProperties().put(config.name(), value);
+    }
+
+    public String getConfig(ImageConfig config) {
+        return getFile().getProperties().getProperty(config.name());
     }
 
     private void onScroll(ScrollEvent e) {
@@ -177,12 +192,18 @@ public class ImageWindow extends BasicWindow {
             }
         }
         close();
+        saveOnlyConfig();
         return true;
     }
 
     public void saveAndUndirty() {
+        updateConfig();
         Files.get().save(getFile());
         undirty();
+    }
+
+    private void updateConfig() {
+        putConfig(ImageConfig.ZOOM_LEVEL, String.valueOf(imageEditor.getImageView().getScaleX()));
     }
 
     public void saveAndClose() {
@@ -192,6 +213,11 @@ public class ImageWindow extends BasicWindow {
 
     public void undirty() {
         getEditor().undirty();
+    }
+
+    public void saveOnlyConfig() {
+        updateConfig();
+        Files.get().saveConfig(getFile());
     }
 
     public ImageEditor getEditor() {

@@ -10,13 +10,13 @@ import java.util.Properties;
 import javafx.scene.image.Image;
 
 import main.java.files.Extension;
-import main.java.files.PixelFile;
+import main.java.files.PixelFileBuilder;
 import main.java.logging.Logger;
 import main.java.util.FileUtil;
 
 public abstract class PixelFileReader {
 
-    public abstract PixelFile read(File file) throws IOException;
+    public abstract PixelFileBuilder read(File file) throws IOException;
 
     Image findImage(File directory) throws MalformedURLException {
         for (File file : directory.listFiles()) {

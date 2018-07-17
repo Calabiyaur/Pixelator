@@ -34,7 +34,7 @@ public abstract class PixelFile {
 
     public final void setFile(File file) {
         this.file = file;
-        this.name.set(file == null ? "New Image" : file.getName());
+        this.name.set(file == null ? "New Image" : FileUtil.removeType(file.getName()));
         this.extension = FileUtil.getExtension(file);
     }
 
