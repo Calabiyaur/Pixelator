@@ -23,7 +23,7 @@ public final class PIXImageReader extends PixelFileReader {
 
         Properties config = super.findProperties(unzippedFile);
         builder.setProperties(config);
-        Logger.log("config", "load", config);
+        Logger.log("config", "load", file.getName() + ": " + config);
 
         FileUtil.deleteRecursive(unzippedFile);
 

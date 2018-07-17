@@ -44,14 +44,12 @@ public final class PIXImageWriter extends PixelFileWriter {
         FileOutputStream outputStream = new FileOutputStream(configDirectory);
         config.store(outputStream, "");
         outputStream.close();
-        Logger.log("config", "store", config);
+        Logger.log("config", "store", pixelFile.getFile().getName() + ": " + config);
 
         // Zip and then delete the parent folder
         File zipFile = new File(outputPath + ".pix");
         ZipUtil.pack(parentFolder, zipFile);
-        if (!zipFile.exists()) {
-            FileUtil.deleteRecursive(parentFolder);
-        }
+        FileUtil.deleteRecursive(parentFolder);
     }
 
     @Override
@@ -63,7 +61,8 @@ public final class PIXImageWriter extends PixelFileWriter {
         FileOutputStream outputStream = new FileOutputStream(config);
         pixelFile.getProperties().store(outputStream, "");
         outputStream.close();
-        Logger.log("config", "store", pixelFile.getProperties());
+        Logger.log("config", "store",
+                pixelFile.getFile().getName() + ": " + pixelFile.getProperties());
         ZipUtil.pack(temp, zipFile);
         FileUtil.deleteRecursive(temp);
     }
