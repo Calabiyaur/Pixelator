@@ -62,7 +62,11 @@ public class ImageWindowContainer extends Pane {
     }
 
     public static ImageEditor getEditor() {
-        return currentWindow.get().getEditor();
+        if (currentWindow.get() != null) {
+            return currentWindow.get().getEditor();
+        } else {
+            return null;
+        }
     }
 
     public Image getCurrentImage() {
