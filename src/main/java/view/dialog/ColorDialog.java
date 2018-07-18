@@ -4,8 +4,7 @@ import java.util.function.Consumer;
 
 import javafx.scene.paint.Color;
 
-import main.java.standard.ColorSelection;
-import main.java.standard.control.basic.BasicDialog;
+import main.java.view.ColorSelection;
 
 public class ColorDialog extends BasicDialog {
 

@@ -5,7 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-import main.java.standard.Point;
+import main.java.meta.Point;
 
 public class InfoView extends GridPane {
 

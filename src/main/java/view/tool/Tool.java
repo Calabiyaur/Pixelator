@@ -10,9 +10,8 @@ import javafx.scene.input.MouseEvent;
 
 import main.java.logging.Logger;
 import main.java.res.Images;
-import main.java.standard.Point;
+import main.java.meta.Point;
 import main.java.view.editor.ImageEditor;
-import main.java.view.editor.ImageWindowContainer;
 import main.java.view.editor.SelectionLayer;
 import main.java.view.editor.ToolLayer;
 
@@ -34,10 +33,9 @@ public abstract class Tool {
     private boolean selectionTool;
     private Tool secondary = this;
 
-    protected Tool(Tools tool, Images image, Images useImage, int hotspotX, int hotspotY, boolean draggableAfterClick,
+    protected Tool(Images image, Images useImage, int hotspotX, int hotspotY, boolean draggableAfterClick,
             boolean selectionTool) {
 
-        ToolManager.setTool(tool, this);
         this.image = image;
         this.useImage = useImage;
         this.hotspotX = hotspotX;
@@ -60,23 +58,15 @@ public abstract class Tool {
     }
 
     protected static ImageEditor getEditor() {
-        return ImageWindowContainer.getEditor();
+        return ToolManager.getEditor();
     }
 
     public static Point getMousePrevious() {
         return mousePrevious;
     }
 
-    public static void setMousePrevious(Point mousePrevious) {
-        Tool.mousePrevious = mousePrevious;
-    }
-
     public static Point getMouse() {
         return mouse;
-    }
-
-    public static void setMouse(Point mouse) {
-        Tool.mouse = mouse;
     }
 
     public static Point getMouseLastPressed() {

@@ -8,7 +8,6 @@ public class Pen extends Tool {
 
     private Pen() {
         super(
-                Tools.PEN,
                 Images.PEN,
                 Images.USE_PEN,
                 6,

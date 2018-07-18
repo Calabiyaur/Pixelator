@@ -9,9 +9,9 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-import main.java.standard.Point;
-import main.java.standard.control.basic.BasicScrollPane;
-import main.java.standard.image.ScalableImageView;
+import main.java.meta.Point;
+import main.java.control.parent.BasicScrollPane;
+import main.java.control.image.ScalableImageView;
 import main.java.util.ImageUtil;
 import main.java.view.editor.ImagePreview;
 import main.java.view.tool.Pick;

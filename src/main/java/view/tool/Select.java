@@ -1,7 +1,7 @@
 package main.java.view.tool;
 
 import main.java.res.Images;
-import main.java.standard.Point;
+import main.java.meta.Point;
 import main.java.util.ShapeUtil;
 import main.java.view.editor.ImageEditor;
 
@@ -11,7 +11,6 @@ public class Select extends Tool {
 
     private Select() {
         super(
-                Tools.SELECT,
                 Images.SELECT,
                 Images.USE_SELECT,
                 15,

@@ -1,20 +1,19 @@
 package main.java.view.tool;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import main.java.util.StringUtil;
+import main.java.view.editor.ImageEditor;
+import main.java.view.editor.ImageWindow;
 
 public class ToolManager {
 
-    private static final Map<Tools, Tool> toolMap = new HashMap<>();
+    private static ObjectProperty<ImageWindow> imageWindow = new SimpleObjectProperty<>();
 
     private ToolManager() {
-    }
-
-    public static void setTool(Tools enumTool, Tool tool) {
-        toolMap.put(enumTool, tool);
     }
 
     public static Tool getTool(Tools tool) {
@@ -33,4 +32,15 @@ public class ToolManager {
         return result;
     }
 
+    public static ObjectProperty<ImageWindow> imageWindowProperty() {
+        return imageWindow;
+    }
+
+    public static ImageWindow getImageWindow() {
+        return imageWindow.get();
+    }
+
+    public static ImageEditor getEditor() {
+        return getImageWindow() == null ? null : getImageWindow().getEditor();
+    }
 }

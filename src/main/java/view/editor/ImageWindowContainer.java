@@ -14,14 +14,15 @@ import javafx.scene.layout.Pane;
 import main.java.files.ImageFile;
 import main.java.files.PixelFile;
 import main.java.res.ImageConfig;
-import main.java.standard.image.ScalableImageView;
+import main.java.control.image.ScalableImageView;
 import main.java.view.InfoView;
 import main.java.view.ToolView;
 import main.java.view.dialog.SaveRequestDialog;
+import main.java.view.tool.ToolManager;
 
 public class ImageWindowContainer extends Pane {
 
-    private static ObjectProperty<ImageWindow> currentWindow;
+    private ObjectProperty<ImageWindow> currentWindow;
     private BooleanProperty imageSelected = new SimpleBooleanProperty(false);
     private BooleanProperty showGrid = new SimpleBooleanProperty(false);
     private BooleanProperty showCrossHair = new SimpleBooleanProperty(false);
@@ -32,6 +33,7 @@ public class ImageWindowContainer extends Pane {
 
     public ImageWindowContainer() {
         currentWindow = new SimpleObjectProperty<>();
+        ToolManager.imageWindowProperty().bind(currentWindow);
         currentWindow.addListener((ov, o, window) -> {
             imageSelected.setValue(window != null);
             if (window == null) {
@@ -61,7 +63,7 @@ public class ImageWindowContainer extends Pane {
         });
     }
 
-    public static ImageEditor getEditor() {
+    public ImageEditor getEditor() {
         if (currentWindow.get() != null) {
             return currentWindow.get().getEditor();
         } else {

@@ -11,8 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import main.java.files.PaletteFile;
-import main.java.standard.Point;
-import main.java.standard.image.PixelatedImageView;
+import main.java.meta.Point;
+import main.java.control.image.PixelatedImageView;
 import main.java.util.ImageUtil;
 import main.java.view.ColorView;
 import main.java.view.dialog.ColorDialog;

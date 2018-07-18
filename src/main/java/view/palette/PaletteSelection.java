@@ -19,9 +19,9 @@ import javafx.scene.layout.VBox;
 import main.java.files.Files;
 import main.java.files.PaletteFile;
 import main.java.res.Images;
-import main.java.standard.Direction;
-import main.java.standard.control.ImageButton;
-import main.java.standard.control.basic.BasicTabPane;
+import main.java.meta.Direction;
+import main.java.control.basic.ImageButton;
+import main.java.control.parent.BasicTabPane;
 import main.java.view.ColorView;
 import main.java.view.dialog.NewPaletteDialog;
 

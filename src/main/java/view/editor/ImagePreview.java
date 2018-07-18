@@ -2,7 +2,7 @@ package main.java.view.editor;
 
 import javafx.scene.layout.StackPane;
 
-import main.java.standard.image.ScalableImageView;
+import main.java.control.image.ScalableImageView;
 
 public class ImagePreview extends StackPane {
 

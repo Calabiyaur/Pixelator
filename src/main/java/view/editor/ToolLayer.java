@@ -3,7 +3,7 @@ package main.java.view.editor;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
-import main.java.standard.PointArray;
+import main.java.meta.PointArray;
 import main.java.util.ColorUtil;
 import main.java.util.ImageUtil;
 import main.java.view.ColorView;

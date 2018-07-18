@@ -9,8 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
 
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
-import main.java.standard.control.basic.BasicDialog;
-import main.java.standard.control.basic.BasicScrollPane;
+import main.java.control.parent.BasicScrollPane;
 
 public class ErrorDialog extends BasicDialog {
 

@@ -8,7 +8,6 @@ public class Pick extends Tool {
 
     private Pick() {
         super(
-                Tools.PICK,
                 Images.PICK,
                 Images.USE_PICK,
                 7,

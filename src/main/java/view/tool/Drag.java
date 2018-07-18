@@ -8,7 +8,6 @@ public class Drag extends Tool {
 
     private Drag() {
         super(
-                Tools.DRAG,
                 null,
                 null,
                 0,

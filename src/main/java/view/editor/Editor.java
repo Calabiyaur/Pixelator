@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 
-import main.java.standard.image.PixelatedImageView;
+import main.java.control.image.PixelatedImageView;
 import main.java.util.ImageUtil;
 import main.java.view.undo.UndoManager;
 import main.java.view.undo.Undoable;

@@ -3,11 +3,11 @@ package main.java.view.palette;
 import javafx.beans.binding.Bindings;
 import javafx.scene.image.Image;
 
-import main.java.standard.Direction;
-import main.java.standard.control.basic.BasicScrollPane;
-import main.java.standard.control.basic.BasicTab;
-import main.java.standard.control.basic.TabToggle;
-import main.java.standard.image.PixelatedImageView;
+import main.java.meta.Direction;
+import main.java.control.parent.BasicScrollPane;
+import main.java.control.parent.BasicTab;
+import main.java.control.parent.TabToggle;
+import main.java.control.image.PixelatedImageView;
 
 public class PaletteTab extends BasicTab {
 

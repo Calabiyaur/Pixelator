@@ -3,7 +3,7 @@ package main.java.view.undo;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 
-import main.java.standard.PixelArray;
+import main.java.meta.PixelArray;
 
 public class PixelChange extends PixelArray implements Undoable {
 

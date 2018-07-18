@@ -2,9 +2,9 @@ package main.java.view.dialog;
 
 import javafx.beans.value.ChangeListener;
 
-import main.java.standard.control.BiasButton;
-import main.java.standard.control.basic.BasicCheckBox;
-import main.java.standard.control.basic.BasicTextField;
+import main.java.control.basic.BiasButton;
+import main.java.control.basic.BasicCheckBox;
+import main.java.control.basic.BasicTextField;
 
 public class ResizeComponents {
 

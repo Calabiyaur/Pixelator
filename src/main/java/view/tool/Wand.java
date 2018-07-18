@@ -8,7 +8,6 @@ public class Wand extends Tool {
 
     private Wand() {
         super(
-                Tools.WAND,
                 Images.WAND,
                 Images.USE_WAND,
                 15,

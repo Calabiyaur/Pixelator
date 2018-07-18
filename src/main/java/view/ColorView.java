@@ -14,11 +14,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import main.java.files.PaletteFile;
-import main.java.res.Config;
 import main.java.res.Images;
-import main.java.standard.ColorSelection;
-import main.java.standard.control.ImageButton;
-import main.java.standard.control.basic.BasicWindow;
+import main.java.control.basic.ImageButton;
+import main.java.control.parent.BasicWindow;
 import main.java.start.ActionManager;
 import main.java.start.Main;
 import main.java.view.palette.PaletteSelection;

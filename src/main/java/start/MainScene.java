@@ -24,8 +24,8 @@ import main.java.files.PixelFile;
 import main.java.res.Action;
 import main.java.res.Config;
 import main.java.res.Images;
-import main.java.standard.Direction;
-import main.java.standard.control.ResizableBorderPane;
+import main.java.meta.Direction;
+import main.java.control.parent.ResizableBorderPane;
 import main.java.view.ColorView;
 import main.java.view.InfoView;
 import main.java.view.ToolView;
@@ -280,7 +280,7 @@ public class MainScene extends Scene {
     }
 
     private ImageEditor getEditor() {
-        return ImageWindowContainer.getEditor();
+        return imageContainer.getEditor();
     }
 
     private void moveAction() {

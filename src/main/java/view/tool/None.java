@@ -8,7 +8,6 @@ public class None extends Tool {
         super(
                 null,
                 null,
-                null,
                 0,
                 0,
                 false,

@@ -9,7 +9,6 @@ public class Line extends Tool {
 
     private Line() {
         super(
-                Tools.LINE,
                 Images.LINE,
                 Images.USE_LINE,
                 15,

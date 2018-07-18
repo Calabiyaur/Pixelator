@@ -1,7 +1,6 @@
 package main.java.view.dialog;
 
-import main.java.standard.control.basic.BasicDialog;
-import main.java.standard.control.basic.BasicTextField;
+import main.java.control.basic.BasicTextField;
 
 public class MoveImageDialog extends BasicDialog {
 

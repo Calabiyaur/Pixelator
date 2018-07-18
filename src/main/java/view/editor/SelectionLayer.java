@@ -7,9 +7,9 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
 import main.java.logging.Logger;
-import main.java.standard.Point;
-import main.java.standard.PointArray;
-import main.java.standard.image.OutlineRect;
+import main.java.meta.Point;
+import main.java.meta.PointArray;
+import main.java.control.image.OutlineRect;
 import main.java.util.ImageUtil;
 import main.java.view.ToolView;
 import main.java.view.undo.PixelChange;

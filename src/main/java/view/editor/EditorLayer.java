@@ -5,8 +5,8 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-import main.java.standard.Point;
-import main.java.standard.image.PixelatedImageView;
+import main.java.meta.Point;
+import main.java.control.image.PixelatedImageView;
 import main.java.view.undo.PixelChange;
 
 public abstract class EditorLayer extends PixelatedImageView {

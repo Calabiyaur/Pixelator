@@ -8,7 +8,6 @@ public class Fill extends Tool {
 
     private Fill() {
         super(
-                Tools.FILL,
                 Images.FILL,
                 Images.USE_FILL,
                 7,

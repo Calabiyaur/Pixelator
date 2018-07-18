@@ -10,7 +10,6 @@ public class Ellipse extends Tool {
 
     private Ellipse() {
         super(
-                Tools.ELLIPSE,
                 Images.ELLIPSE,
                 Images.USE_ELLIPSE,
                 15,

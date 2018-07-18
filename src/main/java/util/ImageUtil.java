@@ -5,8 +5,8 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 
-import main.java.standard.PixelArray;
-import main.java.standard.Point;
+import main.java.meta.PixelArray;
+import main.java.meta.Point;
 
 public class ImageUtil {
 

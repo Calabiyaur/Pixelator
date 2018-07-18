@@ -4,12 +4,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
-import main.java.standard.Point;
-import main.java.standard.PointArray;
-import main.java.standard.control.SwapColorButton;
-import main.java.standard.control.basic.BasicCheckBox;
-import main.java.standard.control.basic.BasicColorField;
-import main.java.standard.control.basic.BasicTextField;
+import main.java.meta.Point;
+import main.java.meta.PointArray;
+import main.java.control.basic.SwapColorButton;
+import main.java.control.basic.BasicCheckBox;
+import main.java.control.basic.BasicColorField;
+import main.java.control.basic.BasicTextField;
 import main.java.util.ShapeUtil;
 import main.java.view.ColorView;
 

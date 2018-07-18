@@ -25,10 +25,10 @@ import javafx.scene.layout.VBox;
 
 import main.java.res.Config;
 import main.java.res.Images;
-import main.java.standard.control.ToggleImageButton;
-import main.java.standard.control.basic.BasicText;
-import main.java.standard.control.basic.BasicWindow;
-import main.java.standard.image.PixelatedImageView;
+import main.java.control.basic.ToggleImageButton;
+import main.java.control.basic.BasicText;
+import main.java.control.parent.BasicWindow;
+import main.java.control.image.PixelatedImageView;
 import main.java.view.tool.Tools;
 
 public class ToolView extends GridPane {

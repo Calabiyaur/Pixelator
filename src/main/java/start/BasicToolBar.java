@@ -6,8 +6,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 
 import main.java.res.Images;
-import main.java.standard.control.ImageButton;
-import main.java.standard.control.ToggleImageButton;
+import main.java.control.basic.ImageButton;
+import main.java.control.basic.ToggleImageButton;
 import main.java.res.Action;
 
 public class BasicToolBar extends ToolBar {

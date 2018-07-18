@@ -11,8 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 
-import main.java.standard.control.basic.BasicControl;
-import main.java.standard.control.basic.BasicDialog;
+import main.java.control.basic.BasicControl;
 import org.apache.logging.log4j.util.TriConsumer;
 
 public abstract class PreviewDialog extends BasicDialog {
@@ -35,7 +34,7 @@ public abstract class PreviewDialog extends BasicDialog {
         GridPane.setVgrow(preview, Priority.ALWAYS);
     }
 
-    void updateImage(TriConsumer<WritableImage, PixelReader, PixelWriter> action) {
+    public void updateImage(TriConsumer<WritableImage, PixelReader, PixelWriter> action) {
         preview.updateImage(action);
     }
 

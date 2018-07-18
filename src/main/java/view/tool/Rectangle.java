@@ -10,7 +10,6 @@ public class Rectangle extends Tool {
 
     private Rectangle() {
         super(
-                Tools.RECTANGLE,
                 Images.RECTANGLE,
                 Images.USE_RECTANGLE,
                 15,

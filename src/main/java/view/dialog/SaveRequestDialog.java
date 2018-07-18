@@ -5,9 +5,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import main.java.standard.control.basic.BasicDialog;
-import main.java.standard.control.basic.Result;
-
 public class SaveRequestDialog extends BasicDialog {
 
     private static Result answer;

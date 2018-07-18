@@ -3,7 +3,7 @@ package main.java.view.undo;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 
-import main.java.standard.image.PixelatedImageView;
+import main.java.control.image.PixelatedImageView;
 
 public class ImageChange implements Undoable {
 

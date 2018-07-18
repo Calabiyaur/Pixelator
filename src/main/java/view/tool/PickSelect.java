@@ -8,7 +8,6 @@ public class PickSelect extends Tool {
 
     private PickSelect() {
         super(
-                Tools.SELECT,
                 Images.SELECT,
                 Images.USE_SELECT,
                 15,

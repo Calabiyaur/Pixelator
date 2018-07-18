@@ -8,7 +8,6 @@ public class FillColor extends Tool {
 
     private FillColor() {
         super(
-                Tools.FILL_COLOR,
                 Images.FILL_COLOR,
                 Images.USE_FILL_COLOR,
                 10,
