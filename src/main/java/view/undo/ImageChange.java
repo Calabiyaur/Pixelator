@@ -48,4 +48,12 @@ public class ImageChange implements Undoable {
     public Undoable clone() {
         return this;
     }
+
+    public Image getPreviousImage() {
+        return previousImage;
+    }
+
+    public Image getImage() {
+        return image;
+    }
 }

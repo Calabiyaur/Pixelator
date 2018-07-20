@@ -25,6 +25,7 @@ import main.java.meta.Direction;
 import main.java.meta.PixelArray;
 import main.java.meta.Point;
 import main.java.meta.PointArray;
+import main.java.meta.QuadConsumer;
 import main.java.util.ColorUtil;
 import main.java.util.ImageUtil;
 import main.java.util.ShapeUtil;
@@ -113,7 +114,8 @@ public class ImageEditor extends Editor {
     }
 
     public void setBorderColor(String color) {
-        /*stackPane.*/setStyle(/*"-fx-border-color: " + color + "; "
+        /*stackPane.*/
+        setStyle(/*"-fx-border-color: " + color + "; "
                 + */"-fx-background-color: #DDDDDD;");
     }
 
@@ -322,7 +324,8 @@ public class ImageEditor extends Editor {
             if (!ImageUtil.outOfBounds(getImage(), x, y)) {
                 Color previousColor = reader.getColor(x, y);
                 Color color =
-                        ToolView.isReplaceColor() ? add.getColor(i) : ColorUtil.addColors(previousColor, add.getColor(i));
+                        ToolView.isReplaceColor() ? add.getColor(i) :
+                                ColorUtil.addColors(previousColor, add.getColor(i));
                 result.add(x, y, previousColor, color);
             }
         }
@@ -357,46 +360,28 @@ public class ImageEditor extends Editor {
         writeAndRegister(pixels);
     }
 
+    @SuppressWarnings("Duplicates")
     public void rotateClockwise() {
-        currentTool.lockAndReset();
-
-        Image oldImage = getImage();
-        WritableImage newImage = new WritableImage((int) oldImage.getHeight(), (int) oldImage.getWidth());
-        writer = newImage.getPixelWriter();
-
-        for (int j = 0; j < height.get(); j++) {
-            int nj = height.get() - j - 1;
-            for (int i = 0; i < width.get(); i++) {
-                writer.setColor(j, i, reader.getColor(i, nj));
+        changeImage(getImageView().getHeight(), getImage().getWidth(), (o, n, reader, writer) -> {
+            for (int j = 0; j < height.get(); j++) {
+                int nj = height.get() - j - 1;
+                for (int i = 0; i < width.get(); i++) {
+                    writer.setColor(j, i, reader.getColor(i, nj));
+                }
             }
-        }
-
-        ImageChange imageChange = new ImageChange(getImageView(), oldImage, newImage);
-        register(imageChange);
-
-        getImageView().setImage(newImage);
-        updateDirty();
+        });
     }
 
+    @SuppressWarnings("Duplicates")
     public void rotateCounterClockwise() {
-        currentTool.lockAndReset();
-
-        Image oldImage = getImage();
-        WritableImage newImage = new WritableImage((int) oldImage.getHeight(), (int) oldImage.getWidth());
-        writer = newImage.getPixelWriter();
-
-        for (int i = 0; i < width.get(); i++) {
-            int ni = width.get() - i - 1;
-            for (int j = 0; j < height.get(); j++) {
-                writer.setColor(j, i, reader.getColor(ni, j));
+        changeImage(getImageView().getHeight(), getImage().getWidth(), (o, n, reader, writer) -> {
+            for (int i = 0; i < width.get(); i++) {
+                int ni = width.get() - i - 1;
+                for (int j = 0; j < height.get(); j++) {
+                    writer.setColor(j, i, reader.getColor(ni, j));
+                }
             }
-        }
-
-        ImageChange imageChange = new ImageChange(getImageView(), oldImage, newImage);
-        register(imageChange);
-
-        getImageView().setImage(newImage);
-        updateDirty();
+        });
     }
 
     public void moveImage(int h, int v) {
@@ -413,30 +398,18 @@ public class ImageEditor extends Editor {
     }
 
     public void stretchImage(int w, int h) {
-        currentTool.lockAndReset();
-
-        WritableImage newImage = new WritableImage(w, h);
-        writer = newImage.getPixelWriter();
-
-        Image oldImage = getImage();
-        for (int i = 0; i < w; i++) {
-            int oldI = (int) oldImage.getWidth() * i / w;
-            for (int j = 0; j < h; j++) {
-                int oldJ = (int) oldImage.getHeight() * j / h;
-                writer.setColor(i, j, reader.getColor(oldI, oldJ));
+        changeImage(w, h, (o, n, reader, writer) -> {
+            for (int i = 0; i < w; i++) {
+                int oldI = (int) o.getWidth() * i / w;
+                for (int j = 0; j < h; j++) {
+                    int oldJ = (int) o.getHeight() * j / h;
+                    writer.setColor(i, j, reader.getColor(oldI, oldJ));
+                }
             }
-        }
-
-        ImageChange imageChange = new ImageChange(getImageView(), oldImage, newImage);
-        register(imageChange);
-
-        getImageView().setImage(newImage);
-        updateDirty();
+        });
     }
 
     public void resizeCanvas(int w, int h, Direction bias) {
-        currentTool.lockAndReset();
-
         Image oldImage = getImage();
         int xDiff = w - (int) oldImage.getWidth();
         int yDiff = h - (int) oldImage.getHeight();
@@ -448,29 +421,35 @@ public class ImageEditor extends Editor {
     }
 
     private void resize(int w, int h, int xBias, int yBias) {
-        WritableImage newImage = new WritableImage(w, h);
-        writer = newImage.getPixelWriter();
-
-        Image oldImage = getImage();
-
-        for (int i = 0; i < oldImage.getWidth(); i++) {
-            int x = i + xBias;
-            if (x < 0 || x >= w) {
-                continue;
-            }
-            for (int j = 0; j < oldImage.getHeight(); j++) {
-                int y = j + yBias;
-                if (y < 0 || y >= h) {
+        changeImage(w, h, (o, n, reader, writer) -> {
+            for (int i = 0; i < o.getWidth(); i++) {
+                int x = i + xBias;
+                if (x < 0 || x >= w) {
                     continue;
                 }
-                writer.setColor(x, y, reader.getColor(i, j));
+                for (int j = 0; j < o.getHeight(); j++) {
+                    int y = j + yBias;
+                    if (y < 0 || y >= h) {
+                        continue;
+                    }
+                    writer.setColor(x, y, reader.getColor(i, j));
+                }
             }
-        }
+        });
+    }
+
+    private void changeImage(double width, double height,
+            QuadConsumer<Image, Image, PixelReader, PixelWriter> consumer) {
+        currentTool.lockAndReset();
+
+        WritableImage newImage = new WritableImage((int) width, (int) height);
+        Image oldImage = getImage();
+        consumer.accept(oldImage, newImage, oldImage.getPixelReader(), newImage.getPixelWriter());
 
         ImageChange imageChange = new ImageChange(getImageView(), oldImage, newImage);
         register(imageChange);
 
-        getImageView().setImage(newImage);
+        getImageView().setImage(imageChange.getImage());
         updateDirty();
     }
 
@@ -569,8 +548,6 @@ public class ImageEditor extends Editor {
             selectionLayer.defineImage(image);
         }
     }
-
-
 
     public void removeSelectionAndRegister() {
         removeSelection();
