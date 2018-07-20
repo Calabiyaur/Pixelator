@@ -111,28 +111,6 @@ public abstract class DraggablePane extends GridPane {
         onMouseDragged.forEach(c -> c.handle(event));
     }
 
-    private double shiftHorizontal(double value) { //TODO: These methods are a mess...
-        double shift = NumberUtil.minMax(minX.get(), getTranslateX() + value, maxX.get() - getWidth());
-        double diff = getTranslateX() - shift;
-        setTranslateX(shift);
-        return diff;
-    }
-
-    private double shiftVertical(double value) {
-        double shift = NumberUtil.minMax(minY.get(), getTranslateY() + value, maxY.get() - getHeight());
-        double diff = getTranslateY() - shift;
-        setTranslateY(shift);
-        return diff;
-    }
-
-    private void setNewWidth(double value) {
-        setPrefWidth(Math.min(value, maxX.get() - getTranslateX()));
-    }
-
-    private void setNewHeight(double value) {
-        setPrefHeight(Math.min(value, maxY.get() - getTranslateY()));
-    }
-
     protected void resetPosition(double width, double height) {
         setTranslateX(NumberUtil.minMax(minX.get(), getTranslateX(), maxX.get() - width));
         setTranslateY(NumberUtil.minMax(minY.get(), getTranslateY(), maxY.get() - height));

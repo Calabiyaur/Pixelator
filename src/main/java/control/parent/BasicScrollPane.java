@@ -53,12 +53,11 @@ public class BasicScrollPane extends BorderPane {
         heightProperty().addListener((ov, o, n) -> update());
 
         setOnScroll(e -> {
-            //Logger.logEvent(e, "SCROLL");
             if (e.isControlDown()) {
                 if (e.isShiftDown()) {
-                    scrollHorizontally(e);
+                    scrollHorizontally(e.getDeltaX());
                 } else {
-                    scrollVertically(e);
+                    scrollVertically(e.getDeltaY());
                 }
             } else {
                 if (onRawScroll != null) {
@@ -169,6 +168,20 @@ public class BasicScrollPane extends BorderPane {
         vBar.setMaxWidth(0);
     }
 
+    private void scrollHorizontally(double delta) {
+        content.setTranslateX(content.getTranslateX() + delta);
+        updateBarPosition();
+    }
+
+    private void scrollVertically(double delta) {
+        content.setTranslateY(content.getTranslateY() + delta);
+        updateBarPosition();
+    }
+
+    private void updateBarPosition() {
+
+    }
+
     public Region getContent() {
         return content;
     }
@@ -221,29 +234,17 @@ public class BasicScrollPane extends BorderPane {
         return vBar.getMaxWidth() != 0;
     }
 
-    public void translateContent(double h, double v) { //FIXME
-        double hFactor = (getWidthOfCenter() - hBar.getWidth()) / content.getWidth();
-        double vFactor = (getHeightOfCenter() - vBar.getHeight()) / content.getHeight();
-        hBar.setTranslateX(hBar.getTranslateX() + h * hFactor);
-        vBar.setTranslateY(vBar.getTranslateY() + v * vFactor);
+    public void translateContent(double h, double v) {
+        scrollHorizontally(h);
+        scrollVertically(v);
     }
 
     public void setScrollByMouse(boolean scrollByMouse) {
         if (scrollByMouse) {
-            setOnRawScroll(e -> scrollVertically(e));
+            setOnRawScroll(e -> scrollVertically(e.getDeltaY()));
         } else {
             setOnRawScroll(onRawScroll);
         }
-    }
-
-    private void scrollHorizontally(ScrollEvent e) {
-        //TODO: Move content instead of scroll bars
-        hBar.setTranslateX(hBar.getTranslateX() - e.getDeltaX());
-    }
-
-    private void scrollVertically(ScrollEvent e) {
-        //TODO: Move content instead of scroll bars
-        vBar.setTranslateY(vBar.getTranslateY() - e.getDeltaY());
     }
 
     public void setOnRawScroll(EventHandler<ScrollEvent> value) {

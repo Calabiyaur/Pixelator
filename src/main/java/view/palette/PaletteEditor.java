@@ -110,7 +110,4 @@ public class PaletteEditor extends Editor {
         this.getPixelFile().setFile(file);
     }
 
-    public double getActualHeight() {
-        return getImageView().getHeight() * getImageView().getScaleY();
-    }
 }
