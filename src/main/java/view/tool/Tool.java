@@ -95,8 +95,6 @@ public abstract class Tool {
             }
         }
 
-        Logger.log("Mouse", mouseButton, "Pressed", mouse);
-
         actingTool.pressPrimary();
     }
 
@@ -117,11 +115,9 @@ public abstract class Tool {
     public final void release(MouseEvent e) {
         updateMouse(e);
         if (actingTool.isDraggableAfterClick() && !dragging && isStillSincePress()) {
-            Logger.log("Mouse", mouseButton, "Released for dragging", mouse);
             dragging = true;
             mouseButton = null;
         } else {
-            Logger.log("Mouse", mouseButton, "Released", mouse);
             imitateRelease();
         }
     }

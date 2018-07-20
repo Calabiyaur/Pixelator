@@ -360,25 +360,43 @@ public class ImageEditor extends Editor {
     public void rotateClockwise() {
         currentTool.lockAndReset();
 
-        for (int i = 0; i < width.get(); i++) {
-            int ni = width.get() - i - 1;
-            for (int j = 0; j < height.get(); j++) {
-                pixels.add(i, j, reader.getColor(i, j), reader.getColor(j, ni));
+        Image oldImage = getImage();
+        WritableImage newImage = new WritableImage((int) oldImage.getHeight(), (int) oldImage.getWidth());
+        writer = newImage.getPixelWriter();
+
+        for (int j = 0; j < height.get(); j++) {
+            int nj = height.get() - j - 1;
+            for (int i = 0; i < width.get(); i++) {
+                writer.setColor(j, i, reader.getColor(i, nj));
             }
         }
-        writeAndRegister(pixels);
+
+        ImageChange imageChange = new ImageChange(getImageView(), oldImage, newImage);
+        register(imageChange);
+
+        getImageView().setImage(newImage);
+        updateDirty();
     }
 
     public void rotateCounterClockwise() {
         currentTool.lockAndReset();
 
-        for (int j = 0; j < height.get(); j++) {
-            int nj = width.get() - j - 1;
-            for (int i = 0; i < width.get(); i++) {
-                pixels.add(i, j, reader.getColor(i, j), reader.getColor(nj, i));
+        Image oldImage = getImage();
+        WritableImage newImage = new WritableImage((int) oldImage.getHeight(), (int) oldImage.getWidth());
+        writer = newImage.getPixelWriter();
+
+        for (int i = 0; i < width.get(); i++) {
+            int ni = width.get() - i - 1;
+            for (int j = 0; j < height.get(); j++) {
+                writer.setColor(j, i, reader.getColor(ni, j));
             }
         }
-        writeAndRegister(pixels);
+
+        ImageChange imageChange = new ImageChange(getImageView(), oldImage, newImage);
+        register(imageChange);
+
+        getImageView().setImage(newImage);
+        updateDirty();
     }
 
     public void moveImage(int h, int v) {
