@@ -16,14 +16,15 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-import main.java.meta.Direction;
-import main.java.meta.PixelArray;
-import main.java.meta.Point;
-import main.java.meta.PointArray;
 import main.java.control.image.Crosshair;
 import main.java.control.image.Grid;
 import main.java.control.image.OutlineRect;
 import main.java.control.image.ScalableImageView;
+import main.java.files.ImageFile;
+import main.java.meta.Direction;
+import main.java.meta.PixelArray;
+import main.java.meta.Point;
+import main.java.meta.PointArray;
 import main.java.util.ColorUtil;
 import main.java.util.ImageUtil;
 import main.java.util.ShapeUtil;
@@ -53,8 +54,8 @@ public class ImageEditor extends Editor {
 
     private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>();
 
-    public ImageEditor(ScalableImageView imageView) {
-        super(imageView);
+    public ImageEditor(ImageFile file, ScalableImageView imageView) {
+        super(file, imageView);
         currentTool = ToolManager.getTool(ToolView.getCurrentTool());
         makeWritable();
 

@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 
 import main.java.control.image.PixelatedImageView;
+import main.java.files.PixelFile;
 import main.java.util.ImageUtil;
 import main.java.view.undo.UndoManager;
 import main.java.view.undo.Undoable;
@@ -16,8 +17,10 @@ public abstract class Editor extends StackPane {
     private PixelatedImageView imageView;
     private Image cleanImage;
     private BooleanProperty dirty = new SimpleBooleanProperty(false);
+    private final PixelFile pixelFile;
 
-    public Editor(PixelatedImageView imageView) {
+    public Editor(PixelFile file, PixelatedImageView imageView) {
+        this.pixelFile = file;
         this.imageView = imageView;
         this.undoManager = new UndoManager();
     }
@@ -51,7 +54,7 @@ public abstract class Editor extends StackPane {
         updateDirty();
     }
 
-    protected final void updateDirty() {
+    public final void updateDirty() {
         dirty.set(!ImageUtil.equals(imageView.getImage(), cleanImage));
     }
 
@@ -67,4 +70,7 @@ public abstract class Editor extends StackPane {
         return dirty;
     }
 
+    public PixelFile getPixelFile() {
+        return pixelFile;
+    }
 }

@@ -26,10 +26,9 @@ public class PaletteEditor extends Editor {
     public static int DEFAULT_HEIGHT = 4;
     private Point selected;
     private Rectangle selection;
-    private PaletteFile file;
 
     public PaletteEditor(PaletteFile file) {
-        super(new PixelatedImageView(ImageUtil.makeWritableIfNot(file.getImage())));
+        super(file, new PixelatedImageView(ImageUtil.makeWritableIfNot(file.getImage())));
         PixelatedImageView imageView = getImageView();
         setCleanImage(ImageUtil.createWritableImage(getImage()));
 
@@ -38,8 +37,6 @@ public class PaletteEditor extends Editor {
         imageView.setOnMouseDragged(e -> choose(e));
         imageView.setOnMouseEntered(e -> setCursor(Pick.getMe().getCursor()));
         imageView.setOnMouseExited(e -> setCursor(Cursor.DEFAULT));
-
-        this.file = file;
 
         selection = new Rectangle();
         selection.widthProperty().bind(imageView.scaleXProperty().add(2));
@@ -106,11 +103,11 @@ public class PaletteEditor extends Editor {
     }
 
     public PaletteFile getFile() {
-        return file;
+        return (PaletteFile) getPixelFile();
     }
 
     public void setFile(File file) {
-        this.file.setFile(file);
+        this.getPixelFile().setFile(file);
     }
 
     public double getActualHeight() {

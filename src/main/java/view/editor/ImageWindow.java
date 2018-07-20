@@ -38,7 +38,7 @@ public class ImageWindow extends BasicWindow {
         super(true);
         this.imageFile = imageFile;
         imageView.imageProperty().addListener((ov, o, n) -> this.imageFile.setImage(n));
-        imageEditor = new ImageEditor(imageView);
+        imageEditor = new ImageEditor(imageFile, imageView);
         setText(imageFile.getName());
         imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
         setGraphic(imageEditor);
@@ -206,7 +206,6 @@ public class ImageWindow extends BasicWindow {
             }
         }
         close();
-        saveOnlyConfig();
         return true;
     }
 
@@ -225,9 +224,10 @@ public class ImageWindow extends BasicWindow {
         getEditor().undirty();
     }
 
-    public void saveOnlyConfig() {
+    public void close() {
         updateConfig();
         Files.get().saveConfig(getFile());
+        super.close();
     }
 
     public ImageEditor getEditor() {

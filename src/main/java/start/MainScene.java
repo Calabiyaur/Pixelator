@@ -270,6 +270,8 @@ public class MainScene extends Scene {
         if (clipboard.hasImage()) {
             Image image = clipboard.getImage();
             imageContainer.addImage(new ImageFile(null, image));
+            getEditor().setCleanImage(new WritableImage((int) image.getWidth(), (int) image.getHeight()));
+            getEditor().updateDirty();
         }
     }
 
