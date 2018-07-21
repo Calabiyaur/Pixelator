@@ -4,6 +4,8 @@ import java.io.File;
 
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -26,6 +28,7 @@ public class PaletteEditor extends Editor {
     public static int DEFAULT_HEIGHT = 4;
     private Point selected;
     private Rectangle selection;
+    private boolean dragging = false;
 
     public PaletteEditor(PaletteFile file) {
         super(file, new PixelatedImageView(ImageUtil.makeWritableIfNot(file.getImage())));
@@ -33,9 +36,10 @@ public class PaletteEditor extends Editor {
         setCleanImage(ImageUtil.createWritableImage(getImage()));
 
         imageView.setPickOnBounds(true);
-        imageView.setOnMousePressed(e -> onMouseClicked(e));
-        imageView.setOnMouseDragged(e -> choose(e));
-        imageView.setOnMouseEntered(e -> setCursor(Pick.getMe().getCursor()));
+        imageView.setOnMousePressed(e -> onMousePressed(e));
+        imageView.setOnMouseDragged(e -> onMouseDragged(e));
+        imageView.setOnMouseReleased(e -> onMouseReleased(e));
+        imageView.setOnMouseMoved(e -> onMouseMoved(e));
         imageView.setOnMouseExited(e -> setCursor(Cursor.DEFAULT));
 
         selection = new Rectangle();
@@ -58,11 +62,64 @@ public class PaletteEditor extends Editor {
         prefHeightProperty().bind(imageView.heightProperty().multiply(imageView.scaleYProperty()));
     }
 
-    private void onMouseClicked(MouseEvent event) {
+    private void onMousePressed(MouseEvent event) {
         if (event.getClickCount() == 2) {
             ColorDialog.chooseColor(ColorView.getColor(), color -> setColor(color));
+        } else if (getMousePosition(event.getX(), event.getY()).equals(selected)) {
+            startDragging();
         } else {
             choose(event);
+        }
+    }
+
+    private void onMouseDragged(MouseEvent e) {
+        if (dragging) {
+            selection.setTranslateX((getImageView().getScaleX() * (e.getX() - 0.5)) - 2);
+            selection.setTranslateY((getImageView().getScaleY() * (e.getY() - 0.5)) - 2);
+        } else {
+            startDragging();
+        }
+    }
+
+    private void startDragging() {
+        setCursor(Cursor.CLOSED_HAND);
+        selection.translateXProperty().unbind();
+        selection.translateYProperty().unbind();
+        selection.setFill(getImage().getPixelReader().getColor(selected.getX(), selected.getY()));
+        dragging = true;
+    }
+
+    private void onMouseReleased(MouseEvent e) {
+        if (dragging) {
+            Point mp = getMousePosition(e.getX(), e.getY());
+
+            PixelReader reader = getImage().getPixelReader();
+            PixelWriter writer = getImage().getPixelWriter();
+
+            Color color = reader.getColor(selected.getX(), selected.getY());
+            Color otherColor = reader.getColor(mp.getX(), mp.getY());
+
+            writer.setColor(selected.getX(), selected.getY(), otherColor);
+            writer.setColor(mp.getX(), mp.getY(), color);
+
+            PixelChange change = new PixelChange(writer);
+            change.add(selected.getX(), selected.getY(), color, otherColor);
+            change.add(mp.getX(), mp.getY(), otherColor, color);
+            register(change);
+
+            dragging = false;
+            setCursor(Cursor.OPEN_HAND);
+            selection.setFill(Color.TRANSPARENT);
+
+            choose(e);
+        }
+    }
+
+    private void onMouseMoved(MouseEvent e) {
+        if (getMousePosition(e.getX(), e.getY()).equals(selected)) {
+            setCursor(Cursor.OPEN_HAND);
+        } else {
+            setCursor(Pick.getMe().getCursor());
         }
     }
 

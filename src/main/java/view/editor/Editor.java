@@ -3,6 +3,7 @@ package main.java.view.editor;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 
 import main.java.control.image.PixelatedImageView;
@@ -29,8 +30,8 @@ public abstract class Editor extends StackPane {
         return imageView;
     }
 
-    public final Image getImage() {
-        return imageView.getImage();
+    public final WritableImage getImage() {
+        return (WritableImage) imageView.getImage();
     }
 
     protected final void register(Undoable change) {
