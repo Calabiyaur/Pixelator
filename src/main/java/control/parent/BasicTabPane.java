@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 
 import main.java.meta.Direction;
 
-public class BasicTabPane<T extends BasicTab> extends ResizableGridPane {
+public class BasicTabPane<T extends BasicTab> extends GridPane {
 
     private Pane northBox;
     private Pane westBox;
@@ -48,8 +48,8 @@ public class BasicTabPane<T extends BasicTab> extends ResizableGridPane {
         initNorth(rotateNorth);
         initWest(rotateWest);
         add(stackPane, 1, 1);
-        setHgrow(1, Priority.ALWAYS);
-        setVgrow(1, Priority.ALWAYS);
+        setHgrow(stackPane, Priority.ALWAYS);
+        setVgrow(stackPane, Priority.ALWAYS);
 
         toggleGroup.selectedToggleProperty().addListener((ov, o, n) -> {
             if (n == null) {
