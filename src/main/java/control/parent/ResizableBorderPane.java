@@ -77,20 +77,22 @@ public class ResizableBorderPane extends BorderPane {
 
     protected Region getComponent(MouseEvent event, boolean setPos) {
         double x = event.getX();
-        double leftX = ((Region) getLeft()).getWidth();
-        double rightX = getWidth() - ((Region) getRight()).getWidth();
+        Region left = (Region) getLeft();
+        double leftX = left == null ? 0 : left.getWidth();
+        Region right = (Region) getRight();
+        double rightX = getWidth() - (right == null ? 0 : right.getWidth());
 
         if (0 < leftX - x && leftX - x < RESIZE_MARGIN) {
             if (setPos) {
                 dragPos = Position.LEFT;
             }
-            return (Region) getLeft();
+            return left;
         }
         if (0 < x - rightX && x - rightX < RESIZE_MARGIN) {
             if (setPos) {
                 dragPos = Position.RIGHT;
             }
-            return (Region) getRight();
+            return right;
         }
         return null;
     }

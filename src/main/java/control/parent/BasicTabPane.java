@@ -3,20 +3,21 @@ package main.java.control.parent;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import main.java.meta.Direction;
 
-public class BasicTabPane<T extends BasicTab> extends BorderPane {
+public class BasicTabPane<T extends BasicTab> extends ResizableGridPane {
 
     private Pane northBox;
     private Pane westBox;
@@ -35,8 +36,8 @@ public class BasicTabPane<T extends BasicTab> extends BorderPane {
     };
 
     public BasicTabPane(Direction rotateNorth, Direction rotateWest) {
-        setCenter(stackPane);
-        setSpacing(0, 0, 0, 6);
+        setHgap(6);
+        setVgap(6);
         tabs.addListener((ListChangeListener<T>) c -> {
             while (c.next()) {
                 c.getAddedSubList().forEach(added -> onTabAdded(added));
@@ -46,6 +47,9 @@ public class BasicTabPane<T extends BasicTab> extends BorderPane {
 
         initNorth(rotateNorth);
         initWest(rotateWest);
+        add(stackPane, 1, 1);
+        setHgrow(1, Priority.ALWAYS);
+        setVgrow(1, Priority.ALWAYS);
 
         toggleGroup.selectedToggleProperty().addListener((ov, o, n) -> {
             if (n == null) {
@@ -54,10 +58,7 @@ public class BasicTabPane<T extends BasicTab> extends BorderPane {
         });
     }
 
-    public void setSpacing(double top, double right, double bottom, double left) {
-        BorderPane.setMargin(stackPane, new Insets(top, right, bottom, left));
-    }
-
+    @SuppressWarnings("Duplicates")
     private void initNorth(Direction rotate) {
         if (rotate.isVertical()) {
             northBox = new VBox();
@@ -67,9 +68,10 @@ public class BasicTabPane<T extends BasicTab> extends BorderPane {
             ((HBox) northBox).setSpacing(6);
         }
         northBox.setRotate(rotate.getRotate());
-        setTop(new Group(northBox));
+        add(new Group(northBox), 1, 0);
     }
 
+    @SuppressWarnings("Duplicates")
     private void initWest(Direction rotate) {
         if (rotate.isVertical()) {
             westBox = new VBox();
@@ -79,7 +81,9 @@ public class BasicTabPane<T extends BasicTab> extends BorderPane {
             ((HBox) westBox).setSpacing(6);
         }
         westBox.setRotate(rotate.getRotate());
-        setLeft(new Group(westBox));
+        Group west = new Group(westBox);
+        add(west, 0, 1);
+        GridPane.setValignment(west, VPos.TOP);
     }
 
     public void addTab(T tab, String text) {

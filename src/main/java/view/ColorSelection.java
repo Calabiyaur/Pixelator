@@ -18,10 +18,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
+import main.java.control.basic.BasicTextField;
+import main.java.control.parent.BasicScrollPane;
+import main.java.control.parent.BasicTabPane;
 import main.java.meta.Direction;
 import main.java.res.Config;
-import main.java.control.parent.BasicTabPane;
-import main.java.control.basic.BasicTextField;
 import main.java.util.ColorUtil;
 
 public class ColorSelection extends BorderPane {
@@ -71,10 +72,12 @@ public class ColorSelection extends BorderPane {
         hexField = new TextField("0x000000FF");
 
         BasicTabPane<ColorTab> tabPane = new BasicTabPane<>(Direction.NORTH, Direction.WEST);
-        tabPane.setSpacing(0, 0, 0, 8);
         tabPane.addTab(new ColorTab(createHsbPane()), "HSB");
         ColorTab rgbTab = new ColorTab(createRgbPane());
         tabPane.addTab(rgbTab, "RGB");
+        ColorTab dummy = new ColorTab(new BasicScrollPane(new Pane()));
+        tabPane.addTab(dummy, null);
+        dummy.getToggle().setVisible(false);
 
         setTop(title);
         VBox vBox = new VBox(colorPreview, hexField);
