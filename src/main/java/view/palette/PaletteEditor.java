@@ -32,6 +32,7 @@ public class PaletteEditor extends Editor {
 
     public PaletteEditor(PaletteFile file) {
         super(file, new PixelatedImageView(ImageUtil.makeWritableIfNot(file.getImage())));
+        getFile().setImage(getImage());
         PixelatedImageView imageView = getImageView();
         setCleanImage(ImageUtil.createWritableImage(getImage()));
 
