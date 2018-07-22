@@ -28,12 +28,18 @@ public class Files {
 
     static {
         writers.put(null, new BasicImageWriter());
-        writers.put(Extension.PIX, new PIXImageWriter());
+        PIXImageWriter writer = new PIXImageWriter();
+        writers.put(Extension.PIX, writer);
+        writers.put(Extension.PAL, writer);
+        writers.put(Extension.PALI, writer);
     }
 
     static {
         readers.put(null, new BasicImageReader());
-        readers.put(Extension.PIX, new PIXImageReader());
+        PIXImageReader reader = new PIXImageReader();
+        readers.put(Extension.PIX, reader);
+        readers.put(Extension.PAL, reader);
+        readers.put(Extension.PALI, reader);
     }
 
     private Files() {

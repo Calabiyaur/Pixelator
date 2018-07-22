@@ -94,7 +94,7 @@ public class PaletteEditor extends Editor {
             Point mp = getMousePosition(e.getX(), e.getY());
 
             PixelReader reader = getImage().getPixelReader();
-            PixelWriter writer = getImage().getPixelWriter();
+            PixelWriter writer = ((WritableImage) getImage()).getPixelWriter();
 
             Color color = reader.getColor(selected.getX(), selected.getY());
             Color otherColor = reader.getColor(mp.getX(), mp.getY());
@@ -137,7 +137,7 @@ public class PaletteEditor extends Editor {
         ColorView.setColor(color);
     }
 
-    private void select(Point position) {
+    void select(Point position) {
         selected = position;
         selection.translateXProperty().bind(getImageView().scaleXProperty().multiply(position.getX()).subtract(2));
         selection.translateYProperty().bind(getImageView().scaleYProperty().multiply(position.getY()).subtract(2));
@@ -167,4 +167,7 @@ public class PaletteEditor extends Editor {
         this.getPixelFile().setFile(file);
     }
 
+    public Point getSelected() {
+        return selected;
+    }
 }

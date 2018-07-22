@@ -1,13 +1,18 @@
 package main.java.view.palette;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.scene.image.Image;
 
 import main.java.control.image.PixelatedImageView;
 import main.java.control.parent.BasicScrollPane;
 import main.java.control.parent.BasicTab;
 import main.java.control.parent.TabToggle;
+import main.java.files.Files;
 import main.java.meta.Direction;
+import main.java.meta.Point;
+import main.java.res.PaletteConfig;
+import main.java.view.dialog.SaveRequestDialog;
 
 public class PaletteTab extends BasicTab {
 
@@ -35,12 +40,60 @@ public class PaletteTab extends BasicTab {
         return new PaletteToggle();
     }
 
+    public void initConfig() {
+        String x = getEditor().getFile().getProperties().getProperty(PaletteConfig.SELECTED_X.name());
+        String y = getEditor().getFile().getProperties().getProperty(PaletteConfig.SELECTED_Y.name());
+        if (x != null && y != null) {
+            getEditor().select(new Point(Integer.parseInt(x), Integer.parseInt(y)));
+        }
+    }
+
+    private void updateConfig() {
+        Point point = getEditor().getSelected();
+        getEditor().getFile().getProperties().put(PaletteConfig.SELECTED_X.name(), Integer.toString(point.getX()));
+        getEditor().getFile().getProperties().put(PaletteConfig.SELECTED_Y.name(), Integer.toString(point.getY()));
+    }
+
     public PaletteEditor getEditor() {
         return editor;
     }
 
     public void setEditor(PaletteEditor editor) {
         this.editor = editor;
+    }
+
+    public boolean closeIfClean() {
+        if (isDirty()) {
+            switch(SaveRequestDialog.display()) {
+                case OK:
+                    saveAndUndirty();
+                    break;
+                case NO:
+                    Files.get().saveConfig(getEditor().getFile());
+                    break;
+                case CANCEL:
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public void saveAndUndirty() {
+        updateConfig();
+        Files.get().save(getEditor().getFile());
+        undirty();
+    }
+
+    public void undirty() {
+        getEditor().undirty();
+    }
+
+    public boolean isDirty() {
+        return dirtyProperty().get();
+    }
+
+    public BooleanProperty dirtyProperty() {
+        return getEditor().dirtyProperty();
     }
 
     private class PaletteToggle extends TabToggle {

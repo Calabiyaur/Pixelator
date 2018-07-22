@@ -14,31 +14,30 @@ public final class PIXImageWriter extends PixelFileWriter {
 
     @Override
     public void write(PixelFile pixelFile) throws IOException {
-        File output = pixelFile.getFile();
+        File zipFile = pixelFile.getFile();
+        String outputPath = FileUtil.removeType(zipFile.getPath());
 
-        // Delete the old PIX file
-        if (output.exists() && !output.delete()) {
-            throw new IOException("Failed to delete old PIX file");
-        }
-
-        // Create parent folder
-        String outputPath = FileUtil.removeType(output.getPath());
-        File parentFolder = new File(outputPath + "_tmp_write");
-        if (!parentFolder.mkdir()) {
-            throw new IOException("Failed to create temporary PIX folder");
+        // Create temporal folder
+        File temp = new File(outputPath + "_tmp_write");
+        if (zipFile.exists()) {
+            ZipUtil.unpack(zipFile, temp);
+        } else {
+            if (!temp.mkdir()) {
+                throw new IOException("Failed to create temporary PIX folder");
+            }
         }
 
         // Create image file
-        File imageDirectory = new File(parentFolder.getPath() + File.separator + "image.png");
-        if (!imageDirectory.createNewFile()) {
+        File imageDirectory = new File(temp.getPath() + File.separator + "image.png");
+        if (!imageDirectory.exists() && !imageDirectory.createNewFile()) {
             throw new IOException("Failed to create image file");
         }
         super.saveImage(pixelFile.getImage(), imageDirectory);
 
         // Create config file
         Properties config = pixelFile.getProperties();
-        File configDirectory = new File(parentFolder.getPath() + File.separator + "config.properties");
-        if (!configDirectory.createNewFile()) {
+        File configDirectory = new File(temp.getPath() + File.separator + "config.properties");
+        if (!configDirectory.exists() && !configDirectory.createNewFile()) {
             throw new IOException("Failed to create config file");
         }
         FileOutputStream outputStream = new FileOutputStream(configDirectory);
@@ -46,10 +45,9 @@ public final class PIXImageWriter extends PixelFileWriter {
         outputStream.close();
         Logger.log("config", "store", pixelFile.getFile().getName() + ": " + config);
 
-        // Zip and then delete the parent folder
-        File zipFile = new File(outputPath + ".pix");
-        ZipUtil.pack(parentFolder, zipFile);
-        FileUtil.deleteRecursive(parentFolder);
+        // Zip and then delete the temporal folder
+        ZipUtil.pack(temp, zipFile);
+        FileUtil.deleteRecursive(temp);
     }
 
     @Override

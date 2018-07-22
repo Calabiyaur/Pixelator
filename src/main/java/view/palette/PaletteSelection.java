@@ -104,13 +104,15 @@ public class PaletteSelection extends BorderPane {
     }
 
     public void savePalette() {
-        Files.get().save(getFile());
+        PaletteTab tab = tabPane.getSelectionModel().getSelectedItem();
+        tab.saveAndUndirty();
     }
 
     public void addPalette(PaletteFile file) {
         PaletteEditor paletteEditor = new PaletteEditor(file);
         PaletteTab tab = new PaletteTab(paletteEditor);
         tabPane.addTab(tab, file.isNew() ? "New Palette" : file.getName());
+        tab.initConfig();
     }
 
     public Image getPalette() {
@@ -152,7 +154,10 @@ public class PaletteSelection extends BorderPane {
     }
 
     public void closeCurrent() {
-        tabPane.removeTab(tabPane.getSelectionModel().getSelectedItem());
+        PaletteTab tab = tabPane.getSelectionModel().getSelectedItem();
+        if (tab.closeIfClean()) {
+            tabPane.removeTab(tab);
+        }
     }
 
 }

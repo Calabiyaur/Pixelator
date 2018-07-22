@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import main.java.files.Extension;
 import main.java.files.PixelFile;
+import main.java.util.FileUtil;
 
 public abstract class PixelFileWriter {
 
@@ -23,6 +24,15 @@ public abstract class PixelFileWriter {
         if (!ImageIO.write(bImage, Extension.PNG.name(), file)) {
             throw new IOException();
         }
+    }
+
+    File findImage(File directory) {
+        for (File file : directory.listFiles()) {
+            if (Extension.PNG.equals(FileUtil.getExtension(file))) {
+                return file;
+            }
+        }
+        return null;
     }
 
     File findConfig(File directory) {

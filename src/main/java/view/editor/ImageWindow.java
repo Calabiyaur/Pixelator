@@ -30,7 +30,6 @@ public class ImageWindow extends BasicWindow {
 
     private ImageEditor imageEditor;
     private ImageFile imageFile;
-    private BooleanProperty dirty = new SimpleBooleanProperty(false);
     private BooleanProperty showGrid = new SimpleBooleanProperty(false);
     private BooleanProperty showCrossHair = new SimpleBooleanProperty(false);
 
@@ -52,8 +51,7 @@ public class ImageWindow extends BasicWindow {
         showGrid.addListener((ov, o, n) -> imageEditor.setShowGrid(n));
         showCrossHair.addListener((ov, o, n) -> imageEditor.setShowCrossHair(n));
         getClose().setOnAction(e -> closeIfClean());
-        dirty.bind(imageEditor.dirtyProperty());
-        dirty.addListener((ov, o, n) -> updateDirtyText());
+        getEditor().dirtyProperty().addListener((ov, o, n) -> updateDirtyText());
         getImageView().scaleXProperty().addListener((ov, o, n) -> ToolView.setZoom(n.doubleValue()));
 
         ImageButton adjustSize = new ImageButton(Images.RECTANGLE);
@@ -194,7 +192,7 @@ public class ImageWindow extends BasicWindow {
     }
 
     public boolean closeIfClean() {
-        if (dirty.get()) {
+        if (isDirty()) {
             switch(SaveRequestDialog.display()) {
                 case OK:
                     saveAndUndirty();
@@ -239,7 +237,7 @@ public class ImageWindow extends BasicWindow {
     }
 
     public void updateDirtyText() {
-        setText(getText().replace(" *", "") + (dirty.get() ? " *" : ""));
+        setText(getText().replace(" *", "") + (isDirty() ? " *" : ""));
     }
 
     public boolean isShowGrid() {
@@ -263,10 +261,10 @@ public class ImageWindow extends BasicWindow {
     }
 
     public boolean isDirty() {
-        return dirty.get();
+        return dirtyProperty().get();
     }
 
     public BooleanProperty dirtyProperty() {
-        return dirty;
+        return getEditor().dirtyProperty();
     }
 }

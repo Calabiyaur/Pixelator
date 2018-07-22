@@ -183,7 +183,6 @@ public class ImageEditor extends Editor {
     public void register() {
         register(pixels);
         pixels.reset();
-        updateDirty();
     }
 
     private void writeAndRegister(PixelChange change) {
@@ -447,10 +446,9 @@ public class ImageEditor extends Editor {
         consumer.accept(oldImage, newImage, oldImage.getPixelReader(), newImage.getPixelWriter());
 
         ImageChange imageChange = new ImageChange(getImageView(), oldImage, newImage);
-        register(imageChange);
-
         getImageView().setImage(imageChange.getImage());
-        updateDirty();
+
+        register(imageChange);
     }
 
     public void selectAll() {
