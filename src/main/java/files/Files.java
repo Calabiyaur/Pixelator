@@ -147,6 +147,27 @@ public class Files {
         return result;
     }
 
+    public PaletteFile openSingleImage() {
+        return (PaletteFile) openSingle(Category.IMAGE);
+    }
+
+    public PaletteFile openSinglePalette() {
+        return (PaletteFile) openSingle(Category.PALETTE);
+    }
+
+    private PixelFile openSingle(Category category) {
+        File fileDirectory = category.getDirectory();
+        FileChooser dialog = new FileChooser();
+        dialog.setInitialDirectory(fileDirectory);
+        dialog.getExtensionFilters().addAll(category.getExtensionFiltersToOpen());
+        File file = dialog.showOpenDialog(Main.getPrimaryStage());
+        if (file == null) {
+            return null;
+        }
+
+        return openFile(file, category);
+    }
+
     private void updateDirectory(Category category, File directory) {
         category.setDirectory(directory.getParent());
     }

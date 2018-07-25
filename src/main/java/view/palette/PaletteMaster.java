@@ -1,6 +1,7 @@
 package main.java.view.palette;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,11 +12,9 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-import main.java.view.ColorView;
-
 public class PaletteMaster {
 
-    public static void extractPalette(Image image) {
+    public static WritableImage extractPalette(Image image) {
         List<Color> colors = new ArrayList<>(extractColors(image));
         int width = PaletteEditor.DEFAULT_WIDTH;
         int height = PaletteEditor.DEFAULT_HEIGHT;
@@ -29,10 +28,10 @@ public class PaletteMaster {
             writer.setColor(i % width, i / width, colors.get(i));
         }
 
-        ColorView.addPalette(palette);
+        return palette;
     }
 
-    private static Set<Color> extractColors(Image image) {
+    public static Set<Color> extractColors(Image image) {
         Set<Color> colors = new HashSet<>();
         PixelReader reader = image.getPixelReader();
         for (int i = 0; i < image.getWidth(); i++) {
@@ -42,6 +41,15 @@ public class PaletteMaster {
         }
         colors.remove(Color.TRANSPARENT);
         return colors;
+    }
+
+    public static List<Color> sort(Collection<Color> colors) {
+        return new ArrayList<>(colors); //TODO
+    }
+
+    public static List<Color> extractAndSort(Image image) {
+        Set<Color> colors = extractColors(image);
+        return sort(colors);
     }
 
 }

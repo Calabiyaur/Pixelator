@@ -3,6 +3,7 @@ package main.java.res;
 import javafx.scene.input.KeyCode;
 
 public enum Action {
+    CHANGE_PALETTE(),
     CLOSE(true, false, false, KeyCode.F4),
     CLOSE_PALETTE(true, false, true, KeyCode.F4),
     COPY(true, false, false, KeyCode.C),

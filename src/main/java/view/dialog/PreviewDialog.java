@@ -1,6 +1,7 @@
 package main.java.view.dialog;
 
 import javafx.application.Platform;
+import javafx.beans.Observable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -40,7 +41,13 @@ public abstract class PreviewDialog extends BasicDialog {
 
     protected final void listenToUpdate(BasicControl... controls) {
         for (BasicControl control : controls) {
-            control.valueProperty().addListener((ov, o, n) -> Platform.runLater(() -> updateImage()));
+            control.valueProperty().addListener(o -> Platform.runLater(() -> updateImage()));
+        }
+    }
+
+    protected final void listenToUpdate(Observable... observables) {
+        for (Observable observable : observables) {
+            observable.addListener(o -> Platform.runLater(() -> updateImage()));
         }
     }
 

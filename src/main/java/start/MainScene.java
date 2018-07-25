@@ -17,18 +17,19 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
+import main.java.control.parent.ResizableBorderPane;
 import main.java.files.Files;
 import main.java.files.ImageFile;
 import main.java.files.PaletteFile;
 import main.java.files.PixelFile;
+import main.java.meta.Direction;
 import main.java.res.Action;
 import main.java.res.Config;
 import main.java.res.Images;
-import main.java.meta.Direction;
-import main.java.control.parent.ResizableBorderPane;
 import main.java.view.ColorView;
 import main.java.view.InfoView;
 import main.java.view.ToolView;
+import main.java.view.dialog.ChangePaletteDialog;
 import main.java.view.dialog.MoveImageDialog;
 import main.java.view.dialog.NewImageDialog;
 import main.java.view.dialog.OutlineDialog;
@@ -39,6 +40,7 @@ import main.java.view.editor.ImageWindowContainer;
 import main.java.view.palette.PaletteMaster;
 import main.java.view.palette.PaletteSelection;
 
+import static main.java.res.Action.CHANGE_PALETTE;
 import static main.java.res.Action.CLOSE;
 import static main.java.res.Action.CLOSE_PALETTE;
 import static main.java.res.Action.COPY;
@@ -193,17 +195,21 @@ public class MainScene extends Scene {
         BasicMenu paletteMenu = new BasicMenu("Palette");
         paletteMenu.addItem(NEW_PALETTE, "New...", e -> paletteSelection.createPalette());
         paletteMenu.addItem(OPEN_PALETTE, "Open...", e -> paletteSelection.openPalette());
-        paletteMenu.addItem(SAVE_PALETTE, "Save", e -> paletteSelection.savePalette(), paletteSelection.paletteSelectedProperty());
-        paletteMenu.addItem(CLOSE_PALETTE, "Close", e -> paletteSelection.closeCurrent(), paletteSelection.paletteSelectedProperty());
+        paletteMenu.addItem(SAVE_PALETTE, "Save", e -> paletteSelection.savePalette(),
+                paletteSelection.paletteSelectedProperty());
+        paletteMenu.addItem(CLOSE_PALETTE, "Close", e -> paletteSelection.closeCurrent(),
+                paletteSelection.paletteSelectedProperty());
         paletteMenu.addSeparator();
         paletteMenu.addItem(UNDO_PALETTE, "Undo", e -> paletteSelection.undo(), paletteSelection.undoEnabledProperty());
         paletteMenu.addItem(REDO_PALETTE, "Redo", e -> paletteSelection.redo(), paletteSelection.redoEnabledProperty());
-        paletteMenu.addSeparator();
-        paletteMenu.addItem(EXTRACT_PALETTE, "Extract palette", e -> extractPalette(),
-                imageContainer.imageSelectedProperty());
 
         BasicMenu toolMenu = new BasicMenu("Tools");
         toolMenu.addItem(OUTLINE, "Outline", e -> outline(), imageContainer.imageSelectedProperty());
+        toolMenu.addSeparator();
+        toolMenu.addItem(EXTRACT_PALETTE, "Extract palette", e -> extractPalette(),
+                imageContainer.imageSelectedProperty());
+        toolMenu.addItem(CHANGE_PALETTE, "Change palette", e -> changePalette(),
+                imageContainer.imageSelectedProperty());
 
         menuBar.getMenus().setAll(fileMenu, editMenu, viewMenu, imageMenu, paletteMenu, toolMenu);
         return menuBar;
@@ -261,7 +267,8 @@ public class MainScene extends Scene {
                 return;
             }
             dialog.close();
-            imageContainer.addImage(new ImageFile(null, new WritableImage(dialog.getImageWidth(), dialog.getImageHeight())));
+            imageContainer
+                    .addImage(new ImageFile(null, new WritableImage(dialog.getImageWidth(), dialog.getImageHeight())));
         });
     }
 
@@ -330,7 +337,7 @@ public class MainScene extends Scene {
     }
 
     private void outline() {
-        OutlineDialog dialog = new OutlineDialog(getEditor().getImageView().getImage());
+        OutlineDialog dialog = new OutlineDialog(imageContainer.getCurrentImage());
         dialog.setOnOk(e -> {
             getEditor().updateImage(dialog.getImage());
             dialog.close();
@@ -339,7 +346,18 @@ public class MainScene extends Scene {
     }
 
     private void extractPalette() {
-        PaletteMaster.extractPalette(imageContainer.getCurrentImage());
+        ColorView.addPalette(PaletteMaster.extractPalette(imageContainer.getCurrentImage()));
+    }
+
+    private void changePalette() {
+        PaletteFile paletteFile = Files.get().openSinglePalette();
+
+        ChangePaletteDialog dialog = new ChangePaletteDialog(imageContainer.getCurrentImage(), paletteFile.getImage());
+        dialog.setOnOk(e -> {
+            getEditor().updateImage(dialog.getImage());
+            dialog.close();
+        });
+        dialog.showAndFocus();
     }
 
 }
