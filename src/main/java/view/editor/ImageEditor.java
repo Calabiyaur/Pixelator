@@ -589,13 +589,11 @@ public class ImageEditor extends Editor {
     public void undo() {
         currentTool.lockAndReset();
         super.undo();
-        updateDirty();
     }
 
     public void redo() {
         currentTool.escape();
         super.redo();
-        updateDirty();
     }
 
     public Image getToolImage() {

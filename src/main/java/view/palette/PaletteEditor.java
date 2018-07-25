@@ -24,8 +24,8 @@ import main.java.view.undo.PixelChange;
 
 public class PaletteEditor extends Editor {
 
-    public static int DEFAULT_WIDTH = 6;
-    public static int DEFAULT_HEIGHT = 4;
+    public static int DEFAULT_WIDTH = 8;
+    public static int DEFAULT_HEIGHT = 5;
     private Point selected;
     private Rectangle selection;
     private boolean dragging = false;
@@ -34,7 +34,7 @@ public class PaletteEditor extends Editor {
         super(file, new PixelatedImageView(ImageUtil.makeWritableIfNot(file.getImage())));
         getFile().setImage(getImage());
         PixelatedImageView imageView = getImageView();
-        setCleanImage(ImageUtil.createWritableImage(getImage()));
+        undirty();
 
         imageView.setPickOnBounds(true);
         imageView.setOnMousePressed(e -> onMousePressed(e));
@@ -51,7 +51,7 @@ public class PaletteEditor extends Editor {
         selection.setStrokeWidth(2);
         selection.setDisable(true);
 
-        select(new Point(0, 0)); //TODO: Use values from palette's properties file
+        select(new Point(0, 0));
 
         getChildren().addAll(imageView, selection);
         StackPane.setAlignment(imageView, Pos.TOP_LEFT);
@@ -94,19 +94,22 @@ public class PaletteEditor extends Editor {
         if (dragging) {
             Point mp = getMousePosition(e.getX(), e.getY());
 
-            PixelReader reader = getImage().getPixelReader();
-            PixelWriter writer = ((WritableImage) getImage()).getPixelWriter();
+            if (isInBounds(mp)) {
+                PixelReader reader = getImage().getPixelReader();
+                PixelWriter writer = ((WritableImage) getImage()).getPixelWriter();
 
-            Color color = reader.getColor(selected.getX(), selected.getY());
-            Color otherColor = reader.getColor(mp.getX(), mp.getY());
+                Color color = reader.getColor(selected.getX(), selected.getY());
+                Color otherColor = reader.getColor(mp.getX(), mp.getY());
 
-            writer.setColor(selected.getX(), selected.getY(), otherColor);
-            writer.setColor(mp.getX(), mp.getY(), color);
+                writer.setColor(selected.getX(), selected.getY(), otherColor);
+                writer.setColor(mp.getX(), mp.getY(), color);
 
-            PixelChange change = new PixelChange(writer);
-            change.add(selected.getX(), selected.getY(), color, otherColor);
-            change.add(mp.getX(), mp.getY(), otherColor, color);
-            register(change);
+                PixelChange change = new PixelChange(writer);
+                change.add(selected.getX(), selected.getY(), color, otherColor);
+                change.add(mp.getX(), mp.getY(), otherColor, color);
+                register(change);
+                updateDirty();
+            }
 
             dragging = false;
             setCursor(Cursor.OPEN_HAND);
@@ -114,6 +117,11 @@ public class PaletteEditor extends Editor {
 
             choose(e);
         }
+    }
+
+    private boolean isInBounds(Point position) {
+        return 0 <= position.getX() && position.getX() < getImage().getWidth()
+                && 0 <= position.getY() && position.getY() < getImage().getHeight();
     }
 
     private void onMouseMoved(MouseEvent e) {

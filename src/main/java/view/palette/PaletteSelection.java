@@ -31,6 +31,7 @@ public class PaletteSelection extends BorderPane {
     private BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty paletteSelected = new SimpleBooleanProperty(false);
+    private BooleanProperty dirty = new SimpleBooleanProperty(false);
 
     public PaletteSelection() {
         Label title = new Label("PALETTE");
@@ -40,7 +41,7 @@ public class PaletteSelection extends BorderPane {
         ImageButton save = new ImageButton(Images.SAVE);
         ImageButton undo = new ImageButton(Images.UNDO);
         ImageButton redo = new ImageButton(Images.REDO);
-        save.disableProperty().bind(tabPane.getSelectionModel().selectedItemProperty().isNull());
+        save.disableProperty().bind(dirty.not());
         undo.disableProperty().bind(undoEnabled.not());
         redo.disableProperty().bind(redoEnabled.not());
         create.setOnAction(e -> createPalette());
@@ -68,10 +69,13 @@ public class PaletteSelection extends BorderPane {
                 undoEnabled.set(false);
                 redoEnabled.unbind();
                 redoEnabled.set(false);
+                dirty.unbind();
+                dirty.set(false);
             } else {
                 PaletteEditor editor = n.getEditor();
                 undoEnabled.bind(editor.undoEnabledProperty());
                 redoEnabled.bind(editor.redoEnabledProperty());
+                dirty.bind(editor.dirtyProperty());
             }
         });
 

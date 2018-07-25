@@ -40,10 +40,12 @@ public abstract class Editor extends StackPane {
 
     public void undo() {
         undoManager.undo();
+        updateDirty();
     }
 
     public void redo() {
         undoManager.redo();
+        updateDirty();
     }
 
     public final void setCleanImage(Image cleanImage) {
