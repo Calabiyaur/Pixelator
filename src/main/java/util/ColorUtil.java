@@ -54,7 +54,7 @@ public class ColorUtil {
 
     /**
      * Return the color's luminosity value.
-     * Range: 0 - 255
+     * Range: 0 - 1
      */
     public static double getLuminosity(Color color) {
         return Math.sqrt(.241 * color.getRed() + .691 * color.getGreen() + .068 * color.getBlue());

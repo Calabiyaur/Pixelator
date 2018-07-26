@@ -2,6 +2,7 @@ package main.java.view.palette;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,18 +18,19 @@ import main.java.util.ColorUtil;
 
 public class PaletteMaster {
 
+    public static final int HUE_VARIETY = 8;
+
     public static WritableImage extractPalette(Image image) {
-        List<Color> colors = new ArrayList<>(extractAndSort(image));
         int width = PaletteEditor.DEFAULT_WIDTH;
-        int height = PaletteEditor.DEFAULT_HEIGHT;
-        if (width * height < colors.size()) {
-            height = (int) Math.ceil((double) colors.size() / (double) width);
-        }
+        List<List<Color>> colors = new ArrayList<>(extractAndSort(image, width));
+        int height = colors.stream().max(Comparator.comparingInt(List::size)).get().size();
 
         WritableImage palette = new WritableImage(width, height);
         PixelWriter writer = palette.getPixelWriter();
         for (int i = 0; i < colors.size(); i++) {
-            writer.setColor(i % width, i / width, colors.get(i));
+            for (int j = 0; j < colors.get(i).size(); j++) {
+                writer.setColor(i, j, colors.get(i).get(j));
+            }
         }
 
         return palette;
@@ -48,31 +50,68 @@ public class PaletteMaster {
 
     public static List<Color> extractAndSort(Image image) {
         Set<Color> colors = extractColors(image);
-        return sort(colors, 1);
+        return sort(colors);
     }
 
-    public static List<Color> sort(Collection<Color> colors, int rep) {
+    public static List<List<Color>> extractAndSort(Image image, int columns) {
+        Set<Color> colors = extractColors(image);
+        return sort(colors, columns);
+    }
+
+    public static List<Color> sort(Set<Color> colors) {
+        List<Color> result = sort(colors, HUE_VARIETY).stream().flatMap(List::stream).collect(Collectors.toList());
+        if (result.size() != colors.size()) {
+            throw new IllegalStateException("List size was reduced from " + colors.size() + " to " + result.size());
+        }
+        return result;
+    }
+
+    public static List<List<Color>> sort(Set<Color> colors, int columns) {
+        return sort3(colors, columns);
+    }
+
+    /**
+     * Sort the colors by hue, saturation and brightness.
+     *
+     * @return a list of lists, each list only containing colors of similar hue.
+     */
+    private static List<List<Color>> sort3(Set<Color> colors, int columns) {
+        if (columns < 1) {
+            throw new IllegalArgumentException("Columns must be at least 1");
+        }
+        List<Color> originalList = new ArrayList<>(colors);
+        List<List<Color>> result = new ArrayList<>();
+        double margin = 180. / columns;
+
+        for (int i = 0; i < columns; i++) {
+            final double hue = 360. * ((double) i / (double) columns);
+
+            List<Color> column = originalList.stream().filter(
+                    c -> Math.abs(c.getHue() - hue) <= margin
+                    || Math.abs(c.getHue() - hue + 360) <= margin
+                    || Math.abs(c.getHue() - hue - 360) <= margin
+            ).collect(Collectors.toList());
+
+            originalList.removeAll(column);
+            result.add(sort2(column));
+        }
+        return result;
+    }
+
+    /**
+     * Sort the colors by saturation and brightness.
+     */
+    private static List<Color> sort2(Collection<Color> colors) {
+        double p = 0.05;
         return colors.stream().sorted((o1, o2) -> {
             if (o1 == null || o2 == null) {
                 return 0;
             }
 
-            int h1 = (int) (o1.getHue() * rep);
-            int h2 = (int) (o2.getHue() * rep);
-            int level1 = Integer.compare(h1, h2);
-            if (level1 != 0) {
-                return level1;
-            }
-
-            int lum1 = (int) (ColorUtil.getLuminosity(o1) * rep);
-            int lum2 = (int) (ColorUtil.getLuminosity(o2) * rep);
-            int level2 = Integer.compare(lum1, lum2);
-            if (level2 != 0) {
-                return level2;
-            }
-
-            //return Integer.compare(v1, v2);
-            return Double.compare(o1.getBrightness(), o2.getBrightness());
+            return Double.compare(
+                    o1.getSaturation() * p + ColorUtil.getLuminosity(o1) * (1 - p),
+                    o2.getSaturation() * p + ColorUtil.getLuminosity(o2) * (1 - p)
+            );
 
         }).collect(Collectors.toList());
     }
