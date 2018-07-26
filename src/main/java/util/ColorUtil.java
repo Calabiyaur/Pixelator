@@ -47,11 +47,17 @@ public class ColorUtil {
 
     /**
      * Convert a Color to a hex String.
-     *
-     * @return null if String is invalid.
      */
     public static String toString(Color color) {
         return color.toString().toUpperCase().replace("0X", "#");
+    }
+
+    /**
+     * Return the color's luminosity value.
+     * Range: 0 - 255
+     */
+    public static double getLuminosity(Color color) {
+        return Math.sqrt(.241 * color.getRed() + .691 * color.getGreen() + .068 * color.getBlue());
     }
 
 }

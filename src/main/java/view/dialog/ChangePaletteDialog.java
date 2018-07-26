@@ -1,11 +1,14 @@
 package main.java.view.dialog;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javafx.geometry.Insets;
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -23,8 +26,10 @@ public class ChangePaletteDialog extends PreviewDialog {
         setOkText("Apply");
 
         VBox buttons = new VBox();
+        buttons.setPadding(new Insets(2));
+        buttons.setSpacing(2);
         List<Color> leftColors = PaletteMaster.extractAndSort(image);
-        Set<Color> rightColors = PaletteMaster.extractColors(palette);
+        Set<Color> rightColors = new HashSet<>(PaletteMaster.extractAndSort(palette));
         for (Color color : leftColors) {
             ChangeColorButton button = new ChangeColorButton(color, rightColors);
             buttons.getChildren().add(button);
@@ -32,8 +37,12 @@ public class ChangePaletteDialog extends PreviewDialog {
             listenToUpdate(button.valueProperty());
         }
         BasicScrollPane scrollPane = new BasicScrollPane(buttons);
+        scrollPane.setScrollByMouse(true);
+        scrollPane.setMinWidth(80 + BasicScrollPane.SCROLL_BAR_WIDTH + 4);
 
-        addContent(new Preview(image), 0, 0);
+        Preview original = new Preview(image);
+        GridPane.setMargin(original, new Insets(0, 10, 0, 0));
+        addContent(original, 0, 0);
         addContent(scrollPane, 1, 0);
     }
 
