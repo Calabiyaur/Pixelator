@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
@@ -80,6 +81,10 @@ public class MainScene extends Scene {
     public MainScene() {
         super(new ResizableBorderPane());
         ResizableBorderPane root = ((ResizableBorderPane) getRoot());
+        Platform.runLater(() -> {
+            root.setLeftMargin(0.16359447004608296 * 1304);
+            root.setRightMargin(0.2442396313364056 * 1304);
+        });
 
         double width = Config.getDouble(Config.WIDTH, 600);
         double height = Config.getDouble(Config.HEIGHT, 400);
