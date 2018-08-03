@@ -29,6 +29,7 @@ public class PaletteEditor extends Editor {
     private Point selected;
     private Rectangle selection;
     private boolean dragging = false;
+    private boolean locked = true;
 
     public PaletteEditor(PaletteFile file) {
         super(file, new PixelatedImageView(ImageUtil.makeWritableIfNot(file.getImage())));
@@ -66,7 +67,7 @@ public class PaletteEditor extends Editor {
     private void onMousePressed(MouseEvent event) {
         if (event.getClickCount() == 2) {
             ColorDialog.chooseColor(ColorView.getColor(), color -> setColor(color));
-        } else if (getMousePosition(event.getX(), event.getY()).equals(selected)) {
+        } else if (!locked && getMousePosition(event.getX(), event.getY()).equals(selected)) {
             startDragging();
         } else {
             choose(event);
@@ -77,8 +78,10 @@ public class PaletteEditor extends Editor {
         if (dragging) {
             selection.setTranslateX((getImageView().getScaleX() * (e.getX() - 0.5)) - 2);
             selection.setTranslateY((getImageView().getScaleY() * (e.getY() - 0.5)) - 2);
-        } else {
+        } else if (!locked) {
             startDragging();
+        } else {
+            choose(e);
         }
     }
 
@@ -125,7 +128,7 @@ public class PaletteEditor extends Editor {
     }
 
     private void onMouseMoved(MouseEvent e) {
-        if (getMousePosition(e.getX(), e.getY()).equals(selected)) {
+        if (!locked && getMousePosition(e.getX(), e.getY()).equals(selected)) {
             setCursor(Cursor.OPEN_HAND);
         } else {
             setCursor(Pick.getMe().getCursor());
@@ -178,5 +181,13 @@ public class PaletteEditor extends Editor {
 
     public Point getSelected() {
         return selected;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 }

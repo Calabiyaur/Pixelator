@@ -26,6 +26,8 @@ public enum Images {
     GRID,
     ICON("/images/icon256.png"),
     LINE,
+    LOCK,
+    LOCK_OPEN,
     NEW,
     NEW_PALETTE(NEW.url),
     OPEN,

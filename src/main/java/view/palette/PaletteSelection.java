@@ -6,6 +6,7 @@ import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
@@ -16,12 +17,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import main.java.control.basic.ImageButton;
+import main.java.control.basic.ToggleImageButton;
+import main.java.control.parent.BasicTabPane;
 import main.java.files.Files;
 import main.java.files.PaletteFile;
-import main.java.res.Images;
 import main.java.meta.Direction;
-import main.java.control.basic.ImageButton;
-import main.java.control.parent.BasicTabPane;
+import main.java.res.Images;
 import main.java.view.ColorView;
 import main.java.view.dialog.NewPaletteDialog;
 
@@ -62,6 +64,19 @@ public class PaletteSelection extends BorderPane {
         setCenter(tabPane);
         VBox.setVgrow(this, Priority.ALWAYS);
 
+        ImageButton take = new ImageButton(Images.SUBMIT);
+        take.setOnAction(e -> getEditor().setColor(ColorView.getColor()));
+        take.disableProperty().bind(paletteSelectedProperty().not());
+
+        ToggleImageButton lock = new ToggleImageButton(Images.LOCK_OPEN, Images.LOCK);
+        lock.selectedProperty().addListener((ov, o, n) -> getEditor().setLocked(n));
+        lock.disableProperty().bind(paletteSelectedProperty().not());
+
+        VBox vBox = new VBox(take, lock);
+        vBox.setPadding(new Insets(6, 0, 6, 6));
+        vBox.setSpacing(6);
+        setRight(vBox);
+
         tabPane.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
             paletteSelected.set(n != null);
             if (n == null) {
@@ -76,15 +91,9 @@ public class PaletteSelection extends BorderPane {
                 undoEnabled.bind(editor.undoEnabledProperty());
                 redoEnabled.bind(editor.redoEnabledProperty());
                 dirty.bind(editor.dirtyProperty());
+                lock.setSelected(editor.isLocked());
             }
         });
-
-        ImageButton take = new ImageButton(Images.SUBMIT);
-        take.setOnAction(e -> getEditor().setColor(ColorView.getColor()));
-        take.disableProperty().bind(paletteSelectedProperty().not());
-
-        VBox vBox = new VBox(take);
-        setRight(vBox);
     }
 
     public void createPalette() {

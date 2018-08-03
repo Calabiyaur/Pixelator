@@ -2,7 +2,6 @@ package main.java.view.palette;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,16 +20,17 @@ public class PaletteMaster {
     public static final int HUE_VARIETY = 8;
 
     public static WritableImage extractPalette(Image image) {
+        List<Color> colors = new ArrayList<>(extractAndSort(image));
         int width = PaletteEditor.DEFAULT_WIDTH;
-        List<List<Color>> colors = new ArrayList<>(extractAndSort(image, width));
-        int height = colors.stream().max(Comparator.comparingInt(List::size)).get().size();
+        int height = PaletteEditor.DEFAULT_HEIGHT;
+        if (width * height < colors.size()) {
+            height = (int) Math.ceil((double) colors.size() / (double) width);
+        }
 
         WritableImage palette = new WritableImage(width, height);
         PixelWriter writer = palette.getPixelWriter();
         for (int i = 0; i < colors.size(); i++) {
-            for (int j = 0; j < colors.get(i).size(); j++) {
-                writer.setColor(i, j, colors.get(i).get(j));
-            }
+            writer.setColor(i % width, i / width, colors.get(i));
         }
 
         return palette;

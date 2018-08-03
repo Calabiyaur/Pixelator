@@ -9,17 +9,26 @@ import main.java.res.Images;
 public class ToggleImageButton extends ToggleButton {
 
     public ToggleImageButton(Images image) {
-        super("", new ImageView(image.getImage()));
+        setGraphic(new ImageView(image.getImage()));
     }
 
     public ToggleImageButton(ToggleGroup tg, Images image) {
-        super("", null);
-        setGraphic(new ImageView(image.getImage()));
+        this(image);
         setToggleGroup(tg);
     }
 
-    public ToggleImageButton(ToggleGroup tg, String text) {
-        super(text, null);
-        setToggleGroup(tg);
+    public ToggleImageButton(Images image, Images selected) {
+        ImageView imageView = new ImageView(image.getImage());
+        ImageView selectedView = new ImageView(selected.getImage());
+        selectedProperty().addListener((ov, o, n) -> {
+            if (n) {
+                setGraphic(selectedView);
+            } else {
+                setGraphic(imageView);
+            }
+        });
+
+        setGraphic(imageView);
     }
+
 }
