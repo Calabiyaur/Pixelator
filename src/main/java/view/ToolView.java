@@ -1,6 +1,5 @@
 package main.java.view;
 
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -23,12 +22,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import main.java.control.basic.BasicText;
+import main.java.control.basic.ToggleImageButton;
+import main.java.control.image.PixelatedImageView;
+import main.java.control.parent.BasicWindow;
 import main.java.res.Config;
 import main.java.res.Images;
-import main.java.control.basic.ToggleImageButton;
-import main.java.control.basic.BasicText;
-import main.java.control.parent.BasicWindow;
-import main.java.control.image.PixelatedImageView;
 import main.java.view.tool.Tools;
 
 public class ToolView extends GridPane {
@@ -54,7 +53,6 @@ public class ToolView extends GridPane {
             instance.setVgap(6);
             instance.setPrefWidth(210);
             instance.setPadding(new Insets(BasicWindow.RESIZE_MARGIN));
-            Platform.runLater(() -> instance.setPrefWidth(instance.getWidth()));
             previewSize.bind(instance.prefWidthProperty().subtract(2 * BasicWindow.RESIZE_MARGIN));
 
             instance.addRow(0, new Label("TOOLS"));

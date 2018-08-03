@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
@@ -14,7 +13,6 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import main.java.control.parent.ResizableBorderPane;
@@ -96,15 +94,12 @@ public class MainScene extends Scene {
         getStylesheets().addAll(getStyle());
 
         imageContainer = new ImageWindowContainer();
+        imageContainer.setStyle("-fx-background-color: #BBBBBB");
 
         createKeyListener();
         imageContainer.setOnKeyPressed(this.getOnKeyPressed());
 
-        BorderPane center = new BorderPane();
-        InfoView infoView = InfoView.getInstance();
-        center.setCenter(imageContainer);
-        center.setBottom(infoView);
-        root.setCenter(center);
+        root.setCenter(imageContainer);
 
         VBox barBox = new VBox();
         root.setTop(barBox);
@@ -117,14 +112,12 @@ public class MainScene extends Scene {
         root.setRight(colorView);
         this.paletteSelection = ColorView.getPaletteSelection();
 
+        InfoView infoView = InfoView.getInstance();
+        root.setBottom(infoView);
+
         MenuBar menuBar = createMenuBar();
         ToolBar toolBar = createToolBar();
         barBox.getChildren().addAll(menuBar, toolBar);
-
-        Platform.runLater(() -> {
-            double tvWidth = toolView.getWidth();
-            imageContainer.translateXProperty().bind(toolView.widthProperty().multiply(-1).add(tvWidth));
-        });
 
         setOnKeyPressed(e -> ActionManager.fire(e));
     }

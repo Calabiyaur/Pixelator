@@ -1,108 +1,70 @@
 package main.java.control.parent;
 
-import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
+import javafx.scene.Node;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
-public class ResizableBorderPane extends BorderPane {
+public class ResizableBorderPane extends VBox {
 
-    private final int RESIZE_MARGIN = 6;
-    private double previousX = 0;
-    private double previousY = 0;
-    private Region dragging;
-    private Position dragPos = null;
+    private SplitPane splitPane;
+    private Node top;
+    private Node left;
+    private Node right;
+    private Node center;
+    private Node bottom;
 
     public ResizableBorderPane() {
-        setOnMousePressed(event -> mousePressed(event));
-        setOnMouseDragged(event -> mouseDragged(event));
-        setOnMouseMoved(event -> mouseOver(event));
-        setOnMouseReleased(event -> mouseReleased(event));
+        splitPane = new SplitPane();
+
+        getChildren().setAll(new Pane(), splitPane, new Pane());
+        splitPane.getItems().setAll(new Pane(), new Pane(), new Pane());
+        VBox.setVgrow(splitPane, Priority.ALWAYS);
     }
 
-    protected void mousePressed(MouseEvent event) {
-        dragging = getComponent(event, true);
-
-        // ignore clicks outside of the draggable margin
-        if (dragging == null) {
-            return;
-        }
-
-        previousX = event.getX();
-        previousY = event.getY();
-
+    public Node getTop() {
+        return top;
     }
 
-    protected void mouseDragged(MouseEvent event) {
-        if (dragging == null) {
-            return;
-        }
-
-        double x = event.getX();
-        double y = event.getY();
-
-        // Make sure the pref width is up to date
-        if (dragging.getPrefWidth() < 1.0) {
-            dragging.setPrefWidth(dragging.getWidth());
-            dragging.setPrefHeight(dragging.getHeight());
-        }
-
-        double xDiff = (previousX - x) * (dragPos == Position.LEFT ? -1 : 1);
-        dragging.setPrefWidth(dragging.getPrefWidth() + xDiff);
-        dragging.setPrefHeight(dragging.getPrefHeight() + (previousY - y));
-
-        previousX = x;
-        previousY = y;
+    public void setTop(Pane top) {
+        this.top = top;
+        getChildren().set(0, top);
     }
 
-    protected void mouseOver(MouseEvent event) {
-        if (getComponent(event, false) == null) {
-            setCursor(Cursor.DEFAULT);
-        } else {
-            setCursor(Cursor.H_RESIZE); //TODO: this works only for 'left' and 'right'
-        }
+    public Node getLeft() {
+        return left;
     }
 
-    protected void mouseReleased(MouseEvent event) {
-        if (dragging != null) {
-            dragging.setPrefWidth(dragging.getWidth());
-            dragging.setPrefHeight(dragging.getHeight());
-        }
-        dragging = null;
-        dragPos = null;
-        if (getComponent(event, false) == null) {
-            setCursor(Cursor.DEFAULT);
-        }
+    public void setLeft(Pane left) {
+        this.left = left;
+        splitPane.getItems().set(0, left);
     }
 
-    protected Region getComponent(MouseEvent event, boolean setPos) {
-        double x = event.getX();
-        Region left = (Region) getLeft();
-        double leftX = left == null ? 0 : left.getWidth();
-        Region right = (Region) getRight();
-        double rightX = getWidth() - (right == null ? 0 : right.getWidth());
-
-        if (0 < leftX - x && leftX - x < RESIZE_MARGIN) {
-            if (setPos) {
-                dragPos = Position.LEFT;
-            }
-            return left;
-        }
-        if (0 < x - rightX && x - rightX < RESIZE_MARGIN) {
-            if (setPos) {
-                dragPos = Position.RIGHT;
-            }
-            return right;
-        }
-        return null;
+    public Node getRight() {
+        return right;
     }
 
-    private enum Position {
-        CENTER,
-        LEFT,
-        RIGHT,
-        TOP,
-        BOTTOM,
+    public void setRight(Pane right) {
+        this.right = right;
+        splitPane.getItems().set(2, right);
     }
 
+    public Node getCenter() {
+        return center;
+    }
+
+    public void setCenter(Pane center) {
+        this.center = center;
+        splitPane.getItems().set(1, center);
+    }
+
+    public Node getBottom() {
+        return bottom;
+    }
+
+    public void setBottom(Pane bottom) {
+        this.bottom = bottom;
+        getChildren().set(2, bottom);
+    }
 }
