@@ -1,14 +1,9 @@
 package main.java.view;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -18,9 +13,11 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import main.java.control.basic.BasicText;
 import main.java.control.basic.ToggleImageButton;
@@ -30,7 +27,7 @@ import main.java.res.Config;
 import main.java.res.Images;
 import main.java.view.tool.Tools;
 
-public class ToolView extends GridPane {
+public class ToolView extends VBox {
 
     private static ToolView instance;
     private static ObjectProperty<Tools> currentTool = new SimpleObjectProperty<>();
@@ -41,7 +38,7 @@ public class ToolView extends GridPane {
     private static Label preview = new Label();
     private static Label previewTool = new Label();
     private static Label previewSelection = new Label();
-    private static DoubleProperty previewSize = new SimpleDoubleProperty(160);
+    private static Pane clipWrapper;
     private static BasicText widthText = new BasicText("Width", "");
     private static BasicText heightText = new BasicText("Height", "");
     private static BasicText zoomText = new BasicText("Zoom", "100 %");
@@ -50,12 +47,11 @@ public class ToolView extends GridPane {
         if (instance == null) {
             instance = new ToolView();
             instance.setStyle("-fx-background-color: #f4f4f4");
-            instance.setVgap(6);
+            instance.setSpacing(6);
             instance.setPrefWidth(210);
             instance.setPadding(new Insets(BasicWindow.RESIZE_MARGIN));
-            previewSize.bind(instance.prefWidthProperty().subtract(2 * BasicWindow.RESIZE_MARGIN));
 
-            instance.addRow(0, new Label("TOOLS"));
+            instance.getChildren().add(new Label("TOOLS"));
             ToggleGroup tg = new ToggleGroup();
             tg.selectedToggleProperty().addListener((ov, o, n) -> {
                 if (n == null && o != null) {
@@ -84,17 +80,17 @@ public class ToolView extends GridPane {
             FlowPane tools1 = new FlowPane(pen, line, pick, fill, fillColor, rectangle, ellipse);
             tools1.setVgap(6);
             tools1.setHgap(6);
-            instance.addRow(1, tools1);
+            instance.getChildren().add(1, tools1);
             pen.fire();
 
-            instance.addRow(2, new Separator());
+            instance.getChildren().add(2, new Separator());
 
             FlowPane tools2 = new FlowPane(select, wand);
             tools2.setVgap(6);
             tools2.setHgap(6);
-            instance.addRow(3, tools2);
+            instance.getChildren().add(3, tools2);
 
-            instance.addRow(4, new Separator());
+            instance.getChildren().add(4, new Separator());
 
             replace = new CheckBox("Replace");
             replace.setOnAction(e -> replaceColor.set(replace.isSelected()));
@@ -102,35 +98,36 @@ public class ToolView extends GridPane {
             ToolView.fill.setOnAction(e -> fillShape.set(ToolView.fill.isSelected()));
             VBox prefBox = new VBox(replace, ToolView.fill);
             prefBox.setSpacing(3);
-            instance.addRow(5, prefBox);
+            instance.getChildren().add(5, prefBox);
 
-            instance.addRow(6, new Separator());
+            instance.getChildren().add(6, new Separator());
 
-            GridPane previewGrid = new GridPane();
-            previewGrid.addRow(0, new Label("PREVIEW"));
+            clipWrapper = new Pane();
+            VBox.setVgrow(clipWrapper, Priority.ALWAYS);
+
+            Rectangle clip = new Rectangle();
+            clip.widthProperty().bind(clipWrapper.widthProperty());
+            clip.heightProperty().bind(clipWrapper.heightProperty());
 
             StackPane previewStack = new StackPane(preview, previewTool, previewSelection);
-            javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle();
-            clip.widthProperty().bind(previewSize);
-            clip.heightProperty().bind(previewSize);
+            clipWrapper.getChildren().add(previewStack);
             previewStack.setClip(clip);
             previewStack.setAlignment(Pos.TOP_LEFT);
-            previewStack.minWidthProperty().bind(previewSize);
 
-            ObservableValue<? extends Number> hProp = getPreviewBinding();
-            previewStack.minHeightProperty().bind(hProp);
-            previewStack.prefWidthProperty().bind(previewSize);
-            previewStack.prefHeightProperty().bind(hProp);
+            clipWrapper.maxWidthProperty().bind(previewStack.widthProperty());
+            clipWrapper.maxHeightProperty().bind(previewStack.heightProperty());
 
-            previewGrid.addRow(1, previewStack);
-            previewGrid.addRow(2, widthText);
-            previewGrid.addRow(3, heightText);
-            previewGrid.addRow(4, zoomText);
-            GridPane.setHalignment(previewStack, HPos.CENTER);
+            VBox previewGrid = new VBox();
+            previewGrid.getChildren().addAll(
+                    new Label("PREVIEW"),
+                    clipWrapper,
+                    widthText,
+                    heightText,
+                    zoomText);
+            VBox.setVgrow(previewGrid, Priority.ALWAYS);
+
             previewGrid.visibleProperty().bind(preview.graphicProperty().isNotNull());
-            GridPane.setMargin(previewStack, new Insets(6, 0, 6, 0));
-            previewGrid.setPadding(new Insets(4, 0, 10, 0));
-            instance.addRow(7, previewGrid);
+            instance.getChildren().add(7, previewGrid);
 
             initConfig();
         }
@@ -159,14 +156,14 @@ public class ToolView extends GridPane {
             previewSelection.setGraphic(new PixelatedImageView(selectionImage));
             previewSelection.setTranslateX(0);
             previewSelection.setTranslateY(0);
-            //TODO: Re-format the preview stack so it can fit itself to the new image height
+            //TODO: Re-format the preview stack so it can fit itself to the new image size
         }
     }
 
     public static void setPreviewPosition(double x, double y) {
-        if (preview.getWidth() > previewSize.get()) {
+        if (preview.getWidth() > clipWrapper.getWidth()) {
             double xTranslate =
-                    -Math.min(Math.max(0, x - previewSize.get() / 2), preview.getWidth() - previewSize.get());
+                    -Math.min(Math.max(0, x - clipWrapper.getWidth() / 2), preview.getWidth() - clipWrapper.getWidth());
             preview.setTranslateX(Math.round(xTranslate));
             previewTool.setTranslateX(Math.round(xTranslate));
             previewSelection.setTranslateX(Math.round(xTranslate));
@@ -176,9 +173,9 @@ public class ToolView extends GridPane {
             previewSelection.setTranslateX(0);
         }
 
-        if (preview.getHeight() > previewSize.get()) {
+        if (preview.getHeight() > clipWrapper.getHeight()) {
             double yTranslate =
-                    -Math.min(Math.max(0, y - previewSize.get() / 2), preview.getHeight() - previewSize.get());
+                    -Math.min(Math.max(0, y - clipWrapper.getHeight() / 2), preview.getHeight() - clipWrapper.getHeight());
             preview.setTranslateY(Math.round(yTranslate));
             previewTool.setTranslateY(Math.round(yTranslate));
             previewSelection.setTranslateY(Math.round(yTranslate));
@@ -187,17 +184,6 @@ public class ToolView extends GridPane {
             previewTool.setTranslateY(0);
             previewSelection.setTranslateY(0);
         }
-    }
-
-    private static ObservableValue<? extends Number> getPreviewBinding() {
-        return Bindings.createDoubleBinding(() -> {
-            PixelatedImageView graphic = (PixelatedImageView) preview.getGraphic();
-            if (graphic == null) {
-                return previewSize.get();
-            } else {
-                return Math.min(graphic.getImage().getHeight(), previewSize.get());
-            }
-        }, previewSize, preview.graphicProperty());
     }
 
     public static void setSize(int width, int height) {
