@@ -13,10 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import main.java.control.basic.ImageButton;
 import main.java.files.PaletteFile;
 import main.java.res.Images;
-import main.java.control.basic.ImageButton;
-import main.java.control.parent.BasicWindow;
 import main.java.start.ActionManager;
 import main.java.start.Main;
 import main.java.view.palette.PaletteSelection;
@@ -34,7 +33,7 @@ public class ColorView extends BorderPane {
             VBox box = new VBox();
             instance.setStyle("-fx-background-color: #f4f4f4");
             box.setSpacing(6);
-            box.setPadding(new Insets(BasicWindow.RESIZE_MARGIN));
+            box.setPadding(new Insets(6, 6, 6, 1));
             box.setAlignment(Pos.TOP_RIGHT);
 
             ImageButton popup = new ImageButton(Images.POPUP);

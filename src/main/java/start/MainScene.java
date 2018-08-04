@@ -96,6 +96,7 @@ public class MainScene extends Scene {
         styleSheets.add(getClass().getResource("/style/togglebutton.css").toExternalForm());
         styleSheets.add(getClass().getResource("/style/toolbutton.css").toExternalForm());
         styleSheets.add(getClass().getResource("/style/window.css").toExternalForm());
+        styleSheets.add(getClass().getResource("/style/splitpane.css").toExternalForm());
         getStylesheets().addAll(getStyle());
 
         imageContainer = new ImageWindowContainer();
