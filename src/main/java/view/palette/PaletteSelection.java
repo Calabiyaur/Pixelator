@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox;
 
 import main.java.control.basic.ImageButton;
 import main.java.control.basic.ToggleImageButton;
-import main.java.control.parent.BasicTabPane;
+import main.java.control.parent.ResizableTabPane;
 import main.java.files.Files;
 import main.java.files.PaletteFile;
 import main.java.meta.Direction;
@@ -29,7 +29,7 @@ import main.java.view.dialog.NewPaletteDialog;
 
 public class PaletteSelection extends BorderPane {
 
-    private BasicTabPane<PaletteTab> tabPane;
+    private ResizableTabPane<PaletteTab> tabPane;
     private BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty paletteSelected = new SimpleBooleanProperty(false);
@@ -37,7 +37,7 @@ public class PaletteSelection extends BorderPane {
 
     public PaletteSelection() {
         Label title = new Label("PALETTE");
-        tabPane = new BasicTabPane<>(Direction.NORTH, Direction.NORTH);
+        tabPane = new ResizableTabPane<>(Direction.NORTH, Direction.NORTH);
         ImageButton create = new ImageButton(Images.NEW);
         ImageButton open = new ImageButton(Images.OPEN);
         ImageButton save = new ImageButton(Images.SAVE);

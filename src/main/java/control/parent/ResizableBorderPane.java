@@ -9,17 +9,17 @@ import javafx.scene.layout.VBox;
 public class ResizableBorderPane extends VBox {
 
     private SplitPane splitPane;
-    private Node top;
-    private Node left;
-    private Node right;
-    private Node center;
-    private Node bottom;
+    private Node top = new Pane();
+    private Node left = new Pane();
+    private Node right = new Pane();
+    private Node center = new Pane();
+    private Node bottom = new Pane();
 
     public ResizableBorderPane() {
         splitPane = new SplitPane();
 
-        getChildren().setAll(new Pane(), splitPane, new Pane());
-        splitPane.getItems().setAll(new Pane(), new Pane(), new Pane());
+        getChildren().setAll(top, splitPane, bottom);
+        splitPane.getItems().setAll(left, center, right);
         VBox.setVgrow(splitPane, Priority.ALWAYS);
     }
 
@@ -35,7 +35,7 @@ public class ResizableBorderPane extends VBox {
         return top;
     }
 
-    public void setTop(Pane top) {
+    public void setTop(Node top) {
         this.top = top;
         getChildren().set(0, top);
     }
@@ -44,7 +44,7 @@ public class ResizableBorderPane extends VBox {
         return left;
     }
 
-    public void setLeft(Pane left) {
+    public void setLeft(Node left) {
         this.left = left;
         splitPane.getItems().set(0, left);
     }
@@ -53,16 +53,20 @@ public class ResizableBorderPane extends VBox {
         return right;
     }
 
-    public void setRight(Pane right) {
+    public void setRight(Node right) {
+        if (right != null) {
+            splitPane.getItems().set(2, right);
+        } else {
+            splitPane.getItems().remove(2);
+        }
         this.right = right;
-        splitPane.getItems().set(2, right);
     }
 
     public Node getCenter() {
         return center;
     }
 
-    public void setCenter(Pane center) {
+    public void setCenter(Node center) {
         this.center = center;
         splitPane.getItems().set(1, center);
     }
@@ -71,7 +75,7 @@ public class ResizableBorderPane extends VBox {
         return bottom;
     }
 
-    public void setBottom(Pane bottom) {
+    public void setBottom(Node bottom) {
         this.bottom = bottom;
         getChildren().set(2, bottom);
     }
