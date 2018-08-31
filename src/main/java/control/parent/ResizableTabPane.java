@@ -5,6 +5,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
@@ -44,6 +45,7 @@ public class ResizableTabPane<T extends BasicTab> extends ResizableBorderPane {
         initWest(rotateWest);
         setCenter(stackPane);
         setRight(null);
+        getSplitPane().setDividerPosition(0, 0.25);
 
         toggleGroup.selectedToggleProperty().addListener((ov, o, n) -> {
             if (n == null) {
@@ -75,7 +77,9 @@ public class ResizableTabPane<T extends BasicTab> extends ResizableBorderPane {
             ((HBox) westBox).setSpacing(6);
         }
         westBox.setRotate(rotate.getRotate());
-        setLeft(new Pane(new Group(westBox)));
+        Pane left = new Pane(new Group(westBox));
+        SplitPane.setResizableWithParent(left, false);
+        setLeft(left);
     }
 
     public void addTab(T tab, String text) {

@@ -24,11 +24,15 @@ public class ResizableBorderPane extends VBox {
     }
 
     public void setLeftMargin(double margin) {
-        splitPane.getDividers().get(0).setPosition(margin / splitPane.getWidth());
+        splitPane.setDividerPosition(0, margin / splitPane.getWidth());
     }
 
     public void setRightMargin(double margin) {
-        splitPane.getDividers().get(1).setPosition(1 - margin / splitPane.getWidth());
+        splitPane.setDividerPosition(1, 1 - margin / splitPane.getWidth());
+    }
+
+    public SplitPane getSplitPane() {
+        return splitPane;
     }
 
     public Node getTop() {
