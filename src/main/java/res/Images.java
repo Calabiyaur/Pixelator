@@ -42,6 +42,7 @@ public enum Images {
     SAVE,
     SAVE_PALETTE(SAVE.url),
     SELECT,
+    SELECTION_BORDER,
     SUBMIT,
     SWAP_COLOR,
     WAND,

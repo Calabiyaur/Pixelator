@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Properties;
 
 import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
@@ -63,9 +62,7 @@ public abstract class PixelFile {
     }
 
     public ReadOnlyStringProperty nameProperty() {
-        ReadOnlyStringWrapper readOnlyStringWrapper = new ReadOnlyStringWrapper();
-        readOnlyStringWrapper.bind(name);
-        return readOnlyStringWrapper.getReadOnlyProperty();
+        return name;
     }
 
     public final Extension getExtension() {

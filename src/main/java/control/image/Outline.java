@@ -1,10 +1,14 @@
 package main.java.control.image;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import main.java.meta.Point;
 import main.java.meta.PointArray;
 
 public class Outline extends ShapeStack {
 
-    private PointArray points;
+    private ObservableList<Point> points;
 
     public Outline(int pixelWidth, int pixelHeight) {
         super(pixelWidth, pixelHeight);
@@ -18,7 +22,8 @@ public class Outline extends ShapeStack {
     }
 
     public void setPoints(PointArray points) {
-        this.points = points;
-        draw();
+        this.points = FXCollections.observableArrayList();
+
+
     }
 }
