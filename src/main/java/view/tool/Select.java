@@ -1,15 +1,14 @@
 package main.java.view.tool;
 
-import main.java.res.Images;
 import main.java.meta.Point;
+import main.java.res.Images;
 import main.java.util.ShapeUtil;
-import main.java.view.editor.ImageEditor;
 
 public class Select extends Tool {
 
     private static Select me = new Select();
 
-    private Select() {
+    Select() {
         super(
                 Images.SELECT,
                 Images.USE_SELECT,
@@ -42,10 +41,4 @@ public class Select extends Tool {
         }
     }
 
-    @Override public void lockAndReset() {
-        ImageEditor editor = getEditor();
-        if (editor != null) {
-            editor.lockSelection();
-        }
-    }
 }

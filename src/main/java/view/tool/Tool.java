@@ -9,8 +9,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import main.java.logging.Logger;
-import main.java.res.Images;
 import main.java.meta.Point;
+import main.java.res.Images;
 import main.java.view.editor.ImageEditor;
 import main.java.view.editor.SelectionLayer;
 import main.java.view.editor.ToolLayer;
@@ -154,6 +154,10 @@ public abstract class Tool {
 
     public void lockAndReset() {
         imitateRelease();
+        ImageEditor editor = getEditor();
+        if (editor != null) {
+            editor.lockSelection();
+        }
     }
 
     public final Cursor getCursor() {
