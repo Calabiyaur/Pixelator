@@ -23,6 +23,7 @@ public abstract class Tool {
     private static Point mouseLastPressed;
     private static boolean dragging = false;
     private static MouseButton mouseButton;
+    private static boolean stillSincePress = true;
 
     private Images image;
     private Images useImage;
@@ -87,6 +88,7 @@ public abstract class Tool {
         updateMouse(e);
         mouseButton = e.getButton();
         mouseLastPressed = getMouse().copy();
+        stillSincePress = true;
         updateTool();
 
         if (!actingTool.isSelectionTool() || !getSelectionLayer().contains(mouse)) {
@@ -100,6 +102,7 @@ public abstract class Tool {
 
     public final void move(MouseEvent e) {
         updateMouse(e);
+        stillSincePress = false;
         if (!Objects.equals(mouse, mousePrevious)) {
             actingTool.movePrimary();
         }
@@ -107,6 +110,7 @@ public abstract class Tool {
 
     public final void drag(MouseEvent e) {
         updateMouse(e);
+        stillSincePress = false;
         if (!Objects.equals(mouse, mousePrevious)) {
             actingTool.dragPrimary();
         }
@@ -141,10 +145,6 @@ public abstract class Tool {
 
     public abstract void releasePrimary();
 
-    public boolean isStillSincePress() {
-        return getMouse().equals(getMouseLastPressed());
-    }
-
     public final void escape() {
         getSelectionLayer().clear();
         getToolLayer().clear();
@@ -166,10 +166,6 @@ public abstract class Tool {
 
     public final ToolLayer getToolLayer() {
         return getEditor().getToolLayer();
-    }
-
-    public final Tool getActingTool() {
-        return actingTool;
     }
 
     public static void setActingTool(Tool tool) {
@@ -198,4 +194,9 @@ public abstract class Tool {
     public MouseButton getMouseButton() {
         return mouseButton;
     }
+
+    public boolean isStillSincePress() {
+        return stillSincePress;
+    }
+
 }
