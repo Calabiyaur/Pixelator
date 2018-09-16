@@ -60,11 +60,16 @@ public abstract class ShapeStack extends StackPane {
     }
 
     protected Line scalableLine(IntegerProperty x1, IntegerProperty y1, IntegerProperty x2, IntegerProperty y2) {
+        return scalableLine(x1, y1, x2, y2, 0, 0);
+    }
+
+    protected Line scalableLine(IntegerProperty x1, IntegerProperty y1, IntegerProperty x2, IntegerProperty y2,
+            int xOffset, int yOffset) {
         Line line = new Line();
-        line.startXProperty().bind(x(x1));
-        line.startYProperty().bind(y(y1));
-        line.endXProperty().bind(x(x2));
-        line.endYProperty().bind(y(y2));
+        line.startXProperty().bind(x(x1).add(xOffset));
+        line.startYProperty().bind(y(y1).add(yOffset));
+        line.endXProperty().bind(x(x2).add(xOffset));
+        line.endYProperty().bind(y(y2).add(yOffset));
         line.translateXProperty().bind(Bindings.min(line.startXProperty(), line.endXProperty()));
         line.translateYProperty().bind(Bindings.min(line.startYProperty(), line.endYProperty()));
         line.visibleProperty().bind(visibleProperty().and(x1.isNotEqualTo(x2).or(y1.isNotEqualTo(y2))));
