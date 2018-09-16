@@ -35,7 +35,11 @@ public class SelectionLayer extends EditorLayer {
     @Override public void setStart(Point position) {
         super.setStart(position);
         outlineRect.resize(getImageWidth(), getImageHeight());
-        active.set(true);
+        if (position != null) {
+            active.set(true);
+        } else {
+            outlineRect.setEdges(-1, -1, -1, -1);
+        }
     }
 
     public boolean contains(Point p) {
@@ -140,9 +144,6 @@ public class SelectionLayer extends EditorLayer {
         active.set(false);
         setTranslateX(0);
         setTranslateY(0);
-
-        //FIXME: outline rect should automatically turn invisible when active is false
-        outlineRect.setEdges(-1, -1, -1, -1);
 
         drag = null;
     }
