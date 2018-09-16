@@ -29,9 +29,9 @@ public abstract class Tool {
     private int hotspotX;
     private int hotspotY;
 
-    private boolean draggableAfterClick;
-    private boolean selectionTool;
-    private Tool secondary = this;
+    boolean draggableAfterClick;
+    boolean selectionTool;
+    Tool secondary = this;
 
     protected Tool(Images image, Images useImage, int hotspotX, int hotspotY, boolean draggableAfterClick,
             boolean selectionTool) {
@@ -193,10 +193,6 @@ public abstract class Tool {
 
     public Tool getSecondary() {
         return secondary;
-    }
-
-    public final void setSecondary(Tool secondary) {
-        this.secondary = secondary;
     }
 
     public MouseButton getMouseButton() {

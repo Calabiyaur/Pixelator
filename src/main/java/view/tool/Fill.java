@@ -15,7 +15,7 @@ public class Fill extends Tool {
                 false,
                 false
         );
-        setSecondary(Pick.getMe());
+        secondary = Pick.getMe();
     }
 
     public static Fill getMe() {

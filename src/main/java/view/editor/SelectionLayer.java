@@ -6,10 +6,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
+import main.java.control.image.OutlineRect;
 import main.java.logging.Logger;
 import main.java.meta.Point;
 import main.java.meta.PointArray;
-import main.java.control.image.OutlineRect;
 import main.java.util.ImageUtil;
 import main.java.view.ToolView;
 import main.java.view.undo.PixelChange;
@@ -201,6 +201,10 @@ public class SelectionLayer extends EditorLayer {
         }
 
         return Pair.of(new Point(minX, minY), new Point(maxX, maxY));
+    }
+
+    public void playAnimation(boolean play) {
+        outlineRect.playAnimation(play);
     }
 
 }

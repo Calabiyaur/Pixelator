@@ -15,7 +15,7 @@ public class Pen extends Tool {
                 false,
                 false
         );
-        setSecondary(PickSelect.getMe());
+        secondary = PickSelect.getMe();
     }
 
     public static Pen getMe() {

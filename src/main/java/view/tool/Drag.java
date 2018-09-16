@@ -28,6 +28,7 @@ public class Drag extends Tool {
             getEditor().register();
         }
         getSelectionLayer().setDragStart(getMouse());
+        getSelectionLayer().playAnimation(false);
     }
 
     @Override public void dragPrimary() {
@@ -35,6 +36,6 @@ public class Drag extends Tool {
     }
 
     @Override public void releasePrimary() {
-        // Do nothing.
+        getSelectionLayer().playAnimation(true);
     }
 }

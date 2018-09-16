@@ -13,11 +13,11 @@ import main.java.view.undo.Undoable;
 
 public abstract class Editor extends StackPane {
 
-    private UndoManager undoManager;
-    private PixelatedImageView imageView;
-    private Image cleanImage;
-    private BooleanProperty dirty = new SimpleBooleanProperty(false);
+    private final UndoManager undoManager;
+    private final PixelatedImageView imageView;
+    private final BooleanProperty dirty = new SimpleBooleanProperty(false);
     private final PixelFile pixelFile;
+    private Image cleanImage;
 
     public Editor(PixelFile file, PixelatedImageView imageView) {
         this.pixelFile = file;

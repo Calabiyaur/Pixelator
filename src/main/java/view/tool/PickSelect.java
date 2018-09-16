@@ -4,6 +4,11 @@ public class PickSelect extends Select {
 
     private static PickSelect me = new PickSelect();
 
+    public PickSelect() {
+        draggableAfterClick = false;
+        selectionTool = false;
+    }
+
     public static PickSelect getMe() {
         return me;
     }

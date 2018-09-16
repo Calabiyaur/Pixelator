@@ -16,7 +16,7 @@ public class Line extends Tool {
                 true,
                 false
         );
-        setSecondary(PickSelect.getMe());
+        secondary = PickSelect.getMe();
     }
 
     public static Line getMe() {

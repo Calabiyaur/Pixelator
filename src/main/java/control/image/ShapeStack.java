@@ -17,7 +17,6 @@ public abstract class ShapeStack extends StackPane {
     protected IntegerProperty pixelHeight;
 
     public ShapeStack(int pixelWidth, int pixelHeight) {
-        super();
         setAlignment(Pos.TOP_LEFT);
         setPrefSize(pixelWidth, pixelHeight);
         this.pixelWidth = new SimpleIntegerProperty(pixelWidth);
@@ -68,7 +67,7 @@ public abstract class ShapeStack extends StackPane {
         line.endYProperty().bind(y(y2));
         line.translateXProperty().bind(Bindings.min(line.startXProperty(), line.endXProperty()));
         line.translateYProperty().bind(Bindings.min(line.startYProperty(), line.endYProperty()));
-        line.visibleProperty().bind(x1.isNotEqualTo(x2).or(y1.isNotEqualTo(y2)));
+        line.visibleProperty().bind(visibleProperty().and(x1.isNotEqualTo(x2).or(y1.isNotEqualTo(y2))));
         return line;
     }
 }

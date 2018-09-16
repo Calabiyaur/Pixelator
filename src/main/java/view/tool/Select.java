@@ -25,6 +25,7 @@ public class Select extends Tool {
 
     @Override public void pressPrimary() {
         getSelectionLayer().setStart(getMouse());
+        getSelectionLayer().playAnimation(false);
     }
 
     @Override public void dragPrimary() {
@@ -38,6 +39,7 @@ public class Select extends Tool {
         Point start = getSelectionLayer().getStart();
         if (start != null) {
             getSelectionLayer().definePixels(ShapeUtil.getRectanglePoints(start, getMouse(), true));
+            getSelectionLayer().playAnimation(true);
         }
     }
 

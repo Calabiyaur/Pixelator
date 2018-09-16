@@ -15,7 +15,7 @@ public class FillColor extends Tool {
                 false,
                 false
         );
-        setSecondary(Pick.getMe());
+        secondary = Pick.getMe();
     }
 
     public static FillColor getMe() {
