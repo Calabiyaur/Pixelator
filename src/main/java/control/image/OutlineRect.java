@@ -33,9 +33,7 @@ public class OutlineRect extends ShapeStack {
         Line left = scalableLine(x1, y1, x1, y2, -1, 0);
         getChildren().setAll(topW, rightW, bottomW, leftW, top, right, bottom, left);
 
-        Arrays.asList(topW, rightW, bottomW, leftW).forEach(line -> {
-            line.setStroke(Color.WHITE);
-        });
+        Arrays.asList(topW, rightW, bottomW, leftW).forEach(line -> line.setStroke(Color.WHITE));
 
         Arrays.asList(top, right, bottom, left).forEach(line -> {
             line.getStrokeDashArray().addAll(4d, 4d);

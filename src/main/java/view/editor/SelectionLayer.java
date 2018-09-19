@@ -7,6 +7,7 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
 import main.java.control.image.OutlineRect;
+import main.java.control.image.OutlineShape;
 import main.java.logging.Logger;
 import main.java.meta.Point;
 import main.java.meta.PointArray;
@@ -20,6 +21,7 @@ public class SelectionLayer extends EditorLayer {
     private Point drag;
     private BooleanProperty active = new SimpleBooleanProperty(false);
     private OutlineRect outlineRect;
+    private OutlineShape outlineShape;
 
     public SelectionLayer(int width, int height, PixelReader reader) {
         super(width, height, reader);
@@ -59,8 +61,6 @@ public class SelectionLayer extends EditorLayer {
     }
 
     public void definePixels(PointArray points) {
-        Logger.log(getClass().getSimpleName(), "Set pixels");
-
         clearImage();
         getPixels().reset();
 
@@ -75,10 +75,13 @@ public class SelectionLayer extends EditorLayer {
             getPixels().addForcefully(x, y, color, color);
         }
         active.set(true);
+        outlineShape.define(points);
     }
 
     public void defineImage(Image image) {
         clear();
+        PointArray points = new PointArray();
+
         int x1 = Integer.MAX_VALUE;
         int y1 = Integer.MAX_VALUE;
         int x2 = 0;
@@ -96,10 +99,11 @@ public class SelectionLayer extends EditorLayer {
                 Color color = reader.getColor(i, j);
                 getWriter().setColor(i, j, color);
                 getPixels().add(i, j, Color.TRANSPARENT, color);
+                points.add(i, j);
             }
         }
         active.set(true);
-        outlineRect.setEdges(x1, y1, x2, y2);
+        outlineShape.define(points);
     }
 
     public void setEdges(Point start, Point end) {
@@ -188,6 +192,12 @@ public class SelectionLayer extends EditorLayer {
         outlineRect.translateYProperty().bind(translateYProperty());
     }
 
+    public void setOutlineShape(OutlineShape outlineShape) {
+        this.outlineShape = outlineShape;
+        outlineShape.translateXProperty().bind(translateXProperty());
+        outlineShape.translateYProperty().bind(translateYProperty());
+    }
+
     public Pair<Point, Point> getBoundaries() {
         int minX = Integer.MAX_VALUE;
         int minY = Integer.MAX_VALUE;
@@ -206,6 +216,7 @@ public class SelectionLayer extends EditorLayer {
 
     public void playAnimation(boolean play) {
         outlineRect.playAnimation(play);
+        outlineShape.playAnimation(play);
     }
 
 }

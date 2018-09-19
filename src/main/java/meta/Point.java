@@ -23,6 +23,14 @@ public class Point {
         return y;
     }
 
+    public int getLeft() {
+        return getX();
+    }
+
+    public int getRight() {
+        return getY();
+    }
+
     public Point copy() {
         return new Point(x, y);
     }
