@@ -27,15 +27,6 @@ public class PointArray { //TODO: Make 'Array' interface and let this and 'Pixel
         }
     }
 
-    public void addAll(int[] x, int[] y) {
-        if (x.length != y.length) {
-            throw new IllegalArgumentException("X and Y coordinates must agree in length");
-        }
-        for (int i = 0; i < x.length; i++) {
-            add(x[i], y[i]);
-        }
-    }
-
     public int getX(int index) {
         return x.get(index);
     }
@@ -67,6 +58,15 @@ public class PointArray { //TODO: Make 'Array' interface and let this and 'Pixel
         return false;
     }
 
+    public boolean containsAll(PointArray points) {
+        for (int i = 0; i < points.size(); i++) {
+            if (!contains(points.getX(i), points.getY(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -89,13 +89,6 @@ public class PointArray { //TODO: Make 'Array' interface and let this and 'Pixel
         pointArray.x = new ArrayList<>(x);
         pointArray.y = new ArrayList<>(y);
         return pointArray;
-    }
-
-    public void translate(int dX, int dY) {
-        for (int i = 0; i < size(); i++) {
-            //x[i] = x[i] + dX;
-            //y[i] = y[i] + dY;
-        }
     }
 
     public String toString() {
