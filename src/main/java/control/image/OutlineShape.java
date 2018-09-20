@@ -23,7 +23,7 @@ import main.java.util.CollectionUtil;
 
 public class OutlineShape extends ShapeStack {
 
-    private final Timeline timeline = new Timeline();
+    private Timeline timeline = new Timeline();
 
     public OutlineShape(int pixelWidth, int pixelHeight) {
         super(pixelWidth, pixelHeight);
@@ -35,6 +35,8 @@ public class OutlineShape extends ShapeStack {
 
     public void define(PointArray points) {
         getChildren().clear();
+        timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
 
         // Maps a row index y to the x values of that row
         Map<Integer, List<Integer>> rowMap = new HashMap<>();
@@ -168,6 +170,12 @@ public class OutlineShape extends ShapeStack {
         });
         getChildren().addAll(whiteLines);
         getChildren().addAll(dashedLines);
+        timeline.play();
+    }
+
+    public void clear() {
+        getChildren().clear();
+        timeline.stop();
     }
 
     public void playAnimation(boolean play) {

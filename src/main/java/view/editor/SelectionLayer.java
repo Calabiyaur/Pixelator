@@ -99,7 +99,9 @@ public class SelectionLayer extends EditorLayer {
                 Color color = reader.getColor(i, j);
                 getWriter().setColor(i, j, color);
                 getPixels().add(i, j, Color.TRANSPARENT, color);
-                points.add(i, j);
+                if (!Color.TRANSPARENT.equals(color)) {
+                    points.add(i, j);
+                }
             }
         }
         active.set(true);
@@ -146,6 +148,7 @@ public class SelectionLayer extends EditorLayer {
         clearImage();
         getPixels().reset();
         active.set(false);
+        outlineShape.clear();
         setTranslateX(0);
         setTranslateY(0);
 
@@ -214,9 +217,12 @@ public class SelectionLayer extends EditorLayer {
         return Pair.of(new Point(minX, minY), new Point(maxX, maxY));
     }
 
-    public void playAnimation(boolean play) {
-        outlineRect.playAnimation(play);
+    public void playBorder(boolean play) {
         outlineShape.playAnimation(play);
+    }
+
+    public void playRect(boolean play) {
+        outlineRect.playAnimation(play);
     }
 
 }
