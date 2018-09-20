@@ -131,20 +131,20 @@ public class OutlineShape extends ShapeStack {
         List<Line> whiteLines = new ArrayList<>();
         List<Line> dashedLines = new ArrayList<>();
         for (Line leftLine : leftLines) {
-            whiteLines.add(scalableLine(leftLine, -1, 0));
-            dashedLines.add(scalableLine(leftLine, -1, 0));
+            whiteLines.add(scalableLine(leftLine, 0, 0, 0, 1));
+            dashedLines.add(scalableLine(leftLine, 0, 0, 0, 1));
         }
         for (Line rightLine : rightLines) {
-            whiteLines.add(scalableLine(rightLine, 0, 0));
-            dashedLines.add(scalableLine(rightLine, 0, 0));
+            whiteLines.add(scalableLine(rightLine, -1, 0, 0, 1));
+            dashedLines.add(scalableLine(rightLine, -1, 0, 0, 1));
         }
         for (Line topLine : topLines) {
-            whiteLines.add(scalableLine(topLine, 0, -1));
-            dashedLines.add(scalableLine(topLine, 0, -1));
+            whiteLines.add(scalableLine(topLine, 0, 0, 1, 0));
+            dashedLines.add(scalableLine(topLine, 0, 0, 1, 0));
         }
         for (Line bottomLine : bottomLines) {
-            whiteLines.add(scalableLine(bottomLine, 0, 0));
-            dashedLines.add(scalableLine(bottomLine, 0, 0));
+            whiteLines.add(scalableLine(bottomLine, 0, -1, 1, 0));
+            dashedLines.add(scalableLine(bottomLine, 0, -1, 1, 0));
         }
         whiteLines.forEach(line -> line.setStroke(Color.WHITE));
         dashedLines.forEach(line -> {

@@ -23,14 +23,14 @@ public class OutlineRect extends ShapeStack {
     public OutlineRect(int pixelWidth, int pixelHeight) {
         super(pixelWidth, pixelHeight);
 
-        Line topW = scalableLine(x1, y1, x2, y1, 0, -1);
-        Line rightW = scalableLine(x2, y1, x2, y2);
-        Line bottomW = scalableLine(x1, y2, x2, y2);
-        Line leftW = scalableLine(x1, y1, x1, y2, -1, 0);
-        Line top = scalableLine(x1, y1, x2, y1, 0, -1);
-        Line right = scalableLine(x2, y1, x2, y2);
-        Line bottom = scalableLine(x1, y2, x2, y2);
-        Line left = scalableLine(x1, y1, x1, y2, -1, 0);
+        Line topW = scalableLine(x1, y1, x2, y1, 0, 0, 1, 0);
+        Line top = scalableLine(x1, y1, x2, y1, 0, 0, 1, 0);
+        Line rightW = scalableLine(x2, y1, x2, y2, -1, 0, 0, 1);
+        Line right = scalableLine(x2, y1, x2, y2, -1, 0, 0, 1);
+        Line bottomW = scalableLine(x1, y2, x2, y2, 0, -1, 1, 0);
+        Line bottom = scalableLine(x1, y2, x2, y2, 0, -1, 1, 0);
+        Line leftW = scalableLine(x1, y1, x1, y2, 0, 0, 0, 1);
+        Line left = scalableLine(x1, y1, x1, y2, 0, 0, 0, 1);
         getChildren().setAll(topW, rightW, bottomW, leftW, top, right, bottom, left);
 
         Arrays.asList(topW, rightW, bottomW, leftW).forEach(line -> line.setStroke(Color.WHITE));

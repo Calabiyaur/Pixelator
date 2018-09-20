@@ -59,24 +59,20 @@ public abstract class ShapeStack extends StackPane {
         return prefHeightProperty().multiply(j.divide((double) getPixelHeight()));
     }
 
-    protected Line scalableLine(IntegerProperty x1, IntegerProperty y1, IntegerProperty x2, IntegerProperty y2) {
-        return scalableLine(x1, y1, x2, y2, 0, 0);
-    }
-
     protected Line scalableLine(IntegerProperty x1, IntegerProperty y1, IntegerProperty x2, IntegerProperty y2,
-            int xOffset, int yOffset) {
+            int xOffset, int yOffset, int xShorten, int yShorten) {
         Line line = new Line();
         line.startXProperty().bind(x(x1).add(xOffset));
         line.startYProperty().bind(y(y1).add(yOffset));
-        line.endXProperty().bind(x(x2).add(xOffset));
-        line.endYProperty().bind(y(y2).add(yOffset));
+        line.endXProperty().bind(x(x2).add(xOffset - xShorten));
+        line.endYProperty().bind(y(y2).add(yOffset - yShorten));
         line.translateXProperty().bind(Bindings.min(line.startXProperty(), line.endXProperty()));
         line.translateYProperty().bind(Bindings.min(line.startYProperty(), line.endYProperty()));
         line.visibleProperty().bind(visibleProperty().and(x1.isNotEqualTo(x2).or(y1.isNotEqualTo(y2))));
         return line;
     }
 
-    protected Line scalableLine(Line base, int xOffset, int yOffset) {
+    protected Line scalableLine(Line base, int xOffset, int yOffset, int xShorten, int yShorten) {
         double x1 = base.getStartX();
         double y1 = base.getStartY();
         double x2 = base.getEndX();
@@ -84,8 +80,8 @@ public abstract class ShapeStack extends StackPane {
         Line line = new Line();
         line.startXProperty().bind(x(x1).add(xOffset));
         line.startYProperty().bind(y(y1).add(yOffset));
-        line.endXProperty().bind(x(x2).add(xOffset));
-        line.endYProperty().bind(y(y2).add(yOffset));
+        line.endXProperty().bind(x(x2).add(xOffset - xShorten));
+        line.endYProperty().bind(y(y2).add(yOffset - yShorten));
         line.translateXProperty().bind(Bindings.min(line.startXProperty(), line.endXProperty()));
         line.translateYProperty().bind(Bindings.min(line.startYProperty(), line.endYProperty()));
         line.visibleProperty().bind(visibleProperty());
