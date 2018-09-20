@@ -23,6 +23,7 @@ public enum Images {
     ELLIPSE,
     FILL,
     FILL_COLOR,
+    FILL_SELECT,
     GRID,
     ICON("/images/icon256.png"),
     LINE,
@@ -42,21 +43,21 @@ public enum Images {
     SAVE,
     SAVE_PALETTE(SAVE.url),
     SELECT,
-    SELECTION_BORDER,
     SUBMIT,
     SWAP_COLOR,
-    WAND,
     UNDO,
     UNDO_PALETTE(UNDO.url),
     USE_ELLIPSE,
     USE_FILL,
     USE_FILL_COLOR,
+    USE_FILL_SELECT,
     USE_LINE,
     USE_PEN,
     USE_PICK,
     USE_RECTANGLE,
     USE_SELECT,
-    USE_WAND;
+    USE_WAND,
+    WAND;
 
     private final static String DIR = "/images/";
     private final static String TYPE = ".png";

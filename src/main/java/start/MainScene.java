@@ -125,11 +125,6 @@ public class MainScene extends Scene {
         ToolBar toolBar = createToolBar();
         barBox.getChildren().addAll(menuBar, toolBar);
 
-        //Platform.runLater(() -> {
-        //    double tvWidth = toolView.getWidth();
-        //    imageContainer.translateXProperty().bind(toolView.widthProperty().multiply(-1).add(tvWidth));
-        //});
-
         setOnKeyPressed(e -> ActionManager.fire(e));
     }
 

@@ -315,6 +315,14 @@ public class ImageEditor extends Editor {
         removePixels(selectionLayer.getPixels());
     }
 
+    public void selectFillSelect(Point point) {
+        if (ImageUtil.outOfBounds(getImage(), point)) {
+            return;
+        }
+        Color color = reader.getColor(point.getX(), point.getY());
+        selectionLayer.definePixels(ShapeUtil.getPointsOfColor(color, reader, width.get(), height.get()));
+    }
+
     public void pickColor(Point p) {
         if (!ImageUtil.outOfBounds(getImage(), p)) {
             ColorView.setColor(reader.getColor(p.getX(), p.getY()));

@@ -76,6 +76,8 @@ public class ToolView extends VBox {
             ellipse.setOnAction(e -> currentTool.set(Tools.ELLIPSE));
             ToggleButton fillColor = new ToggleImageButton(tg, Images.FILL_COLOR);
             fillColor.setOnAction(e -> currentTool.set(Tools.FILL_COLOR));
+            ToggleButton fillSelect = new ToggleImageButton(tg, Images.FILL_SELECT);
+            fillSelect.setOnAction(e -> currentTool.set(Tools.FILL_SELECT));
 
             FlowPane tools1 = new FlowPane(pen, line, pick, fill, fillColor, rectangle, ellipse);
             tools1.setVgap(6);
@@ -85,7 +87,7 @@ public class ToolView extends VBox {
 
             instance.getChildren().add(2, new Separator());
 
-            FlowPane tools2 = new FlowPane(select, wand);
+            FlowPane tools2 = new FlowPane(select, wand, fillSelect);
             tools2.setVgap(6);
             tools2.setHgap(6);
             instance.getChildren().add(3, tools2);
