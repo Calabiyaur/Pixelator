@@ -36,7 +36,6 @@ public class SelectionLayer extends EditorLayer {
 
     @Override public void setStart(Point position) {
         super.setStart(position);
-        outlineRect.resize(getImageWidth(), getImageHeight());
         if (position != null) {
             active.set(true);
         } else {
