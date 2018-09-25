@@ -21,6 +21,7 @@ public enum Images {
     CROSSHAIR,
     CUT,
     ELLIPSE,
+    ERROR_20,
     FILL,
     FILL_COLOR,
     FILL_SELECT,
@@ -83,8 +84,12 @@ public enum Images {
         try {
             return new Image(url);
         } catch (IllegalArgumentException e) {
-            System.out.println("Image not found: " + url);
-            return null;
+            if (ERROR_20.url.equals(url)) {
+                System.out.println("Image not found: " + url);
+                return null;
+            } else {
+                return get(ERROR_20.url);
+            }
         }
     }
 
