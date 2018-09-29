@@ -8,13 +8,12 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 
-import main.java.res.Images;
-
 import main.java.res.Action;
+import main.java.res.Images;
 
 public class BasicMenu extends Menu {
 
-    private static String SPACE = "        ";
+    private static final String SPACE = "        ";
 
     public BasicMenu(String text) {
         super(text);
@@ -49,7 +48,7 @@ public class BasicMenu extends Menu {
             //        key.isCtrl() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
             //        key.isAlt() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
             //        KeyCombination.ModifierValue.ANY, KeyCombination.ModifierValue.ANY);
-            //item.setAccelerator(accelerator);
+            //item.setAccelerator(accelerator); //FIXME: Using the key combination triggers the action twice
             item.setText(item.getText() + SPACE);
         }
     }

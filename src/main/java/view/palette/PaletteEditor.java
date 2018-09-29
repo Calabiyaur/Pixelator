@@ -12,9 +12,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import main.java.control.image.PixelatedImageView;
 import main.java.files.PaletteFile;
 import main.java.meta.Point;
-import main.java.control.image.PixelatedImageView;
 import main.java.util.ImageUtil;
 import main.java.view.ColorView;
 import main.java.view.dialog.ColorDialog;
@@ -104,7 +104,9 @@ public class PaletteEditor extends Editor {
                 Color color = reader.getColor(selected.getX(), selected.getY());
                 Color otherColor = reader.getColor(mp.getX(), mp.getY());
 
-                writer.setColor(selected.getX(), selected.getY(), otherColor);
+                if (!e.isControlDown()) {
+                    writer.setColor(selected.getX(), selected.getY(), otherColor);
+                }
                 writer.setColor(mp.getX(), mp.getY(), color);
 
                 PixelChange change = new PixelChange(writer);
@@ -141,7 +143,11 @@ public class PaletteEditor extends Editor {
             return;
         }
         select(mp);
-        takeColor();
+        if (event.isControlDown()) {
+            setColor(ColorView.getColor());
+        } else {
+            takeColor();
+        }
     }
 
     private void takeColor() {
@@ -165,6 +171,14 @@ public class PaletteEditor extends Editor {
         register(change);
 
         ColorView.setColor(color);
+    }
+
+    public void moveSelection(int right, int down) {
+        Point point = new Point(selected.getX() + right, selected.getY() + down);
+        if (!ImageUtil.outOfBounds(getImage(), point)) {
+            select(point);
+            takeColor();
+        }
     }
 
     private Point getMousePosition(double x, double y) {

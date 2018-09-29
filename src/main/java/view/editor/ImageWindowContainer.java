@@ -11,10 +11,10 @@ import javafx.collections.FXCollections;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
+import main.java.control.image.ScalableImageView;
 import main.java.files.ImageFile;
 import main.java.files.PixelFile;
 import main.java.res.ImageConfig;
-import main.java.control.image.ScalableImageView;
 import main.java.view.InfoView;
 import main.java.view.ToolView;
 import main.java.view.dialog.SaveRequestDialog;
@@ -207,19 +207,27 @@ public class ImageWindowContainer extends Pane {
     }
 
     public void escape() {
+        if (currentWindow.get() != null) {
         currentWindow.get().getEditor().escape();
+        }
     }
 
     public void zoomIn() {
+        if (currentWindow.get() != null) {
         currentWindow.get().zoomIn();
+        }
     }
 
     public void zoomOut() {
+        if (currentWindow.get() != null) {
         currentWindow.get().zoomOut();
+        }
     }
 
     public void fitWindow() {
-        currentWindow.get().adjustSize();
+        if (currentWindow.get() != null) {
+            currentWindow.get().adjustSize();
+        }
     }
 
     public BooleanProperty imageSelectedProperty() {

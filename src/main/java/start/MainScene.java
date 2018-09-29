@@ -16,6 +16,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.layout.VBox;
 
+import main.java.control.basic.BasicMenuBar;
 import main.java.control.parent.ResizableBorderPane;
 import main.java.files.Files;
 import main.java.files.ImageFile;
@@ -140,7 +141,7 @@ public class MainScene extends Scene {
     }
 
     private MenuBar createMenuBar() {
-        MenuBar menuBar = new MenuBar();
+        MenuBar menuBar = new BasicMenuBar();
         menuBar.setOnMouseEntered(e -> menuBar.setCursor(Cursor.DEFAULT));
 
         BasicMenu fileMenu = new BasicMenu("File");
@@ -238,12 +239,28 @@ public class MainScene extends Scene {
         ActionManager.registerAction(Action.ESCAPE, e -> imageContainer.escape());
         ActionManager.registerAction(Action.PLUS, e -> imageContainer.zoomIn());
         ActionManager.registerAction(Action.MINUS, e -> imageContainer.zoomOut());
-        ActionManager.registerAction(Action.RIGHT, e -> getEditor().moveSelection(1, 0));
-        ActionManager.registerAction(Action.UP, e -> getEditor().moveSelection(0, -1));
-        ActionManager.registerAction(Action.LEFT, e -> getEditor().moveSelection(-1, 0));
-        ActionManager.registerAction(Action.DOWN, e -> getEditor().moveSelection(0, 1));
+        ActionManager.registerAction(Action.RIGHT, e -> moveSelection(1, 0));
+        ActionManager.registerAction(Action.UP, e -> moveSelection(0, -1));
+        ActionManager.registerAction(Action.LEFT, e -> moveSelection(-1, 0));
+        ActionManager.registerAction(Action.DOWN, e -> moveSelection(0, 1));
+        ActionManager.registerAction(Action.P_RIGHT, e -> movePaletteSelection(1, 0));
+        ActionManager.registerAction(Action.P_UP, e -> movePaletteSelection(0, -1));
+        ActionManager.registerAction(Action.P_LEFT, e -> movePaletteSelection(-1, 0));
+        ActionManager.registerAction(Action.P_DOWN, e -> movePaletteSelection(0, 1));
         ActionManager.registerAction(Action.SWITCH_TAB, e -> imageContainer.selectNextWindow());
         ActionManager.registerAction(Action.FIT_WINDOW, e -> imageContainer.fitWindow());
+    }
+
+    private void moveSelection(int right, int down) {
+        if (getEditor() != null) {
+            getEditor().moveSelection(right, down);
+        }
+    }
+
+    private void movePaletteSelection(int right, int down) {
+        if (paletteSelection.getEditor() != null) {
+            paletteSelection.getEditor().moveSelection(right, down);
+        }
     }
 
     public void openFiles(Collection<String> files) {

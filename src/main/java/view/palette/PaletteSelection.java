@@ -143,7 +143,8 @@ public class PaletteSelection extends BorderPane {
     }
 
     public PaletteEditor getEditor() {
-        return tabPane.getSelectionModel().getSelectedItem().getEditor();
+        PaletteTab selectedItem = tabPane.getSelectionModel().getSelectedItem();
+        return selectedItem == null ? null : selectedItem.getEditor();
     }
 
     public void undo() {
