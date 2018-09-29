@@ -49,6 +49,7 @@ public class ImageWindowContainer extends Pane {
                 dirty.set(false);
                 ToolView.setPreview(null, null, null);
                 InfoView.setMousePosition(null);
+                InfoView.setColorCount(null);
             } else {
                 undoEnabled.bind(window.getEditor().undoEnabledProperty());
                 redoEnabled.bind(window.getEditor().redoEnabledProperty());
@@ -59,6 +60,7 @@ public class ImageWindowContainer extends Pane {
                 updateImage(window);
                 window.toFront();
                 window.adjustSize();
+                window.getEditor().updateColorCount();
             }
         });
     }
@@ -129,6 +131,7 @@ public class ImageWindowContainer extends Pane {
 
     void setCurrentWindow(ImageWindow window) {
         currentWindow.set(window);
+
     }
 
     private void updateImage(ImageWindow window) {
@@ -178,6 +181,7 @@ public class ImageWindowContainer extends Pane {
     public void selectNextWindow() {
         if (getChildren().isEmpty()) {
             return;
+
         }
         int index = getChildren().indexOf(currentWindow.get());
         int next = (index + 1) % getChildren().size();
@@ -208,19 +212,19 @@ public class ImageWindowContainer extends Pane {
 
     public void escape() {
         if (currentWindow.get() != null) {
-        currentWindow.get().getEditor().escape();
+            currentWindow.get().getEditor().escape();
         }
     }
 
     public void zoomIn() {
         if (currentWindow.get() != null) {
-        currentWindow.get().zoomIn();
+            currentWindow.get().zoomIn();
         }
     }
 
     public void zoomOut() {
         if (currentWindow.get() != null) {
-        currentWindow.get().zoomOut();
+            currentWindow.get().zoomOut();
         }
     }
 

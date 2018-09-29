@@ -14,6 +14,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import main.java.control.basic.BasicMenuBar;
@@ -101,12 +102,13 @@ public class MainScene extends Scene {
         getStylesheets().addAll(getStyle());
 
         imageContainer = new ImageWindowContainer();
-        imageContainer.setStyle("-fx-background-color: #BBBBBB");
 
         createKeyListener();
         imageContainer.setOnKeyPressed(this.getOnKeyPressed());
 
-        root.setCenter(imageContainer);
+        BorderPane center = new BorderPane(imageContainer);
+        center.setStyle("-fx-background-color: #BBBBBB");
+        root.setCenter(center);
 
         VBox barBox = new VBox();
         root.setTop(barBox);
@@ -120,7 +122,7 @@ public class MainScene extends Scene {
         this.paletteSelection = ColorView.getPaletteSelection();
 
         InfoView infoView = InfoView.getInstance();
-        root.setBottom(infoView);
+        center.setBottom(infoView);
 
         MenuBar menuBar = createMenuBar();
         ToolBar toolBar = createToolBar();

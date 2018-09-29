@@ -31,6 +31,7 @@ import main.java.util.ColorUtil;
 import main.java.util.ImageUtil;
 import main.java.util.ShapeUtil;
 import main.java.view.ColorView;
+import main.java.view.InfoView;
 import main.java.view.ToolView;
 import main.java.view.tool.Tool;
 import main.java.view.tool.ToolManager;
@@ -111,12 +112,15 @@ public class ImageEditor extends Editor {
             selectionLayer.resize(width.get(), height.get(), reader);
             grid.resize(width.get(), height.get());
             crosshair.resize(width.get(), height.get());
+            updateColorCount();
         });
 
         ToolView.currentToolProperty().addListener((ov, o, n) -> {
             currentTool.lockAndReset();
             currentTool = ToolManager.getTool(n);
         });
+
+        updateColorCount();
     }
 
     public void setBorderColor(String color) {
@@ -189,6 +193,7 @@ public class ImageEditor extends Editor {
     public void register() {
         register(pixels);
         pixels.reset();
+        updateColorCount();
     }
 
     private void writeAndRegister(PixelChange change) {
@@ -584,6 +589,10 @@ public class ImageEditor extends Editor {
         register();
     }
 
+    public void updateColorCount() {
+        InfoView.setColorCount(ImageUtil.countColors(getImage()));
+    }
+
     public ToolLayer getToolLayer() {
         return toolLayer;
     }
@@ -603,11 +612,13 @@ public class ImageEditor extends Editor {
     public void undo() {
         currentTool.lockAndReset();
         super.undo();
+        updateColorCount();
     }
 
     public void redo() {
         currentTool.escape();
         super.redo();
+        updateColorCount();
     }
 
     public Image getToolImage() {

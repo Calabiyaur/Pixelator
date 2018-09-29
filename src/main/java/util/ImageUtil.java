@@ -1,9 +1,13 @@
 package main.java.util;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 
 import main.java.meta.PixelArray;
 import main.java.meta.Point;
@@ -93,6 +97,17 @@ public class ImageUtil {
 
     public static boolean outOfBounds(Image image, Point point) {
         return outOfBounds(image, point.getX(), point.getY());
+    }
+
+    public static int countColors(Image image) {
+        Set<Color> colors = new HashSet<>();
+        PixelReader reader = image.getPixelReader();
+        for (int i = 0; i < image.getWidth(); i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
+                colors.add(reader.getColor(i, j));
+            }
+        }
+        return colors.size();
     }
 
 }
