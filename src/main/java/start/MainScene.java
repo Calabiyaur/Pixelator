@@ -1,5 +1,9 @@
 package main.java.start;
 
+import java.awt.AWTException;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -241,10 +245,10 @@ public class MainScene extends Scene {
         ActionManager.registerAction(Action.ESCAPE, e -> imageContainer.escape());
         ActionManager.registerAction(Action.PLUS, e -> imageContainer.zoomIn());
         ActionManager.registerAction(Action.MINUS, e -> imageContainer.zoomOut());
-        ActionManager.registerAction(Action.RIGHT, e -> moveSelection(1, 0));
-        ActionManager.registerAction(Action.UP, e -> moveSelection(0, -1));
-        ActionManager.registerAction(Action.LEFT, e -> moveSelection(-1, 0));
-        ActionManager.registerAction(Action.DOWN, e -> moveSelection(0, 1));
+        ActionManager.registerAction(Action.RIGHT, e -> move(1, 0));
+        ActionManager.registerAction(Action.UP, e -> move(0, -1));
+        ActionManager.registerAction(Action.LEFT, e -> move(-1, 0));
+        ActionManager.registerAction(Action.DOWN, e -> move(0, 1));
         ActionManager.registerAction(Action.P_RIGHT, e -> movePaletteSelection(1, 0));
         ActionManager.registerAction(Action.P_UP, e -> movePaletteSelection(0, -1));
         ActionManager.registerAction(Action.P_LEFT, e -> movePaletteSelection(-1, 0));
@@ -253,9 +257,16 @@ public class MainScene extends Scene {
         ActionManager.registerAction(Action.FIT_WINDOW, e -> imageContainer.fitWindow());
     }
 
-    private void moveSelection(int right, int down) {
-        if (getEditor() != null) {
+    private void move(int right, int down) {
+        if (getEditor() != null && getEditor().selectionActiveProperty().get()) {
             getEditor().moveSelection(right, down);
+        } else {
+            try {
+                Point location = MouseInfo.getPointerInfo().getLocation();
+                new Robot().mouseMove((int) location.getX() + right, (int) location.getY() + down);
+            } catch (AWTException e) {
+                ExceptionHandler.handle(e);
+            }
         }
     }
 

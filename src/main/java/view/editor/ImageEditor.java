@@ -116,7 +116,9 @@ public class ImageEditor extends Editor {
         });
 
         ToolView.currentToolProperty().addListener((ov, o, n) -> {
-            currentTool.lockAndReset();
+            if (o == null || ToolManager.getTool(o).isSelectionTool() != ToolManager.getTool(n).isSelectionTool()) {
+                currentTool.lockAndReset();
+            }
             currentTool = ToolManager.getTool(n);
         });
 

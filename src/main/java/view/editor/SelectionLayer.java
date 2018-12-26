@@ -8,7 +8,6 @@ import javafx.scene.paint.Color;
 
 import main.java.control.image.OutlineRect;
 import main.java.control.image.OutlineShape;
-import main.java.logging.Logger;
 import main.java.meta.Point;
 import main.java.meta.PointArray;
 import main.java.util.ImageUtil;
@@ -118,7 +117,6 @@ public class SelectionLayer extends EditorLayer {
         PixelChange result = getPixelsTransformed();
         clear();
         setStart(null);
-        Logger.log(getClass().getSimpleName(), "Retrieved pixels");
         return result;
     }
 
