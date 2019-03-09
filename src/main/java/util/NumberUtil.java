@@ -10,4 +10,8 @@ public class NumberUtil {
         return Math.min(Math.max(min, value), max);
     }
 
+    public static double clamp(double value) {
+        return value < 0 ? 0 : value > 1 ? 1 : value;
+    }
+
 }

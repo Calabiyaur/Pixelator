@@ -1,13 +1,11 @@
-package main.java.view;
+package main.java.view.colorpicker;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -24,14 +22,14 @@ import main.java.control.parent.BasicTabPane;
 import main.java.meta.Direction;
 import main.java.res.Config;
 import main.java.util.ColorUtil;
+import main.java.view.ColorTab;
 
 public class ColorSelection extends BorderPane {
 
     private static final int LABEL_WIDTH = 70;
     private static final int TEXT_WIDTH = 50;
-    private ColorPicker colorPicker = new ColorPicker();
-    private Pane colorPreview = new Pane();
-    private TextField hexField;
+    private final ColorPicker colorPicker;
+    private final ColorPreview colorPreview;
     private StringConverter<Number> stringConverter;
     private boolean convertingColorFormats = false;
     private DoubleProperty red = new SimpleDoubleProperty(0.0);
@@ -57,7 +55,11 @@ public class ColorSelection extends BorderPane {
     private Slider alphaSlider = new Slider(0, 1, 1);
 
     public ColorSelection() {
-        colorPreview.getStyleClass().add("color-rect");
+        ColorPickerComponents colorPickerComponents = new ColorPickerComponents();
+        HuePicker huePicker = colorPickerComponents.getHuePicker();
+        colorPicker = colorPickerComponents.getColorPicker();
+        colorPreview = colorPickerComponents.getPreview();
+
         colorPreview.setMinSize(80, 50);
         colorPicker.setColor(Color.valueOf(Config.getString(Config.COLOR, "#000000")));
         updatePreview(getColor());
@@ -69,7 +71,6 @@ public class ColorSelection extends BorderPane {
                 tg.selectToggle(o);
             }
         });
-        hexField = new TextField("0x000000FF");
 
         BasicTabPane<ColorTab> tabPane = new BasicTabPane<>(Direction.NORTH, Direction.WEST);
         tabPane.addTab(new ColorTab(createHsbPane()), "HSB");
@@ -80,14 +81,13 @@ public class ColorSelection extends BorderPane {
         dummy.getToggle().setVisible(false);
 
         setTop(title);
-        VBox vBox = new VBox(colorPreview, hexField);
-        HBox colorBox = new HBox(new Group(colorPicker), vBox);
-        HBox.setHgrow(vBox, Priority.ALWAYS);
+        HBox colorBox = new HBox(huePicker, colorPicker, colorPreview);
+        HBox.setHgrow(colorPreview, Priority.ALWAYS);
         colorBox.setSpacing(6);
         colorBox.setPadding(new Insets(6, 0, 6, 0));
         setCenter(colorBox);
         setBottom(tabPane);
-        BorderPane.setMargin(colorBox, new Insets(0, 0, 2, -2));
+        //BorderPane.setMargin(colorBox, new Insets(0, 0, 2, -2));
 
         bind();
         rgbTab.getToggle().fire();
@@ -157,7 +157,7 @@ public class ColorSelection extends BorderPane {
         Bindings.bindBidirectional(alphaSlider.valueProperty(), alpha);
 
         // Convert rgb <-> hsb <-> hex
-        hexField.textProperty().addListener(e -> onChangeHex());
+        colorPreview.textProperty().addListener(e -> onChangeHex());
         red.addListener(e -> onChangeRGB());
         green.addListener(e -> onChangeRGB());
         blue.addListener(e -> onChangeRGB());
@@ -188,7 +188,7 @@ public class ColorSelection extends BorderPane {
         if (convertingColorFormats) {
             return;
         }
-        Color color = ColorUtil.valueOf(hexField.getText());
+        Color color = ColorUtil.valueOf(colorPreview.getText());
         if (color == null) {
             return;
         }
@@ -211,7 +211,7 @@ public class ColorSelection extends BorderPane {
         }
         Color color = getColor();
         convertingColorFormats = true;
-        hexField.setText(ColorUtil.toString(color));
+        colorPreview.setText(ColorUtil.toString(color));
         hue.set(color.getHue());
         sat.set(color.getSaturation());
         bright.set(color.getBrightness());
@@ -226,7 +226,7 @@ public class ColorSelection extends BorderPane {
         }
         Color color = Color.hsb(hue.get(), sat.get(), bright.get(), alpha.get());
         convertingColorFormats = true;
-        hexField.setText(ColorUtil.toString(color));
+        colorPreview.setText(ColorUtil.toString(color));
         red.set(color.getRed());
         green.set(color.getGreen());
         blue.set(color.getBlue());
@@ -241,7 +241,7 @@ public class ColorSelection extends BorderPane {
         }
         Color color = getColor();
         convertingColorFormats = true;
-        hexField.setText(ColorUtil.toString(color));
+        colorPreview.setText(ColorUtil.toString(color));
         convertingColorFormats = false;
 
         updatePreview(color);
