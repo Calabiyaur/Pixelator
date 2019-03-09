@@ -15,8 +15,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
 import main.java.control.basic.ImageButton;
-import main.java.res.Images;
 import main.java.meta.Direction;
+import main.java.res.Images;
 
 public class BasicWindow extends DraggablePane {
 
@@ -118,7 +118,7 @@ public class BasicWindow extends DraggablePane {
         onClose.handle(new Event(Event.ANY));
     }
 
-    public void setGraphic(Region graphic) {
+    public void setContent(Region graphic) {
         content.setContent(graphic);
     }
 

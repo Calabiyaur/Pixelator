@@ -40,7 +40,7 @@ public class ImageWindow extends BasicWindow {
         imageEditor = new ImageEditor(imageFile, imageView);
         setText(imageFile.getName());
         imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
-        setGraphic(imageEditor);
+        setContent(imageEditor);
         setPrefSize(400, 400); //TODO: Use preferences from .pix file
 
         getContent().setOnRawScroll(e -> onScroll(e));
@@ -165,7 +165,7 @@ public class ImageWindow extends BasicWindow {
         stage.getIcons().add(Images.ICON.getImage());
         Main.getStages().add(stage);
 
-        setGraphic(new Pane());
+        setContent(new Pane());
         setVisible(false);
         BasicScrollPane root = new BasicScrollPane(imageEditor);
         stage.setScene(new Scene(root));
@@ -178,7 +178,7 @@ public class ImageWindow extends BasicWindow {
 
         stage.setAlwaysOnTop(true);
         stage.setOnCloseRequest(e -> {
-            setGraphic(imageEditor);
+            setContent(imageEditor);
             setVisible(true);
         });
         stage.show();
