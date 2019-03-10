@@ -60,4 +60,14 @@ public class ColorUtil {
         return Math.sqrt(.241 * color.getRed() + .691 * color.getGreen() + .068 * color.getBlue());
     }
 
+    /**
+     * Return a color with a high contrast to the given color.
+     * Used for displaying text on arbitrarily colored backgrounds.
+     */
+    public static Color getHighContrast(Color color) {
+        double lum = getLuminosity(color);
+        double opa = color.getOpacity();
+        return opa < 0.3 ? Color.BLACK : lum < 0.8 ? Color.WHITE : Color.BLACK;
+    }
+
 }
