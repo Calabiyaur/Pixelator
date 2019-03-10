@@ -140,6 +140,8 @@ final class ColorSelectionModel {
             slider.setTarget(target);
             slider.setMin(dimension.minSliderValue);
             slider.setMax(dimension.maxSliderValue);
+            slider.setBlockIncrement((dimension.maxSliderValue - dimension.minSliderValue)
+                    / (double) (dimension.maxTextValue - dimension.minTextValue));
         }
 
         // Bind text fields
