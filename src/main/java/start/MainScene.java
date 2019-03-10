@@ -131,8 +131,6 @@ public class MainScene extends Scene {
         MenuBar menuBar = createMenuBar();
         ToolBar toolBar = createToolBar();
         barBox.getChildren().addAll(menuBar, toolBar);
-
-        setOnKeyPressed(e -> ActionManager.fire(e));
     }
 
     public static List<String> getStyle() {

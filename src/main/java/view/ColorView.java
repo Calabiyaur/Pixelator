@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import main.java.control.basic.ImageButton;
 import main.java.files.PaletteFile;
 import main.java.res.Images;
-import main.java.start.ActionManager;
 import main.java.start.Main;
 import main.java.view.colorselection.ColorSelection;
 import main.java.view.palette.PaletteSelection;
@@ -69,7 +68,6 @@ public class ColorView extends BorderPane {
         //root.setOnMouseClicked(e -> mouseClick(e));
         //root.setOnMouseMoved(e -> mouseMoved(e));
         //root.setOnMouseDragged(e -> mouseMoved(e));
-        stage.getScene().setOnKeyPressed(e -> ActionManager.fire(e));
 
         stage.setAlwaysOnTop(true);
         stage.setOnCloseRequest(e -> {

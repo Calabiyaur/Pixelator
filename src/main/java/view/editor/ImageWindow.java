@@ -20,7 +20,6 @@ import main.java.files.ImageFile;
 import main.java.meta.Point;
 import main.java.res.ImageConfig;
 import main.java.res.Images;
-import main.java.start.ActionManager;
 import main.java.start.Main;
 import main.java.view.InfoView;
 import main.java.view.ToolView;
@@ -174,7 +173,6 @@ public class ImageWindow extends BasicWindow {
         root.setOnMouseClicked(e -> mouseClick(e));
         root.setOnMouseMoved(e -> mouseMoved(e));
         root.setOnMouseDragged(e -> mouseMoved(e));
-        stage.getScene().setOnKeyPressed(e -> ActionManager.fire(e));
 
         stage.setAlwaysOnTop(true);
         stage.setOnCloseRequest(e -> {

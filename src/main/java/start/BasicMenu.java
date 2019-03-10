@@ -7,6 +7,8 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
 import main.java.res.Action;
 import main.java.res.Images;
@@ -43,12 +45,12 @@ public class BasicMenu extends Menu {
 
     static void accelerate(Action key, MenuItem item) {
         if (key.getKey() != null) {
-            //KeyCodeCombination accelerator = new KeyCodeCombination(key.getKey(),
-            //        key.isShift() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
-            //        key.isCtrl() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
-            //        key.isAlt() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
-            //        KeyCombination.ModifierValue.ANY, KeyCombination.ModifierValue.ANY);
-            //item.setAccelerator(accelerator); //FIXME: Using the key combination triggers the action twice
+            KeyCodeCombination accelerator = new KeyCodeCombination(key.getKey(),
+                    key.isShift() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
+                    key.isCtrl() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
+                    key.isAlt() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
+                    KeyCombination.ModifierValue.ANY, KeyCombination.ModifierValue.ANY);
+            item.setAccelerator(accelerator);
             item.setText(item.getText() + SPACE);
         }
     }

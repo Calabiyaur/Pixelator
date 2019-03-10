@@ -7,9 +7,7 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyEvent;
 
-import main.java.logging.Logger;
 import main.java.res.Action;
 
 public class ActionManager {
@@ -18,14 +16,6 @@ public class ActionManager {
     private static Map<Action, EventHandler<ActionEvent>> eventMap = new HashMap<>();
 
     private ActionManager() {
-    }
-
-    public static void fire(KeyEvent event) {
-        Action action = Action.get(event.isControlDown(), event.isShiftDown(), event.isAltDown(), event.getCode());
-        if (action != null) {
-            Logger.logEvent(event, action.name());
-            fire(action);
-        }
     }
 
     public static void fire(Action key) {
