@@ -13,16 +13,17 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
-import main.java.control.basic.BasicText;
 import main.java.control.basic.ToggleImageButton;
 import main.java.control.image.PixelatedImageView;
-import main.java.control.parent.BasicWindow;
 import main.java.res.Config;
 import main.java.res.Images;
 import main.java.view.tool.Tools;
@@ -39,9 +40,8 @@ public class ToolView extends VBox {
     private static Label previewTool = new Label();
     private static Label previewSelection = new Label();
     private static Pane clipWrapper;
-    private static BasicText widthText = new BasicText("Width", "");
-    private static BasicText heightText = new BasicText("Height", "");
-    private static BasicText zoomText = new BasicText("Zoom", "100 %");
+    private static Text sizeText = new Text();
+    private static Text zoomText = new Text();
 
     public static ToolView getInstance() {
         if (instance == null) {
@@ -49,7 +49,7 @@ public class ToolView extends VBox {
             instance.setStyle("-fx-background-color: #f4f4f4");
             instance.setSpacing(6);
             instance.setPrefWidth(210);
-            instance.setPadding(new Insets(BasicWindow.RESIZE_MARGIN));
+            instance.setPadding(new Insets(6, 0, 6, 6));
 
             instance.getChildren().add(new Label("TOOLS"));
             ToggleGroup tg = new ToggleGroup();
@@ -119,13 +119,10 @@ public class ToolView extends VBox {
             clipWrapper.maxWidthProperty().bind(previewStack.widthProperty());
             clipWrapper.maxHeightProperty().bind(previewStack.heightProperty());
 
-            VBox previewGrid = new VBox();
-            previewGrid.getChildren().addAll(
-                    new Label("PREVIEW"),
-                    clipWrapper,
-                    widthText,
-                    heightText,
-                    zoomText);
+            Region space = new Region();
+            HBox detailBox = new HBox(sizeText, space, zoomText);
+            HBox.setHgrow(space, Priority.ALWAYS);
+            VBox previewGrid = new VBox(new Label("PREVIEW"), clipWrapper, detailBox);
             VBox.setVgrow(previewGrid, Priority.ALWAYS);
 
             previewGrid.visibleProperty().bind(preview.graphicProperty().isNotNull());
@@ -189,12 +186,11 @@ public class ToolView extends VBox {
     }
 
     public static void setSize(int width, int height) {
-        widthText.setValue(Integer.toString(width));
-        heightText.setValue(Integer.toString(height));
+        sizeText.setText(Integer.toString(width) + "×" + Integer.toString(height));
     }
 
     public static void setZoom(double zoom) {
-        zoomText.setValue(Long.toString(Math.round(zoom * 100)) + " %");
+        zoomText.setText(Long.toString(Math.round(zoom * 100)) + " %");
     }
 
     public static ObjectProperty<Tools> currentToolProperty() {

@@ -19,7 +19,7 @@ public class InfoView extends GridPane {
             instance = new InfoView();
             instance.setStyle("-fx-background-color: #f4f4f4");
             instance.setHgap(6);
-            instance.setPadding(new Insets(2, 0, 6, 2));
+            instance.setPadding(new Insets(2, 2, 1, 2));
             instance.setAlignment(Pos.TOP_LEFT);
 
             mousePosition = new Label();
@@ -35,7 +35,7 @@ public class InfoView extends GridPane {
     }
 
     public static void setColorCount(Integer count) {
-        colorCount.setText(count == null ? null : "Colors: " + count);
+        colorCount.setText(count == null ? null : count + " color" + (count > 1 ? "s" : ""));
     }
 
 }
