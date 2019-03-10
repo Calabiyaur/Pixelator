@@ -1,4 +1,4 @@
-package main.java.view.colorpicker;
+package main.java.view.colorselection;
 
 import javafx.scene.Group;
 import javafx.scene.control.ToggleButton;
@@ -18,13 +18,13 @@ public class TabButtons extends Group {
             }
         });
 
-        rgb = new ToggleButton("RGB");
-        hsb = new ToggleButton("HSB");
+        rgb = new ToggleButton(ColorSpace.RGB.name());
+        hsb = new ToggleButton(ColorSpace.HSB.name());
 
         tg.getToggles().addAll(rgb, hsb);
 
         HBox hBox = new HBox(hsb, rgb);
-        hBox.setRotate(90);
+        hBox.setRotate(270);
         hBox.setSpacing(6);
         getChildren().add(hBox);
     }

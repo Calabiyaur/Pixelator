@@ -40,7 +40,7 @@ public abstract class BasicControl<T> extends GridPane {
 
     private void adjustWidth() {
         setMinWidth(120);
-        control.setPrefWidth(120 / getChildren().size());
+        control.setPrefWidth(120d / getChildren().size());
     }
 
     public BasicControl(String title, T value) {
@@ -92,7 +92,7 @@ public abstract class BasicControl<T> extends GridPane {
     }
 
     public final void setTitle(String title) {
-        this.titleText.setText(title);
+        this.titleText.setText(title + ": ");
     }
 
     public final String getTail() {

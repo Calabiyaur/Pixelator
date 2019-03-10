@@ -18,7 +18,7 @@ import main.java.files.PaletteFile;
 import main.java.res.Images;
 import main.java.start.ActionManager;
 import main.java.start.Main;
-import main.java.view.colorpicker.ColorSelection;
+import main.java.view.colorselection.ColorSelection;
 import main.java.view.palette.PaletteSelection;
 
 public class ColorView extends BorderPane {

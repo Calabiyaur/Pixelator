@@ -3,11 +3,17 @@ package main.java.control.basic;
 import javafx.beans.property.Property;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 
 public class BasicTextField extends BasicControl<String> {
 
     private TextField textField;
-    private int maxValue;
+    private TextFormatter<String> formatter;
+    //TODO: private UnaryOperator<TextFormatter.Change> minValueFilter;
+    //TODO: private UnaryOperator<TextFormatter.Change> maxValueFilter;
+    //TODO: private UnaryOperator<TextFormatter.Change> minLengthFilter;
+    //TODO: private UnaryOperator<TextFormatter.Change> maxLengthFilter;
+    //TODO: private UnaryOperator<TextFormatter.Change> numbersOnlyFilter;
 
     public BasicTextField(String title, String tail, String value) {
         super(title, tail, value);
@@ -47,18 +53,32 @@ public class BasicTextField extends BasicControl<String> {
         setValue(Integer.toString(value));
     }
 
-    public int getMaxValue() {
-        return maxValue;
+    public void setMinValue(final int minValue) {
+        //TODO
     }
 
-    public void setMaxValue(int maxValue) { //TODO: Does not work twice
-        this.maxValue = maxValue;
-        textField.textProperty().addListener((ov, o, n) -> {
-            Integer intValue = getIntValue();
-            if (intValue != null && intValue > maxValue) {
-                setValue(maxValue);
-            }
-        });
+    public void setMaxValue(final int maxValue) {
+        //TODO: UnaryOperator<TextFormatter.Change> newFilter = change -> {
+        //TODO:     if (change.isDeleted()) {
+        //TODO:         return change;
+        //TODO:     }
+        //TODO:     String text = change.getControlNewText();
+        //TODO:     try {
+        //TODO:         int value = Integer.parseInt(text);
+        //TODO:         return value <= maxValue ? change : null;
+        //TODO:     } catch (NumberFormatException e) {
+        //TODO:         return null;
+        //TODO:     }
+        //TODO: };
+        //TODO:
+        //TODO: if (formatter == null) {
+        //TODO:     formatter = new TextFormatter<>(newFilter);
+        //TODO: } else {
+        //TODO:     UnaryOperator<TextFormatter.Change> oldFilter = formatter.getFilter();
+        //TODO:     formatter = new TextFormatter<>(change -> oldFilter.andThen(newFilter).apply(change));
+        //TODO: }
+        //TODO:
+        //TODO: textField.setTextFormatter(formatter);
     }
 
 }

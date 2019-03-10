@@ -1,4 +1,8 @@
-package main.java.view.colorpicker;
+package main.java.view.colorselection;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -10,8 +14,17 @@ import javafx.util.StringConverter;
 import main.java.control.basic.BasicTextField;
 import main.java.res.Config;
 import main.java.util.ColorUtil;
+import main.java.util.MapUtil;
 
-final class ColorPickerComponents {
+import static main.java.view.colorselection.ColorDimension.ALPHA;
+import static main.java.view.colorselection.ColorDimension.BLUE;
+import static main.java.view.colorselection.ColorDimension.BRIGHTNESS;
+import static main.java.view.colorselection.ColorDimension.GREEN;
+import static main.java.view.colorselection.ColorDimension.HUE;
+import static main.java.view.colorselection.ColorDimension.RED;
+import static main.java.view.colorselection.ColorDimension.SATURATION;
+
+final class ColorSelectionModel {
 
     static final double INDICATOR_RADIUS = 5;
     static final double INDICATOR_WIDTH = 18;
@@ -35,17 +48,24 @@ final class ColorPickerComponents {
     private final CustomTextField greenField = new CustomTextField();
     private final CustomTextField blueField = new CustomTextField();
     private final CustomTextField alphaField = new CustomTextField();
-    private final Slider redSlider = new Slider(0, 1, 0);
-    private final Slider greenSlider = new Slider(0, 1, 0);
-    private final Slider blueSlider = new Slider(0, 1, 0);
-    private final Slider alphaSlider = new Slider(0, 1, 1);
+    private final CustomSlider redSlider = new CustomSlider();
+    private final CustomSlider greenSlider = new CustomSlider();
+    private final CustomSlider blueSlider = new CustomSlider();
+    private final CustomSlider alphaSlider = new CustomSlider();
 
     private StringConverter<Number> stringConverter;
     private boolean convertingColorFormats = false;
+    private final Map<ColorDimension, DoubleProperty> dimensionMap = MapUtil.asMap(
+            new ColorDimension[] { RED, GREEN, BLUE, HUE, SATURATION, BRIGHTNESS, ALPHA },
+            new DoubleProperty[] { red, green, blue, hue, sat, bright, alpha }
+    );
+    private final Map<Integer, StringConverter<Number>> converterMap = MapUtil.asMap(
+            new Integer[] { 255, 360 },
+            new StringConverter[] { getString255Converter(), getString360Converter() }
+    );
 
-    public ColorPickerComponents() {
+    public ColorSelectionModel() {
         huePicker.hueProperty().bindBidirectional(colorPicker.hueProperty());
-        colorPicker.setMinSize(80, 80);
 
         tabButtons.getRgb().setOnAction(e -> init(ColorSpace.RGB));
         tabButtons.getHsb().setOnAction(e -> init(ColorSpace.HSB));
@@ -89,88 +109,49 @@ final class ColorPickerComponents {
     }
 
     private void init(ColorSpace colorSpace) {
-        // Unbind text fields
-        Bindings.unbindBidirectional(redField.valueProperty(), redField.getTarget());
-        Bindings.bindBidirectional(greenField.valueProperty(), green, getString255Converter());
-        Bindings.bindBidirectional(blueField.valueProperty(), blue, getString255Converter());
-        Bindings.bindBidirectional(alphaField.valueProperty(), alpha, getString255Converter());
-        // Unbind sliders
-        Bindings.bindBidirectional(redSlider.valueProperty(), red);
-        Bindings.bindBidirectional(greenSlider.valueProperty(), green);
-        Bindings.bindBidirectional(blueSlider.valueProperty(), blue);
-        Bindings.bindBidirectional(alphaSlider.valueProperty(), alpha);
+        if (redField.getTarget() != null) {
+            // Unbind text fields
+            Bindings.unbindBidirectional(redField.valueProperty(), redField.getTarget());
+            Bindings.unbindBidirectional(greenField.valueProperty(), greenField.getTarget());
+            Bindings.unbindBidirectional(blueField.valueProperty(), blueField.getTarget());
+            Bindings.unbindBidirectional(alphaField.valueProperty(), alphaField.getTarget());
+            // Unbind sliders
+            Bindings.unbindBidirectional(redSlider.valueProperty(), redSlider.getTarget());
+            Bindings.unbindBidirectional(greenSlider.valueProperty(), greenSlider.getTarget());
+            Bindings.unbindBidirectional(blueSlider.valueProperty(), blueSlider.getTarget());
+            Bindings.unbindBidirectional(alphaSlider.valueProperty(), alphaSlider.getTarget());
+        }
 
-        switch(colorSpace) {
-            case RGB:
-                initRgb();
-                break;
-            case HSB:
-                initHsb();
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown color space: " + colorSpace);
+        // Change targets for text fields and sliders
+        List<CustomTextField> textFields = Arrays.asList(redField, greenField, blueField, alphaField);
+        List<CustomSlider> sliders = Arrays.asList(redSlider, greenSlider, blueSlider, alphaSlider);
+        for (int i = 0; i < 4; i++) {
+            ColorDimension dimension = colorSpace.getDimensions().get(i);
+            CustomTextField textField = textFields.get(i);
+            CustomSlider slider = sliders.get(i);
+            DoubleProperty target = dimensionMap.get(dimension);
+
+            textField.setTarget(target);
+            textField.setTitle(dimension.getName());
+            textField.setMinValue(dimension.minTextValue);
+            textField.setMaxValue(dimension.maxTextValue);
+            textField.setConverter(converterMap.get(dimension.getMaxTextValue()));
+
+            slider.setTarget(target);
+            slider.setMin(dimension.minSliderValue);
+            slider.setMax(dimension.maxSliderValue);
         }
 
         // Bind text fields
         Bindings.bindBidirectional(redField.valueProperty(), redField.getTarget(), redField.getConverter());
-        Bindings.bindBidirectional(greenField.valueProperty(), green, getString255Converter());
-        Bindings.bindBidirectional(blueField.valueProperty(), blue, getString255Converter());
-        Bindings.bindBidirectional(alphaField.valueProperty(), alpha, getString255Converter());
+        Bindings.bindBidirectional(greenField.valueProperty(), greenField.getTarget(), greenField.getConverter());
+        Bindings.bindBidirectional(blueField.valueProperty(), blueField.getTarget(), blueField.getConverter());
+        Bindings.bindBidirectional(alphaField.valueProperty(), alphaField.getTarget(), alphaField.getConverter());
         // Bind sliders
-        Bindings.bindBidirectional(redSlider.valueProperty(), red);
-        Bindings.bindBidirectional(greenSlider.valueProperty(), green);
-        Bindings.bindBidirectional(blueSlider.valueProperty(), blue);
-        Bindings.bindBidirectional(alphaSlider.valueProperty(), alpha);
-
-        //switch(colorSpace) {
-        //    case RGB:
-        //        // Bind text fields
-        //        Bindings.bindBidirectional(redField.valueProperty(), red, getString255Converter());
-        //        Bindings.bindBidirectional(greenField.valueProperty(), green, getString255Converter());
-        //        Bindings.bindBidirectional(blueField.valueProperty(), blue, getString255Converter());
-        //        Bindings.bindBidirectional(alphaField.valueProperty(), alpha, getString255Converter());
-        //        // Bind sliders
-        //        Bindings.bindBidirectional(redSlider.valueProperty(), red);
-        //        Bindings.bindBidirectional(greenSlider.valueProperty(), green);
-        //        Bindings.bindBidirectional(blueSlider.valueProperty(), blue);
-        //        Bindings.bindBidirectional(alphaSlider.valueProperty(), alpha);
-        //        break;
-        //    case HSB:
-        //        // Bind text fields
-        //        Bindings.bindBidirectional(redField.valueProperty(), hue, getString360Converter());
-        //        Bindings.bindBidirectional(greenField.valueProperty(), sat, getString255Converter());
-        //        Bindings.bindBidirectional(blueField.valueProperty(), bright, getString255Converter());
-        //        Bindings.bindBidirectional(alphaField.valueProperty(), alpha, getString255Converter());
-        //        // Bind sliders
-        //        Bindings.bindBidirectional(redSlider.valueProperty(), hue);
-        //        Bindings.bindBidirectional(greenSlider.valueProperty(), sat);
-        //        Bindings.bindBidirectional(blueSlider.valueProperty(), bright);
-        //        Bindings.bindBidirectional(alphaSlider.valueProperty(), alpha);
-        //        break;
-        //    default:
-        //        throw new IllegalArgumentException("Unknown color space: " + colorSpace);
-        //}
-    }
-
-    private void initRgb() {
-        redField.setTitle("Red");
-        redField.setTarget(red);
-        redField.setConverter(getString255Converter());
-        //...
-        //TODO
-
-        redSlider.setMax(1);
-        //...
-        //TODO
-    }
-
-    private void initHsb() {
-        //...
-        //TODO
-
-        redSlider.setMax(360);
-        //...
-        //TODO
+        Bindings.bindBidirectional(redSlider.valueProperty(), redField.getTarget());
+        Bindings.bindBidirectional(greenSlider.valueProperty(), greenField.getTarget());
+        Bindings.bindBidirectional(blueSlider.valueProperty(), blueField.getTarget());
+        Bindings.bindBidirectional(alphaSlider.valueProperty(), alphaField.getTarget());
     }
 
     private void onChangeHex() {
@@ -337,7 +318,7 @@ final class ColorPickerComponents {
         private StringConverter<Number> converter;
 
         public CustomTextField() {
-            super("", 0);
+            super("Temp", 0);
         }
 
         public DoubleProperty getTarget() {
@@ -354,6 +335,19 @@ final class ColorPickerComponents {
 
         public void setConverter(StringConverter<Number> converter) {
             this.converter = converter;
+        }
+    }
+
+    private class CustomSlider extends Slider {
+
+        private DoubleProperty target;
+
+        public DoubleProperty getTarget() {
+            return target;
+        }
+
+        public void setTarget(DoubleProperty target) {
+            this.target = target;
         }
     }
 }

@@ -1,4 +1,4 @@
-package main.java.view.colorpicker;
+package main.java.view.colorselection;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
@@ -25,8 +25,8 @@ import javafx.scene.shape.Circle;
 
 import main.java.util.NumberUtil;
 
-import static main.java.view.colorpicker.ColorPickerComponents.INDICATOR_RADIUS;
-import static main.java.view.colorpicker.ColorPickerComponents.INDICATOR_STROKE_WIDTH;
+import static main.java.view.colorselection.ColorSelectionModel.INDICATOR_RADIUS;
+import static main.java.view.colorselection.ColorSelectionModel.INDICATOR_STROKE_WIDTH;
 
 class ColorPicker extends StackPane {
 

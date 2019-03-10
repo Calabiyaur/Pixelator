@@ -1,4 +1,4 @@
-package main.java.view.colorpicker;
+package main.java.view.colorselection;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -21,9 +21,9 @@ import javafx.scene.shape.Rectangle;
 
 import main.java.util.NumberUtil;
 
-import static main.java.view.colorpicker.ColorPickerComponents.INDICATOR_HEIGHT;
-import static main.java.view.colorpicker.ColorPickerComponents.INDICATOR_STROKE_WIDTH;
-import static main.java.view.colorpicker.ColorPickerComponents.INDICATOR_WIDTH;
+import static main.java.view.colorselection.ColorSelectionModel.INDICATOR_HEIGHT;
+import static main.java.view.colorselection.ColorSelectionModel.INDICATOR_STROKE_WIDTH;
+import static main.java.view.colorselection.ColorSelectionModel.INDICATOR_WIDTH;
 
 class HuePicker extends StackPane {
 
@@ -53,6 +53,7 @@ class HuePicker extends StackPane {
 
         indicator.translateYProperty().bind(hue.divide(360).multiply(colorBar.heightProperty())
                 .subtract((INDICATOR_HEIGHT + INDICATOR_STROKE_WIDTH) / 2d));
+        indicator.translateXProperty().bind(colorBar.layoutXProperty().divide(2));
 
         getChildren().setAll(colorBar, indicator);
         StackPane.setAlignment(indicator, Pos.TOP_LEFT);

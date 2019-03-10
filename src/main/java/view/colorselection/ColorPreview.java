@@ -1,4 +1,4 @@
-package main.java.view.colorpicker;
+package main.java.view.colorselection;
 
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TextField;
