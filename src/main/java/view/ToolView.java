@@ -80,16 +80,16 @@ public class ToolView extends VBox {
             fillSelect.setOnAction(e -> currentTool.set(Tools.FILL_SELECT));
 
             FlowPane tools1 = new FlowPane(pen, line, pick, fill, fillColor, rectangle, ellipse);
-            tools1.setVgap(6);
-            tools1.setHgap(6);
+            tools1.setVgap(1);
+            tools1.setHgap(1);
             instance.getChildren().add(1, tools1);
             pen.fire();
 
             instance.getChildren().add(2, new Separator());
 
             FlowPane tools2 = new FlowPane(select, wand, fillSelect);
-            tools2.setVgap(6);
-            tools2.setHgap(6);
+            tools2.setVgap(1);
+            tools2.setHgap(1);
             instance.getChildren().add(3, tools2);
 
             instance.getChildren().add(4, new Separator());
