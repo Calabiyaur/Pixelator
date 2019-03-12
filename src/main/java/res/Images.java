@@ -14,6 +14,7 @@ public enum Images {
     ARROW_SW,
     ARROW_S,
     ARROW_SE,
+    ASTERISK,
     CHOOSE_COLOR,
     CLOSE,
     CLOSE_PALETTE(CLOSE.url),

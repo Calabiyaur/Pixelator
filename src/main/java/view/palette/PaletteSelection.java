@@ -18,26 +18,25 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import main.java.control.basic.ImageButton;
-import main.java.control.basic.ToggleImageButton;
-import main.java.control.parent.ResizableTabPane;
 import main.java.files.Files;
 import main.java.files.PaletteFile;
-import main.java.meta.Direction;
 import main.java.res.Images;
-import main.java.view.ColorView;
 import main.java.view.dialog.NewPaletteDialog;
 
 public class PaletteSelection extends BorderPane {
 
-    private ResizableTabPane<PaletteTab> tabPane;
+    private final PaletteSelectionModel model;
     private BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty paletteSelected = new SimpleBooleanProperty(false);
     private BooleanProperty dirty = new SimpleBooleanProperty(false);
 
     public PaletteSelection() {
+        model = new PaletteSelectionModel();
+        PaletteTabButtons tabButtonBox = model.getTabButtons();
+        PalettePane palettePane = model.getPalettePane();
+
         Label title = new Label("PALETTE");
-        tabPane = new ResizableTabPane<>(Direction.NORTH, Direction.NORTH);
         ImageButton create = new ImageButton(Images.NEW);
         ImageButton open = new ImageButton(Images.OPEN);
         ImageButton save = new ImageButton(Images.SAVE);
@@ -60,24 +59,26 @@ public class PaletteSelection extends BorderPane {
         GridPane.setHalignment(buttonBox, HPos.RIGHT);
         setTop(titlePane);
 
-        tabPane.setOnMouseEntered(e -> setCursor(Cursor.DEFAULT));
-        setCenter(tabPane);
+        setOnMouseEntered(e -> setCursor(Cursor.DEFAULT));
+        setLeft(tabButtonBox);
+        BorderPane.setMargin(tabButtonBox, new Insets(0, 6, 0, 0));
+        setCenter(palettePane);
         VBox.setVgrow(this, Priority.ALWAYS);
 
-        ImageButton take = new ImageButton(Images.SUBMIT);
-        take.setOnAction(e -> getEditor().setColor(ColorView.getColor()));
-        take.disableProperty().bind(paletteSelectedProperty().not());
+        //ImageButton take = new ImageButton(Images.SUBMIT);
+        //take.setOnAction(e -> getEditor().setColor(ColorView.getColor()));
+        //take.disableProperty().bind(paletteSelectedProperty().not());
 
-        ToggleImageButton lock = new ToggleImageButton(Images.LOCK_OPEN, Images.LOCK);
-        lock.selectedProperty().addListener((ov, o, n) -> getEditor().setLocked(n));
-        lock.disableProperty().bind(paletteSelectedProperty().not());
+        //ToggleImageButton lock = new ToggleImageButton(Images.LOCK_OPEN, Images.LOCK);
+        //lock.selectedProperty().addListener((ov, o, n) -> getEditor().setLocked(n));
+        //lock.disableProperty().bind(paletteSelectedProperty().not());
 
-        VBox vBox = new VBox(take, lock);
-        vBox.setPadding(new Insets(6, 0, 6, 6));
-        vBox.setSpacing(6);
-        setRight(vBox);
+        //VBox vBox = new VBox(take, lock);
+        //vBox.setPadding(new Insets(6, 0, 6, 6));
+        //vBox.setSpacing(6);
+        //setRight(vBox);
 
-        tabPane.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
+        model.editorProperty().addListener((ov, o, n) -> {
             paletteSelected.set(n != null);
             if (n == null) {
                 undoEnabled.unbind();
@@ -87,11 +88,10 @@ public class PaletteSelection extends BorderPane {
                 dirty.unbind();
                 dirty.set(false);
             } else {
-                PaletteEditor editor = n.getEditor();
-                undoEnabled.bind(editor.undoEnabledProperty());
-                redoEnabled.bind(editor.redoEnabledProperty());
-                dirty.bind(editor.dirtyProperty());
-                lock.setSelected(editor.isLocked());
+                undoEnabled.bind(n.undoEnabledProperty());
+                redoEnabled.bind(n.redoEnabledProperty());
+                dirty.bind(n.dirtyProperty());
+                //lock.setSelected(n.isLocked());
             }
         });
     }
@@ -117,15 +117,12 @@ public class PaletteSelection extends BorderPane {
     }
 
     public void savePalette() {
-        PaletteTab tab = tabPane.getSelectionModel().getSelectedItem();
-        tab.saveAndUndirty();
+        model.saveAndUndirty();
     }
 
     public void addPalette(PaletteFile file) {
-        PaletteEditor paletteEditor = new PaletteEditor(file);
-        PaletteTab tab = new PaletteTab(paletteEditor);
-        tabPane.addTab(tab, file.isNew() ? "New Palette" : file.getName());
-        tab.initConfig();
+        model.addPalette(file);
+        model.initConfig();
     }
 
     public Image getPalette() {
@@ -137,14 +134,12 @@ public class PaletteSelection extends BorderPane {
     }
 
     public void setFile(File file) {
-        PaletteTab tab = tabPane.getSelectionModel().getSelectedItem();
-        tab.getEditor().setFile(file);
-        tab.setText(file.getName());
+        model.getEditor().setFile(file);
+        model.getTabButtons().getSelected().setText(file.getName());
     }
 
     public PaletteEditor getEditor() {
-        PaletteTab selectedItem = tabPane.getSelectionModel().getSelectedItem();
-        return selectedItem == null ? null : selectedItem.getEditor();
+        return model.getEditor();
     }
 
     public void undo() {
@@ -168,10 +163,7 @@ public class PaletteSelection extends BorderPane {
     }
 
     public void closeCurrent() {
-        PaletteTab tab = tabPane.getSelectionModel().getSelectedItem();
-        if (tab.closeIfClean()) {
-            tabPane.removeTab(tab);
-        }
+        model.closeIfClean();
     }
 
 }

@@ -69,6 +69,10 @@ public abstract class Editor extends StackPane {
         return undoManager.redoEnabledProperty();
     }
 
+    public boolean isDirty() {
+        return dirty.get();
+    }
+
     public final BooleanProperty dirtyProperty() {
         return dirty;
     }

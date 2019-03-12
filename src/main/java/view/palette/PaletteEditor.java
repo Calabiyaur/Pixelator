@@ -4,6 +4,7 @@ import java.io.File;
 
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -35,7 +36,15 @@ public class PaletteEditor extends Editor {
         super(file, new PixelatedImageView(ImageUtil.makeWritableIfNot(file.getImage())));
         getFile().setImage(getImage());
         PixelatedImageView imageView = getImageView();
+        Image image = imageView.getImage();
         undirty();
+
+        imageView.setScaleX(20);
+        imageView.setScaleY(20);
+        imageView.translateXProperty().bind(image.widthProperty()
+                .multiply(imageView.scaleXProperty()).divide(2).subtract(image.widthProperty().divide(2)));
+        imageView.translateYProperty().bind(image.heightProperty()
+                .multiply(imageView.scaleYProperty()).divide(2).subtract(image.heightProperty().divide(2)));
 
         imageView.setPickOnBounds(true);
         imageView.setOnMousePressed(e -> onMousePressed(e));
@@ -57,11 +66,6 @@ public class PaletteEditor extends Editor {
         getChildren().addAll(imageView, selection);
         StackPane.setAlignment(imageView, Pos.TOP_LEFT);
         StackPane.setAlignment(selection, Pos.TOP_LEFT);
-        init(imageView);
-    }
-
-    private void init(PixelatedImageView imageView) {
-        prefHeightProperty().bind(imageView.heightProperty().multiply(imageView.scaleYProperty()));
     }
 
     private void onMousePressed(MouseEvent event) {

@@ -5,12 +5,12 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 
-public class TabButtons extends Group {
+public class ColorTabButtons extends Group {
 
     private final ToggleButton rgb;
     private final ToggleButton hsb;
 
-    public TabButtons() {
+    public ColorTabButtons() {
         ToggleGroup tg = new ToggleGroup();
         tg.selectedToggleProperty().addListener((ov, o, n) -> {
             if (n == null) {
@@ -25,7 +25,7 @@ public class TabButtons extends Group {
 
         HBox hBox = new HBox(hsb, rgb);
         hBox.setRotate(270);
-        hBox.setSpacing(6);
+        hBox.setSpacing(1);
         getChildren().add(hBox);
     }
 

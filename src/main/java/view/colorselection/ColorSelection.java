@@ -21,7 +21,7 @@ public class ColorSelection extends BorderPane {
         HuePicker huePicker = model.getHuePicker();
         ColorPicker colorPicker = model.getColorPicker();
         ColorPreview colorPreview = model.getPreview();
-        TabButtons tabButtons = model.getTabButtons();
+        ColorTabButtons tabButtons = model.getTabButtons();
         colorPicker.setMinSize(125, 125);
 
         BasicTextField redField = model.getRedField();

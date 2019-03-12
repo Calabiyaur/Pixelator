@@ -43,7 +43,7 @@ final class ColorSelectionModel {
     private final ColorPicker colorPicker = new ColorPicker();
     private final ColorPreview preview = new ColorPreview();
 
-    private final TabButtons tabButtons = new TabButtons();
+    private final ColorTabButtons tabButtons = new ColorTabButtons();
     private final CustomTextField redField = new CustomTextField();
     private final CustomTextField greenField = new CustomTextField();
     private final CustomTextField blueField = new CustomTextField();
@@ -278,7 +278,7 @@ final class ColorSelectionModel {
         return preview;
     }
 
-    public TabButtons getTabButtons() {
+    public ColorTabButtons getTabButtons() {
         return tabButtons;
     }
 

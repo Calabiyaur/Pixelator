@@ -181,7 +181,6 @@ public class ImageWindowContainer extends Pane {
     public void selectNextWindow() {
         if (getChildren().isEmpty()) {
             return;
-
         }
         int index = getChildren().indexOf(currentWindow.get());
         int next = (index + 1) % getChildren().size();

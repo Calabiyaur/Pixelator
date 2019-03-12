@@ -31,3 +31,11 @@
 .toggle-button:show-mnemonics > .mnemonic-underline {
     -fx-stroke: -fx-text-fill;
 }
+
+.palette-toggle-button:armed {
+    -fx-background-insets: 0 -6 0 0;
+}
+
+.palette-toggle-button:selected {
+    -fx-background-insets: 0 -6 0 0;
+}
