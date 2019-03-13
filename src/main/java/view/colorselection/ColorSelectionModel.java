@@ -42,8 +42,8 @@ final class ColorSelectionModel {
     private final HuePicker huePicker = new HuePicker();
     private final ColorPicker colorPicker = new ColorPicker();
     private final ColorPreview preview = new ColorPreview();
-
     private final ColorTabButtons tabButtons = new ColorTabButtons();
+
     private final CustomTextField redField = new CustomTextField();
     private final CustomTextField greenField = new CustomTextField();
     private final CustomTextField blueField = new CustomTextField();
