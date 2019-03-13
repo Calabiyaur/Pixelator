@@ -378,6 +378,9 @@ public class MainScene extends Scene {
 
     private void changePalette() {
         PaletteFile paletteFile = Files.get().openSinglePalette();
+        if (paletteFile == null) {
+            return;
+        }
 
         ChangePaletteDialog dialog = new ChangePaletteDialog(imageContainer.getCurrentImage(), paletteFile.getImage());
         dialog.setOnOk(e -> {

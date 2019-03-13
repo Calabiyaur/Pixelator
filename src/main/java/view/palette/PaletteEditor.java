@@ -63,7 +63,7 @@ public class PaletteEditor extends Editor {
 
         select(new Point(0, 0));
 
-        getChildren().addAll(imageView, selection);
+        getChildren().addAll(imageView/*, selection*/);
         StackPane.setAlignment(imageView, Pos.TOP_LEFT);
         StackPane.setAlignment(selection, Pos.TOP_LEFT);
     }
