@@ -84,7 +84,7 @@ public abstract class DraggablePane extends GridPane {
                 }
                 if (dragVertical) {
                     double yDiff = y - previousY;
-                    setTranslateY(getTranslateY() + yDiff);
+                    setTranslateY(Math.max(minY.doubleValue(), getTranslateY() + yDiff));
                 }
             } else if (resizable) {
                 double xDiff = resizing.isEast() || resizing.isWest() ? x - previousX : 0;
