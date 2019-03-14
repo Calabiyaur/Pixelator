@@ -1,5 +1,9 @@
 package main.java.util;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import javafx.scene.paint.Color;
 
 public class ColorUtil {
@@ -68,6 +72,20 @@ public class ColorUtil {
         double lum = getLuminosity(color);
         double opa = color.getOpacity();
         return opa < 0.3 ? Color.BLACK : lum < 0.8 ? Color.WHITE : Color.BLACK;
+    }
+
+    /**
+     * Return a random color that is not too gray, nor too sharp.
+     */
+    public static Color getRandomPleasant() {
+        int first = (int) (Math.random() * 256);
+        int second = (int) (Math.random() * 256);
+        int third = (second + 64 + (int) (Math.random() * 128)) % 256;
+
+        List<Double> values = Arrays.asList(((double) first) / 256d, ((double) second) / 256d, ((double) third) / 256d);
+        Collections.shuffle(values);
+
+        return Color.color(values.get(0), values.get(1), values.get(2));
     }
 
 }

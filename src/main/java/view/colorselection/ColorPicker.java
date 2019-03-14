@@ -23,6 +23,8 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 
+import main.java.res.Config;
+import main.java.util.ColorUtil;
 import main.java.util.NumberUtil;
 
 import static main.java.view.colorselection.ColorSelectionModel.INDICATOR_RADIUS;
@@ -30,7 +32,7 @@ import static main.java.view.colorselection.ColorSelectionModel.INDICATOR_STROKE
 
 class ColorPicker extends StackPane {
 
-    private final ObjectProperty<Color> colorProperty = new SimpleObjectProperty<>(Color.WHITE);
+    private final ObjectProperty<Color> colorProperty = new SimpleObjectProperty<>();
     private DoubleProperty hue = new SimpleDoubleProperty(0.0); // in degrees: 0.0 - 360.0
     private DoubleProperty sat = new SimpleDoubleProperty(0.0);
     private DoubleProperty bright = new SimpleDoubleProperty(0.0);
@@ -56,7 +58,7 @@ class ColorPicker extends StackPane {
         StackPane.setAlignment(indicator, Pos.TOP_LEFT);
 
         if (colorProperty.get() == null) {
-            colorProperty.set(Color.TRANSPARENT);
+            colorProperty.set(Color.valueOf(Config.getString(Config.COLOR, ColorUtil.getRandomPleasant().toString())));
         }
         updateValues();
     }

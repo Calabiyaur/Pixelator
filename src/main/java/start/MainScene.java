@@ -31,6 +31,7 @@ import main.java.meta.Direction;
 import main.java.res.Action;
 import main.java.res.Config;
 import main.java.res.Images;
+import main.java.util.ColorUtil;
 import main.java.view.ColorView;
 import main.java.view.InfoView;
 import main.java.view.ToolView;
@@ -240,19 +241,20 @@ public class MainScene extends Scene {
     }
 
     private void createKeyListener() {
-        ActionManager.registerAction(Action.ESCAPE, e -> imageContainer.escape());
-        ActionManager.registerAction(Action.PLUS, e -> imageContainer.zoomIn());
-        ActionManager.registerAction(Action.MINUS, e -> imageContainer.zoomOut());
-        ActionManager.registerAction(Action.RIGHT, e -> move(1, 0));
-        ActionManager.registerAction(Action.UP, e -> move(0, -1));
-        ActionManager.registerAction(Action.LEFT, e -> move(-1, 0));
         ActionManager.registerAction(Action.DOWN, e -> move(0, 1));
+        ActionManager.registerAction(Action.ESCAPE, e -> imageContainer.escape());
+        ActionManager.registerAction(Action.FIT_WINDOW, e -> imageContainer.fitWindow());
+        ActionManager.registerAction(Action.LEFT, e -> move(-1, 0));
+        ActionManager.registerAction(Action.MINUS, e -> imageContainer.zoomOut());
+        ActionManager.registerAction(Action.P_DOWN, e -> movePaletteSelection(0, 1));
+        ActionManager.registerAction(Action.P_LEFT, e -> movePaletteSelection(-1, 0));
         ActionManager.registerAction(Action.P_RIGHT, e -> movePaletteSelection(1, 0));
         ActionManager.registerAction(Action.P_UP, e -> movePaletteSelection(0, -1));
-        ActionManager.registerAction(Action.P_LEFT, e -> movePaletteSelection(-1, 0));
-        ActionManager.registerAction(Action.P_DOWN, e -> movePaletteSelection(0, 1));
+        ActionManager.registerAction(Action.RANDOM_COLOR, e -> ColorView.setColor(ColorUtil.getRandomPleasant()));
+        ActionManager.registerAction(Action.PLUS, e -> imageContainer.zoomIn());
+        ActionManager.registerAction(Action.RIGHT, e -> move(1, 0));
         ActionManager.registerAction(Action.SWITCH_TAB, e -> imageContainer.selectNextWindow());
-        ActionManager.registerAction(Action.FIT_WINDOW, e -> imageContainer.fitWindow());
+        ActionManager.registerAction(Action.UP, e -> move(0, -1));
     }
 
     private void move(int right, int down) {

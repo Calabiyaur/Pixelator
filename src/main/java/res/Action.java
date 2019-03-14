@@ -34,6 +34,7 @@ public enum Action {
     P_UP(false, false, true, KeyCode.UP),
     PASTE(true, false, false, KeyCode.V),
     PLUS(false, false, false, KeyCode.PLUS),
+    RANDOM_COLOR(false, false, false, KeyCode.R),
     REDO(true, false, false, KeyCode.Y),
     REDO_PALETTE(true, false, true, KeyCode.Y),
     RESIZE(),

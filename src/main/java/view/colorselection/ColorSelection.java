@@ -10,7 +10,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 
 import main.java.control.basic.BasicTextField;
-import main.java.res.Config;
 
 public class ColorSelection extends BorderPane {
 
@@ -33,7 +32,6 @@ public class ColorSelection extends BorderPane {
         Slider blueSlider = model.getBlueSlider();
         Slider alphaSlider = model.getAlphaSlider();
 
-        colorPicker.setColor(Color.valueOf(Config.getString(Config.COLOR, "#000000")));
         model.updatePreview(getColor());
 
         Label title = new Label("COLOR");
