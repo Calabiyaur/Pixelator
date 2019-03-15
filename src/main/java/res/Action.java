@@ -4,6 +4,7 @@ import javafx.scene.input.KeyCode;
 
 public enum Action {
 
+    BACKGROUND(true, true, false, KeyCode.B),
     CHANGE_PALETTE(),
     CLOSE(true, false, false, KeyCode.F4),
     CLOSE_PALETTE(true, false, true, KeyCode.F4),
@@ -47,6 +48,7 @@ public enum Action {
     SELECT_ALL(true, false, false, KeyCode.A),
     STRETCH(),
     SWITCH_TAB(true, false, false, KeyCode.TAB),
+    SWITCH_TAB_BACK(true, true, false, KeyCode.TAB),
     UNDO(true, false, false, KeyCode.Z),
     UNDO_PALETTE(true, false, true, KeyCode.Z),
     UP(false, false, false, KeyCode.UP);

@@ -46,6 +46,7 @@ import main.java.view.editor.ImageWindowContainer;
 import main.java.view.palette.PaletteMaster;
 import main.java.view.palette.PaletteSelection;
 
+import static main.java.res.Action.BACKGROUND;
 import static main.java.res.Action.CHANGE_PALETTE;
 import static main.java.res.Action.CLOSE;
 import static main.java.res.Action.CLOSE_PALETTE;
@@ -181,6 +182,10 @@ public class MainScene extends Scene {
                 e -> imageContainer.setShowCrossHair(!imageContainer.showCrossHairProperty().get()),
                 imageContainer.imageSelectedProperty());
         imageContainer.showCrossHairProperty().addListener((ov, o, n) -> crossHairItem.setSelected(n));
+        CheckMenuItem backgroundItem = viewMenu.addCheckItem(BACKGROUND, "Show Background",
+                e -> imageContainer.setShowBackground(!imageContainer.showBackgroundProperty().get()),
+                imageContainer.imageSelectedProperty());
+        imageContainer.showBackgroundProperty().addListener((ov, o, n) -> backgroundItem.setSelected(n));
 
         BasicMenu imageMenu = new BasicMenu("Image"); // Center
         imageMenu.addItem(MOVE_IMAGE, "Move image", e -> moveAction(), imageContainer.imageSelectedProperty());
@@ -237,6 +242,8 @@ public class MainScene extends Scene {
         imageContainer.showGridProperty().addListener((ov, o, n) -> grid.setSelected(n));
         ToggleButton crosshair = toolBar.addToggle(CROSSHAIR, Images.CROSSHAIR);
         imageContainer.showCrossHairProperty().addListener((ov, o, n) -> crosshair.setSelected(n));
+        ToggleButton background = toolBar.addToggle(BACKGROUND, Images.BACKGROUND);
+        imageContainer.showBackgroundProperty().addListener((ov, o, n) -> background.setSelected(n));
 
         return toolBar;
     }
@@ -255,6 +262,7 @@ public class MainScene extends Scene {
         ActionManager.registerAction(Action.PLUS, e -> imageContainer.zoomIn());
         ActionManager.registerAction(Action.RIGHT, e -> move(1, 0));
         ActionManager.registerAction(Action.SWITCH_TAB, e -> imageContainer.selectNextWindow());
+        ActionManager.registerAction(Action.SWITCH_TAB_BACK, e -> imageContainer.selectPreviousWindow());
         ActionManager.registerAction(Action.UP, e -> move(0, -1));
     }
 

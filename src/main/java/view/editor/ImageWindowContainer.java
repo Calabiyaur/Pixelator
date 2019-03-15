@@ -30,6 +30,7 @@ public class ImageWindowContainer extends Pane {
     private BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty selectionActive = new SimpleBooleanProperty(false);
     private BooleanProperty dirty = new SimpleBooleanProperty(false);
+    private BooleanProperty showBackground = new SimpleBooleanProperty(false);
 
     public ImageWindowContainer() {
         currentWindow = new SimpleObjectProperty<>();
@@ -47,6 +48,8 @@ public class ImageWindowContainer extends Pane {
                 showCrossHair.setValue(false);
                 dirty.unbind();
                 dirty.set(false);
+                showBackground.unbind();
+                showBackground.set(false);
                 ToolView.setPreview(null, null, null);
                 InfoView.setMousePosition(null);
                 InfoView.setColorCount(null);
@@ -54,9 +57,10 @@ public class ImageWindowContainer extends Pane {
                 undoEnabled.bind(window.getEditor().undoEnabledProperty());
                 redoEnabled.bind(window.getEditor().redoEnabledProperty());
                 selectionActive.bind(window.getEditor().selectionActiveProperty());
-                showGrid.setValue(window.isShowGrid());
-                showCrossHair.setValue(window.isShowCrossHair());
-                dirty.bind(window.dirtyProperty());
+                showGrid.setValue(window.getEditor().isShowGrid());
+                showCrossHair.setValue(window.getEditor().isShowCrossHair());
+                dirty.bind(window.getEditor().dirtyProperty());
+                showBackground.setValue(window.getEditor().isShowBackground());
                 updateImage(window);
                 window.toFront();
                 window.adjustSize();
@@ -187,17 +191,33 @@ public class ImageWindowContainer extends Pane {
         setCurrentWindow((ImageWindow) getChildren().get(next));
     }
 
+    public void selectPreviousWindow() {
+        if (getChildren().isEmpty()) {
+            return;
+        }
+        int index = getChildren().indexOf(currentWindow.get());
+        int previous = (index - 1) % getChildren().size();
+        setCurrentWindow((ImageWindow) getChildren().get(previous));
+    }
+
     public void setShowGrid(boolean value) {
         showGrid.set(value);
         if (currentWindow.get() != null) {
-            currentWindow.get().setShowGrid(value);
+            currentWindow.get().getEditor().setShowGrid(value);
         }
     }
 
     public void setShowCrossHair(boolean value) {
         showCrossHair.set(value);
         if (currentWindow.get() != null) {
-            currentWindow.get().setShowCrossHair(value);
+            currentWindow.get().getEditor().setShowCrossHair(value);
+        }
+    }
+
+    public void setShowBackground(boolean value) {
+        showBackground.set(value);
+        if (currentWindow.get() != null) {
+            currentWindow.get().getEditor().setShowBackground(value);
         }
     }
 
@@ -251,6 +271,10 @@ public class ImageWindowContainer extends Pane {
 
     public BooleanProperty showCrossHairProperty() {
         return showCrossHair;
+    }
+
+    public BooleanProperty showBackgroundProperty() {
+        return showBackground;
     }
 
     public BooleanProperty selectionActiveProperty() {

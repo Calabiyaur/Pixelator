@@ -58,6 +58,7 @@ public class ImageEditor extends Editor {
     private OutlineShape outlineShape;
     private Grid grid;
     private Crosshair crosshair;
+    private Pane background;
 
     private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>();
 
@@ -70,8 +71,8 @@ public class ImageEditor extends Editor {
         prefWidthProperty().bind(imageView.scaleXProperty().multiply(imageView.widthProperty()));
         prefHeightProperty().bind(imageView.scaleYProperty().multiply(imageView.heightProperty()));
 
-        Pane transparentBackground = new Pane();
-        transparentBackground.setBackground(BackgroundUtil.repeat(Images.CHECKERS));
+        background = new Pane();
+        background.setBackground(BackgroundUtil.repeat(Images.CHECKERS));
 
         outlineRect = new OutlineRect(getImageWidth(), getImageHeight());
         outlineShape = new OutlineShape(getImageWidth(), getImageHeight());
@@ -95,7 +96,7 @@ public class ImageEditor extends Editor {
         outlineShape.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
 
         getChildren().addAll(
-                transparentBackground, imageView, toolLayer, selectionLayer, crosshair, grid, outlineShape, outlineRect);
+                background, imageView, toolLayer, selectionLayer, crosshair, grid, outlineShape, outlineRect);
 
         setBorderColor("transparent"); //TODO: use parameters from preferences
         setShowGrid(false);
@@ -138,12 +139,28 @@ public class ImageEditor extends Editor {
                 + */"-fx-background-color: #DDDDDD;");
     }
 
+    public boolean isShowGrid() {
+        return grid.isVisible();
+    }
+
     public void setShowGrid(boolean showGrid) {
         grid.setVisible(showGrid);
     }
 
+    public boolean isShowCrossHair() {
+        return crosshair.isVisible();
+    }
+
     public void setShowCrossHair(boolean showCrossHair) {
         crosshair.setVisible(showCrossHair);
+    }
+
+    public boolean isShowBackground() {
+        return background.isVisible();
+    }
+
+    public void setShowBackground(boolean showBackground) {
+        background.setVisible(showBackground);
     }
 
     private void makeWritable() {

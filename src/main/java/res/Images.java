@@ -15,6 +15,7 @@ public enum Images {
     ARROW_S,
     ARROW_SE,
     ASTERISK,
+    BACKGROUND,
     CHECKERS,
     CHOOSE_COLOR,
     CLOSE,

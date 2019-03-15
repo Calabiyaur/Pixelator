@@ -1,8 +1,6 @@
 package main.java.view.editor;
 
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
@@ -30,8 +28,6 @@ public class ImageWindow extends BasicWindow {
 
     private ImageEditor imageEditor;
     private ImageFile imageFile;
-    private BooleanProperty showGrid = new SimpleBooleanProperty(false);
-    private BooleanProperty showCrossHair = new SimpleBooleanProperty(false);
 
     public ImageWindow(ScalableImageView imageView, ImageFile imageFile) {
         super(true);
@@ -48,8 +44,6 @@ public class ImageWindow extends BasicWindow {
         addOnMouseMoved(e -> mouseMoved(e));
         addOnMouseDragged(e -> mouseMoved(e));
         getEditor().mousePositionProperty().addListener((ov, o, n) -> updateMouse(n));
-        showGrid.addListener((ov, o, n) -> imageEditor.setShowGrid(n));
-        showCrossHair.addListener((ov, o, n) -> imageEditor.setShowCrossHair(n));
         getClose().setOnAction(e -> closeIfClean());
         getEditor().dirtyProperty().addListener((ov, o, n) -> updateDirtyText());
         getImageView().scaleXProperty().addListener((ov, o, n) -> ToolView.setZoom(n.doubleValue()));
@@ -240,31 +234,11 @@ public class ImageWindow extends BasicWindow {
         setText(getText().replace(" *", "") + (isDirty() ? " *" : ""));
     }
 
-    public boolean isShowGrid() {
-        return showGrid.get();
-    }
-
-    public void setShowGrid(boolean showGrid) {
-        this.showGrid.set(showGrid);
-    }
-
-    public boolean isShowCrossHair() {
-        return showCrossHair.get();
-    }
-
-    public void setShowCrossHair(boolean showCrossHair) {
-        this.showCrossHair.set(showCrossHair);
-    }
-
     public ScalableImageView getImageView() {
         return (ScalableImageView) imageEditor.getImageView();
     }
 
     public boolean isDirty() {
-        return dirtyProperty().get();
-    }
-
-    public BooleanProperty dirtyProperty() {
-        return getEditor().dirtyProperty();
+        return getEditor().isDirty();
     }
 }
