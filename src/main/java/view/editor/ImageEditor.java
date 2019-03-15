@@ -14,6 +14,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import main.java.control.image.Crosshair;
@@ -27,6 +28,8 @@ import main.java.meta.PixelArray;
 import main.java.meta.Point;
 import main.java.meta.PointArray;
 import main.java.meta.QuadConsumer;
+import main.java.res.Images;
+import main.java.util.BackgroundUtil;
 import main.java.util.ColorUtil;
 import main.java.util.ImageUtil;
 import main.java.util.ShapeUtil;
@@ -67,6 +70,9 @@ public class ImageEditor extends Editor {
         prefWidthProperty().bind(imageView.scaleXProperty().multiply(imageView.widthProperty()));
         prefHeightProperty().bind(imageView.scaleYProperty().multiply(imageView.heightProperty()));
 
+        Pane transparentBackground = new Pane();
+        transparentBackground.setBackground(BackgroundUtil.repeat(Images.CHECKERS));
+
         outlineRect = new OutlineRect(getImageWidth(), getImageHeight());
         outlineShape = new OutlineShape(getImageWidth(), getImageHeight());
         outlineShape.visibleProperty().bind(selectionLayer.activeProperty());
@@ -88,7 +94,8 @@ public class ImageEditor extends Editor {
         outlineShape.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         outlineShape.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
 
-        getChildren().addAll(imageView, toolLayer, selectionLayer, crosshair, grid, outlineShape, outlineRect);
+        getChildren().addAll(
+                transparentBackground, imageView, toolLayer, selectionLayer, crosshair, grid, outlineShape, outlineRect);
 
         setBorderColor("transparent"); //TODO: use parameters from preferences
         setShowGrid(false);

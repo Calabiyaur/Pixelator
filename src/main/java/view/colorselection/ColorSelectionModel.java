@@ -86,7 +86,7 @@ final class ColorSelectionModel {
     }
 
     void updatePreview(Color color) {
-        preview.setStyle("-fx-background-color: " + ColorUtil.toString(color));
+        preview.setColor(color);
         Config.putString(Config.COLOR, color.toString());
     }
 
@@ -160,7 +160,7 @@ final class ColorSelectionModel {
         if (convertingColorFormats) {
             return;
         }
-        Color color = ColorUtil.valueOf(preview.getText());
+        Color color = preview.getColor();
         if (color == null) {
             return;
         }

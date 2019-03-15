@@ -25,6 +25,8 @@ import javafx.scene.shape.Circle;
 
 import main.java.res.Config;
 import main.java.util.ColorUtil;
+import main.java.res.Images;
+import main.java.util.BackgroundUtil;
 import main.java.util.NumberUtil;
 
 import static main.java.view.colorselection.ColorSelectionModel.INDICATOR_RADIUS;
@@ -66,6 +68,9 @@ class ColorPicker extends StackPane {
     private Pane createColorRect() {
         final Pane colorRectOpacityContainer = new StackPane();
 
+        Pane transparentBackground = new Pane();
+        transparentBackground.setBackground(BackgroundUtil.repeat(Images.CHECKERS));
+
         Pane colorRectHue = new Pane();
         colorRectHue.backgroundProperty().bind(new ObjectBinding<Background>() {
 
@@ -80,7 +85,6 @@ class ColorPicker extends StackPane {
         });
 
         Pane colorRectOverlayOne = new Pane();
-        colorRectOverlayOne.getStyleClass().add("color-rect");
         colorRectOverlayOne.setBackground(new Background(new BackgroundFill(
                 new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE,
                         new Stop(0, Color.rgb(255, 255, 255, 1)),
@@ -95,7 +99,6 @@ class ColorPicker extends StackPane {
         };
 
         Pane colorRectOverlayTwo = new Pane();
-        colorRectOverlayTwo.getStyleClass().addAll("color-rect");
         colorRectOverlayTwo.setBackground(new Background(new BackgroundFill(
                 new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
                         new Stop(0, Color.rgb(0, 0, 0, 0)),
@@ -104,8 +107,11 @@ class ColorPicker extends StackPane {
         colorRectOverlayTwo.setOnMouseDragged(rectMouseHandler);
         colorRectOverlayTwo.setOnMousePressed(rectMouseHandler);
 
-        colorRectOpacityContainer.getChildren().setAll(colorRectHue, colorRectOverlayOne, colorRectOverlayTwo);
-        colorRectOpacityContainer.opacityProperty().bind(alpha);
+        colorRectOpacityContainer.getChildren().setAll(
+                transparentBackground, colorRectHue, colorRectOverlayOne, colorRectOverlayTwo);
+        colorRectHue.opacityProperty().bind(alpha);
+        colorRectOverlayOne.opacityProperty().bind(alpha);
+        colorRectOverlayTwo.opacityProperty().bind(alpha);
         return colorRectOpacityContainer;
     }
 

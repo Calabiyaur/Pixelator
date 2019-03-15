@@ -99,7 +99,6 @@ public class MainScene extends Scene {
 
         root.setStyle("-fx-background-color: #BBBBBB");
 
-        styleSheets.add(getClass().getResource("/style/color.css").toExternalForm());
         styleSheets.add(getClass().getResource("/style/togglebutton.css").toExternalForm());
         styleSheets.add(getClass().getResource("/style/toolbutton.css").toExternalForm());
         styleSheets.add(getClass().getResource("/style/window.css").toExternalForm());
