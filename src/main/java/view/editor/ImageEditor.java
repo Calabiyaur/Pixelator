@@ -101,6 +101,7 @@ public class ImageEditor extends Editor {
         setBorderColor("transparent"); //TODO: use parameters from preferences
         setShowGrid(false);
         setShowCrossHair(false);
+        setShowBackground(false);
 
         setOnMousePressed(this::onMousePressed);
         setOnMouseMoved(this::onMouseMoved);
