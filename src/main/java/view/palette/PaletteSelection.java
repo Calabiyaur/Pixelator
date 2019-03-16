@@ -3,6 +3,7 @@ package main.java.view.palette;
 import java.io.File;
 import java.util.List;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.HPos;
@@ -22,6 +23,7 @@ import main.java.files.Files;
 import main.java.files.PaletteFile;
 import main.java.res.Images;
 import main.java.view.dialog.NewPaletteDialog;
+import main.java.view.editor.ImageWindowContainer;
 
 public class PaletteSelection extends BorderPane {
 
@@ -77,6 +79,11 @@ public class PaletteSelection extends BorderPane {
         //vBox.setPadding(new Insets(6, 0, 6, 6));
         //vBox.setSpacing(6);
         //setRight(vBox);
+
+        BooleanBinding paletteVisible = tabButtonBox.sizeProperty().greaterThan(1)
+                .or(ImageWindowContainer.imageSelectedProperty());
+        tabButtonBox.visibleProperty().bind(paletteVisible);
+        palettePane.visibleProperty().bind(paletteVisible);
 
         model.editorProperty().addListener((ov, o, n) -> {
             paletteSelected.set(n != null);

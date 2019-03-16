@@ -23,7 +23,7 @@ import main.java.view.tool.ToolManager;
 public class ImageWindowContainer extends Pane {
 
     private ObjectProperty<ImageWindow> currentWindow;
-    private BooleanProperty imageSelected = new SimpleBooleanProperty(false);
+    private static BooleanProperty imageSelected = new SimpleBooleanProperty(false);
     private BooleanProperty showGrid = new SimpleBooleanProperty(false);
     private BooleanProperty showCrossHair = new SimpleBooleanProperty(false);
     private BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
@@ -253,7 +253,7 @@ public class ImageWindowContainer extends Pane {
         }
     }
 
-    public BooleanProperty imageSelectedProperty() {
+    public static BooleanProperty imageSelectedProperty() {
         return imageSelected;
     }
 
