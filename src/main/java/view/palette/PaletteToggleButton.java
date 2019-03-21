@@ -13,12 +13,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.PopupWindow;
 
 import main.java.control.basic.ImageButton;
 import main.java.res.Images;
+import main.java.util.Do;
 
 public class PaletteToggleButton extends ToggleButton {
 
@@ -32,19 +34,28 @@ public class PaletteToggleButton extends ToggleButton {
 
         GridPane content = new GridPane();
         content.setStyle("-fx-background-color: #f4f4f4");
+        content.prefHeightProperty().bind(heightProperty());
+
         textPane = new Text(text);
-        ImageButton close = new ImageButton(Images.CLOSE_SMALL);
-        close.getStyleClass().add("close-button");
         content.add(textPane, 0, 0);
         GridPane.setVgrow(textPane, Priority.SOMETIMES);
+        GridPane.setMargin(textPane, new Insets(0, 6, 0, 5));
+
+        Pane filler = new Pane();
+        filler.setPrefWidth(7);
+        hoverProperty().addListener((ov, o, n) -> Do.when(n && !isSelected(), () -> filler.setStyle("-fx-background-color: #cccccc")));
+        armedProperty().addListener((ov, o, n) -> Do.when(n, () -> filler.setStyle("-fx-background-color: #aaaaaa")));
+        selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> filler.setStyle("-fx-background-color: #aaaaaa")));
+        content.add(filler, 2, 0);
+
         if (closable) {
+            ImageButton close = new ImageButton(Images.CLOSE_SMALL);
+            close.getStyleClass().add("close-button");
             content.add(close, 1, 0);
-            GridPane.setMargin(close, new Insets(0, 7, 0, 0));
-            GridPane.setMargin(textPane, new Insets(0, 6, 0, 5));
-        } else {
-            GridPane.setMargin(textPane, new Insets(0, 13, 0, 5));
+            GridPane.setMargin(close, new Insets(0, 0, 0, 0));
+
+            close.setOnMouseClicked(e -> close(e));
         }
-        content.prefHeightProperty().bind(heightProperty());
 
         popup = createPopup(content);
 
@@ -52,7 +63,6 @@ public class PaletteToggleButton extends ToggleButton {
         setOnMouseExited(e -> maybeHidePopup(e));
         content.setOnMouseExited(e -> maybeHidePopup(e));
 
-        close.setOnMouseClicked(e -> close(e));
         setOnMouseClicked(e -> {
             if (MouseButton.MIDDLE.equals(e.getButton())) {
                 close(e);
