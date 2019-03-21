@@ -142,7 +142,7 @@ public class PaletteSelection extends BorderPane {
 
     public void setFile(File file) {
         model.getEditor().setFile(file);
-        model.getTabButtons().getSelected().setText(file.getName());
+        model.getTabButtons().getSelected().setPopupText(file.getName());
     }
 
     public PaletteEditor getEditor() {

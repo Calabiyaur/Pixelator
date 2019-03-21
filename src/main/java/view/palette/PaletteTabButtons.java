@@ -6,7 +6,6 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 
 class PaletteTabButtons extends VBox {
@@ -26,13 +25,9 @@ class PaletteTabButtons extends VBox {
         tg.getToggles().addListener((ListChangeListener<Toggle>) c -> size.set(tg.getToggles().size()));
     }
 
-    public PaletteToggleButton create(Image image, String text) {
-        PaletteToggleButton button = new PaletteToggleButton(image, text);
-        button.setOnMouseClicked(e -> {
-            if (MouseButton.MIDDLE.equals(e.getButton())) {
-                close(button);
-            }
-        });
+    public PaletteToggleButton create(Image image, String text, boolean closable) {
+        PaletteToggleButton button = new PaletteToggleButton(image, text, closable);
+        button.setOnClose(e -> close(button));
         button.setToggleGroup(tg);
         getChildren().add(button);
         return button;

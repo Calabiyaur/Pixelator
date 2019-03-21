@@ -24,7 +24,7 @@ final class PaletteSelectionModel {
         WritableImage image = new WritableImage(PaletteEditor.DEFAULT_WIDTH, PaletteEditor.DEFAULT_HEIGHT);
         PaletteFile file = new PaletteFile(null, image);
         PaletteEditor editor = new PaletteEditor(file);
-        PaletteToggleButton button = tabButtons.create(Images.ASTERISK.getImage(), "Current Image");
+        PaletteToggleButton button = tabButtons.create(Images.ASTERISK.getImage(), "Current Image", false);
         button.setOnAction(e -> paletteEditor.set(editor));
         button.fire();
     }
@@ -32,7 +32,7 @@ final class PaletteSelectionModel {
     public void addPalette(PaletteFile file) {
         PaletteEditor editor = new PaletteEditor(file);
         PaletteToggleButton button = tabButtons
-                .create(/*TODO: file.getPreview()*/ Images.NEW.getImage(), file.isNew() ? "New Palette" : file.getName());
+                .create(/*TODO: file.getPreview()*/ Images.NEW.getImage(), file.isNew() ? "New Palette" : file.getName(), true);
         button.setOnAction(e -> paletteEditor.set(editor));
         button.fire();
     }
