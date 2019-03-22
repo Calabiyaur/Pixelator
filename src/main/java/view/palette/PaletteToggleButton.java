@@ -46,7 +46,7 @@ public class PaletteToggleButton extends ToggleButton {
         hoverProperty().addListener((ov, o, n) -> {
             if (n && !isSelected()) {
                 filler.setStyle("-fx-background-color: #cccccc");
-            } else if (!n) {
+            } else if (!n && !isSelected()) {
                 filler.setStyle("-fx-background-color: transparent");
             } else if (isSelected()) {
                 filler.setStyle("-fx-background-color: #aaaaaa");
@@ -126,7 +126,7 @@ public class PaletteToggleButton extends ToggleButton {
         }
     }
 
-    private void maybeHidePopup(MouseEvent e) {
+    private void maybeHidePopup(MouseEvent e) { //FIXME: Coordinates are sometimes a tad wrong
         if (popup.isShowing()) {
             Bounds rightBounds = localToScreen(getBoundsInLocal());
             Bounds leftBounds = popup.getSkin().getNode().localToScreen(popup.getSkin().getNode().getBoundsInLocal());

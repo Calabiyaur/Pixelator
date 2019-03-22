@@ -28,10 +28,7 @@ import main.java.view.editor.ImageWindowContainer;
 public class PaletteSelection extends BorderPane {
 
     private final PaletteSelectionModel model;
-    private BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
-    private BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty paletteSelected = new SimpleBooleanProperty(false);
-    private BooleanProperty dirty = new SimpleBooleanProperty(false);
 
     public PaletteSelection() {
         model = new PaletteSelectionModel();
@@ -41,20 +38,11 @@ public class PaletteSelection extends BorderPane {
         Label title = new Label("PALETTE");
         ImageButton create = new ImageButton(Images.NEW);
         ImageButton open = new ImageButton(Images.OPEN);
-        ImageButton save = new ImageButton(Images.SAVE);
-        ImageButton undo = new ImageButton(Images.UNDO);
-        ImageButton redo = new ImageButton(Images.REDO);
-        save.disableProperty().bind(dirty.not());
-        undo.disableProperty().bind(undoEnabled.not());
-        redo.disableProperty().bind(redoEnabled.not());
         create.setOnAction(e -> createPalette());
         open.setOnAction(e -> openPalette());
-        save.setOnAction(e -> savePalette());
-        undo.setOnAction(e -> undo());
-        redo.setOnAction(e -> redo());
 
         GridPane titlePane = new GridPane();
-        ToolBar buttonBox = new ToolBar(create, open, save, undo, redo);
+        ToolBar buttonBox = new ToolBar(create, open);
         titlePane.add(title, 0, 0);
         titlePane.add(buttonBox, 1, 0);
         GridPane.setHgrow(title, Priority.ALWAYS);
@@ -67,40 +55,12 @@ public class PaletteSelection extends BorderPane {
         setCenter(palettePane);
         VBox.setVgrow(this, Priority.ALWAYS);
 
-        //ImageButton take = new ImageButton(Images.SUBMIT);
-        //take.setOnAction(e -> getEditor().setColor(ColorView.getColor()));
-        //take.disableProperty().bind(paletteSelectedProperty().not());
-
-        //ToggleImageButton lock = new ToggleImageButton(Images.LOCK_OPEN, Images.LOCK);
-        //lock.selectedProperty().addListener((ov, o, n) -> getEditor().setLocked(n));
-        //lock.disableProperty().bind(paletteSelectedProperty().not());
-
-        //VBox vBox = new VBox(take, lock);
-        //vBox.setPadding(new Insets(6, 0, 6, 6));
-        //vBox.setSpacing(6);
-        //setRight(vBox);
-
         BooleanBinding paletteVisible = tabButtonBox.sizeProperty().greaterThan(1)
                 .or(ImageWindowContainer.imageSelectedProperty());
         tabButtonBox.visibleProperty().bind(paletteVisible);
         palettePane.visibleProperty().bind(paletteVisible);
 
-        model.editorProperty().addListener((ov, o, n) -> {
-            paletteSelected.set(n != null);
-            if (n == null) {
-                undoEnabled.unbind();
-                undoEnabled.set(false);
-                redoEnabled.unbind();
-                redoEnabled.set(false);
-                dirty.unbind();
-                dirty.set(false);
-            } else {
-                undoEnabled.bind(n.undoEnabledProperty());
-                redoEnabled.bind(n.redoEnabledProperty());
-                dirty.bind(n.dirtyProperty());
-                //lock.setSelected(n.isLocked());
-            }
-        });
+        model.editorProperty().addListener((ov, o, n) -> paletteSelected.set(n != null));
     }
 
     public void createPalette() {
@@ -155,14 +115,6 @@ public class PaletteSelection extends BorderPane {
 
     public void redo() {
         getEditor().redo();
-    }
-
-    public BooleanProperty undoEnabledProperty() {
-        return undoEnabled;
-    }
-
-    public BooleanProperty redoEnabledProperty() {
-        return redoEnabled;
     }
 
     public BooleanProperty paletteSelectedProperty() {

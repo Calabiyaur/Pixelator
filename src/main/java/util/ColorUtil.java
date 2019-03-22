@@ -1,9 +1,5 @@
 package main.java.util;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import javafx.scene.paint.Color;
 
 public class ColorUtil {
@@ -78,14 +74,11 @@ public class ColorUtil {
      * Return a random color that is not too gray, nor too sharp.
      */
     public static Color getRandomPleasant() {
-        int first = (int) (Math.random() * 256);
-        int second = (int) (Math.random() * 256);
-        int third = (second + 64 + (int) (Math.random() * 128)) % 256;
+        double hue = Math.random() * 360;
+        double sat = Math.random() * 0.75 + 0.25;
+        double bri = Math.random() * 0.875 + 0.125;
 
-        List<Double> values = Arrays.asList(((double) first) / 256d, ((double) second) / 256d, ((double) third) / 256d);
-        Collections.shuffle(values);
-
-        return Color.color(values.get(0), values.get(1), values.get(2));
+        return Color.hsb(hue, sat, bri);
     }
 
 }
