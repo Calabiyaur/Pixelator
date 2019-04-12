@@ -17,7 +17,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.Clipboard;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -32,6 +31,7 @@ import main.java.res.Action;
 import main.java.res.Config;
 import main.java.res.Images;
 import main.java.util.ColorUtil;
+import main.java.util.ImageUtil;
 import main.java.view.ColorView;
 import main.java.view.InfoView;
 import main.java.view.ToolView;
@@ -303,9 +303,8 @@ public class MainScene extends Scene {
     }
 
     private void createFromClipboard() {
-        Clipboard clipboard = Clipboard.getSystemClipboard();
-        if (clipboard.hasImage()) {
-            Image image = clipboard.getImage();
+        Image image = ImageUtil.getFromClipboard();
+        if (image != null) {
             imageContainer.addImage(new ImageFile(null, image));
             getEditor().setCleanImage(new WritableImage((int) image.getWidth(), (int) image.getHeight()));
             getEditor().updateDirty();

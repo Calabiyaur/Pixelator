@@ -1,5 +1,15 @@
 package main.java.util;
 
+import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,8 +19,11 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
+import javax.imageio.ImageIO;
+
 import main.java.meta.PixelArray;
 import main.java.meta.Point;
+import main.java.start.ExceptionHandler;
 
 public class ImageUtil {
 
@@ -108,6 +121,34 @@ public class ImageUtil {
             }
         }
         return colors.size();
+    }
+
+    public static Image getFromClipboard() {
+        Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+        if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+            try {
+                java.awt.Image transferData = (java.awt.Image) transferable.getTransferData(DataFlavor.imageFlavor);
+
+                if (!(transferable instanceof RenderedImage)) {
+                    BufferedImage bufferedImage = new BufferedImage(transferData.getWidth(null),
+                            transferData.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                    Graphics g = bufferedImage.createGraphics();
+                    g.drawImage(transferData, 0, 0, null);
+                    g.dispose();
+
+                    transferData = bufferedImage;
+
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    ImageIO.write((RenderedImage) transferData, "png", out);
+                    out.flush();
+                    ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+                    return new Image(in);
+                }
+            } catch (UnsupportedFlavorException | IOException e) {
+                ExceptionHandler.handle(e);
+            }
+        }
+        return null;
     }
 
 }
