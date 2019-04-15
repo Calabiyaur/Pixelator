@@ -2,8 +2,10 @@ package main.java.view.palette;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,24 +15,26 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
+import main.java.meta.Point;
 import main.java.util.ColorUtil;
+import main.java.view.palette.partition.HilbertPartition;
+import main.java.view.palette.partition.Partition;
 
 public class PaletteMaster {
 
     public static final int HUE_VARIETY = 8;
 
     public static WritableImage extractPalette(Image image) {
-        List<Color> colors = new ArrayList<>(extractAndSort(image));
-        int width = PaletteEditor.DEFAULT_WIDTH;
-        int height = PaletteEditor.DEFAULT_HEIGHT;
-        if (width * height < colors.size()) {
-            height = (int) Math.ceil((double) colors.size() / (double) width);
-        }
+        Map<Color, Point> colorMap = hilbertSort3d(extractColors(image));
+        int width = colorMap.values().stream().max(Comparator.comparingInt(Point::getX)).get().getX() + 1;
+        int height = colorMap.values().stream().max(Comparator.comparingInt(Point::getY)).get().getY() + 1;
 
         WritableImage palette = new WritableImage(width, height);
         PixelWriter writer = palette.getPixelWriter();
-        for (int i = 0; i < colors.size(); i++) {
-            writer.setColor(i % width, i / width, colors.get(i));
+        for (Map.Entry<Color, Point> entry : colorMap.entrySet()) {
+            int x = entry.getValue().getX();
+            int y = entry.getValue().getY();
+            writer.setColor(x, y, entry.getKey());
         }
 
         return palette;
@@ -53,21 +57,28 @@ public class PaletteMaster {
         return sort(colors);
     }
 
-    public static List<List<Color>> extractAndSort(Image image, int columns) {
-        Set<Color> colors = extractColors(image);
-        return sort(colors, columns);
-    }
-
     public static List<Color> sort(Set<Color> colors) {
-        List<Color> result = sort(colors, HUE_VARIETY).stream().flatMap(List::stream).collect(Collectors.toList());
+        List<Color> result = sortInternal(colors).stream().flatMap(List::stream).collect(Collectors.toList());
         if (result.size() != colors.size()) {
             throw new IllegalStateException("List size was reduced from " + colors.size() + " to " + result.size());
         }
         return result;
     }
 
-    public static List<List<Color>> sort(Set<Color> colors, int columns) {
-        return sort3(colors, columns);
+    private static List<List<Color>> sortInternal(Set<Color> colors) {
+        return sort3(colors);
+    }
+
+    /**
+     * Sort the colors by using a 2-dimensional hilbert curve through the 3-dimensional color-space,
+     * thereby neglecting opacity.
+     */
+    private static Map<Color, Point> hilbertSort3d(Set<Color> colors) {
+        Partition partition = new HilbertPartition();
+        for (Color color : colors) {
+            partition.add(color);
+        }
+        return partition.createMapping();
     }
 
     /**
@@ -75,16 +86,16 @@ public class PaletteMaster {
      *
      * @return a list of lists, each list only containing colors of similar hue.
      */
-    private static List<List<Color>> sort3(Set<Color> colors, int columns) {
-        if (columns < 1) {
+    private static List<List<Color>> sort3(Set<Color> colors) {
+        if (HUE_VARIETY < 1) {
             throw new IllegalArgumentException("Columns must be at least 1");
         }
         List<Color> originalList = new ArrayList<>(colors);
         List<List<Color>> result = new ArrayList<>();
-        double margin = 180. / columns;
+        double margin = 180. / HUE_VARIETY;
 
-        for (int i = 0; i < columns; i++) {
-            final double hue = 360. * ((double) i / (double) columns);
+        for (int i = 0; i < HUE_VARIETY; i++) {
+            final double hue = 360. * ((double) i / (double) HUE_VARIETY);
 
             List<Color> column = originalList.stream().filter(
                     c -> Math.abs(c.getHue() - hue) <= margin
