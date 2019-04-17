@@ -80,11 +80,35 @@ public enum Direction {
     }
 
     public boolean isVertical() {
-        return isNorth() || isSouth();
+        switch(this) {
+            case NORTH:
+            case SOUTH:
+                return true;
+            default:
+                return false;
+        }
     }
 
     public boolean isHorizontal() {
-        return isEast() || isWest();
+        switch(this) {
+            case EAST:
+            case WEST:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public boolean isDiagonal() {
+        switch(this) {
+            case NORTH_EAST:
+            case NORTH_WEST:
+            case SOUTH_EAST:
+            case SOUTH_WEST:
+                return true;
+            default:
+                return false;
+        }
     }
 
     public Double getRotate() {
