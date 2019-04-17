@@ -23,7 +23,6 @@ import main.java.files.Files;
 import main.java.files.PaletteFile;
 import main.java.res.Images;
 import main.java.view.dialog.NewPaletteDialog;
-import main.java.view.editor.ImageWindowContainer;
 
 public class PaletteSelection extends BorderPane {
 
@@ -55,8 +54,7 @@ public class PaletteSelection extends BorderPane {
         setCenter(palettePane);
         VBox.setVgrow(this, Priority.ALWAYS);
 
-        BooleanBinding paletteVisible = tabButtonBox.sizeProperty().greaterThan(1)
-                .or(ImageWindowContainer.imageSelectedProperty());
+        BooleanBinding paletteVisible = tabButtonBox.sizeProperty().greaterThan(0);
         tabButtonBox.visibleProperty().bind(paletteVisible);
         palettePane.visibleProperty().bind(paletteVisible);
 

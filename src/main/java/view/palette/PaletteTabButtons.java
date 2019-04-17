@@ -8,10 +8,13 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 
+import main.java.view.editor.ImageWindowContainer;
+
 class PaletteTabButtons extends VBox {
 
     private final ToggleGroup tg = new ToggleGroup();
     private final IntegerProperty size = new SimpleIntegerProperty();
+    private PaletteToggleButton defaultToggle;
 
     public PaletteTabButtons() {
         setSpacing(1);
@@ -23,13 +26,33 @@ class PaletteTabButtons extends VBox {
         });
 
         tg.getToggles().addListener((ListChangeListener<Toggle>) c -> size.set(tg.getToggles().size()));
+
+        ImageWindowContainer.imageSelectedProperty().addListener((ov, o, n) -> {
+            if (n) {
+                if (!getChildren().contains(defaultToggle)) {
+                    getChildren().add(0, defaultToggle);
+                }
+                if (!tg.getToggles().contains(defaultToggle)) {
+                    Toggle selected = tg.getSelectedToggle();
+                    tg.getToggles().add(0, defaultToggle);
+                    tg.selectToggle(selected);
+                }
+            } else {
+                closeHard(defaultToggle);
+            }
+        });
     }
 
     public PaletteToggleButton create(Image image, String text, boolean closable) {
         PaletteToggleButton button = new PaletteToggleButton(image, text, closable);
+        if (defaultToggle == null) {
+            defaultToggle = button;
+        }
         button.setOnClose(e -> close(button));
-        button.setToggleGroup(tg);
-        getChildren().add(button);
+        if(button != defaultToggle || ImageWindowContainer.imageSelectedProperty().get()) {
+            button.setToggleGroup(tg);
+            getChildren().add(button);
+        }
         return button;
     }
 
@@ -38,7 +61,7 @@ class PaletteTabButtons extends VBox {
     }
 
     public boolean isDefaultSelected() {
-        return getChildren().indexOf(getSelected()) == 0;
+        return getSelected() == defaultToggle;
     }
 
     public IntegerProperty sizeProperty() {
@@ -50,11 +73,15 @@ class PaletteTabButtons extends VBox {
     }
 
     private boolean close(PaletteToggleButton button) {
-        int index = getChildren().indexOf(button);
-        if (index == 0) {
+        if (button == defaultToggle) {
             return false;
         }
 
+        return closeHard(button);
+    }
+
+    private boolean closeHard(PaletteToggleButton button) {
+        int index = getChildren().indexOf(button);
         int newIndex = (index + 1) % getChildren().size();
         ((PaletteToggleButton) getChildren().get(newIndex)).fire();
 
