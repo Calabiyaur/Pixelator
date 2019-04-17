@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.input.Clipboard;
 import javafx.stage.Stage;
 
 import main.java.logging.Logger;
@@ -15,6 +18,7 @@ public class Main extends Application {
     private static final String TITLE = "Pixelator";
     private static Stage primaryStage;
     private static List<Stage> stages = new ArrayList<>();
+    private static BooleanProperty clipboardActive = new SimpleBooleanProperty();
 
     public static Stage getPrimaryStage() {
         return primaryStage;
@@ -24,10 +28,16 @@ public class Main extends Application {
         return stages;
     }
 
-    @Override public void start(Stage primaryStage) {
+    public static BooleanProperty clipboardActiveProperty() {
+        return clipboardActive;
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
 
         Logger.log("Application started!");
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> ExceptionHandler.handle(e));
+        initClipboardListener();
 
         Main.primaryStage = primaryStage;
         MainScene scene = new MainScene();
@@ -52,6 +62,17 @@ public class Main extends Application {
         scene.openFiles(files);
 
         primaryStage.show();
+    }
+
+    private void initClipboardListener() {
+        final Clipboard systemClipboard = Clipboard.getSystemClipboard();
+
+        new com.sun.glass.ui.ClipboardAssistance(com.sun.glass.ui.Clipboard.SYSTEM) {
+            @Override
+            public void contentChanged() {
+                clipboardActive.set(systemClipboard.hasImage());
+            }
+        };
     }
 
     /**

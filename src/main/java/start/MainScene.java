@@ -155,7 +155,8 @@ public class MainScene extends Scene {
                 ImageWindowContainer.imageSelectedProperty().and(imageContainer.dirtyProperty()));
         fileMenu.addItem(SAVE_AS, "Save As...", e -> Files.get().create(imageContainer.getCurrentFile()),
                 ImageWindowContainer.imageSelectedProperty());
-        fileMenu.addItem(CREATE_FROM_CLIPBOARD, "Create from clipboard", e -> createFromClipboard());
+        fileMenu.addItem(CREATE_FROM_CLIPBOARD, "Create from clipboard", e -> createFromClipboard(),
+                Main.clipboardActiveProperty());
         fileMenu.addItem(CLOSE, "Close", e -> imageContainer.closeCurrent(),
                 ImageWindowContainer.imageSelectedProperty());
 
