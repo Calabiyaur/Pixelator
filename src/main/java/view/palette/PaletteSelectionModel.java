@@ -16,6 +16,7 @@ final class PaletteSelectionModel {
     private final PaletteTabButtons tabButtons = new PaletteTabButtons();
     private final PalettePane palettePane = new PalettePane();
 
+    private final PaletteEditor defaultEditor;
     private final ObjectProperty<PaletteEditor> paletteEditor = new SimpleObjectProperty<>();
 
     public PaletteSelectionModel() {
@@ -23,9 +24,9 @@ final class PaletteSelectionModel {
 
         WritableImage image = new WritableImage(PaletteEditor.DEFAULT_WIDTH, PaletteEditor.DEFAULT_HEIGHT);
         PaletteFile file = new PaletteFile(null, image);
-        PaletteEditor editor = new PaletteEditor(file);
+        defaultEditor = new PaletteEditor(file);
         PaletteToggleButton button = tabButtons.create(Images.ASTERISK.getImage(), "Current Image", false);
-        button.setOnAction(e -> paletteEditor.set(editor));
+        button.setOnAction(e -> paletteEditor.set(defaultEditor));
         button.fire();
     }
 
@@ -86,6 +87,10 @@ final class PaletteSelectionModel {
 
     public PalettePane getPalettePane() {
         return palettePane;
+    }
+
+    public PaletteEditor getDefaultEditor() {
+        return defaultEditor;
     }
 
     public PaletteEditor getEditor() {

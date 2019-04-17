@@ -36,6 +36,7 @@ import main.java.util.ShapeUtil;
 import main.java.view.ColorView;
 import main.java.view.InfoView;
 import main.java.view.ToolView;
+import main.java.view.palette.PaletteMaster;
 import main.java.view.tool.Tool;
 import main.java.view.tool.ToolManager;
 import main.java.view.undo.ImageChange;
@@ -606,6 +607,7 @@ public class ImageEditor extends Editor {
         }
     }
 
+    @Override
     public void updateImage(Image image) {
         currentTool.lockAndReset();
         PixelReader r = image.getPixelReader();
@@ -619,6 +621,8 @@ public class ImageEditor extends Editor {
 
     public void updateColorCount() {
         InfoView.setColorCount(ImageUtil.countColors(getImage()));
+        //TODO: Update default palette only if colors changed, default palette is visible
+        ColorView.getPaletteSelection().getDefaultEditor().updateImage(PaletteMaster.extractPalette(getImage()));
     }
 
     public ToolLayer getToolLayer() {

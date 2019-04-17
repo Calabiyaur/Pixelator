@@ -2,6 +2,7 @@ package main.java.view.palette;
 
 import java.io.File;
 
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.image.Image;
@@ -21,6 +22,7 @@ import main.java.view.ColorView;
 import main.java.view.dialog.ColorDialog;
 import main.java.view.editor.Editor;
 import main.java.view.tool.Pick;
+import main.java.view.undo.ImageChange;
 import main.java.view.undo.PixelChange;
 
 public class PaletteEditor extends Editor {
@@ -36,15 +38,18 @@ public class PaletteEditor extends Editor {
         super(file, new PixelatedImageView(ImageUtil.makeWritableIfNot(file.getImage())));
         getFile().setImage(getImage());
         PixelatedImageView imageView = getImageView();
-        Image image = imageView.getImage();
         undirty();
 
         imageView.setScaleX(10);
         imageView.setScaleY(10);
-        imageView.translateXProperty().bind(image.widthProperty()
-                .multiply(imageView.scaleXProperty()).divide(2).subtract(image.widthProperty().divide(2)));
-        imageView.translateYProperty().bind(image.heightProperty()
-                .multiply(imageView.scaleYProperty()).divide(2).subtract(image.heightProperty().divide(2)));
+        ChangeListener<Image> imageChangeListener = (ov, o, n) -> {
+            imageView.translateXProperty().bind(n.widthProperty()
+                    .multiply(imageView.scaleXProperty()).divide(2).subtract(n.widthProperty().divide(2)));
+            imageView.translateYProperty().bind(n.heightProperty()
+                    .multiply(imageView.scaleYProperty()).divide(2).subtract(n.heightProperty().divide(2)));
+        };
+        imageView.imageProperty().addListener(imageChangeListener);
+        imageChangeListener.changed(null, null, imageView.getImage());
 
         imageView.setPickOnBounds(true);
         imageView.setOnMousePressed(e -> onMousePressed(e));
@@ -175,6 +180,13 @@ public class PaletteEditor extends Editor {
         register(change);
 
         ColorView.setColor(color);
+    }
+
+    @Override
+    public void updateImage(Image image) {
+        ImageChange change = new ImageChange(getImageView(), getImage(), image);
+        getImageView().setImage(image);
+        register(change);
     }
 
     public void moveSelection(int right, int down) {

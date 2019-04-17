@@ -105,6 +105,10 @@ public class PaletteSelection extends BorderPane {
         model.getTabButtons().getSelected().setPopupText(file.getName());
     }
 
+    public PaletteEditor getDefaultEditor() {
+        return model.getDefaultEditor();
+    }
+
     public PaletteEditor getEditor() {
         return model.getEditor();
     }
