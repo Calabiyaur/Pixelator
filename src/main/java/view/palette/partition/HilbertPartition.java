@@ -13,9 +13,8 @@ import java.util.stream.Collectors;
 import javafx.scene.paint.Color;
 
 import main.java.meta.Direction;
+import main.java.meta.Frac;
 import main.java.meta.Point;
-import main.java.util.Check;
-import org.apache.commons.lang3.math.Fraction;
 import org.apache.commons.lang3.tuple.Pair;
 
 import static main.java.meta.Direction.EAST;
@@ -29,12 +28,12 @@ import static main.java.meta.Direction.WEST;
 
 public class HilbertPartition implements Partition {
 
-    private final static Fraction TWO = Fraction.getFraction(2);
+    private final static Frac TWO = Frac.of(2);
 
     private final Part root;
 
     public HilbertPartition() {
-        Fraction f = Fraction.getFraction(.5);
+        Frac f = Frac.of(.5);
         root = new Part(0, NORTH, f, f, f, f, f, f, f);
     }
 
@@ -92,7 +91,7 @@ public class HilbertPartition implements Partition {
         if (part.isLeaf()) {
             if (!part.getColors().isEmpty()) {
                 Color color = part.getColors().iterator().next();
-                set.add(new ColorPoint(color, part.progress.doubleValue(), part.brightness.doubleValue()));
+                set.add(new ColorPoint(color, part.progress.doubleValue(), color.getBrightness()));
             }
         } else {
             for (Part child : part.getChildren()) {
@@ -106,19 +105,19 @@ public class HilbertPartition implements Partition {
 
         private final int depth;
         private final Direction orientation;
-        private final Fraction progress;
-        private final Fraction hue;
-        private final Fraction hTolerance;
-        private final Fraction saturation;
-        private final Fraction sTolerance;
-        private final Fraction brightness;
-        private final Fraction bTolerance;
+        private final Frac progress;
+        private final Frac hue;
+        private final Frac hTolerance;
+        private final Frac saturation;
+        private final Frac sTolerance;
+        private final Frac brightness;
+        private final Frac bTolerance;
         private Set<Color> colors;
         private List<Part> children;
 
-        public Part(int depth, Direction orientation, Fraction progress,
-                Fraction hue, Fraction hTolerance, Fraction saturation, Fraction sTolerance,
-                Fraction brightness, Fraction bTolerance) {
+        public Part(int depth, Direction orientation, Frac progress,
+                Frac hue, Frac hTolerance, Frac saturation, Frac sTolerance,
+                Frac brightness, Frac bTolerance) {
             this.orientation = orientation;
             this.depth = depth;
             this.progress = progress;
@@ -139,9 +138,9 @@ public class HilbertPartition implements Partition {
         }
 
         public boolean contains(double x, double y, double z) {
-            Fraction xF = Fraction.getFraction(x);
-            Fraction yF = Fraction.getFraction(y);
-            Fraction zF = Fraction.getFraction(z);
+            Frac xF = Frac.of(x);
+            Frac yF = Frac.of(y);
+            Frac zF = Frac.of(z);
             return hue.subtract(hTolerance).compareTo(xF) <= 0 && hue.add(hTolerance).compareTo(xF) >= 0
                     && saturation.subtract(sTolerance).compareTo(yF) <= 0 && saturation.add(sTolerance).compareTo(yF) >= 0
                     && brightness.subtract(bTolerance).compareTo(zF) <= 0 && brightness.add(bTolerance).compareTo(zF) >= 0;
@@ -157,8 +156,8 @@ public class HilbertPartition implements Partition {
         }
 
         public void splitHs(double hMargin, double sMargin) {
-            Fraction hMarginF = Fraction.getFraction(hMargin);
-            Fraction sMarginF = Fraction.getFraction(sMargin);
+            Frac hMarginF = Frac.of(hMargin);
+            Frac sMarginF = Frac.of(sMargin);
             if (hue.subtract(hMarginF).abs().divideBy(hTolerance)
                     .compareTo(saturation.subtract(sMarginF).abs().divideBy(sTolerance)) < 0) {
                 sMarginF = saturation;
@@ -193,38 +192,38 @@ public class HilbertPartition implements Partition {
             validate();
         }
 
-        private void splitHs(Fraction hMargin, Fraction sMargin, List<Direction> orientations, List<Direction> positions) {
+        private void splitHs(Frac hMargin, Frac sMargin, List<Direction> orientations, List<Direction> positions) {
 
-            Fraction hMin = hue.subtract(hTolerance);
-            Fraction hMax = hue.add(hTolerance);
-            Fraction sMin = saturation.subtract(sTolerance);
-            Fraction sMax = saturation.add(sTolerance);
+            Frac hMin = hue.subtract(hTolerance);
+            Frac hMax = hue.add(hTolerance);
+            Frac sMin = saturation.subtract(sTolerance);
+            Frac sMax = saturation.add(sTolerance);
 
-            Map<Direction, Fraction> progressRange = new HashMap<>();
+            Map<Direction, Frac> progressRange = new HashMap<>();
             progressRange.put(NORTH_EAST, hMax.subtract(hMargin).multiplyBy(sMargin.subtract(sMin)));
             progressRange.put(NORTH_WEST, hMargin.subtract(hMin).multiplyBy(sMargin.subtract(sMin)));
             progressRange.put(SOUTH_WEST, hMargin.subtract(hMin).multiplyBy(sMax.subtract(sMargin)));
             progressRange.put(SOUTH_EAST, hMax.subtract(hMargin).multiplyBy(sMax.subtract(sMargin)));
 
-            Map<Direction, Pair<Fraction, Fraction>> hueMap = new HashMap<>();
+            Map<Direction, Pair<Frac, Frac>> hueMap = new HashMap<>();
             hueMap.put(NORTH_EAST, Pair.of(hMax.add(hMargin).divideBy(TWO), hMax.subtract(hMargin).divideBy(TWO)));
             hueMap.put(NORTH_WEST, Pair.of(hMargin.add(hMin).divideBy(TWO), hMargin.subtract(hMin).divideBy(TWO)));
             hueMap.put(SOUTH_WEST, Pair.of(hMargin.add(hMin).divideBy(TWO), hMargin.subtract(hMin).divideBy(TWO)));
             hueMap.put(SOUTH_EAST, Pair.of(hMax.add(hMargin).divideBy(TWO), hMax.subtract(hMargin).divideBy(TWO)));
 
-            Map<Direction, Pair<Fraction, Fraction>> satMap = new HashMap<>();
+            Map<Direction, Pair<Frac, Frac>> satMap = new HashMap<>();
             satMap.put(NORTH_EAST, Pair.of((sMargin.add(sMin)).divideBy(TWO), sMargin.subtract(sMin).divideBy(TWO)));
             satMap.put(NORTH_WEST, Pair.of((sMargin.add(sMin)).divideBy(TWO), sMargin.subtract(sMin).divideBy(TWO)));
             satMap.put(SOUTH_WEST, Pair.of((sMax.add(sMargin)).divideBy(TWO), sMax.subtract(sMargin).divideBy(TWO)));
             satMap.put(SOUTH_EAST, Pair.of((sMax.add(sMargin)).divideBy(TWO), sMax.subtract(sMargin).divideBy(TWO)));
 
-            Fraction pMin = progress.subtract(hTolerance.add(sTolerance).divideBy(TWO));
+            Frac pMin = progress.subtract(TWO.multiplyBy(hTolerance).multiplyBy(sTolerance));
             for (int i = 0; i < 4; i++) {
                 Direction o = orientations.get(i);
                 Direction p = positions.get(i);
-                Fraction pr = progressRange.get(p);
-                Pair<Fraction, Fraction> huePair = hueMap.get(p);
-                Pair<Fraction, Fraction> satPair = satMap.get(p);
+                Frac pr = progressRange.get(p);
+                Pair<Frac, Frac> huePair = hueMap.get(p);
+                Pair<Frac, Frac> satPair = satMap.get(p);
                 getChildren().add(new Part(depth + 1, o, pMin.add(pr.divideBy(TWO)),
                         huePair.getLeft(), huePair.getRight(),
                         satPair.getLeft(), satPair.getRight(), brightness, bTolerance));
@@ -233,9 +232,9 @@ public class HilbertPartition implements Partition {
         }
 
         public void splitB(double margin) {
-            Fraction marginF = Fraction.getFraction(margin);
-            Fraction bMin = brightness.subtract(bTolerance);
-            Fraction bMax = brightness.add(bTolerance);
+            Frac marginF = Frac.of(margin);
+            Frac bMin = brightness.subtract(bTolerance);
+            Frac bMax = brightness.add(bTolerance);
             getChildren().add(new Part(depth + 1, orientation, progress, hue, hTolerance, saturation, sTolerance,
                     marginF.add(bMin).divideBy(TWO),
                     marginF.subtract(bMin).divideBy(TWO)));
@@ -262,34 +261,34 @@ public class HilbertPartition implements Partition {
                 }
             }
             // Complete
-            if (getChildren().size() == 4) {
-                List<Part> sorted = getChildren().stream().sorted((c1, c2) -> {
-                    int cSat = c1.saturation.compareTo(c2.saturation);
-                    if (cSat != 0) {
-                        return cSat;
-                    }
-                    return c1.hue.compareTo(c2.hue);
-                }).collect(Collectors.toList());
-                Part topLeft = sorted.get(0);
-                Part topRight = sorted.get(1);
-                Part botLeft = sorted.get(2);
-                Part botRight = sorted.get(3);
-                Check.ensureEquals(topLeft.hue, botLeft.hue);
-                Check.ensureEquals(topLeft.hTolerance, botLeft.hTolerance);
-                Check.ensureEquals(botRight.hue, botRight.hue);
-                Check.ensureEquals(botRight.hTolerance, botRight.hTolerance);
-                Check.ensureEquals(hue.subtract(hTolerance), topLeft.hue.subtract(topLeft.hTolerance));
-                Check.ensureEquals(topLeft.hue.add(topLeft.hTolerance), topRight.hue.subtract(topRight.hTolerance));
-                Check.ensureEquals(topRight.hue.add(topRight.hTolerance), hue.add(hTolerance));
-                Check.ensureEquals(topLeft.saturation, topRight.saturation);
-                Check.ensureEquals(topLeft.sTolerance, topRight.sTolerance);
-                Check.ensureEquals(botLeft.saturation, botRight.saturation);
-                Check.ensureEquals(botLeft.sTolerance, botRight.sTolerance);
-                Check.ensureEquals(saturation.subtract(sTolerance), topLeft.saturation.subtract(topLeft.sTolerance));
-                Check.ensureEquals(topLeft.saturation.add(topLeft.sTolerance),
-                        botLeft.saturation.subtract(botLeft.sTolerance));
-                Check.ensureEquals(botLeft.saturation.add(botLeft.sTolerance), saturation.add(sTolerance));
-            }
+            //if (getChildren().size() == 4) {
+            //    List<Part> sorted = getChildren().stream().sorted((c1, c2) -> {
+            //        int cSat = c1.saturation.compareTo(c2.saturation);
+            //        if (cSat != 0) {
+            //            return cSat;
+            //        }
+            //        return c1.hue.compareTo(c2.hue);
+            //    }).collect(Collectors.toList());
+            //    Part topLeft = sorted.get(0);
+            //    Part topRight = sorted.get(1);
+            //    Part botLeft = sorted.get(2);
+            //    Part botRight = sorted.get(3);
+            //    Check.ensureEquals(topLeft.hue, botLeft.hue);
+            //    Check.ensureEquals(topLeft.hTolerance, botLeft.hTolerance);
+            //    Check.ensureEquals(botRight.hue, botRight.hue);
+            //    Check.ensureEquals(botRight.hTolerance, botRight.hTolerance);
+            //    Check.ensureEquals(hue.subtract(hTolerance), topLeft.hue.subtract(topLeft.hTolerance));
+            //    Check.ensureEquals(topLeft.hue.add(topLeft.hTolerance), topRight.hue.subtract(topRight.hTolerance));
+            //    Check.ensureEquals(topRight.hue.add(topRight.hTolerance), hue.add(hTolerance));
+            //    Check.ensureEquals(topLeft.saturation, topRight.saturation);
+            //    Check.ensureEquals(topLeft.sTolerance, topRight.sTolerance);
+            //    Check.ensureEquals(botLeft.saturation, botRight.saturation);
+            //    Check.ensureEquals(botLeft.sTolerance, botRight.sTolerance);
+            //    Check.ensureEquals(saturation.subtract(sTolerance), topLeft.saturation.subtract(topLeft.sTolerance));
+            //    Check.ensureEquals(topLeft.saturation.add(topLeft.sTolerance),
+            //            botLeft.saturation.subtract(botLeft.sTolerance));
+            //    Check.ensureEquals(botLeft.saturation.add(botLeft.sTolerance), saturation.add(sTolerance));
+            //}
         }
 
         public Set<Color> getColors() {

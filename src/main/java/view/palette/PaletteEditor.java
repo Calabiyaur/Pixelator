@@ -39,8 +39,8 @@ public class PaletteEditor extends Editor {
         Image image = imageView.getImage();
         undirty();
 
-        imageView.setScaleX(20);
-        imageView.setScaleY(20);
+        imageView.setScaleX(10);
+        imageView.setScaleY(10);
         imageView.translateXProperty().bind(image.widthProperty()
                 .multiply(imageView.scaleXProperty()).divide(2).subtract(image.widthProperty().divide(2)));
         imageView.translateYProperty().bind(image.heightProperty()
