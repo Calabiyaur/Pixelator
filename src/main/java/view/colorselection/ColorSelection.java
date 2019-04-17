@@ -22,6 +22,7 @@ public class ColorSelection extends BorderPane {
         ColorPreview colorPreview = model.getPreview();
         ColorTabButtons tabButtons = model.getTabButtons();
         colorPicker.setMinSize(125, 125);
+        colorPreview.setMinWidth(100);
 
         BasicTextField redField = model.getRedField();
         BasicTextField greenField = model.getGreenField();
@@ -60,6 +61,10 @@ public class ColorSelection extends BorderPane {
 
     public void setColor(Color color) {
         model.setColor(color);
+    }
+
+    public void addRecentColor(Color color) {
+        model.getPreview().addRecentColor(color);
     }
 
 }

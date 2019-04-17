@@ -1,7 +1,10 @@
 package main.java.util;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class MapUtil {
 
@@ -15,5 +18,14 @@ public class MapUtil {
             map.put(keys[i], values[i]);
         }
         return map;
+    }
+
+    public static <T, U> Set<U> getAll(Map<T, U> map, Collection<? extends T> keys) {
+        Set<U> result = new HashSet<>();
+        for (T key : keys) {
+            result.add(map.get(key));
+        }
+        result.remove(null);
+        return result;
     }
 }

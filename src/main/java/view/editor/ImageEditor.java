@@ -289,6 +289,7 @@ public class ImageEditor extends Editor {
         Color newColor = replace ? color : ColorUtil.addColors(previousColor, color);
 
         writer.setColor(x, y, newColor);
+        ColorView.addRecentColor(color);
         pixels.add(x, y, previousColor, newColor);
     }
 

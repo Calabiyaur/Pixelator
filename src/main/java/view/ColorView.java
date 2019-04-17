@@ -87,6 +87,10 @@ public class ColorView extends BorderPane {
         colorSelection.setColor(color);
     }
 
+    public static void addRecentColor(Color color) {
+        colorSelection.addRecentColor(color);
+    }
+
     public static PaletteSelection getPaletteSelection() {
         return paletteSelection;
     }
