@@ -1,0 +1,210 @@
+.root {
+    -px_default_background: #FFFFFF;
+    -px_window: #FFFFFF;
+    -px_empty_area: #F4F4F4;
+    -px_hover: #CCCCCC;
+    -px_selected: #AAAAAA;
+    -px_hover_light: #AAAAAA;
+    -px_selected_light: #BBBBBB;
+}
+
+.draggable-pane {
+    -fx-background-color: -px_window;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.text {
+    -fx-background-color: -px_default_background;
+    -fx-padding: 0.33em 0.33em 0.33em 0.66em;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.close-button {
+    -fx-background-color: -px_window;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.close-button:hover {
+    -fx-background-color: #D81123;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.close-button:armed {
+    -fx-background-color: #FF8888;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.close-button:selected {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.default-button {
+    -fx-background-color: -px_default_background;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.default-button:hover {
+    -fx-background-color: -px_hover;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.default-button:armed {
+    -fx-background-color: -px_selected;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.default-button:selected {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius:  0, 0, 0, 0;
+}
+
+.scroll-bar-horizontal {
+    -fx-background-color: -px_hover_light;
+    -fx-background-insets: 0 0 -1 0;
+}
+
+.scroll-bar-horizontal:pressed {
+    -fx-background-color: -px_selected_light;
+    -fx-background-insets: 0 0 -1 0;
+}
+
+.scroll-bar-vertical {
+    -fx-background-color: -px_hover_light;
+}
+
+.scroll-bar-vertical:pressed {
+    -fx-background-color: -px_selected_light;
+}
+
+.toggle-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+    -fx-padding: 0.25em 0.3em 0.25em 0.3em;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.toggle-button:focused {
+    -fx-background-color: transparent;
+}
+
+.toggle-button:hover {
+    -fx-background-color: -px_hover;
+}
+
+.toggle-button:armed {
+    -fx-background-color: -px_selected;
+}
+
+.toggle-button:selected {
+    -fx-background-color: -px_selected;
+}
+
+.toggle-button:disabled {
+    -fx-opacity: 0.4;
+}
+
+.toggle-button:show-mnemonics > .mnemonic-underline {
+    -fx-stroke: -fx-text-fill;
+}
+
+.palette-toggle-button:armed {
+    -fx-background-insets: 0 -6 0 0;
+}
+
+.palette-toggle-button:selected {
+    -fx-background-insets: 0 -6 0 0;
+}
+
+.tool-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+    -fx-padding: 0.25em 0.3em 0.25em 0.3em;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.tool-button:focused {
+    -fx-background-color: transparent;
+}
+
+.tool-button:hover {
+    -fx-background-color: -px_hover;
+}
+
+.tool-button:armed {
+    -fx-background-color: -px_selected;
+}
+
+.tool-button:default {
+    -fx-base: -fx-accent;
+}
+
+.tool-button:cancel {
+}
+
+.tool-button:disabled {
+    -fx-opacity: 0.4;
+}
+
+.tool-button:show-mnemonics > .mnemonic-underline {
+    -fx-stroke: -fx-text-fill;
+}
+
+
+.split-pane {
+    -fx-background-color: -px_empty_area;
+    -fx-background-insets: 0, 1;
+    -fx-padding: 1;
+}
+
+.split-pane > .split-pane-divider {
+    -fx-padding: 0 2 0 2; /* 0 3 0 3 */
+}
+
+/* horizontal the two nodes are placed to the left/right of each other. */
+.split-pane:horizontal > .split-pane-divider {
+   -fx-border-color: -px_empty_area;
+   -fx-background-color: -px_empty_area;
+   -fx-background-insets: 0, 0 1 0 1;
+}
+
+/* vertical the two nodes are placed on top of each other. */
+.split-pane:vertical > .split-pane-divider {
+   -fx-border-color: -px_empty_area;
+   -fx-background-color: -px_empty_area;
+   -fx-background-insets: 0, 1 0 1 0;
+}
+
+.split-pane > .split-pane-divider > .horizontal-grabber {
+    -fx-padding: 5 1 5 1;
+    -fx-background-color: -px_empty_area;
+    -fx-background-insets: 1 0 -1 0, 0;
+}
+
+.split-pane > .split-pane-divider > .vertical-grabber {
+    -fx-padding: 1 5 1 5;
+    -fx-background-color: -px_empty_area;
+    -fx-background-insets: 1 0 -1 0, 0;
+}

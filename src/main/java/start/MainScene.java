@@ -97,10 +97,7 @@ public class MainScene extends Scene {
 
         root.setStyle("-fx-background-color: #BBBBBB");
 
-        styleSheets.add(getClass().getResource("/style/togglebutton.css").toExternalForm());
-        styleSheets.add(getClass().getResource("/style/toolbutton.css").toExternalForm());
-        styleSheets.add(getClass().getResource("/style/window.css").toExternalForm());
-        styleSheets.add(getClass().getResource("/style/splitpane.css").toExternalForm());
+        styleSheets.add(getClass().getResource("/style/light-theme.css").toExternalForm());
         getStylesheets().addAll(getStyle());
 
         imageContainer = new ImageWindowContainer();
