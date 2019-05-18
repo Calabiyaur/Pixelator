@@ -2,7 +2,7 @@ package main.java.view.palette;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +15,14 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
+import main.java.meta.HashMatrix;
+import main.java.meta.Matrix;
 import main.java.meta.Point;
+import main.java.util.CollectionUtil;
 import main.java.util.ColorUtil;
+import main.java.util.MapUtil;
 import main.java.view.palette.partition.HilbertPartition;
+import main.java.view.palette.partition.Mapping;
 import main.java.view.palette.partition.Partition;
 
 public class PaletteMaster {
@@ -25,13 +30,13 @@ public class PaletteMaster {
     public static final int HUE_VARIETY = 8;
 
     public static WritableImage extractPalette(Image image) {
-        Map<Color, Point> colorMap = hilbertSort3d(extractColors(image));
-        int width = colorMap.values().stream().max(Comparator.comparingInt(Point::getX)).get().getX() + 1;
-        int height = colorMap.values().stream().max(Comparator.comparingInt(Point::getY)).get().getY() + 1;
+        Mapping mapping = hilbertSort3d(extractColors(image));
 
+        int width = Math.max(1, mapping.width());
+        int height = Math.max(1, mapping.height());
         WritableImage palette = new WritableImage(width, height);
         PixelWriter writer = palette.getPixelWriter();
-        for (Map.Entry<Color, Point> entry : colorMap.entrySet()) {
+        for (Map.Entry<Color, Point> entry : mapping.get().entrySet()) {
             int x = entry.getValue().getX();
             int y = entry.getValue().getY();
             writer.setColor(x, y, entry.getKey());
@@ -73,12 +78,94 @@ public class PaletteMaster {
      * Sort the colors by using a 2-dimensional hilbert curve through the 3-dimensional color-space,
      * thereby neglecting opacity.
      */
-    private static Map<Color, Point> hilbertSort3d(Set<Color> colors) {
+    private static Mapping hilbertSort3d(Set<Color> colors) {
         Partition partition = new HilbertPartition();
         for (Color color : colors) {
             partition.add(color);
         }
-        return partition.createMapping();
+        Mapping mapping = partition.createMapping();
+        Matrix<Color> colorMatrix = new HashMatrix<>();
+        for (Map.Entry<Color, Point> entry : mapping.get().entrySet()) {
+            int x = entry.getValue().getX();
+            int y = entry.getValue().getY();
+            colorMatrix.put(x, y, entry.getKey());
+        }
+
+        List<Integer> unfinishedRows = CollectionUtil.intsBetween(0, mapping.height() - 1);
+        List<Integer> unfinishedColumns = CollectionUtil.intsBetween(0, mapping.width() - 1);
+        List<Integer> retainedRows = new ArrayList<>(unfinishedRows);
+        List<Integer> retainedColumns = new ArrayList<>(unfinishedColumns);
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            for (int i = 0, j = 0; i < unfinishedRows.size() && j < unfinishedColumns.size(); i += 2, j += 2) {
+                if (!unfinishedRows.isEmpty()) {
+                    unfinishedRows.size();
+                    Integer rowNum = unfinishedRows.get(i);
+                    if (i + 1 >= unfinishedRows.size()) {
+                        unfinishedRows.remove(rowNum);
+                        changed = true;
+                    } else {
+                        Integer nextRowNum = unfinishedRows.get(i + 1);
+
+                        Map<Integer, Color> row = colorMatrix.getRow(rowNum);
+                        Map<Integer, Color> nextRow = colorMatrix.getRow(nextRowNum);
+                        boolean remove = true;
+                        if (row != null) {
+                            if (nextRow == null || !MapUtil.getAll(nextRow, row.keySet()).isEmpty()) {
+                                remove = false;
+                                i--;
+                            } else {
+                                for (Map.Entry<Integer, Color> entry : row.entrySet()) {
+                                    nextRow.put(entry.getKey(), entry.getValue());
+                                }
+                                row.clear();
+                            }
+                        }
+                        if (remove) {
+                            unfinishedRows.remove(rowNum);
+                            retainedRows.remove(rowNum);
+                            changed = true;
+                        }
+                    }
+                }
+                if (!unfinishedColumns.isEmpty()) {
+                    Integer colNum = unfinishedColumns.get(j);
+                    if (j + 1 >= unfinishedColumns.size()) {
+                        unfinishedColumns.remove(colNum);
+                        changed = true;
+                        continue;
+                    }
+                    Integer nextColNum = unfinishedColumns.get(j + 1);
+
+                    Map<Integer, Color> column = colorMatrix.getColumn(colNum);
+                    if (column != null) {
+                        Map<Integer, Color> nextColumn = colorMatrix.getColumn(nextColNum);
+                        if (nextColumn == null || !MapUtil.getAll(nextColumn, column.keySet()).isEmpty()) {
+                            j--;
+                            continue;
+                        }
+                        for (Map.Entry<Integer, Color> entry : column.entrySet()) {
+                            nextColumn.put(entry.getKey(), entry.getValue());
+                        }
+                        column.clear();
+                    }
+                    unfinishedColumns.remove(colNum);
+                    retainedColumns.remove(colNum);
+                    changed = true;
+                }
+            }
+        }
+
+        Map<Color, Point> result = new HashMap<>();
+        for (Map.Entry<Integer, Map<Integer, Color>> rowEntry : colorMatrix.rows()) {
+            int y = retainedRows.indexOf(rowEntry.getKey());
+            for (Map.Entry<Integer, Color> entry : rowEntry.getValue().entrySet()) {
+                int x = retainedColumns.indexOf(entry.getKey());
+                result.put(entry.getValue(), new Point(x, y));
+            }
+        }
+        return new Mapping(retainedColumns.size(), retainedRows.size(), result);
     }
 
     /**

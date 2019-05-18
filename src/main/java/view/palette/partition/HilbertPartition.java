@@ -66,7 +66,7 @@ public class HilbertPartition implements Partition {
     }
 
     @Override
-    public Map<Color, Point> createMapping() {
+    public Mapping createMapping() {
         Set<ColorPoint> set = addMapping(root, new HashSet<>());
 
         Set<Double> hsValues = new HashSet<>();
@@ -84,7 +84,7 @@ public class HilbertPartition implements Partition {
             int y = hsOrder.indexOf(colorPoint.hs);
             result.put(colorPoint.color, new Point(x, y));
         }
-        return result;
+        return new Mapping(bValues.size(), hsValues.size(), result);
     }
 
     private Set<ColorPoint> addMapping(Part part, Set<ColorPoint> set) {

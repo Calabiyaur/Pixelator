@@ -51,7 +51,7 @@ public class Point {
     }
 
     @Override public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Point)) {
+        if (!(obj instanceof Point)) {
             return false;
         }
         Point p = (Point) obj;

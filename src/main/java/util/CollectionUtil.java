@@ -39,4 +39,12 @@ public class CollectionUtil {
         return result;
     }
 
+    public static List<Integer> intsBetween(int start, int end) {
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = start; i <= end; i++) {
+            result.add(i);
+        }
+        return result;
+    }
+
 }
