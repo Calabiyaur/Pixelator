@@ -98,9 +98,8 @@ public class PaletteMaster {
         boolean changed = true;
         while (changed) {
             changed = false;
-            for (int i = 0, j = 0; i < unfinishedRows.size() && j < unfinishedColumns.size(); i += 2, j += 2) {
-                if (!unfinishedRows.isEmpty()) {
-                    unfinishedRows.size();
+            for (int i = 0, j = 0; i < unfinishedRows.size() || j < unfinishedColumns.size(); i += 2, j += 2) {
+                if (!unfinishedRows.isEmpty() && i < unfinishedRows.size()) {
                     Integer rowNum = unfinishedRows.get(i);
                     if (i + 1 >= unfinishedRows.size()) {
                         unfinishedRows.remove(rowNum);
@@ -129,30 +128,34 @@ public class PaletteMaster {
                         }
                     }
                 }
-                if (!unfinishedColumns.isEmpty()) {
+                if (!unfinishedColumns.isEmpty() && j < unfinishedColumns.size()) {
                     Integer colNum = unfinishedColumns.get(j);
                     if (j + 1 >= unfinishedColumns.size()) {
                         unfinishedColumns.remove(colNum);
                         changed = true;
-                        continue;
-                    }
-                    Integer nextColNum = unfinishedColumns.get(j + 1);
+                    } else {
+                        Integer nextColNum = unfinishedColumns.get(j + 1);
 
-                    Map<Integer, Color> column = colorMatrix.getColumn(colNum);
-                    if (column != null) {
+                        Map<Integer, Color> column = colorMatrix.getColumn(colNum);
                         Map<Integer, Color> nextColumn = colorMatrix.getColumn(nextColNum);
-                        if (nextColumn == null || !MapUtil.getAll(nextColumn, column.keySet()).isEmpty()) {
-                            j--;
-                            continue;
+                        boolean remove = true;
+                        if (column != null) {
+                            if (nextColumn == null || !MapUtil.getAll(nextColumn, column.keySet()).isEmpty()) {
+                                remove = false;
+                                j--;
+                            } else {
+                                for (Map.Entry<Integer, Color> entry : column.entrySet()) {
+                                    nextColumn.put(entry.getKey(), entry.getValue());
+                                }
+                                column.clear();
+                            }
                         }
-                        for (Map.Entry<Integer, Color> entry : column.entrySet()) {
-                            nextColumn.put(entry.getKey(), entry.getValue());
+                        if (remove) {
+                            unfinishedColumns.remove(colNum);
+                            retainedColumns.remove(colNum);
+                            changed = true;
                         }
-                        column.clear();
                     }
-                    unfinishedColumns.remove(colNum);
-                    retainedColumns.remove(colNum);
-                    changed = true;
                 }
             }
         }
