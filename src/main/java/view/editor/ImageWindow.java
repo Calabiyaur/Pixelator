@@ -9,6 +9,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import com.sun.javafx.scene.control.skin.ScrollBarSkin;
 import main.java.control.basic.ImageButton;
 import main.java.control.image.ScalableImageView;
 import main.java.control.parent.BasicScrollPane;
@@ -40,10 +41,10 @@ public class ImageWindow extends BasicWindow {
         setPrefSize(400, 400); //TODO: Use preferences from .pix file
 
         getContent().setOnRawScroll(e -> onScroll(e));
+        setOnScroll(e -> onScroll(e));
         setOnMouseClicked(e -> mouseClick(e));
-        addOnMouseMoved(e -> mouseMoved(e));
-        addOnMouseDragged(e -> mouseMoved(e));
         getEditor().mousePositionProperty().addListener((ov, o, n) -> updateMouse(n));
+        getEditor().setOnMouseExited(e -> updateMouse(null));
         getClose().setOnAction(e -> closeIfClean());
         getEditor().dirtyProperty().addListener((ov, o, n) -> updateDirtyText());
         getImageView().scaleXProperty().addListener((ov, o, n) -> ToolView.setZoom(n.doubleValue()));
@@ -72,8 +73,8 @@ public class ImageWindow extends BasicWindow {
         putConfig(ImageConfig.Y, String.valueOf(getTranslateY()));
         putConfig(ImageConfig.WIDTH, String.valueOf(getWidth()));
         putConfig(ImageConfig.HEIGHT, String.valueOf(getHeight()));
-        putConfig(ImageConfig.H_SCROLL, String.valueOf(getContent().getHBar().getTranslateX()));
-        putConfig(ImageConfig.V_SCROLL, String.valueOf(getContent().getVBar().getTranslateY()));
+        putConfig(ImageConfig.H_SCROLL, String.valueOf(getContent().getHvalue()));
+        putConfig(ImageConfig.V_SCROLL, String.valueOf(getContent().getVvalue()));
     }
 
     public String getConfig(ImageConfig config) {
@@ -107,15 +108,9 @@ public class ImageWindow extends BasicWindow {
     }
 
     private void mouseClick(MouseEvent e) {
-        if (MouseButton.PRIMARY.equals(e.getButton())
-                && e.getClickCount() == 2
-                && isDraggableHere(e)) {
-
+        if (MouseButton.PRIMARY.equals(e.getButton()) && e.getClickCount() == 2) {
             adjustSize();
-
-        } else if (MouseButton.MIDDLE.equals(e.getButton())
-                && isDraggableHere(e)) {
-
+        } else if (MouseButton.MIDDLE.equals(e.getButton())) {
             closeIfClean();
         }
     }
@@ -132,22 +127,16 @@ public class ImageWindow extends BasicWindow {
         double additionalWidth = 0;
         double additionalHeight = 0;
         if (prefWidth > maxWidth) {
-            additionalHeight = BasicScrollPane.SCROLL_BAR_HEIGHT;
+            additionalHeight = ScrollBarSkin.DEFAULT_WIDTH;
         }
         if (prefHeight > maxHeight) {
-            additionalWidth = BasicScrollPane.SCROLL_BAR_WIDTH;
+            additionalWidth = ScrollBarSkin.DEFAULT_WIDTH;
         }
 
         setPrefWidth(Math.min(prefWidth + additionalWidth, maxWidth));
         setPrefHeight(Math.min(prefHeight + additionalHeight, maxHeight));
 
         Platform.runLater(() -> resetPosition(getPrefWidth(), getPrefHeight()));
-    }
-
-    private void mouseMoved(MouseEvent e) {
-        if (!isContentHere(e)) {
-            InfoView.setMousePosition(null);
-        }
     }
 
     private void popupAction() {
@@ -164,10 +153,7 @@ public class ImageWindow extends BasicWindow {
         BasicScrollPane root = new BasicScrollPane(imageEditor);
         stage.setScene(new Scene(root));
 
-        root.setOnRawScroll(e -> onScroll(e));
         root.setOnMouseClicked(e -> mouseClick(e));
-        root.setOnMouseMoved(e -> mouseMoved(e));
-        root.setOnMouseDragged(e -> mouseMoved(e));
         stage.getScene().setOnKeyPressed(e -> ActionManager.fire(e));
 
         stage.setAlwaysOnTop(true);
@@ -179,10 +165,14 @@ public class ImageWindow extends BasicWindow {
     }
 
     private void updateMouse(Point p) {
-        double posX = p.getX();
-        double posY = p.getY();
-        ToolView.setPreviewPosition(posX, posY);
-        InfoView.setMousePosition(new Point((int) posX, (int) posY));
+        if (p != null) {
+            double posX = p.getX();
+            double posY = p.getY();
+            ToolView.setPreviewPosition(posX, posY);
+            InfoView.setMousePosition(new Point((int) posX, (int) posY));
+        } else {
+            InfoView.setMousePosition(null);
+        }
     }
 
     public boolean closeIfClean() {

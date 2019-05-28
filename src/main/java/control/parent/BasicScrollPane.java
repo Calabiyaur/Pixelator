@@ -1,23 +1,21 @@
 package main.java.control.parent;
 
-import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.StackPane;
 
-public class BasicScrollPane extends BorderPane {
+import main.java.start.ExceptionHandler;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
-    public static double SCROLL_BAR_WIDTH = 9;
-    public static double SCROLL_BAR_HEIGHT = 8;
+public class BasicScrollPane extends ScrollPane {
 
-    private final BasicScrollBar hBar = new BasicScrollBar(true);
-    private final BasicScrollBar vBar = new BasicScrollBar(false);
-    private Region content;
-    private boolean updating = false;
+    private ScrollBar hBar;
+    private ScrollBar vBar;
 
+    private boolean scrollByMouse = false;
     private EventHandler<ScrollEvent> onRawScroll;
 
     public BasicScrollPane(Region content) {
@@ -26,225 +24,42 @@ public class BasicScrollPane extends BorderPane {
     }
 
     public BasicScrollPane() {
-        setRight(vBar);
-        setBottom(hBar);
-        hideBars();
+        skinProperty().addListener((o, v, n) -> {
+            if (n != null) {
+                try {
+                    // Disable scrolling from scroll pane content
+                    Object viewRect = FieldUtils.readField(getSkin(), "viewRect", true);
+                    ((StackPane) viewRect).addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
 
-        setStyle("-fx-background-color: #FFFFFF");
+                    // Disable scrolling from scroll bars
+                    Object hsb = FieldUtils.readField(getSkin(), "hsb", true);
+                    hBar = ((ScrollBar) hsb);
+                    hBar.addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
 
-        hBar.translateXProperty().addListener((ov, o, n) -> {
-            if (n.doubleValue() < getTranslateX()) {
-                hBar.setTranslateX(getTranslateX());
-            } else if (n.doubleValue() + hBar.getWidth() > getWidthOfCenter()) {
-                hBar.setTranslateX(Math.max(getWidthOfCenter() - hBar.getWidth(), 0));
-            }
-            updateContentPosition();
-        });
-        vBar.translateYProperty().addListener((ov, o, n) -> {
-            if (n.doubleValue() < getTranslateY()) {
-                vBar.setTranslateY(getTranslateY());
-            } else if (n.doubleValue() + vBar.getHeight() > getHeightOfCenter()) {
-                vBar.setTranslateY(Math.max(getHeightOfCenter() - vBar.getHeight(), 0));
-            }
-            updateContentPosition();
-        });
+                    Object vsb = FieldUtils.readField(getSkin(), "vsb", true);
+                    vBar = ((ScrollBar) vsb);
+                    vBar.addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
 
-        widthProperty().addListener((ov, o, n) -> update());
-        heightProperty().addListener((ov, o, n) -> update());
-
-        setOnScroll(e -> {
-            if (e.isControlDown()) {
-                if (e.isShiftDown()) {
-                    scrollHorizontally(e.getDeltaX());
-                } else {
-                    scrollVertically(e.getDeltaY());
-                }
-            } else {
-                if (onRawScroll != null) {
-                    onRawScroll.handle(e);
+                } catch (IllegalAccessException e) {
+                    ExceptionHandler.handle(e);
                 }
             }
         });
     }
 
-    /**
-     * Set the scroll pane's content.
-     */
-    public void setContent(Region region) {
-        content = region;
-        content.widthProperty().addListener((ov, o, n) -> update());
-        content.heightProperty().addListener((ov, o, n) -> update());
-
-        Pane wrapper = new Pane(content);
-
-        Rectangle clip = new Rectangle();
-        clip.widthProperty().bind(widthProperty().subtract(vBar.widthProperty()));
-        clip.heightProperty().bind(heightProperty().subtract(hBar.heightProperty()));
-        wrapper.setClip(clip);
-
-        setCenter(wrapper);
-    }
-
-    private void update() {
-        if (updating) {
-            return;
-        }
-        updating = true;
-        Platform.runLater(() -> {
-            updateBars();
-            updateContentPosition();
-            updating = false;
-        });
-    }
-
-    private void updateBars() {
-        hideBars();
-
-        // See if scrolling horizontally is necessary
-        double newWidth = getWidthOfCenter() * getWidthOfCenter() / content.getWidth();
-        if (newWidth >= getWidthOfCenter()) {
-            // h-scroll: NO
-            newWidth = getWidthOfCenter();
-        } else {
-            // h-scroll: YES
-            hBar.setMaxHeight(-1);
-        }
-
-        // See if scrolling vertically is necessary
-        double newHeight = getHeightOfCenter() * getHeightOfCenter() / content.getHeight();
-        if (newHeight >= getHeightOfCenter()) {
-            // v-scroll: NO
-            newHeight = getHeightOfCenter();
-        } else {
-            // v-scroll: YES
-            vBar.setMaxWidth(-1);
-
-            // See if scrolling horizontally became necessary because of the vertical scroll
-            newWidth = getWidthOfCenter() * getWidthOfCenter() / content.getWidth();
-            if (newWidth >= getWidthOfCenter()) {
-                // h-scroll: NO
-                hBar.setMaxHeight(0);
-                newWidth = getWidthOfCenter();
-            } else {
-                // h-scroll: YES
-                hBar.setMaxHeight(-1);
+    private void filterScrolling(ScrollEvent e) {
+        if (!e.isControlDown()) {
+            if (onRawScroll != null) {
+                onRawScroll.handle(e);
+            }
+            if (!scrollByMouse) {
+                e.consume();
             }
         }
-
-        hBar.setMaxWidth(newWidth);
-        vBar.setMaxHeight(newHeight);
-
-        // Make sure that the bars don't go outside of the window
-        if (hBar.getTranslateX() + newWidth > getWidthOfCenter()) {
-            hBar.setTranslateX(getWidthOfCenter() - newWidth);
-        }
-        if (vBar.getTranslateY() + newHeight > getHeightOfCenter()) {
-            vBar.setTranslateY(getHeightOfCenter() - newHeight);
-        }
     }
 
-    private void updateContentPosition() {
-        if (hBar.getMaxHeight() != 0) {
-            double dWidth = getWidthOfCenter() - hBar.getWidth();
-            double hBarX = hBar.getLayoutX() + hBar.getTranslateX();
-            double xPercent = hBarX / (dWidth == 0 ? 1 : dWidth); // 0 = left, 1 = right
-            content.setTranslateX(Math.round((content.getWidth() - getWidthOfCenter()) * (-xPercent)));
-        } else {
-            content.setTranslateX(0);
-        }
-
-        if (vBar.getMaxWidth() != 0) {
-            double dHeight = getHeightOfCenter() - vBar.getHeight();
-            double vBarY = vBar.getLayoutY() + vBar.getTranslateY();
-            double yPercent = vBarY / (dHeight == 0 ? 1 : dHeight); // 0 = up, 1 = down
-            content.setTranslateY(Math.round((content.getHeight() - getHeightOfCenter()) * (-yPercent)));
-        } else {
-            content.setTranslateY(0);
-        }
-    }
-
-    private void hideBars() {
-        hBar.setMaxHeight(0);
-        vBar.setMaxWidth(0);
-    }
-
-    private void scrollHorizontally(double delta) {
-        content.setTranslateX(content.getTranslateX() + delta);
-        updateBarPosition();
-    }
-
-    private void scrollVertically(double delta) {
-        content.setTranslateY(content.getTranslateY() + delta);
-        updateBarPosition();
-    }
-
-    private void updateBarPosition() {
-
-    }
-
-    public Region getContent() {
-        return content;
-    }
-
-    public BasicScrollBar getHBar() {
-        return hBar;
-    }
-
-    public BasicScrollBar getVBar() {
-        return vBar;
-    }
-
-    public double getContentX() {
-        return content.getLayoutX();
-    }
-
-    public double getContentY() {
-        return content.getLayoutY();
-    }
-
-    public double getContentX2() {
-        return getContentX() + content.getWidth();
-    }
-
-    public double getContentY2() {
-        return getContentY() + content.getHeight();
-    }
-
-    private double getWidthOfCenter() {
-        if (isVerticalScroll()) {
-            return getWidth() - vBar.getWidth();
-        } else {
-            return getWidth();
-        }
-    }
-
-    private double getHeightOfCenter() {
-        if (isHorizontalScroll()) {
-            return getHeight() - hBar.getHeight();
-        } else {
-            return getHeight();
-        }
-    }
-
-    private boolean isHorizontalScroll() {
-        return hBar.getMaxHeight() != 0;
-    }
-
-    private boolean isVerticalScroll() {
-        return vBar.getMaxWidth() != 0;
-    }
-
-    public void translateContent(double h, double v) {
-        scrollHorizontally(h);
-        scrollVertically(v);
-    }
-
-    public void setScrollByMouse(boolean scrollByMouse) {
-        if (scrollByMouse) {
-            setOnRawScroll(e -> scrollVertically(e.getDeltaY()));
-        } else {
-            setOnRawScroll(onRawScroll);
-        }
+    public void setScrollByMouse(boolean value) {
+        this.scrollByMouse = value;
     }
 
     public void setOnRawScroll(EventHandler<ScrollEvent> value) {

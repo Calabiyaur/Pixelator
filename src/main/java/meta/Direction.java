@@ -1,5 +1,7 @@
 package main.java.meta;
 
+import javafx.scene.Cursor;
+
 public enum Direction {
 
     NONE(null),
@@ -44,6 +46,32 @@ public enum Direction {
             return SOUTH;
         }
         return null;
+    }
+
+    public static Direction getDirection(Cursor cursor) {
+        if (cursor == null) {
+            return NONE;
+        }
+        switch(cursor.toString()) {
+            case "NW_RESIZE":
+                return NORTH_WEST;
+            case "N_RESIZE":
+                return NORTH;
+            case "NE_RESIZE":
+                return NORTH_EAST;
+            case "E_RESIZE":
+                return EAST;
+            case "SE_RESIZE":
+                return SOUTH_EAST;
+            case "S_RESIZE":
+                return SOUTH;
+            case "SW_RESIZE":
+                return SOUTH_WEST;
+            case "W_RESIZE":
+                return WEST;
+            default:
+                return NONE;
+        }
     }
 
     public boolean isSimple() {

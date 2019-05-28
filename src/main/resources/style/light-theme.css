@@ -176,7 +176,7 @@
 .split-pane {
     -fx-background-color: -px_empty_area;
     -fx-background-insets: 0, 1;
-    -fx-padding: 1;
+    -fx-padding: 0;
 }
 
 .split-pane > .split-pane-divider {
@@ -207,4 +207,10 @@
     -fx-padding: 1 5 1 5;
     -fx-background-color: -px_empty_area;
     -fx-background-insets: 1 0 -1 0, 0;
+}
+
+.scroll-pane {
+    -fx-background-color: -px_default_background;
+    -fx-background-insets: 0;
+    -fx-padding: 0.0;
 }

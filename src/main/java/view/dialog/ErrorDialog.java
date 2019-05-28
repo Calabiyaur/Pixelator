@@ -1,15 +1,9 @@
 package main.java.view.dialog;
 
-import javafx.application.Platform;
-import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
-
-import com.sun.javafx.scene.control.skin.TextAreaSkin;
-import main.java.control.parent.BasicScrollPane;
 
 public class ErrorDialog extends BasicDialog {
 
@@ -33,18 +27,8 @@ public class ErrorDialog extends BasicDialog {
         message.textProperty().bindBidirectional(textField.textProperty());
         message.setGraphic(textStack);
         message.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        Platform.runLater(() -> {
-            ScrollPane evil = ((ScrollPane) ((TextAreaSkin) textField.getSkin()).getChildren().get(0));
-            evil.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            evil.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            for (Node node : evil.getChildrenUnmodifiable()) {
-                node.setDisable(true);
-            }
-        });
 
-        BasicScrollPane scrollPane = new BasicScrollPane(message);
-        scrollPane.setScrollByMouse(true);
-        addContent(scrollPane, 0, 1);
+        addContent(message, 0, 1);
 
         setPrefSize(750, 500);
         setOnOk(button -> close());
@@ -58,7 +42,8 @@ public class ErrorDialog extends BasicDialog {
         this.message.setText(message);
     }
 
-    @Override public void focus() {
+    @Override
+    public void focus() {
 
     }
 

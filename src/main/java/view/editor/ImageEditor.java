@@ -187,10 +187,12 @@ public class ImageEditor extends Editor {
     }
 
     private void onMousePressed(MouseEvent e) {
-        Parent grandParent = this.getParent().getParent().getParent(); //TODO: duh.
-        if (grandParent != null) {
-            ImageWindow imageWindow = (ImageWindow) grandParent;
-            ((ImageWindowContainer) imageWindow.getParent()).setCurrentWindow(imageWindow);
+        for (Parent parent = getParent(); parent != null; parent = parent.getParent()) {
+            if (parent instanceof ImageWindow) {
+                ImageWindow imageWindow = (ImageWindow) parent;
+                ((ImageWindowContainer) imageWindow.getParent()).setCurrentWindow(imageWindow);
+                break;
+            }
         }
         currentTool.press(e);
     }

@@ -38,7 +38,7 @@ public class ChangePaletteDialog extends PreviewDialog {
         }
         BasicScrollPane scrollPane = new BasicScrollPane(buttons);
         scrollPane.setScrollByMouse(true);
-        scrollPane.setMinWidth(80 + BasicScrollPane.SCROLL_BAR_WIDTH + 4);
+        scrollPane.setMinWidth(80 + 4);
 
         Preview original = new Preview(image);
         GridPane.setMargin(original, new Insets(0, 10, 0, 0));

@@ -6,18 +6,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 import main.java.meta.Direction;
 import main.java.util.NumberUtil;
 
 public abstract class DraggablePane extends GridPane {
 
+    public static final int RESIZE_MARGIN = 6;
+
+    private GridPane content;
+
     private double previousX = 0;
     private double previousY = 0;
     private boolean dragging;
     private Direction resizing;
+    private boolean exiting;
 
     private DoubleProperty minX = new SimpleDoubleProperty(Double.MIN_VALUE); //FIXME: Min / Max values work only half
     private DoubleProperty minY = new SimpleDoubleProperty(Double.MIN_VALUE);
@@ -34,36 +42,55 @@ public abstract class DraggablePane extends GridPane {
     public DraggablePane() {
         getStyleClass().addAll("draggable-pane");
         setPickOnBounds(true);
+
+        addBorderRegion(Cursor.NW_RESIZE, 0, 0);
+        addBorderRegion(Cursor.N_RESIZE, 1, 0);
+        addBorderRegion(Cursor.NE_RESIZE, 2, 0);
+        addBorderRegion(Cursor.E_RESIZE, 2, 1);
+        addBorderRegion(Cursor.SE_RESIZE, 2, 2);
+        addBorderRegion(Cursor.S_RESIZE, 1, 2);
+        addBorderRegion(Cursor.SW_RESIZE, 0, 2);
+        addBorderRegion(Cursor.W_RESIZE, 0, 1);
+
+        content = new GridPane();
+        super.add(content, 1, 1);
+        GridPane.setVgrow(content, Priority.ALWAYS);
+        GridPane.setHgrow(content, Priority.ALWAYS);
+
         setOnMousePressed(event -> mousePressed(event));
         setOnMouseDragged(event -> mouseDragged(event));
         setOnMouseMoved(event -> mouseOver(event));
         setOnMouseReleased(event -> mouseReleased(event));
     }
 
-    public void resetCursor() {
-        setCursor(Cursor.DEFAULT);
+    private void addBorderRegion(Cursor cursor, int x, int y) {
+        Region region = new Region();
+        region.setMinSize(RESIZE_MARGIN, RESIZE_MARGIN);
+        region.setOnMouseEntered(event -> {
+            setCursor(cursor);
+            exiting = false;
+        });
+        region.setOnMouseExited(event -> {
+            if (resizing == null) {
+                setCursor(Cursor.DEFAULT);
+            } else {
+                exiting = true;
+            }
+        });
+        super.add(region, x, y);
     }
 
     protected void mousePressed(MouseEvent event) {
         setFocused(false);
         setFocused(true);
 
-        dragging = isDraggableHere(event);
-        if (!dragging) {
-            resizing = isResizableHere(event);
-            if (resizing == null) {
-                return;
-            }
+        resizing = Direction.getDirection(getCursor());
+        if (resizing == Direction.NONE) {
+            dragging = true;
         }
 
         previousX = event.getX();
         previousY = event.getY();
-
-        if (dragging) {
-
-        } else {
-
-        }
     }
 
     protected void mouseDragged(MouseEvent event) {
@@ -117,42 +144,36 @@ public abstract class DraggablePane extends GridPane {
     }
 
     protected void mouseOver(MouseEvent event) {
-        Direction dir = isResizableHere(event);
-        if (dir == null) {
-            resetCursor();
-        } else {
-            switch(dir) {
-                case EAST:
-                case WEST:
-                    setCursor(Cursor.E_RESIZE);
-                    break;
-                case NORTH_EAST:
-                case SOUTH_WEST:
-                    setCursor(Cursor.NE_RESIZE);
-                    break;
-                case NORTH:
-                case SOUTH:
-                    setCursor(Cursor.S_RESIZE);
-                    break;
-                case NORTH_WEST:
-                case SOUTH_EAST:
-                    setCursor(Cursor.SE_RESIZE);
-                    break;
-                default:
-                    resetCursor();
-                    break;
-            }
-        }
-
         onMouseMoved.forEach(c -> c.handle(event));
     }
 
     protected void mouseReleased(MouseEvent event) {
         dragging = false;
         resizing = null;
-        if (isResizableHere(event) == null) {
-            resetCursor();
+        if (exiting) {
+            exiting = false;
+            setCursor(Cursor.DEFAULT);
         }
+    }
+
+    @Override
+    public void add(Node child, int columnIndex, int rowIndex) {
+        content.add(child, columnIndex, rowIndex);
+    }
+
+    @Override
+    public void add(Node child, int columnIndex, int rowIndex, int colspan, int rowspan) {
+        content.add(child, columnIndex, rowIndex, colspan, rowspan);
+    }
+
+    @Override
+    public void addRow(int rowIndex, Node... children) {
+        content.addRow(rowIndex, children);
+    }
+
+    @Override
+    public void addColumn(int columnIndex, Node... children) {
+        content.addColumn(columnIndex, children);
     }
 
     public void addOnMouseMoved(EventHandler<? super MouseEvent> value) {
@@ -210,10 +231,6 @@ public abstract class DraggablePane extends GridPane {
     public void setMaxY(double maxY) {
         this.maxY.set(maxY);
     }
-
-    public abstract boolean isDraggableHere(MouseEvent event);
-
-    public abstract Direction isResizableHere(MouseEvent event);
 
     public boolean isDragHorizontal() {
         return dragHorizontal;
