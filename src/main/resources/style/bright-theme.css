@@ -1,11 +1,12 @@
 .root {
-    -px_default_background: #FFFFFF;
-    -px_window: #FFFFFF;
-    -px_empty_area: #F4F4F4;
+    -px_default: #FFFFFF;
     -px_hover: #CCCCCC;
     -px_selected: #AAAAAA;
-    -px_hover_light: #AAAAAA;
-    -px_selected_light: #BBBBBB;
+    -px_window: #FFFFFF;
+    -px_empty_area: #F4F4F4;
+    -px_bright_default: #AAAAAA;
+    -px_bright_hover: #AAAAAA;
+    -px_bright_selected: #BBBBBB;
 }
 
 .draggable-pane {
@@ -18,7 +19,7 @@
 }
 
 .text {
-    -fx-background-color: -px_default_background;
+    -fx-background-color: -px_default;
     -fx-padding: 0.33em 0.33em 0.33em 0.66em;
     -fx-text-fill: -fx-text-base-color;
     -fx-alignment: CENTER;
@@ -51,7 +52,7 @@
 }
 
 .default-button {
-    -fx-background-color: -px_default_background;
+    -fx-background-color: -px_default;
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
     -fx-background-radius:  0, 0, 0, 0;
     -fx-alignment: CENTER;
@@ -73,24 +74,6 @@
 .default-button:selected {
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
     -fx-background-radius:  0, 0, 0, 0;
-}
-
-.scroll-bar-horizontal {
-    -fx-background-color: -px_hover_light;
-    -fx-background-insets: 0 0 -1 0;
-}
-
-.scroll-bar-horizontal:pressed {
-    -fx-background-color: -px_selected_light;
-    -fx-background-insets: 0 0 -1 0;
-}
-
-.scroll-bar-vertical {
-    -fx-background-color: -px_hover_light;
-}
-
-.scroll-bar-vertical:pressed {
-    -fx-background-color: -px_selected_light;
 }
 
 .toggle-button {
@@ -209,8 +192,134 @@
     -fx-background-insets: 1 0 -1 0, 0;
 }
 
+.scroll-bar:horizontal {
+    -fx-background-color: -px_bright_default;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:horizontal:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:horizontal:armed {
+    -fx-background-color: -px_bright_selected;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: -px_bright_default;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:vertical:focused {
+    -fx-background-color: -px_bright_selected;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:horizontal > .thumb {
+    -fx-background-color: -px_bright_default;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar:vertical > .thumb {
+    -fx-background-color: -px_bright_default;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar:focused > .thumb {
+    -fx-color: -px_bright_selected;
+}
+
+.scroll-bar > .thumb:hover {
+    -fx-color: -px_bright_default;
+}
+
+.scroll-bar:horizontal > .track {
+    -fx-background-color: -px_default;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+.scroll-bar:horizontal > .track-background {
+    -fx-background-color: -px_default;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:vertical > .track {
+    -fx-background-color: -px_default;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar:vertical > .track-background {
+    -fx-background-color: -px_default;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar > .increment-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-bar > .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-insets:  0;
+    -fx-padding: 0;
+}
+
+.scroll-bar:horizontal > .increment-button > .increment-arrow {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0 0 0 0;
+    -fx-padding: 0 0 0 0;
+    -fx-shape: "";
+}
+
+.scroll-bar:vertical > .increment-button > .increment-arrow {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0 0 0 0;
+    -fx-padding: 0 0 0 0;
+    -fx-shape: "";
+}
+
+.scroll-bar:horizontal > .decrement-button > .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0 0 0 0;
+    -fx-padding: 0 0 0 0;
+    -fx-shape: "";
+}
+
+.scroll-bar:vertical > .decrement-button > .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0 0 0 0;
+    -fx-padding: 0 0 0 0;
+    -fx-shape: "";
+}
+
 .scroll-pane {
-    -fx-background-color: -px_default_background;
+    -fx-background-color: -px_default;
     -fx-background-insets: 0;
     -fx-padding: 0.0;
+}
+
+.scroll-pane:focused {
+    -fx-background-color: -px_default;
+    -fx-background-insets: 0;
+}
+
+.scroll-pane > * > .scroll-bar:horizontal {
+    -fx-background-insets: 0;
+    -fx-padding: 0.0 0.0 0.0 0.0;
+}
+
+.scroll-pane > * > .scroll-bar:vertical {
+    -fx-background-insets: 0;
+    -fx-padding: 0.0 0.0 0.0 0.0;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: -px_default;
+    -fx-background-insets: 0;
 }

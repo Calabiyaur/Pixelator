@@ -27,24 +27,29 @@ public class BasicScrollPane extends ScrollPane {
         skinProperty().addListener((o, v, n) -> {
             if (n != null) {
                 try {
-                    // Disable scrolling from scroll pane content
-                    Object viewRect = FieldUtils.readField(getSkin(), "viewRect", true);
-                    ((StackPane) viewRect).addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
-
-                    // Disable scrolling from scroll bars
-                    Object hsb = FieldUtils.readField(getSkin(), "hsb", true);
-                    hBar = ((ScrollBar) hsb);
-                    hBar.addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
-
-                    Object vsb = FieldUtils.readField(getSkin(), "vsb", true);
-                    vBar = ((ScrollBar) vsb);
-                    vBar.addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
-
+                    initialize();
                 } catch (IllegalAccessException e) {
                     ExceptionHandler.handle(e);
                 }
             }
         });
+    }
+
+    private void initialize() throws IllegalAccessException {
+        // Disable scrolling from scroll pane content
+        Object viewRect = FieldUtils.readField(getSkin(), "viewRect", true);
+        ((StackPane) viewRect).addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
+
+        // Disable scrolling from scroll bars
+        Object hsb = FieldUtils.readField(getSkin(), "hsb", true);
+        hBar = ((ScrollBar) hsb);
+        hBar.addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
+
+        Object vsb = FieldUtils.readField(getSkin(), "vsb", true);
+        vBar = ((ScrollBar) vsb);
+        vBar.addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
+
+
     }
 
     private void filterScrolling(ScrollEvent e) {

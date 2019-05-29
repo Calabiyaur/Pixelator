@@ -97,7 +97,7 @@ public class MainScene extends Scene {
 
         root.setStyle("-fx-background-color: #BBBBBB");
 
-        styleSheets.add(getClass().getResource("/style/light-theme.css").toExternalForm());
+        styleSheets.add(getClass().getResource("/style/bright-theme.css").toExternalForm());
         getStylesheets().addAll(getStyle());
 
         imageContainer = new ImageWindowContainer();
