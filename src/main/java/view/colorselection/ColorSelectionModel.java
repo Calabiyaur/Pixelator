@@ -87,7 +87,7 @@ final class ColorSelectionModel {
 
     void updatePreview(Color color) {
         preview.setColor(color);
-        Config.putString(Config.COLOR, color.toString());
+        Config.COLOR.putString(color.toString());
     }
 
     private void bind() {

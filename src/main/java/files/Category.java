@@ -50,7 +50,7 @@ public enum Category {
     }
 
     public File getDirectory() {
-        File file = new File(Config.getString(config, ""));
+        File file = new File(config.getString());
         if (file.isDirectory()) {
             return file;
         } else {
@@ -59,7 +59,7 @@ public enum Category {
     }
 
     public void setDirectory(String directory) {
-        Config.putString(config, directory);
+        config.putString(directory);
     }
 
     public List<FileChooser.ExtensionFilter> getExtensionFiltersToSave() {

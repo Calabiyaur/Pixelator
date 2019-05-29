@@ -24,9 +24,9 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 
 import main.java.res.Config;
-import main.java.util.ColorUtil;
 import main.java.res.Images;
 import main.java.util.BackgroundUtil;
+import main.java.util.ColorUtil;
 import main.java.util.NumberUtil;
 
 import static main.java.view.colorselection.ColorSelectionModel.INDICATOR_RADIUS;
@@ -60,7 +60,8 @@ class ColorPicker extends StackPane {
         StackPane.setAlignment(indicator, Pos.TOP_LEFT);
 
         if (colorProperty.get() == null) {
-            colorProperty.set(Color.valueOf(Config.getString(Config.COLOR, ColorUtil.getRandomPleasant().toString())));
+            Config.COLOR.setDef(ColorUtil.getRandomPleasant().toString());
+            colorProperty.set(Color.valueOf(Config.COLOR.getString()));
         }
         updateValues();
     }

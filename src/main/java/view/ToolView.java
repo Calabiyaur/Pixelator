@@ -134,10 +134,10 @@ public class ToolView extends VBox {
     }
 
     private static void initConfig() {
-        setReplace(Config.getBoolean(Config.REPLACE, false));
-        setFillShape(Config.getBoolean(Config.FILL_SHAPE, false));
-        replaceColor.addListener((ov, o, n) -> Config.putBoolean(Config.REPLACE, n));
-        fillShape.addListener((ov, o, n) -> Config.putBoolean(Config.FILL_SHAPE, n));
+        setReplace(Config.REPLACE.getBoolean());
+        setFillShape(Config.FILL_SHAPE.getBoolean());
+        replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(n));
+        fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(n));
     }
 
     public static void setPreview(Image image, Image toolImage, Image selectionImage) {

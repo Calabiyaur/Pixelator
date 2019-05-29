@@ -91,8 +91,8 @@ public class MainScene extends Scene {
             root.setRightMargin(0.2442396313364056 * 1304);
         });
 
-        double width = Config.getDouble(Config.WIDTH, 600);
-        double height = Config.getDouble(Config.HEIGHT, 400);
+        double width = Config.WIDTH.getDouble();
+        double height = Config.HEIGHT.getDouble();
         root.setPrefSize(width, height);
 
         root.setStyle("-fx-background-color: #BBBBBB");
@@ -342,8 +342,8 @@ public class MainScene extends Scene {
             }
             getEditor().resizeCanvas(w, h, bias);
             dialog.close();
-            Config.putBoolean(Config.RESIZE_KEEP_RATIO, dialog.isKeepRatio());
-            Config.putString(Config.RESIZE_BIAS, dialog.getBias().name());
+            Config.RESIZE_KEEP_RATIO.putBoolean(dialog.isKeepRatio());
+            Config.RESIZE_BIAS.putString(dialog.getBias().name());
         });
         dialog.showAndFocus();
     }
@@ -358,7 +358,7 @@ public class MainScene extends Scene {
             }
             getEditor().stretchImage(w, h);
             dialog.close();
-            Config.putBoolean(Config.STRETCH_KEEP_RATIO, dialog.isKeepRatio());
+            Config.STRETCH_KEEP_RATIO.putBoolean(dialog.isKeepRatio());
         });
         dialog.showAndFocus();
     }
@@ -373,7 +373,8 @@ public class MainScene extends Scene {
     }
 
     private void extractPalette() {
-        ColorView.addPalette(PaletteMaster.extractPalette(imageContainer.getCurrentImage()));
+        ColorView.addPalette(PaletteMaster.extractPalette(imageContainer.getCurrentImage(),
+                Config.PALETTE_MAX_COLORS.getInt()));
     }
 
     private void changePalette() {

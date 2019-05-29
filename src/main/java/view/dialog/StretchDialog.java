@@ -1,8 +1,8 @@
 package main.java.view.dialog;
 
-import main.java.res.Config;
 import main.java.control.basic.BasicCheckBox;
 import main.java.control.basic.BasicTextField;
+import main.java.res.Config;
 
 public class StretchDialog extends BasicDialog {
 
@@ -25,7 +25,7 @@ public class StretchDialog extends BasicDialog {
         addContent(heightField, 1, 1);
         addContent(keepRatio, 0, 2);
 
-        keepRatio.setValue(Config.getBoolean(Config.STRETCH_KEEP_RATIO, true));
+        keepRatio.setValue(Config.STRETCH_KEEP_RATIO.getBoolean());
     }
 
     @Override public void focus() {

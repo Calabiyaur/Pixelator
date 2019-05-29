@@ -28,6 +28,7 @@ import main.java.meta.PixelArray;
 import main.java.meta.Point;
 import main.java.meta.PointArray;
 import main.java.meta.QuadConsumer;
+import main.java.res.Config;
 import main.java.res.Images;
 import main.java.util.BackgroundUtil;
 import main.java.util.ColorUtil;
@@ -624,7 +625,8 @@ public class ImageEditor extends Editor {
     public void updateColorCount() {
         InfoView.setColorCount(ImageUtil.countColors(getImage()));
         //TODO: Update default palette only if colors changed, default palette is visible
-        ColorView.getPaletteSelection().getDefaultEditor().updateImage(PaletteMaster.extractPalette(getImage()));
+        ColorView.getPaletteSelection().getDefaultEditor().updateImage(PaletteMaster.extractPalette(getImage(),
+                Config.PALETTE_MAX_COLORS.getInt()));
     }
 
     public ToolLayer getToolLayer() {

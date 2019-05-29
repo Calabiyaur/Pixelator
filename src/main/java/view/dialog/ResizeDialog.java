@@ -4,11 +4,11 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.GridPane;
 
-import main.java.res.Config;
-import main.java.meta.Direction;
-import main.java.control.basic.BiasButton;
 import main.java.control.basic.BasicCheckBox;
 import main.java.control.basic.BasicTextField;
+import main.java.control.basic.BiasButton;
+import main.java.meta.Direction;
+import main.java.res.Config;
 
 public class ResizeDialog extends BasicDialog {
 
@@ -36,8 +36,8 @@ public class ResizeDialog extends BasicDialog {
         GridPane.setValignment(keepRatio, VPos.TOP);
         GridPane.setHalignment(biasButton, HPos.CENTER);
 
-        biasButton.setValue(Direction.valueOf(Config.getString(Config.RESIZE_BIAS, Direction.NONE.name())));
-        keepRatio.setValue(Config.getBoolean(Config.RESIZE_KEEP_RATIO, false));
+        biasButton.setValue(Direction.valueOf(Config.RESIZE_BIAS.getString()));
+        keepRatio.setValue(Config.RESIZE_KEEP_RATIO.getBoolean());
     }
 
     @Override public void focus() {

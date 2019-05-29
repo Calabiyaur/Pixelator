@@ -29,8 +29,8 @@ public class PaletteMaster {
 
     public static final int HUE_VARIETY = 8;
 
-    public static WritableImage extractPalette(Image image) {
-        Mapping mapping = hilbertSort3d(extractColors(image));
+    public static WritableImage extractPalette(Image image, int maxColors) {
+        Mapping mapping = hilbertSort3d(extractColors(image, maxColors));
 
         int width = Math.max(1, mapping.width());
         int height = Math.max(1, mapping.height());
@@ -45,7 +45,7 @@ public class PaletteMaster {
         return palette;
     }
 
-    public static Set<Color> extractColors(Image image) {
+    public static Set<Color> extractColors(Image image, Integer maxColors) {
         Set<Color> colors = new HashSet<>();
         PixelReader reader = image.getPixelReader();
         for (int i = 0; i < image.getWidth(); i++) {
@@ -54,11 +54,15 @@ public class PaletteMaster {
             }
         }
         colors.remove(Color.TRANSPARENT);
-        return colors;
+        if (maxColors == null || colors.size() <= maxColors) {
+            return colors;
+        } else {
+            return CollectionUtil.subset(colors, maxColors);
+        }
     }
 
     public static List<Color> extractAndSort(Image image) {
-        Set<Color> colors = extractColors(image);
+        Set<Color> colors = extractColors(image, null);
         return sort(colors);
     }
 

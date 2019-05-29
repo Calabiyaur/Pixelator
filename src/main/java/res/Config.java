@@ -2,46 +2,109 @@ package main.java.res;
 
 import java.util.prefs.Preferences;
 
+import main.java.meta.Direction;
+
 public enum Config {
 
-    COLOR,
-    FILL_SHAPE,
-    FULLSCREEN,
-    HEIGHT,
-    IMAGE_DIRECTORY,
-    PALETTE_DIRECTORY,
-    REPLACE,
-    RESIZE_BIAS,
-    RESIZE_KEEP_RATIO,
-    STRETCH_KEEP_RATIO,
-    WIDTH;
+    COLOR(ConfigType.STRING, null),
+    FILL_SHAPE(ConfigType.BOOLEAN, false),
+    FULLSCREEN(ConfigType.BOOLEAN, false),
+    HEIGHT(ConfigType.DOUBLE, 400d),
+    IMAGE_DIRECTORY(ConfigType.STRING, ""),
+    PALETTE_DIRECTORY(ConfigType.STRING, ""),
+    PALETTE_MAX_COLORS(ConfigType.INT, 128),
+    REPLACE(ConfigType.BOOLEAN, false),
+    RESIZE_BIAS(ConfigType.STRING, Direction.NONE.name()),
+    RESIZE_KEEP_RATIO(ConfigType.BOOLEAN, true),
+    STRETCH_KEEP_RATIO(ConfigType.BOOLEAN, true),
+    WIDTH(ConfigType.DOUBLE, 600d);
+
+    private ConfigType configType;
+    private Object def;
+
+    Config(ConfigType configType, Object def) {
+        this.configType = configType;
+        this.def = def;
+    }
+
+    public void setDef(Object def) {
+        this.def = def;
+    }
 
     public String toString() {
         return name();
     }
 
-    public static void putDouble(Config key, double value) {
-        Preferences.userRoot().putDouble(key.toString(), value);
+    public boolean getBoolean() {
+        return (boolean) get(ConfigType.BOOLEAN, def);
     }
 
-    public static double getDouble(Config key, double def) {
-        return Preferences.userRoot().getDouble(key.toString(), def);
+    public double getDouble() {
+        return (double) get(ConfigType.DOUBLE, def);
     }
 
-    public static boolean getBoolean(Config key, boolean def) {
-        return Preferences.userRoot().getBoolean(key.toString(), def);
+    public int getInt() {
+        return (int) get(ConfigType.INT, def);
     }
 
-    public static void putBoolean(Config key, boolean value) {
-        Preferences.userRoot().putBoolean(key.toString(), value);
+    public String getString() {
+        return (String) get(ConfigType.STRING, def);
     }
 
-    public static String getString(Config key, String def) {
-        return Preferences.userRoot().get(key.toString(), def);
+    private Object get(ConfigType configType, Object def) {
+        if (!configType.equals(this.configType)) {
+            throw new UnsupportedOperationException();
+        }
+        switch(configType) {
+            case BOOLEAN:
+                return Preferences.userRoot().getBoolean(name(), (boolean) def);
+            case DOUBLE:
+                return Preferences.userRoot().getDouble(name(), (double) def);
+            case INT:
+                return Preferences.userRoot().getInt(name(), (int) def);
+            case STRING:
+                return Preferences.userRoot().get(name(), (String) def);
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
-    public static void putString(Config key, String value) {
-        Preferences.userRoot().put(key.toString(), value);
+    public void putBoolean(boolean value) {
+        put(ConfigType.BOOLEAN, value);
+    }
+
+    public void putDouble(double value) {
+        put(ConfigType.DOUBLE, value);
+    }
+
+    public void putInt(int value) {
+        put(ConfigType.INT, value);
+    }
+
+    public void putString(String value) {
+        put(ConfigType.STRING, value);
+    }
+
+    private void put(ConfigType configType, Object value) {
+        if (!configType.equals(this.configType)) {
+            throw new UnsupportedOperationException();
+        }
+        switch(configType) {
+            case BOOLEAN:
+                Preferences.userRoot().putBoolean(name(), (boolean) value);
+                break;
+            case DOUBLE:
+                Preferences.userRoot().putDouble(name(), (double) value);
+                break;
+            case INT:
+                Preferences.userRoot().putInt(name(), (int) value);
+                break;
+            case STRING:
+                Preferences.userRoot().put(name(), (String) value);
+                break;
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
 }

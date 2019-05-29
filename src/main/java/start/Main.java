@@ -42,7 +42,7 @@ public class Main extends Application {
         Main.primaryStage = primaryStage;
         MainScene scene = new MainScene();
         primaryStage.getIcons().add(Images.ICON.getImage());
-        primaryStage.setMaximized(Config.getBoolean(Config.FULLSCREEN, false));
+        primaryStage.setMaximized(Config.FULLSCREEN.getBoolean());
         primaryStage.setMinWidth(755);
         primaryStage.setMinHeight(530);
 
@@ -89,10 +89,10 @@ public class Main extends Application {
             boolean fullscreen = stage.isMaximized();
 
             if (!fullscreen) {
-                Config.putDouble(Config.WIDTH, width);
-                Config.putDouble(Config.HEIGHT, height);
+                Config.WIDTH.putDouble(width);
+                Config.HEIGHT.putDouble(height);
             }
-            Config.putBoolean(Config.FULLSCREEN, fullscreen);
+            Config.FULLSCREEN.putBoolean(fullscreen);
         } catch (Exception e) {
             Logger.log(e.getMessage() + "\nError while trying to close application. Closing anyway.");
         }
