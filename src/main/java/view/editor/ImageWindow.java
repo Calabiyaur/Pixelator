@@ -9,7 +9,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import com.sun.javafx.scene.control.skin.ScrollBarSkin;
+import com.sun.javafx.scene.control.Properties;
 import main.java.control.basic.ImageButton;
 import main.java.control.image.ScalableImageView;
 import main.java.control.parent.BasicScrollPane;
@@ -127,10 +127,10 @@ public class ImageWindow extends BasicWindow {
         double additionalWidth = 0;
         double additionalHeight = 0;
         if (prefWidth > maxWidth) {
-            additionalHeight = ScrollBarSkin.DEFAULT_WIDTH;
+            additionalHeight = Properties.DEFAULT_EMBEDDED_SB_BREADTH;
         }
         if (prefHeight > maxHeight) {
-            additionalWidth = ScrollBarSkin.DEFAULT_WIDTH;
+            additionalWidth = Properties.DEFAULT_EMBEDDED_SB_BREADTH;
         }
 
         setPrefWidth(Math.min(prefWidth + additionalWidth, maxWidth));

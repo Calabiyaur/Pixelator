@@ -5,14 +5,12 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.NodeOrientation;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 
 import main.java.control.basic.ImageButton;
 import main.java.res.Images;
@@ -37,15 +35,11 @@ public class BasicWindow extends DraggablePane {
             buttonBox.setTranslateX(margin);
             buttonBox.setTranslateY(-margin);
         }
-        HBox contentBox = new HBox(content);
-        VBox wrapper = new VBox(contentBox);
-        wrapper.setAlignment(Pos.CENTER);
-        contentBox.setAlignment(Pos.CENTER);
-        add(wrapper, 0, 1, 2, 1);
+        add(content, 0, 1, 2, 1);
 
         GridPane.setHgrow(text, Priority.ALWAYS);
         GridPane.setHalignment(buttonBox, HPos.RIGHT);
-        GridPane.setVgrow(wrapper, Priority.ALWAYS);
+        GridPane.setVgrow(content, Priority.ALWAYS);
 
         initStyle();
     }
