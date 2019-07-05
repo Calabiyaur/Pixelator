@@ -8,6 +8,7 @@ import java.util.Properties;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.logging.Logger;
 import com.calabi.pixelator.util.FileUtil;
+import com.calabi.pixelator.util.ZipUtil;
 
 public final class PIXImageWriter extends PixelFileWriter {
 
@@ -17,14 +18,7 @@ public final class PIXImageWriter extends PixelFileWriter {
         String outputPath = FileUtil.removeType(zipFile.getPath());
 
         // Create temporal folder
-        File temp = new File(outputPath + "_tmp_write");
-        if (zipFile.exists()) {
-            //ZipUtil.unpack(zipFile, temp);
-        } else {
-            if (!temp.mkdir()) {
-                throw new IOException("Failed to create temporary PIX folder");
-            }
-        }
+        File temp = ZipUtil.unpack(zipFile, outputPath + "_tmp_write");
 
         // Create image file
         File imageDirectory = new File(temp.getPath() + File.separator + "image.png");
@@ -45,22 +39,21 @@ public final class PIXImageWriter extends PixelFileWriter {
         Logger.log("config", "store", pixelFile.getFile().getName() + ": " + config);
 
         // Zip and then delete the temporal folder
-        //ZipUtil.pack(temp, zipFile);
+        ZipUtil.pack(temp, zipFile.getPath());
         FileUtil.deleteRecursive(temp);
     }
 
     @Override
     public void writeConfig(PixelFile pixelFile) throws IOException {
         File zipFile = pixelFile.getFile();
-        File temp = new File(FileUtil.removeType(zipFile.getPath()) + "_tmp_config");
-        //ZipUtil.unpack(zipFile, temp);
+        File temp = ZipUtil.unpack(zipFile, FileUtil.removeType(zipFile.getPath()) + "_tmp_config");
         File config = findConfig(temp);
         FileOutputStream outputStream = new FileOutputStream(config);
         pixelFile.getProperties().store(outputStream, "");
         outputStream.close();
         Logger.log("config", "store",
                 pixelFile.getFile().getName() + ": " + pixelFile.getProperties());
-        //ZipUtil.pack(temp, zipFile);
+        ZipUtil.pack(temp, zipFile.getPath());
         FileUtil.deleteRecursive(temp);
     }
 

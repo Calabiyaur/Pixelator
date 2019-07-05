@@ -9,13 +9,13 @@ import javafx.scene.image.Image;
 import com.calabi.pixelator.files.PixelFileBuilder;
 import com.calabi.pixelator.logging.Logger;
 import com.calabi.pixelator.util.FileUtil;
+import com.calabi.pixelator.util.ZipUtil;
 
 public final class PIXImageReader extends PixelFileReader {
 
     @Override
     public PixelFileBuilder read(File file) throws IOException {
-        File unzippedFile = new File(FileUtil.removeType(file.getPath()) + "_tmp_read");
-        //ZipUtil.unpack(file, unzippedFile);
+        File unzippedFile = ZipUtil.unpack(file, FileUtil.removeType(file.getPath()) + "_tmp_read");
 
         Image image = super.findImage(unzippedFile);
         PixelFileBuilder builder = new PixelFileBuilder(file, image);

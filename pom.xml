@@ -52,8 +52,8 @@
         <outputDirectory>target/classes</outputDirectory>
         <finalName>${artifactId}-${version}</finalName>
         <testOutputDirectory>target/test-classes</testOutputDirectory>
-        <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>test</testSourceDirectory>
+        <sourceDirectory>src/main/com.calabi.pixelator</sourceDirectory>
+        <testSourceDirectory>src/test/com.calabi.pixelator</testSourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
