@@ -73,7 +73,7 @@ public class PixelatedImageView extends ImageView {
 
             @Override
             public BaseBounds doComputeGeomBounds(Node node, BaseBounds bounds, BaseTransform tx) {
-                return (BaseBounds) ReflectionUtil.invokeMethod(node, "doComputeGeomBounds", bounds, tx);
+                return ReflectionUtil.invokeMethod(node, "doComputeGeomBounds", bounds, tx);
             }
 
             @Override

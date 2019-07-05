@@ -12,10 +12,6 @@ public class ExceptionHandler {
     private ExceptionHandler() {
     }
 
-    public static ExceptionHandler get() {
-        return instance;
-    }
-
     public static void handle(Throwable e) {
         Logger.error(e);
         ErrorDialog dialog = new ErrorDialog();

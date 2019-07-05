@@ -15,7 +15,7 @@ public final class PIXImageReader extends PixelFileReader {
     @Override
     public PixelFileBuilder read(File file) throws IOException {
         File unzippedFile = new File(FileUtil.removeType(file.getPath()) + "_tmp_read");
-        ZipUtil.unpack(file, unzippedFile);
+        //ZipUtil.unpack(file, unzippedFile);
 
         Image image = super.findImage(unzippedFile);
         PixelFileBuilder builder = new PixelFileBuilder(file, image);

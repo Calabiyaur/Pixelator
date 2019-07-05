@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+import com.calabi.pixelator.util.StringUtil;
 import com.calabi.pixelator.view.editor.ImageEditor;
 import com.calabi.pixelator.view.editor.ImageWindow;
 
@@ -15,11 +16,11 @@ public class ToolManager {
     private ToolManager() {
     }
 
-    public static Tool getTool(main.pixelator.view.tool.Tools tool) {
+    public static Tool getTool(Tools tool) {
         Tool result;
         try {
             String classPath = Tool.class.getPackage().getName();
-            String className = main.pixelator.util.StringUtil.toCamelCap(tool.name());
+            String className = StringUtil.toCamelCap(tool.name());
             Class<?> clazz = Class.forName(classPath + "." + className);
             result = (Tool) clazz.getMethod("getMe").invoke(null);
         } catch (ClassNotFoundException

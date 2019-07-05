@@ -9,7 +9,7 @@ import com.calabi.pixelator.view.dialog.ColorDialog;
 
 public class BasicColorField extends BasicControl<Color> {
 
-    private main.pixelator.control.basic.ColorField colorField;
+    private ColorField colorField;
     private ImageButton colorButton;
 
     public BasicColorField(String title, String tail, Color value) {
@@ -30,7 +30,7 @@ public class BasicColorField extends BasicControl<Color> {
 
     @Override
     public Control createControl() {
-        colorField = new main.pixelator.control.basic.ColorField();
+        colorField = new ColorField();
         return colorField;
     }
 

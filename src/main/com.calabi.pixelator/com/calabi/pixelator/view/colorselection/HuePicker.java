@@ -19,7 +19,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 
-import main.pixelator.util.NumberUtil;
+import com.calabi.pixelator.util.NumberUtil;
 
 class HuePicker extends StackPane {
 

@@ -8,7 +8,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 
-import main.pixelator.view.editor.ImageWindowContainer;
+import com.calabi.pixelator.view.editor.ImageWindowContainer;
 
 class PaletteTabButtons extends VBox {
 

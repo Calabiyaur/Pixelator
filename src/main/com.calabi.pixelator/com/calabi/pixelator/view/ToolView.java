@@ -22,12 +22,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-import main.pixelator.control.image.PixelatedImageView;
-import main.pixelator.view.tool.Tools;
-
 import com.calabi.pixelator.control.basic.ToggleImageButton;
+import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.view.tool.Tools;
 
 public class ToolView extends VBox {
 

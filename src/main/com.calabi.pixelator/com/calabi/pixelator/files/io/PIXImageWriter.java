@@ -19,7 +19,7 @@ public final class PIXImageWriter extends PixelFileWriter {
         // Create temporal folder
         File temp = new File(outputPath + "_tmp_write");
         if (zipFile.exists()) {
-            ZipUtil.unpack(zipFile, temp);
+            //ZipUtil.unpack(zipFile, temp);
         } else {
             if (!temp.mkdir()) {
                 throw new IOException("Failed to create temporary PIX folder");
@@ -45,7 +45,7 @@ public final class PIXImageWriter extends PixelFileWriter {
         Logger.log("config", "store", pixelFile.getFile().getName() + ": " + config);
 
         // Zip and then delete the temporal folder
-        ZipUtil.pack(temp, zipFile);
+        //ZipUtil.pack(temp, zipFile);
         FileUtil.deleteRecursive(temp);
     }
 
@@ -53,14 +53,14 @@ public final class PIXImageWriter extends PixelFileWriter {
     public void writeConfig(PixelFile pixelFile) throws IOException {
         File zipFile = pixelFile.getFile();
         File temp = new File(FileUtil.removeType(zipFile.getPath()) + "_tmp_config");
-        ZipUtil.unpack(zipFile, temp);
+        //ZipUtil.unpack(zipFile, temp);
         File config = findConfig(temp);
         FileOutputStream outputStream = new FileOutputStream(config);
         pixelFile.getProperties().store(outputStream, "");
         outputStream.close();
         Logger.log("config", "store",
                 pixelFile.getFile().getName() + ": " + pixelFile.getProperties());
-        ZipUtil.pack(temp, zipFile);
+        //ZipUtil.pack(temp, zipFile);
         FileUtil.deleteRecursive(temp);
     }
 
