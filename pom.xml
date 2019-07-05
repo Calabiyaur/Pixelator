@@ -12,8 +12,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>12</source>
+                    <target>12</target>
                 </configuration>
             </plugin>
 
@@ -22,7 +22,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>main.java.start.Main</mainClass>
+                            <mainClass>main.pixelator.com.calabi.pixelator.start.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -38,6 +38,15 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.2</version>
+                <configuration>
+                    <mainClass>HelloFX</mainClass>
+                </configuration>
             </plugin>
         </plugins>
         <outputDirectory>target/classes</outputDirectory>
@@ -78,6 +87,11 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>RELEASE</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>12.0.1</version>
         </dependency>
     </dependencies>
 </project>
