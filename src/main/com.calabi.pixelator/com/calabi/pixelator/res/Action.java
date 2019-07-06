@@ -21,6 +21,7 @@ public enum Action {
     FLIP_HORIZONTALLY(),
     FLIP_VERTICALLY(),
     GRID(true, true, false, KeyCode.G),
+    INVERT(),
     LEFT(false, false, false, KeyCode.LEFT),
     MINUS(false, false, false, KeyCode.MINUS),
     MOVE_IMAGE(),

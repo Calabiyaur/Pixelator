@@ -583,6 +583,27 @@ public class ImageEditor extends Editor {
         removeSelectionAndRegister();
     }
 
+    public void invert() {
+        if (selectionActiveProperty().get()) {
+            PixelChange selectedPixels = selectionLayer.getPixels().clone();
+            currentTool.lockAndReset();
+
+            selectedPixels.forEach((x, y, prev, color) -> {
+                pixels.add(x, y, color, ColorUtil.invert(color));
+            });
+        } else {
+            currentTool.lockAndReset();
+
+            for (int i = 0; i < width.get(); i++) {
+                for (int j = 0; j < height.get(); j++) {
+                    Color color = reader.getColor(i, j);
+                    pixels.add(i, j, color, ColorUtil.invert(color));
+                }
+            }
+        }
+        writeAndRegister(pixels);
+    }
+
     public void copyImage() {
         Image image = ImageUtil.get(selectionLayer.getPixels());
         ClipboardContent content = new ClipboardContent();

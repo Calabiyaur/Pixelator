@@ -60,6 +60,7 @@ import static com.calabi.pixelator.res.Action.EXTRACT_PALETTE;
 import static com.calabi.pixelator.res.Action.FLIP_HORIZONTALLY;
 import static com.calabi.pixelator.res.Action.FLIP_VERTICALLY;
 import static com.calabi.pixelator.res.Action.GRID;
+import static com.calabi.pixelator.res.Action.INVERT;
 import static com.calabi.pixelator.res.Action.MOVE_IMAGE;
 import static com.calabi.pixelator.res.Action.NEW;
 import static com.calabi.pixelator.res.Action.NEW_PALETTE;
@@ -198,6 +199,7 @@ public class MainScene extends Scene {
         imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, "Rotate counter-clockwise",
                 e -> getEditor().rotateCounterClockwise(),
                 ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(INVERT, "Invert colors", e -> getEditor().invert(), ImageWindowContainer.imageSelectedProperty());
 
         BasicMenu paletteMenu = new BasicMenu("Palette");
         paletteMenu.addItem(NEW_PALETTE, "New...", e -> paletteSelection.createPalette());

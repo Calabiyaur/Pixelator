@@ -126,7 +126,7 @@ public abstract class Tool {
         }
     }
 
-    private void imitateRelease() {
+    public void imitateRelease() {
         actingTool.releasePrimary();
         setActingTool(None.getMe());
         dragging = false;

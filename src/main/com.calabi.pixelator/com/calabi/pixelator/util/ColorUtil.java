@@ -2,7 +2,7 @@ package com.calabi.pixelator.util;
 
 import javafx.scene.paint.Color;
 
-public class ColorUtil {
+public final class ColorUtil {
 
     /**
      * Adds a color to another color, which mixes their RGB values, and
@@ -79,6 +79,18 @@ public class ColorUtil {
         double bri = Math.random() * 0.875 + 0.125;
 
         return Color.hsb(hue, sat, bri);
+    }
+
+    /**
+     * Invert the given color.
+     */
+    public static Color invert(Color color) {
+        return Color.color(
+                1 - color.getRed(),
+                1 - color.getGreen(),
+                1 - color.getBlue(),
+                color.getOpacity()
+        );
     }
 
 }
