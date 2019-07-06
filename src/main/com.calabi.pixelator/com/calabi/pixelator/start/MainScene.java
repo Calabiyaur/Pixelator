@@ -153,7 +153,7 @@ public class MainScene extends Scene {
         fileMenu.addItem(SAVE_AS, "Save As...", e -> Files.get().create(imageContainer.getCurrentFile()),
                 ImageWindowContainer.imageSelectedProperty());
         fileMenu.addItem(CREATE_FROM_CLIPBOARD, "Create from clipboard", e -> createFromClipboard(),
-                Main.clipboardActiveProperty());
+                Pixelator.clipboardActiveProperty());
         fileMenu.addItem(CLOSE, "Close", e -> imageContainer.closeCurrent(),
                 ImageWindowContainer.imageSelectedProperty());
 

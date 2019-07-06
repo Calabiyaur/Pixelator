@@ -17,7 +17,7 @@ import com.calabi.pixelator.files.io.PIXImageReader;
 import com.calabi.pixelator.files.io.PIXImageWriter;
 import com.calabi.pixelator.files.io.PixelFileReader;
 import com.calabi.pixelator.files.io.PixelFileWriter;
-import com.calabi.pixelator.start.Main;
+import com.calabi.pixelator.start.Pixelator;
 import com.calabi.pixelator.util.FileUtil;
 
 public class Files {
@@ -68,7 +68,7 @@ public class Files {
         List<FileChooser.ExtensionFilter> filters = pixelFile.getCategory().getExtensionFiltersToSave();
         dialog.getExtensionFilters().addAll(filters);
         dialog.setSelectedExtensionFilter(pixelFile.getUsedFilter(filters));
-        File file = dialog.showSaveDialog(Main.getPrimaryStage());
+        File file = dialog.showSaveDialog(Pixelator.getPrimaryStage());
         if (file == null) {
             return false;
         }
@@ -116,7 +116,7 @@ public class Files {
         FileChooser dialog = new FileChooser();
         dialog.setInitialDirectory(fileDirectory);
         dialog.getExtensionFilters().addAll(category.getExtensionFiltersToOpen());
-        List<File> files = dialog.showOpenMultipleDialog(Main.getPrimaryStage());
+        List<File> files = dialog.showOpenMultipleDialog(Pixelator.getPrimaryStage());
         if (files == null || files.isEmpty()) {
             return result;
         }
@@ -160,7 +160,7 @@ public class Files {
         FileChooser dialog = new FileChooser();
         dialog.setInitialDirectory(fileDirectory);
         dialog.getExtensionFilters().addAll(category.getExtensionFiltersToOpen());
-        File file = dialog.showOpenDialog(Main.getPrimaryStage());
+        File file = dialog.showOpenDialog(Pixelator.getPrimaryStage());
         if (file == null) {
             return null;
         }

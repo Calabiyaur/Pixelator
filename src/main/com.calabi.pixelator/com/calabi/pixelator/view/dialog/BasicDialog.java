@@ -15,8 +15,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.stage.Window;
 
-import com.calabi.pixelator.start.Main;
 import com.calabi.pixelator.start.MainScene;
+import com.calabi.pixelator.start.Pixelator;
 
 public abstract class BasicDialog extends Dialog<Button> {
 
@@ -27,9 +27,9 @@ public abstract class BasicDialog extends Dialog<Button> {
     private GridPane grid = new GridPane();
 
     public BasicDialog() {
-        Main.getStages().forEach(s -> s.setAlwaysOnTop(false));
+        Pixelator.getStages().forEach(s -> s.setAlwaysOnTop(false));
 
-        initOwner(Main.getPrimaryStage());
+        initOwner(Pixelator.getPrimaryStage());
         setDialogPane(new DialogPane());
         Window window = getDialogPane().getScene().getWindow();
         window.setOnCloseRequest(event -> window.hide());
@@ -93,7 +93,7 @@ public abstract class BasicDialog extends Dialog<Button> {
         no.setText(text);
         no.setOnAction(e -> {
             consumer.accept(no);
-            Main.getStages().forEach(s -> s.setAlwaysOnTop(true));
+            Pixelator.getStages().forEach(s -> s.setAlwaysOnTop(true));
         });
         setButtons(ok, no, cancel);
     }
@@ -101,14 +101,14 @@ public abstract class BasicDialog extends Dialog<Button> {
     public void setOnOk(Consumer<Button> consumer) {
         ok.setOnAction(e -> {
             consumer.accept(ok);
-            Main.getStages().forEach(s -> s.setAlwaysOnTop(true));
+            Pixelator.getStages().forEach(s -> s.setAlwaysOnTop(true));
         });
     }
 
     public void setOnCancel(Consumer<Button> consumer) {
         cancel.setOnAction(e -> {
             consumer.accept(cancel);
-            Main.getStages().forEach(s -> s.setAlwaysOnTop(true));
+            Pixelator.getStages().forEach(s -> s.setAlwaysOnTop(true));
         });
     }
 

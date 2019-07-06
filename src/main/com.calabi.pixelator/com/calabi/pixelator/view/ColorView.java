@@ -17,7 +17,7 @@ import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.start.ActionManager;
-import com.calabi.pixelator.start.Main;
+import com.calabi.pixelator.start.Pixelator;
 import com.calabi.pixelator.view.colorselection.ColorSelection;
 import com.calabi.pixelator.view.palette.PaletteSelection;
 
@@ -60,7 +60,7 @@ public class ColorView extends BorderPane {
         Stage stage = new Stage();
         //stage.titleProperty().bind(textProperty());
         stage.getIcons().add(Images.ICON.getImage());
-        Main.getStages().add(stage);
+        Pixelator.getStages().add(stage);
 
         Pane root = new Pane(instance.getChildren().get(0));
         stage.setScene(new Scene(root));

@@ -21,7 +21,7 @@ import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.res.ImageConfig;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.start.ActionManager;
-import com.calabi.pixelator.start.Main;
+import com.calabi.pixelator.start.Pixelator;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
@@ -147,7 +147,7 @@ public class ImageWindow extends BasicWindow {
         stage.setY(bounds.getMinY());
         stage.titleProperty().bind(textProperty());
         stage.getIcons().add(Images.ICON.getImage());
-        Main.getStages().add(stage);
+        Pixelator.getStages().add(stage);
 
         setContent(new Pane());
         setVisible(false);
