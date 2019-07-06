@@ -1,15 +1,13 @@
 package com.calabi.pixelator.files.io;
 
-import java.io.BufferedOutputStream;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritablePixelFormat;
+
+import javax.imageio.ImageIO;
 
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.PixelFile;
@@ -25,18 +23,18 @@ public abstract class PixelFileWriter {
         int width = (int) image.getWidth();
         int height = (int) image.getHeight();
         PixelReader reader = image.getPixelReader();
-        byte[] buffer = new byte[width * height * 4];
-        WritablePixelFormat<ByteBuffer> format = PixelFormat.getByteBgraInstance();
-        reader.getPixels(0, 0, width, height, format, buffer, 0, width * 4);
-        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
-        for (int count = 0; count < buffer.length; count += 4) {
-            out.write(buffer[count + 2]);
-            out.write(buffer[count + 1]);
-            out.write(buffer[count]);
-            out.write(buffer[count + 3]);
+        BufferedImage bImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                int argb = reader.getArgb(i, j);
+                bImage.setRGB(i, j, argb);
+            }
         }
-        out.flush();
-        out.close();
+
+        if (!ImageIO.write(bImage, Extension.PNG.name(), file)) {
+            throw new IOException("Failed to write image: " + bImage.toString());
+        }
     }
 
     File findImage(File directory) {
