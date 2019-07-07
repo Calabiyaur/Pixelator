@@ -19,61 +19,48 @@
 }
 
 .text {
-    -fx-background-color: -px_default;
-    -fx-padding: 0.33em 0.33em 0.33em 0.66em;
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
     -fx-text-fill: -fx-text-base-color;
-    -fx-alignment: CENTER;
+    -fx-alignment: TOP_LEFT;
     -fx-content-display: LEFT;
 }
 
 .close-button {
-    -fx-background-color: -px_window;
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius:  0, 0, 0, 0;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+    -fx-padding: 0.25em 0.3em 0.25em 0.3em;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
 }
 
 .close-button:hover {
     -fx-background-color: #D81123;
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius:  0, 0, 0, 0;
 }
 
 .close-button:armed {
     -fx-background-color: #FF8888;
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius:  0, 0, 0, 0;
-}
-
-.close-button:selected {
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius:  0, 0, 0, 0;
 }
 
 .default-button {
-    -fx-background-color: -px_default;
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius:  0, 0, 0, 0;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+    -fx-padding: 0.25em 0.3em 0.25em 0.3em;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
 }
 
 .default-button:hover {
     -fx-background-color: -px_hover;
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius:  0, 0, 0, 0;
 }
 
 .default-button:armed {
     -fx-background-color: -px_selected;
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius:  0, 0, 0, 0;
 }
 
 .default-button:selected {
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius:  0, 0, 0, 0;
 }
 
 .toggle-button {

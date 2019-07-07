@@ -9,8 +9,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import com.sun.javafx.scene.control.Properties;
-
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
@@ -63,9 +61,13 @@ public class ImageWindow extends BasicWindow {
         getImageView().setScaleX(zoom == null ? 1 : Double.valueOf(zoom));
         getImageView().setScaleY(zoom == null ? 1 : Double.valueOf(zoom));
         String width = getConfig(ImageConfig.WIDTH);
-        setPrefWidth(width == null ? -1 : Double.valueOf(width));
+        if (width != null) {
+            setPrefWidth(Double.valueOf(width));
+        }
         String height = getConfig(ImageConfig.HEIGHT);
-        setPrefHeight(height == null ? -1 : Double.valueOf(height));
+        if (height != null) {
+            setPrefHeight(Double.valueOf(height));
+        }
     }
 
     private void updateConfig() {
@@ -128,16 +130,19 @@ public class ImageWindow extends BasicWindow {
         double additionalWidth = 0;
         double additionalHeight = 0;
         if (prefWidth > maxWidth) {
-            additionalHeight = Properties.DEFAULT_EMBEDDED_SB_BREADTH;
+            additionalHeight = BasicScrollPane.BAR_BREADTH;
         }
         if (prefHeight > maxHeight) {
-            additionalWidth = Properties.DEFAULT_EMBEDDED_SB_BREADTH;
+            additionalWidth = BasicScrollPane.BAR_BREADTH;
         }
 
         setPrefWidth(Math.min(prefWidth + additionalWidth, maxWidth));
         setPrefHeight(Math.min(prefHeight + additionalHeight, maxHeight));
 
-        Platform.runLater(() -> resetPosition(getPrefWidth(), getPrefHeight()));
+        Platform.runLater(() -> {
+            resetPosition(getPrefWidth(), getPrefHeight());
+            requestLayout();
+        });
     }
 
     private void popupAction() {

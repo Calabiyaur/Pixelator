@@ -27,4 +27,12 @@ public class ReflectionUtil {
         }
     }
 
+    public static void setField(final Object object, final String fieldName, final Object value) {
+        try {
+            FieldUtils.writeField(object, fieldName, value, true);
+        } catch (IllegalAccessException e) {
+            ExceptionHandler.handle(e);
+        }
+    }
+
 }

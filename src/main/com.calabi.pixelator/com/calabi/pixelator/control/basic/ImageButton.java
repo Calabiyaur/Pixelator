@@ -9,6 +9,6 @@ public class ImageButton extends Button {
 
     public ImageButton(Images image) {
         super("", new ImageView(image.getImage()));
-        getStyleClass().setAll("tool-button");
+        getStyleClass().setAll("default-button");
     }
 }

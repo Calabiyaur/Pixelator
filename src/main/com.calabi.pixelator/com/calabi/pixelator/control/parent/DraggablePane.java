@@ -19,7 +19,7 @@ public abstract class DraggablePane extends GridPane {
 
     public static final int RESIZE_MARGIN = 6;
 
-    private GridPane content;
+    GridPane content;
 
     private double previousX = 0;
     private double previousY = 0;
@@ -40,20 +40,12 @@ public abstract class DraggablePane extends GridPane {
     ObservableList<EventHandler<? super MouseEvent>> onMouseDragged = FXCollections.observableArrayList();
 
     public DraggablePane() {
-        getStyleClass().addAll("draggable-pane");
+        getStyleClass().setAll("draggable-pane");
         setPickOnBounds(true);
-
-        addBorderRegion(Cursor.NW_RESIZE, 0, 0);
-        addBorderRegion(Cursor.N_RESIZE, 1, 0);
-        addBorderRegion(Cursor.NE_RESIZE, 2, 0);
-        addBorderRegion(Cursor.E_RESIZE, 2, 1);
-        addBorderRegion(Cursor.SE_RESIZE, 2, 2);
-        addBorderRegion(Cursor.S_RESIZE, 1, 2);
-        addBorderRegion(Cursor.SW_RESIZE, 0, 2);
-        addBorderRegion(Cursor.W_RESIZE, 0, 1);
 
         content = new GridPane();
         super.add(content, 1, 1);
+        createBorder();
         GridPane.setVgrow(content, Priority.ALWAYS);
         GridPane.setHgrow(content, Priority.ALWAYS);
 
@@ -63,9 +55,20 @@ public abstract class DraggablePane extends GridPane {
         setOnMouseReleased(event -> mouseReleased(event));
     }
 
-    private void addBorderRegion(Cursor cursor, int x, int y) {
+    void createBorder() {
+        super.add(this.createBorderRegion(Cursor.NW_RESIZE, RESIZE_MARGIN), 0, 0);
+        super.add(this.createBorderRegion(Cursor.N_RESIZE, RESIZE_MARGIN), 1, 0);
+        super.add(this.createBorderRegion(Cursor.NE_RESIZE, RESIZE_MARGIN), 2, 0);
+        super.add(this.createBorderRegion(Cursor.E_RESIZE, RESIZE_MARGIN), 2, 1);
+        super.add(this.createBorderRegion(Cursor.SE_RESIZE, RESIZE_MARGIN), 2, 2);
+        super.add(this.createBorderRegion(Cursor.S_RESIZE, RESIZE_MARGIN), 1, 2);
+        super.add(this.createBorderRegion(Cursor.SW_RESIZE, RESIZE_MARGIN), 0, 2);
+        super.add(this.createBorderRegion(Cursor.W_RESIZE, RESIZE_MARGIN), 0, 1);
+    }
+
+    final Region createBorderRegion(Cursor cursor, int size) {
         Region region = new Region();
-        region.setMinSize(RESIZE_MARGIN, RESIZE_MARGIN);
+        region.setMinSize(size, size);
         region.setOnMouseEntered(event -> {
             setCursor(cursor);
             exiting = false;
@@ -77,7 +80,7 @@ public abstract class DraggablePane extends GridPane {
                 exiting = true;
             }
         });
-        super.add(region, x, y);
+        return region;
     }
 
     protected void mousePressed(MouseEvent event) {

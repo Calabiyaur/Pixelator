@@ -14,6 +14,7 @@ public class BasicToolBar extends ToolBar {
 
     public Button addButton(Action key, Images image) {
         Button tool = new ImageButton(image);
+        tool.getStyleClass().setAll("tool-button");
         register(key, tool);
         return tool;
     }

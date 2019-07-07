@@ -17,6 +17,8 @@ public class ColorDialog extends BasicDialog {
         colorSelection = new ColorSelection();
         colorSelection.setColor(color);
         setDialogContent(colorSelection);
+
+        setPrefWidth(308);
     }
 
     public Color getColor() {

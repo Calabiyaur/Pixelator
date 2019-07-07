@@ -29,7 +29,7 @@ public class PaletteToggleButton extends ToggleButton {
     private EventHandler<? super MouseEvent> onClose;
 
     public PaletteToggleButton(Image image, String text, boolean closable) {
-        getStyleClass().add("palette-toggle-button");
+        getStyleClass().setAll("palette-toggle-button");
         setGraphic(new ImageView(image));
 
         GridPane content = new GridPane();
@@ -58,7 +58,7 @@ public class PaletteToggleButton extends ToggleButton {
 
         if (closable) {
             ImageButton close = new ImageButton(Images.CLOSE_SMALL);
-            close.getStyleClass().add("close-button");
+            close.getStyleClass().setAll("close-button");
             content.add(close, 1, 0);
             GridPane.setMargin(close, new Insets(0, 0, 0, 0));
 

@@ -2,7 +2,6 @@ package com.calabi.pixelator.view.dialog;
 
 import java.util.function.Consumer;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -47,7 +46,6 @@ public abstract class BasicDialog extends Dialog<Button> {
 
         grid.setHgap(6);
         grid.setVgap(6);
-        grid.setPadding(new Insets(10));
         setDialogContent(grid);
 
         getDialogPane().setOnKeyPressed(key -> {

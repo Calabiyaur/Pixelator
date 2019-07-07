@@ -11,6 +11,8 @@ import com.calabi.pixelator.util.ReflectionUtil;
 
 public class BasicScrollPane extends ScrollPane {
 
+    public static final double BAR_BREADTH = 8.;
+
     private boolean scrollByMouse = false;
     private EventHandler<ScrollEvent> onRawScroll;
 
@@ -37,6 +39,10 @@ public class BasicScrollPane extends ScrollPane {
         // Disable scrolling from scroll bars
         skin.getHorizontalScrollBar().addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
         skin.getVerticalScrollBar().addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
+
+        // Set scroll bar size
+        skin.getVerticalScrollBar().setPrefWidth(BAR_BREADTH);
+        skin.getHorizontalScrollBar().setPrefHeight(BAR_BREADTH);
     }
 
     private void filterScrolling(ScrollEvent e) {
