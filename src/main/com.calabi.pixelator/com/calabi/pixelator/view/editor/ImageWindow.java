@@ -37,7 +37,6 @@ public class ImageWindow extends BasicWindow {
         setText(imageFile.getName());
         imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
         setContent(imageEditor);
-        setPrefSize(400, 400); //TODO: Use preferences from .pix file
 
         getContent().setOnRawScroll(e -> onScroll(e));
         setOnScroll(e -> onScroll(e));

@@ -3,6 +3,7 @@ package com.calabi.pixelator.view.palette;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
@@ -25,7 +26,7 @@ class PaletteTabButtons extends VBox {
             }
         });
 
-        tg.getToggles().addListener((ListChangeListener<Toggle>) c -> size.set(tg.getToggles().size()));
+        getChildren().addListener((ListChangeListener<Node>) c -> size.set(getChildren().size()));
 
         ImageWindowContainer.imageSelectedProperty().addListener((ov, o, n) -> {
             if (n) {
@@ -49,8 +50,8 @@ class PaletteTabButtons extends VBox {
             defaultToggle = button;
         }
         button.setOnClose(e -> close(button));
-        if(button != defaultToggle || ImageWindowContainer.imageSelectedProperty().get()) {
-            button.setToggleGroup(tg);
+        button.setToggleGroup(tg);
+        if (button != defaultToggle || ImageWindowContainer.imageSelectedProperty().get()) {
             getChildren().add(button);
         }
         return button;
@@ -85,7 +86,9 @@ class PaletteTabButtons extends VBox {
         int newIndex = (index + 1) % getChildren().size();
         ((PaletteToggleButton) getChildren().get(newIndex)).fire();
 
-        tg.getToggles().remove(button);
+        if (button != defaultToggle) {
+            tg.getToggles().remove(button);
+        }
         return getChildren().remove(button);
     }
 }

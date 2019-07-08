@@ -646,7 +646,7 @@ public class ImageEditor extends Editor {
 
     public void updateColorCount() {
         InfoView.setColorCount(ImageUtil.countColors(getImage()));
-        //TODO: Update default palette only if colors changed, default palette is visible
+        //TODO: Update default palette only if colors changed && default palette is visible
         ColorView.getPaletteSelection().getDefaultEditor().updateImage(PaletteMaster.extractPalette(getImage(),
                 Config.PALETTE_MAX_COLORS.getInt()));
     }

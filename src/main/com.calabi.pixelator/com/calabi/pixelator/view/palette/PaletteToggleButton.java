@@ -29,7 +29,7 @@ public class PaletteToggleButton extends ToggleButton {
     private EventHandler<? super MouseEvent> onClose;
 
     public PaletteToggleButton(Image image, String text, boolean closable) {
-        getStyleClass().setAll("palette-toggle-button");
+        getStyleClass().add("palette-toggle-button");
         setGraphic(new ImageView(image));
 
         GridPane content = new GridPane();
@@ -94,7 +94,7 @@ public class PaletteToggleButton extends ToggleButton {
     private PopupControl createPopup(Node content) {
         PopupControl popup = new PopupControl() {
             {
-                setSkin(new Skin<Skinnable>() {
+                setSkin(new Skin<>() {
                     @Override
                     public Skinnable getSkinnable() {
                         return PaletteToggleButton.this;
