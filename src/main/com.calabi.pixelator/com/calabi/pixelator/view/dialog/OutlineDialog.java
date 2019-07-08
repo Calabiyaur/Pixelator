@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.control.basic.BasicCheckBox;
 import com.calabi.pixelator.control.basic.BasicColorField;
-import com.calabi.pixelator.control.basic.BasicTextField;
+import com.calabi.pixelator.control.basic.BasicIntegerField;
 import com.calabi.pixelator.control.basic.SwapColorButton;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
@@ -15,7 +15,7 @@ import com.calabi.pixelator.view.ColorView;
 
 public class OutlineDialog extends PreviewDialog {
 
-    private BasicTextField widthField;
+    private BasicIntegerField widthField;
     private BasicColorField colorField;
     private BasicColorField outsideField;
     private SwapColorButton swapColorButton;
@@ -27,7 +27,7 @@ public class OutlineDialog extends PreviewDialog {
         setTitle("Outline");
         setOkText("Apply");
 
-        widthField = new BasicTextField("Width", "1");
+        widthField = new BasicIntegerField("Width", 1);
         widthField.setMaxValue(10);
         colorField = new BasicColorField("Color", ColorView.getColor());
         outsideField = new BasicColorField("Outside color", Color.TRANSPARENT);
@@ -53,7 +53,7 @@ public class OutlineDialog extends PreviewDialog {
 
     @Override protected void updateImage() {
         try {
-            int width = Math.min(10, Integer.parseInt(widthField.getValue()));
+            int width = widthField.getValue();
             Color color = colorField.getValue();
             Color outside = outsideField.getValue();
 

@@ -17,6 +17,10 @@ public abstract class BasicControl<T> extends GridPane {
     private Control control;
     private Label tailText;
 
+    public BasicControl(String title, T value) {
+        this(title, null, value);
+    }
+
     public BasicControl(String title, String tail, T value) {
         List<Control> children = new ArrayList<>();
         if (title != null) {
@@ -43,25 +47,21 @@ public abstract class BasicControl<T> extends GridPane {
         control.setPrefWidth(120d / getChildren().size());
     }
 
-    public BasicControl(String title, T value) {
-        this(title, null, value);
-    }
-
     public final void focus() {
         Platform.runLater(() -> control.requestFocus());
     }
 
     protected abstract Control createControl();
 
-    public Control getControl() {
+    public final Control getControl() {
         return control;
     }
 
-    public Label getFrontLabel() {
+    public final Label getFrontLabel() {
         return titleText;
     }
 
-    public Label getBackLabel() {
+    public final Label getBackLabel() {
         return tailText;
     }
 
@@ -77,7 +77,7 @@ public abstract class BasicControl<T> extends GridPane {
         adjustWidth();
     }
 
-    public T getValue() {
+    public final T getValue() {
         return valueProperty().getValue();
     }
 

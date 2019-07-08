@@ -1,29 +1,29 @@
 package com.calabi.pixelator.view.dialog;
 
-import com.calabi.pixelator.control.basic.BasicTextField;
+import com.calabi.pixelator.control.basic.BasicIntegerField;
 
 public class MoveImageDialog extends BasicDialog {
 
-    private BasicTextField hField;
-    private BasicTextField vField;
+    private BasicIntegerField hField;
+    private BasicIntegerField vField;
 
     public MoveImageDialog() {
         setTitle("Move the Image");
         setOkText("Move");
 
-        hField = new BasicTextField("Horizontal", 0);
-        vField = new BasicTextField("Vertical", 0);
+        hField = new BasicIntegerField("Horizontal", 0);
+        vField = new BasicIntegerField("Vertical", 0);
 
         addContent(hField, 0, 0);
         addContent(vField, 0, 1);
     }
 
     public Integer getHorizontal() {
-        return hField.getIntValue();
+        return hField.getValue();
     }
 
     public Integer getVertical() {
-        return vField.getIntValue();
+        return vField.getValue();
     }
 
     @Override public void focus() {

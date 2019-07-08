@@ -1,36 +1,26 @@
 package com.calabi.pixelator.view.dialog;
 
-import com.calabi.pixelator.control.basic.BasicTextField;
+import com.calabi.pixelator.control.basic.BasicIntegerField;
 
 public abstract class NewDialog extends BasicDialog {
 
-    protected BasicTextField widthField;
-    protected BasicTextField heightField;
+    protected BasicIntegerField widthField;
+    protected BasicIntegerField heightField;
 
     public NewDialog() {
-        widthField = new BasicTextField("Width", 32);
-        heightField = new BasicTextField("Height", 32);
+        widthField = new BasicIntegerField("Width", 32);
+        heightField = new BasicIntegerField("Height", 32);
 
         addContent(widthField, 0, 0);
         addContent(heightField, 0, 1);
     }
 
     public Integer getImageWidth() {
-        try {
-            return Integer.parseInt(widthField.getValue());
-        } catch (NumberFormatException e) {
-            System.out.println(widthField.getValue() + " is not a valid number");
-            return null;
-        }
+        return widthField.getValue();
     }
 
     public Integer getImageHeight() {
-        try {
-            return Integer.parseInt(heightField.getValue());
-        } catch (NumberFormatException e) {
-            System.out.println(heightField.getValue() + " is not a valid number");
-            return null;
-        }
+        return heightField.getValue();
     }
 
     @Override public void focus() {

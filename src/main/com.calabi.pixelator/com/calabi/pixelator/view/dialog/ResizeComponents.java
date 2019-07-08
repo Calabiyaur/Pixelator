@@ -3,21 +3,21 @@ package com.calabi.pixelator.view.dialog;
 import javafx.beans.value.ChangeListener;
 
 import com.calabi.pixelator.control.basic.BasicCheckBox;
-import com.calabi.pixelator.control.basic.BasicTextField;
+import com.calabi.pixelator.control.basic.BasicIntegerField;
 import com.calabi.pixelator.control.basic.BiasButton;
 
 public class ResizeComponents {
 
     private double initialWidth;
     private double initialHeight;
-    private BasicTextField wPercentField;
-    private ChangeListener<String> wPercentChangeListener;
-    private BasicTextField widthField;
-    private ChangeListener<String> widthChangeListener;
-    private BasicTextField hPercentField;
-    private ChangeListener<String> hPercentChangeListener;
-    private BasicTextField heightField;
-    private ChangeListener<String> heightChangeListener;
+    private BasicIntegerField wPercentField;
+    private ChangeListener<Integer> wPercentChangeListener;
+    private BasicIntegerField widthField;
+    private ChangeListener<Integer> widthChangeListener;
+    private BasicIntegerField hPercentField;
+    private ChangeListener<Integer> hPercentChangeListener;
+    private BasicIntegerField heightField;
+    private ChangeListener<Integer> heightChangeListener;
     private BasicCheckBox keepRatio;
     private ChangeListener<Boolean> keepRatioChangeListener;
     private BiasButton biasButton;
@@ -27,10 +27,10 @@ public class ResizeComponents {
         this.initialWidth = initialWidth;
         this.initialHeight = initialHeight;
 
-        wPercentField = new BasicTextField("Width", "%", 100);
-        widthField = new BasicTextField(null, "pixels", initialWidth);
-        hPercentField = new BasicTextField("Height", "%", 100);
-        heightField = new BasicTextField(null, "pixels", initialHeight);
+        wPercentField = new BasicIntegerField("Width", "%", 100);
+        widthField = new BasicIntegerField(null, "pixels", initialWidth);
+        hPercentField = new BasicIntegerField("Height", "%", 100);
+        heightField = new BasicIntegerField(null, "pixels", initialHeight);
         keepRatio = new BasicCheckBox("Keep ratio", false);
         biasButton = new BiasButton();
 
@@ -41,10 +41,10 @@ public class ResizeComponents {
         keepRatio.valueProperty().addListener(getKeepRatioChangeListener());
     }
 
-    private ChangeListener<String> getWPercentChangeListener() {
+    private ChangeListener<Integer> getWPercentChangeListener() {
         if (wPercentChangeListener == null) {
             wPercentChangeListener = (ov, o, n) -> {
-                Integer newPercentage = wPercentField.getIntValue();
+                Integer newPercentage = wPercentField.getValue();
                 if (newPercentage != null) {
                     setWidth(initialWidth * newPercentage.doubleValue() / 100d);
                     if (keepRatio.getValue()) {
@@ -58,10 +58,10 @@ public class ResizeComponents {
         return wPercentChangeListener;
     }
 
-    private ChangeListener<String> getWidthChangeListener() {
+    private ChangeListener<Integer> getWidthChangeListener() {
         if (widthChangeListener == null) {
             widthChangeListener = (ov, o, n) -> {
-                Integer newValue = widthField.getIntValue();
+                Integer newValue = widthField.getValue();
                 if (newValue != null) {
                     double newPercentage = newValue.doubleValue() / initialWidth * 100;
                     setWPercent(newPercentage);
@@ -76,10 +76,10 @@ public class ResizeComponents {
         return widthChangeListener;
     }
 
-    private ChangeListener<String> getHPercentChangeListener() {
+    private ChangeListener<Integer> getHPercentChangeListener() {
         if (hPercentChangeListener == null) {
             hPercentChangeListener = (ov, o, n) -> {
-                Integer newPercentage = hPercentField.getIntValue();
+                Integer newPercentage = hPercentField.getValue();
                 if (newPercentage != null) {
                     setHeight(initialHeight * newPercentage.doubleValue() / 100d);
                     if (keepRatio.getValue()) {
@@ -93,10 +93,10 @@ public class ResizeComponents {
         return hPercentChangeListener;
     }
 
-    private ChangeListener<String> getHeightChangeListener() {
+    private ChangeListener<Integer> getHeightChangeListener() {
         if (heightChangeListener == null) {
             heightChangeListener = (ov, o, n) -> {
-                Integer newValue = heightField.getIntValue();
+                Integer newValue = heightField.getValue();
                 if (newValue != null) {
                     double newPercentage = newValue.doubleValue() / initialHeight * 100;
                     setHPercent(newPercentage);
@@ -116,11 +116,11 @@ public class ResizeComponents {
             keepRatioChangeListener = (ov, o, n) -> {
                 if (n) {
                     if (widthWasChangedLast) {
-                        Integer newPercentage = wPercentField.getIntValue();
+                        Integer newPercentage = wPercentField.getValue();
                         setHPercent(newPercentage);
                         setHeight(initialHeight * newPercentage.doubleValue() / 100d);
                     } else {
-                        Integer newPercentage = hPercentField.getIntValue();
+                        Integer newPercentage = hPercentField.getValue();
                         setWPercent(newPercentage);
                         setWidth(initialWidth * newPercentage.doubleValue() / 100d);
                     }
@@ -132,41 +132,41 @@ public class ResizeComponents {
 
     private void setWidth(double newValue) {
         widthField.valueProperty().removeListener(widthChangeListener);
-        widthField.setValue(String.valueOf((int) newValue));
+        widthField.setValue((int) newValue);
         widthField.valueProperty().addListener(widthChangeListener);
     }
 
     private void setWPercent(double newValue) {
         wPercentField.valueProperty().removeListener(wPercentChangeListener);
-        wPercentField.setValue(String.valueOf((int) newValue));
+        wPercentField.setValue((int) newValue);
         wPercentField.valueProperty().addListener(wPercentChangeListener);
     }
 
     private void setHeight(double newValue) {
         heightField.valueProperty().removeListener(heightChangeListener);
-        heightField.setValue(String.valueOf((int) newValue));
+        heightField.setValue((int) newValue);
         heightField.valueProperty().addListener(heightChangeListener);
     }
 
     private void setHPercent(double newValue) {
         hPercentField.valueProperty().removeListener(hPercentChangeListener);
-        hPercentField.setValue(String.valueOf((int) newValue));
+        hPercentField.setValue((int) newValue);
         hPercentField.valueProperty().addListener(hPercentChangeListener);
     }
 
-    public BasicTextField getWPercentField() {
+    public BasicIntegerField getWPercentField() {
         return wPercentField;
     }
 
-    public BasicTextField getWidthField() {
+    public BasicIntegerField getWidthField() {
         return widthField;
     }
 
-    public BasicTextField getHPercentField() {
+    public BasicIntegerField getHPercentField() {
         return hPercentField;
     }
 
-    public BasicTextField getHeightField() {
+    public BasicIntegerField getHeightField() {
         return heightField;
     }
 

@@ -50,7 +50,7 @@ public class ImageWindowContainer extends Pane {
                 dirty.set(false);
                 showBackground.unbind();
                 showBackground.set(false);
-                ToolView.setPreview(null, null, null);
+                ToolView.getInstance().setPreview(null, null, null);
                 InfoView.setMousePosition(null);
                 InfoView.setColorCount(null);
             } else {
@@ -139,10 +139,10 @@ public class ImageWindowContainer extends Pane {
     }
 
     private void updateImage(ImageWindow window) {
-        ToolView.setPreview(window.getImageView().getImage(), getEditor().getToolImage(),
+        ToolView.getInstance().setPreview(window.getImageView().getImage(), getEditor().getToolImage(),
                 getEditor().getSelectionImage());
-        ToolView.setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
-        ToolView.setZoom(window.getImageView().scaleXProperty().doubleValue());
+        ToolView.getInstance().setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
+        ToolView.getInstance().setZoom(window.getImageView().scaleXProperty().doubleValue());
     }
 
     public boolean closeAll() {

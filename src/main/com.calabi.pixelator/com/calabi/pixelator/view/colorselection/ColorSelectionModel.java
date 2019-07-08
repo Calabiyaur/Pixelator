@@ -133,8 +133,8 @@ final class ColorSelectionModel {
 
             textField.setTarget(target);
             textField.setTitle(dimension.getName());
-            textField.setMinValue(dimension.minTextValue);
-            textField.setMaxValue(dimension.maxTextValue);
+            //TODO: textField.setMinValue(dimension.minTextValue);
+            //TODO: textField.setMaxValue(dimension.maxTextValue);
             textField.setConverter(converterMap.get(dimension.getMaxTextValue()));
 
             slider.setTarget(target);
@@ -320,7 +320,7 @@ final class ColorSelectionModel {
         private StringConverter<Number> converter;
 
         public CustomTextField() {
-            super("Temp", 0);
+            super("Temp", "0");
         }
 
         public DoubleProperty getTarget() {

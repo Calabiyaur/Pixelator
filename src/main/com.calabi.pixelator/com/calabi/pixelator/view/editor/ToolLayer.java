@@ -25,7 +25,7 @@ public class ToolLayer extends EditorLayer {
                 continue;
             }
             Color previousColor = getReader().getColor(x, y);
-            Color color = ToolView.isReplaceColor() ?
+            Color color = ToolView.getInstance().isReplaceColor() ?
                     ColorUtil.addColors(Color.LIGHTGREY, ColorView.getColor()) :
                     ColorUtil.addColors(previousColor, ColorView.getColor());
             getWriter().setColor(x, y, color);
@@ -38,7 +38,7 @@ public class ToolLayer extends EditorLayer {
      */
     public PixelChange retrievePixels() {
         PixelChange result;
-        if (ToolView.isReplaceColor()) {
+        if (ToolView.getInstance().isReplaceColor()) {
             for (int i = 0; i < getPixels().size(); i++) {
                 getPixels().setColor(i, ColorView.getColor());
             }

@@ -67,7 +67,7 @@ public class ImageEditor extends Editor {
 
     public ImageEditor(ImageFile file, ScalableImageView imageView) {
         super(file, imageView);
-        currentTool = ToolManager.getTool(ToolView.getCurrentTool());
+        currentTool = ToolManager.getTool(ToolView.getInstance().getCurrentTool());
         makeWritable();
 
         setMinSize(1, 1);
@@ -127,7 +127,7 @@ public class ImageEditor extends Editor {
             updateColorCount();
         });
 
-        ToolView.currentToolProperty().addListener((ov, o, n) -> {
+        ToolView.getInstance().currentToolProperty().addListener((ov, o, n) -> {
             if (o == null || ToolManager.getTool(o).isSelectionTool() != ToolManager.getTool(n).isSelectionTool()) {
                 currentTool.lockAndReset();
             }
@@ -305,11 +305,11 @@ public class ImageEditor extends Editor {
     }
 
     public void paintPoint(int x, int y) {
-        paintPixel(x, y, ColorView.getColor(), ToolView.isReplaceColor());
+        paintPixel(x, y, ColorView.getColor(), ToolView.getInstance().isReplaceColor());
     }
 
     public void paintPoint(Point point) {
-        paintPixel(point.getX(), point.getY(), ColorView.getColor(), ToolView.isReplaceColor());
+        paintPixel(point.getX(), point.getY(), ColorView.getColor(), ToolView.getInstance().isReplaceColor());
     }
 
     public void paintPoints(PointArray points) {
@@ -320,7 +320,7 @@ public class ImageEditor extends Editor {
 
     public void paintPixels(PixelArray pixels) {
         for (int i = 0; i < pixels.size(); i++) {
-            paintPixel(pixels.getX(i), pixels.getY(i), pixels.getColor(i), ToolView.isReplaceColor());
+            paintPixel(pixels.getX(i), pixels.getY(i), pixels.getColor(i), ToolView.getInstance().isReplaceColor());
         }
     }
 
@@ -375,7 +375,7 @@ public class ImageEditor extends Editor {
             if (!ImageUtil.outOfBounds(getImage(), x, y)) {
                 Color previousColor = reader.getColor(x, y);
                 Color color =
-                        ToolView.isReplaceColor() ? add.getColor(i) :
+                        ToolView.getInstance().isReplaceColor() ? add.getColor(i) :
                                 ColorUtil.addColors(previousColor, add.getColor(i));
                 result.add(x, y, previousColor, color);
             }

@@ -16,6 +16,7 @@ public enum Config {
     REPLACE(ConfigType.BOOLEAN, false),
     RESIZE_BIAS(ConfigType.STRING, Direction.NONE.name()),
     RESIZE_KEEP_RATIO(ConfigType.BOOLEAN, true),
+    SHAPE_WIDTH(ConfigType.INT, 1),
     STRETCH_KEEP_RATIO(ConfigType.BOOLEAN, true),
     WIDTH(ConfigType.DOUBLE, 600d);
 

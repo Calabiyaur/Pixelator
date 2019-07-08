@@ -25,7 +25,7 @@ public class SelectionLayer extends EditorLayer {
 
     public SelectionLayer(int width, int height, PixelReader reader) {
         super(width, height, reader);
-        ToolView.replaceColorProperty().addListener((ov, o, n) -> {
+        ToolView.getInstance().replaceColorProperty().addListener((ov, o, n) -> {
             if (n) {
                 setStyle("-fx-background-color: #DDDDDD"); //FIXME: This doesn't work.
             } else {

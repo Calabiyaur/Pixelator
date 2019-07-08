@@ -1,13 +1,13 @@
 package com.calabi.pixelator.view.dialog;
 
 import com.calabi.pixelator.control.basic.BasicCheckBox;
-import com.calabi.pixelator.control.basic.BasicTextField;
+import com.calabi.pixelator.control.basic.BasicIntegerField;
 import com.calabi.pixelator.res.Config;
 
 public class StretchDialog extends BasicDialog {
 
-    private BasicTextField widthField;
-    private BasicTextField heightField;
+    private BasicIntegerField widthField;
+    private BasicIntegerField heightField;
     private BasicCheckBox keepRatio;
 
     public StretchDialog(int width, int height) {
@@ -33,11 +33,11 @@ public class StretchDialog extends BasicDialog {
     }
 
     public Integer getNewWidth() {
-        return widthField.getIntValue();
+        return widthField.getValue();
     }
 
     public Integer getNewHeight() {
-        return heightField.getIntValue();
+        return heightField.getValue();
     }
 
     public boolean isKeepRatio() {

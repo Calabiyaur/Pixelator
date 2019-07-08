@@ -1,12 +1,13 @@
 package com.calabi.pixelator.view;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleButton;
@@ -22,6 +23,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import com.calabi.pixelator.control.basic.BasicCheckBox;
+import com.calabi.pixelator.control.basic.BasicIntegerField;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
 import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.res.Config;
@@ -31,116 +34,142 @@ import com.calabi.pixelator.view.tool.Tools;
 public class ToolView extends VBox {
 
     private static ToolView instance;
-    private static ObjectProperty<Tools> currentTool = new SimpleObjectProperty<>();
-    private static CheckBox replace;
-    private static CheckBox fill;
-    private static BooleanProperty replaceColor = new SimpleBooleanProperty();
-    private static BooleanProperty fillShape = new SimpleBooleanProperty();
-    private static Label preview = new Label();
-    private static Label previewTool = new Label();
-    private static Label previewSelection = new Label();
-    private static Pane clipWrapper;
-    private static Text sizeText = new Text();
-    private static Text zoomText = new Text();
+    private ObjectProperty<Tools> currentTool = new SimpleObjectProperty<>();
+    private BasicCheckBox replaceColorField;
+    private BasicCheckBox fillShapeField;
+    private BasicIntegerField shapeWidthField;
+    private BooleanProperty replaceColor = new SimpleBooleanProperty();
+    private BooleanProperty fillShape = new SimpleBooleanProperty();
+    private IntegerProperty shapeWidth = new SimpleIntegerProperty();
+    private Label preview = new Label();
+    private Label previewTool = new Label();
+    private Label previewSelection = new Label();
+    private Pane clipWrapper;
+    private Text sizeText = new Text();
+    private Text zoomText = new Text();
+
+    private ToolView() {
+        setStyle("-fx-background-color: #f4f4f4");
+        setSpacing(6);
+        setPrefWidth(210);
+        setPadding(new Insets(6, 0, 6, 6));
+
+        getChildren().add(new Label("TOOLS"));
+        ToggleGroup tg = new ToggleGroup();
+        tg.selectedToggleProperty().addListener((ov, o, n) -> {
+            if (n == null && o != null) {
+                o.setSelected(true);
+            }
+        });
+
+        FlowPane tools1 = createFirstToolLayer(tg);
+        tools1.setVgap(1);
+        tools1.setHgap(1);
+        getChildren().add(1, tools1);
+
+        getChildren().add(2, new Separator());
+
+        FlowPane tools2 = createSecondToolLayer(tg);
+        tools2.setVgap(1);
+        tools2.setHgap(1);
+        getChildren().add(3, tools2);
+
+        getChildren().add(4, new Separator());
+
+        VBox prefBox = createPrefLayer();
+        prefBox.setFillWidth(false);
+        prefBox.setSpacing(3);
+        getChildren().add(5, prefBox);
+
+        getChildren().add(6, new Separator());
+
+        clipWrapper = new Pane();
+        VBox.setVgrow(clipWrapper, Priority.ALWAYS);
+
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(clipWrapper.widthProperty());
+        clip.heightProperty().bind(clipWrapper.heightProperty());
+
+        StackPane previewStack = new StackPane(preview, previewTool, previewSelection);
+        clipWrapper.getChildren().add(previewStack);
+        previewStack.setClip(clip);
+        previewStack.setAlignment(Pos.TOP_LEFT);
+
+        clipWrapper.maxWidthProperty().bind(previewStack.widthProperty());
+        clipWrapper.maxHeightProperty().bind(previewStack.heightProperty());
+
+        Region space = new Region();
+        HBox detailBox = new HBox(sizeText, space, zoomText);
+        HBox.setHgrow(space, Priority.ALWAYS);
+        VBox previewGrid = new VBox(new Label("PREVIEW"), clipWrapper, detailBox);
+        VBox.setVgrow(previewGrid, Priority.ALWAYS);
+
+        previewGrid.visibleProperty().bind(preview.graphicProperty().isNotNull());
+        getChildren().add(7, previewGrid);
+
+        initConfig();
+    }
 
     public static ToolView getInstance() {
         if (instance == null) {
             instance = new ToolView();
-            instance.setStyle("-fx-background-color: #f4f4f4");
-            instance.setSpacing(6);
-            instance.setPrefWidth(210);
-            instance.setPadding(new Insets(6, 0, 6, 6));
-
-            instance.getChildren().add(new Label("TOOLS"));
-            ToggleGroup tg = new ToggleGroup();
-            tg.selectedToggleProperty().addListener((ov, o, n) -> {
-                if (n == null && o != null) {
-                    o.setSelected(true);
-                }
-            });
-            ToggleButton pen = new ToggleImageButton(tg, Images.PEN);
-            pen.setOnAction(e -> currentTool.set(Tools.PEN));
-            ToggleButton line = new ToggleImageButton(tg, Images.LINE);
-            line.setOnAction(e -> currentTool.set(Tools.LINE));
-            ToggleButton fill = new ToggleImageButton(tg, Images.FILL);
-            fill.setOnAction(e -> currentTool.set(Tools.FILL));
-            ToggleButton pick = new ToggleImageButton(tg, Images.PICK);
-            pick.setOnAction(e -> currentTool.set(Tools.PICK));
-            ToggleButton select = new ToggleImageButton(tg, Images.SELECT);
-            select.setOnAction(e -> currentTool.set(Tools.SELECT));
-            ToggleButton wand = new ToggleImageButton(tg, Images.WAND);
-            wand.setOnAction(e -> currentTool.set(Tools.WAND));
-            ToggleButton rectangle = new ToggleImageButton(tg, Images.RECTANGLE);
-            rectangle.setOnAction(e -> currentTool.set(Tools.RECTANGLE));
-            ToggleButton ellipse = new ToggleImageButton(tg, Images.ELLIPSE);
-            ellipse.setOnAction(e -> currentTool.set(Tools.ELLIPSE));
-            ToggleButton fillColor = new ToggleImageButton(tg, Images.FILL_COLOR);
-            fillColor.setOnAction(e -> currentTool.set(Tools.FILL_COLOR));
-            ToggleButton fillSelect = new ToggleImageButton(tg, Images.FILL_SELECT);
-            fillSelect.setOnAction(e -> currentTool.set(Tools.FILL_SELECT));
-
-            FlowPane tools1 = new FlowPane(pen, line, pick, fill, fillColor, rectangle, ellipse);
-            tools1.setVgap(1);
-            tools1.setHgap(1);
-            instance.getChildren().add(1, tools1);
-            pen.fire();
-
-            instance.getChildren().add(2, new Separator());
-
-            FlowPane tools2 = new FlowPane(select, wand, fillSelect);
-            tools2.setVgap(1);
-            tools2.setHgap(1);
-            instance.getChildren().add(3, tools2);
-
-            instance.getChildren().add(4, new Separator());
-
-            replace = new CheckBox("Replace");
-            replace.setOnAction(e -> replaceColor.set(replace.isSelected()));
-            ToolView.fill = new CheckBox("Fill shape");
-            ToolView.fill.setOnAction(e -> fillShape.set(ToolView.fill.isSelected()));
-            VBox prefBox = new VBox(replace, ToolView.fill);
-            prefBox.setSpacing(3);
-            instance.getChildren().add(5, prefBox);
-
-            instance.getChildren().add(6, new Separator());
-
-            clipWrapper = new Pane();
-            VBox.setVgrow(clipWrapper, Priority.ALWAYS);
-
-            Rectangle clip = new Rectangle();
-            clip.widthProperty().bind(clipWrapper.widthProperty());
-            clip.heightProperty().bind(clipWrapper.heightProperty());
-
-            StackPane previewStack = new StackPane(preview, previewTool, previewSelection);
-            clipWrapper.getChildren().add(previewStack);
-            previewStack.setClip(clip);
-            previewStack.setAlignment(Pos.TOP_LEFT);
-
-            clipWrapper.maxWidthProperty().bind(previewStack.widthProperty());
-            clipWrapper.maxHeightProperty().bind(previewStack.heightProperty());
-
-            Region space = new Region();
-            HBox detailBox = new HBox(sizeText, space, zoomText);
-            HBox.setHgrow(space, Priority.ALWAYS);
-            VBox previewGrid = new VBox(new Label("PREVIEW"), clipWrapper, detailBox);
-            VBox.setVgrow(previewGrid, Priority.ALWAYS);
-
-            previewGrid.visibleProperty().bind(preview.graphicProperty().isNotNull());
-            instance.getChildren().add(7, previewGrid);
-
-            initConfig();
         }
         return instance;
     }
 
-    private static void initConfig() {
-        setReplace(Config.REPLACE.getBoolean());
-        setFillShape(Config.FILL_SHAPE.getBoolean());
-        replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(n));
-        fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(n));
+    private FlowPane createFirstToolLayer(ToggleGroup tg) {
+        ToggleButton pen = new ToggleImageButton(tg, Images.PEN);
+        pen.setOnAction(e -> currentTool.set(Tools.PEN));
+        ToggleButton line = new ToggleImageButton(tg, Images.LINE);
+        line.setOnAction(e -> currentTool.set(Tools.LINE));
+        ToggleButton fill = new ToggleImageButton(tg, Images.FILL);
+        fill.setOnAction(e -> currentTool.set(Tools.FILL));
+        ToggleButton pick = new ToggleImageButton(tg, Images.PICK);
+        pick.setOnAction(e -> currentTool.set(Tools.PICK));
+        ToggleButton rectangle = new ToggleImageButton(tg, Images.RECTANGLE);
+        rectangle.setOnAction(e -> currentTool.set(Tools.RECTANGLE));
+        ToggleButton ellipse = new ToggleImageButton(tg, Images.ELLIPSE);
+        ellipse.setOnAction(e -> currentTool.set(Tools.ELLIPSE));
+        ToggleButton fillColor = new ToggleImageButton(tg, Images.FILL_COLOR);
+        fillColor.setOnAction(e -> currentTool.set(Tools.FILL_COLOR));
+
+        FlowPane tools1 = new FlowPane(pen, line, pick, fill, fillColor, rectangle, ellipse);
+        pen.fire();
+        return tools1;
     }
 
-    public static void setPreview(Image image, Image toolImage, Image selectionImage) {
+    private FlowPane createSecondToolLayer(ToggleGroup tg) {
+        ToggleButton select = new ToggleImageButton(tg, Images.SELECT);
+        select.setOnAction(e -> currentTool.set(Tools.SELECT));
+        ToggleButton wand = new ToggleImageButton(tg, Images.WAND);
+        wand.setOnAction(e -> currentTool.set(Tools.WAND));
+        ToggleButton fillSelect = new ToggleImageButton(tg, Images.FILL_SELECT);
+        fillSelect.setOnAction(e -> currentTool.set(Tools.FILL_SELECT));
+
+        return new FlowPane(select, wand, fillSelect);
+    }
+
+    private VBox createPrefLayer() {
+        replaceColorField = new BasicCheckBox("Replace");
+        fillShapeField = new BasicCheckBox("Fill shape");
+        shapeWidthField = new BasicIntegerField("Width");
+        shapeWidthField.setMaxValue(10);
+        replaceColorField.valueProperty().addListener((ov, o, n) -> replaceColor.set(n));
+        fillShapeField.valueProperty().addListener((ov, o, n) -> fillShape.set(n));
+        shapeWidthField.valueProperty().addListener((ov, o, n) -> shapeWidth.set(n));
+        return new VBox(replaceColorField, fillShapeField, shapeWidthField);
+    }
+
+    private void initConfig() {
+        setReplace(Config.REPLACE.getBoolean());
+        setFillShape(Config.FILL_SHAPE.getBoolean());
+        setShapeWidth(Config.SHAPE_WIDTH.getInt());
+        replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(n));
+        fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(n));
+        shapeWidth.addListener((ov, o, n) -> Config.SHAPE_WIDTH.putInt(n.intValue()));
+    }
+
+    public void setPreview(Image image, Image toolImage, Image selectionImage) {
         if (image == null) {
             preview.setGraphic(null);
             previewTool.setGraphic(null);
@@ -159,7 +188,7 @@ public class ToolView extends VBox {
         }
     }
 
-    public static void setPreviewPosition(double x, double y) {
+    public void setPreviewPosition(double x, double y) {
         if (preview.getWidth() > clipWrapper.getWidth()) {
             double xTranslate =
                     -Math.min(Math.max(0, x - clipWrapper.getWidth() / 2), preview.getWidth() - clipWrapper.getWidth());
@@ -185,43 +214,44 @@ public class ToolView extends VBox {
         }
     }
 
-    public static void setSize(int width, int height) {
+    public void setSize(int width, int height) {
         sizeText.setText(Integer.toString(width) + "×" + Integer.toString(height));
     }
 
-    public static void setZoom(double zoom) {
+    public void setZoom(double zoom) {
         zoomText.setText(Long.toString(Math.round(zoom * 100)) + " %");
     }
 
-    public static ObjectProperty<Tools> currentToolProperty() {
+    public ObjectProperty<Tools> currentToolProperty() {
         return currentTool;
     }
 
-    public static Tools getCurrentTool() {
+    public Tools getCurrentTool() {
         return currentTool.get();
     }
 
-    public static boolean isReplaceColor() {
+    public boolean isReplaceColor() {
         return replaceColor.get();
     }
 
-    public static BooleanProperty replaceColorProperty() {
+    public BooleanProperty replaceColorProperty() {
         return replaceColor;
     }
 
-    public static boolean isFillShape() {
+    public boolean isFillShape() {
         return fillShape.get();
     }
 
-    public static void setReplace(boolean replaceColor) {
-        if (replaceColor) {
-            ToolView.replace.fire();
-        }
+    public void setReplace(boolean value) {
+        replaceColorField.setValue(value);
     }
 
-    public static void setFillShape(boolean fillShape) {
-        if (fillShape) {
-            ToolView.fill.fire();
-        }
+    public void setFillShape(boolean value) {
+        fillShapeField.setValue(value);
     }
+
+    public void setShapeWidth(int value) {
+        shapeWidthField.setValue(value);
+    }
+
 }

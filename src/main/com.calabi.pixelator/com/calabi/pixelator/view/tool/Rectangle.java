@@ -31,7 +31,7 @@ public class Rectangle extends Tool {
         getEditor().getToolLayer().setPixels(ShapeUtil.getRectanglePoints(
                 getToolLayer().getStart(),
                 getMouse(),
-                ToolView.isFillShape()));
+                ToolView.getInstance().isFillShape()));
     }
 
     @Override public void releasePrimary() {

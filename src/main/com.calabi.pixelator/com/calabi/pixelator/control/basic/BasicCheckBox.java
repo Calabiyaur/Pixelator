@@ -16,13 +16,18 @@ public class BasicCheckBox extends BasicControl<Boolean> {
         super(title, value);
     }
 
+    public BasicCheckBox(String title) {
+        this(title, false);
+    }
+
     @Override
     public Control createControl() {
         checkBox = new CheckBox();
         return checkBox;
     }
 
-    @Override public BooleanProperty valueProperty() {
+    @Override
+    public BooleanProperty valueProperty() {
         return checkBox.selectedProperty();
     }
 }

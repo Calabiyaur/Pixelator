@@ -5,15 +5,15 @@ import javafx.geometry.VPos;
 import javafx.scene.layout.GridPane;
 
 import com.calabi.pixelator.control.basic.BasicCheckBox;
-import com.calabi.pixelator.control.basic.BasicTextField;
+import com.calabi.pixelator.control.basic.BasicIntegerField;
 import com.calabi.pixelator.control.basic.BiasButton;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.res.Config;
 
 public class ResizeDialog extends BasicDialog {
 
-    private BasicTextField widthField;
-    private BasicTextField heightField;
+    private BasicIntegerField widthField;
+    private BasicIntegerField heightField;
     private BasicCheckBox keepRatio;
     private BiasButton biasButton;
 
@@ -45,11 +45,11 @@ public class ResizeDialog extends BasicDialog {
     }
 
     public Integer getNewWidth() {
-        return widthField.getIntValue();
+        return widthField.getValue();
     }
 
     public Integer getNewHeight() {
-        return heightField.getIntValue();
+        return heightField.getValue();
     }
 
     public Boolean isKeepRatio() {
