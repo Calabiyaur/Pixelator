@@ -1,6 +1,5 @@
 package com.calabi.pixelator.control.basic;
 
-import javafx.beans.property.Property;
 import javafx.scene.control.Control;
 import javafx.scene.paint.Color;
 
@@ -12,13 +11,12 @@ public class BasicColorField extends BasicControl<Color> {
     private ColorField colorField;
     private ImageButton colorButton;
 
-    public BasicColorField(String title, String tail, Color value) {
-        super(title, tail, value);
-        init();
+    public BasicColorField(String title, Color value) {
+        this(title, null, value);
     }
 
-    public BasicColorField(String title, Color value) {
-        super(title, value);
+    public BasicColorField(String title, String tail, Color value) {
+        super(title, tail, value);
         init();
     }
 
@@ -26,6 +24,13 @@ public class BasicColorField extends BasicControl<Color> {
         colorButton = new ImageButton(Images.CHOOSE_COLOR);
         colorButton.setOnAction(e -> ColorDialog.chooseColor(getValue(), color -> setValue(color)));
         addControl(colorButton, 2);
+
+        this.valueProperty().bindBidirectional(colorField.colorProperty());
+        this.valueProperty().addListener((ov, o, n) -> {
+            if (n == null && o != null) {
+                setValue(o);
+            }
+        });
     }
 
     @Override
@@ -34,14 +39,4 @@ public class BasicColorField extends BasicControl<Color> {
         return colorField;
     }
 
-    @Override
-    public void setValue(Color value) {
-        if (value != null) {
-            colorField.setColor(value);
-        }
-    }
-
-    @Override public Property<Color> valueProperty() {
-        return colorField.colorProperty();
-    }
 }

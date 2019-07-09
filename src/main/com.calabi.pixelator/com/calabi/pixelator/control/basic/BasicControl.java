@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Control;
@@ -16,10 +18,7 @@ public abstract class BasicControl<T> extends GridPane {
     private Label titleText;
     private Control control;
     private Label tailText;
-
-    public BasicControl(String title, T value) {
-        this(title, null, value);
-    }
+    private ObjectProperty<T> value = new SimpleObjectProperty<>();
 
     public BasicControl(String title, String tail, T value) {
         List<Control> children = new ArrayList<>();
@@ -81,11 +80,13 @@ public abstract class BasicControl<T> extends GridPane {
         return valueProperty().getValue();
     }
 
-    public void setValue(T value) {
+    public final void setValue(T value) {
         valueProperty().setValue(value);
     }
 
-    public abstract Property<T> valueProperty();
+    public final Property<T> valueProperty() {
+        return value;
+    }
 
     public final String getTitle() {
         return titleText.getText();

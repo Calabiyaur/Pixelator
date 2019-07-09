@@ -6,12 +6,13 @@ import java.util.Map;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
-import javafx.util.StringConverter;
 
-import com.calabi.pixelator.control.basic.BasicTextField;
+import com.calabi.pixelator.control.basic.BasicDoubleField;
+import com.calabi.pixelator.control.basic.BasicNumberField;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.MapUtil;
@@ -53,15 +54,10 @@ final class ColorSelectionModel {
     private final CustomSlider blueSlider = new CustomSlider();
     private final CustomSlider alphaSlider = new CustomSlider();
 
-    private StringConverter<Number> stringConverter;
     private boolean convertingColorFormats = false;
     private final Map<ColorDimension, DoubleProperty> dimensionMap = MapUtil.asMap(
             new ColorDimension[] { RED, GREEN, BLUE, HUE, SATURATION, BRIGHTNESS, ALPHA },
             new DoubleProperty[] { red, green, blue, hue, sat, bright, alpha }
-    );
-    private final Map<Integer, StringConverter<Number>> converterMap = MapUtil.asMap(
-            new Integer[] { 255, 360 },
-            new StringConverter[] { getString255Converter(), getString360Converter() }
     );
 
     public ColorSelectionModel() {
@@ -111,10 +107,10 @@ final class ColorSelectionModel {
     private void init(ColorSpace colorSpace) {
         if (redField.getTarget() != null) {
             // Unbind text fields
-            Bindings.unbindBidirectional(redField.valueProperty(), redField.getTarget());
-            Bindings.unbindBidirectional(greenField.valueProperty(), greenField.getTarget());
-            Bindings.unbindBidirectional(blueField.valueProperty(), blueField.getTarget());
-            Bindings.unbindBidirectional(alphaField.valueProperty(), alphaField.getTarget());
+            Bindings.unbindBidirectional(redField.valueProperty(), redField.getTargetAsObject());
+            Bindings.unbindBidirectional(greenField.valueProperty(), greenField.getTargetAsObject());
+            Bindings.unbindBidirectional(blueField.valueProperty(), blueField.getTargetAsObject());
+            Bindings.unbindBidirectional(alphaField.valueProperty(), alphaField.getTargetAsObject());
             // Unbind sliders
             Bindings.unbindBidirectional(redSlider.valueProperty(), redSlider.getTarget());
             Bindings.unbindBidirectional(greenSlider.valueProperty(), greenSlider.getTarget());
@@ -132,10 +128,11 @@ final class ColorSelectionModel {
             DoubleProperty target = dimensionMap.get(dimension);
 
             textField.setTarget(target);
+            textField.setTargetAsObject(target.asObject());
             textField.setTitle(dimension.getName());
-            //TODO: textField.setMinValue(dimension.minTextValue);
-            //TODO: textField.setMaxValue(dimension.maxTextValue);
-            textField.setConverter(converterMap.get(dimension.getMaxTextValue()));
+            textField.setMinValue((double) dimension.minTextValue);
+            textField.setMaxValue((double) dimension.maxTextValue);
+            textField.setConversionFactor((double) dimension.maxTextValue / (double) dimension.maxSliderValue);
 
             slider.setTarget(target);
             slider.setMin(dimension.minSliderValue);
@@ -145,10 +142,10 @@ final class ColorSelectionModel {
         }
 
         // Bind text fields
-        Bindings.bindBidirectional(redField.valueProperty(), redField.getTarget(), redField.getConverter());
-        Bindings.bindBidirectional(greenField.valueProperty(), greenField.getTarget(), greenField.getConverter());
-        Bindings.bindBidirectional(blueField.valueProperty(), blueField.getTarget(), blueField.getConverter());
-        Bindings.bindBidirectional(alphaField.valueProperty(), alphaField.getTarget(), alphaField.getConverter());
+        Bindings.bindBidirectional(redField.valueProperty(), redField.getTargetAsObject());
+        Bindings.bindBidirectional(greenField.valueProperty(), greenField.getTargetAsObject());
+        Bindings.bindBidirectional(blueField.valueProperty(), blueField.getTargetAsObject());
+        Bindings.bindBidirectional(alphaField.valueProperty(), alphaField.getTargetAsObject());
         // Bind sliders
         Bindings.bindBidirectional(redSlider.valueProperty(), redField.getTarget());
         Bindings.bindBidirectional(greenSlider.valueProperty(), greenField.getTarget());
@@ -219,53 +216,6 @@ final class ColorSelectionModel {
         updatePreview(color);
     }
 
-    private StringConverter<Number> getString255Converter() {
-        if (stringConverter == null) {
-            stringConverter = new StringConverter<Number>() {
-                @Override public String toString(Number object) {
-                    return toString255(object);
-                }
-
-                @Override public Number fromString(String string) {
-                    return parse255(string);
-                }
-            };
-        }
-        return stringConverter;
-    }
-
-    private StringConverter<Number> getString360Converter() {
-        return new StringConverter<Number>() {
-            @Override public String toString(Number object) {
-                return Integer.toString(object.intValue());
-            }
-
-            @Override public Number fromString(String string) {
-                try {
-                    double value = Double.parseDouble(string);
-                    return Math.min(Math.max(value, 0.0), 360.0);
-                } catch (NumberFormatException e) {
-                    System.out.println(e.getMessage() + "\nCannot parse " + string + ".");
-                    return 0.0;
-                }
-            }
-        };
-    }
-
-    private String toString255(Number n) {
-        return Integer.toString((int) Math.round(n.doubleValue() * 255));
-    }
-
-    private double parse255(String n) {
-        try {
-            double value = Double.parseDouble(n) / 255;
-            return Math.min(Math.max(value, 0.0), 1.0);
-        } catch (NumberFormatException e) {
-            System.out.println(e.getMessage() + "\nCannot parse " + n + ".");
-            return 0.0;
-        }
-    }
-
     public HuePicker getHuePicker() {
         return huePicker;
     }
@@ -282,19 +232,19 @@ final class ColorSelectionModel {
         return tabButtons;
     }
 
-    public BasicTextField getRedField() {
+    public BasicNumberField getRedField() {
         return redField;
     }
 
-    public BasicTextField getGreenField() {
+    public BasicNumberField getGreenField() {
         return greenField;
     }
 
-    public BasicTextField getBlueField() {
+    public BasicNumberField getBlueField() {
         return blueField;
     }
 
-    public BasicTextField getAlphaField() {
+    public BasicNumberField getAlphaField() {
         return alphaField;
     }
 
@@ -314,13 +264,14 @@ final class ColorSelectionModel {
         return alphaSlider;
     }
 
-    private class CustomTextField extends BasicTextField {
+    private class CustomTextField extends BasicDoubleField {
 
         private DoubleProperty target;
-        private StringConverter<Number> converter;
+        private ObjectProperty<Double> targetAsObject;
 
         public CustomTextField() {
-            super("Temp", "0");
+            super("Temp", 0.);
+            setPrecision(0);
         }
 
         public DoubleProperty getTarget() {
@@ -331,12 +282,12 @@ final class ColorSelectionModel {
             this.target = target;
         }
 
-        public StringConverter<Number> getConverter() {
-            return converter;
+        public ObjectProperty<Double> getTargetAsObject() {
+            return targetAsObject;
         }
 
-        public void setConverter(StringConverter<Number> converter) {
-            this.converter = converter;
+        public void setTargetAsObject(ObjectProperty<Double> targetAsObject) {
+            this.targetAsObject = targetAsObject;
         }
     }
 

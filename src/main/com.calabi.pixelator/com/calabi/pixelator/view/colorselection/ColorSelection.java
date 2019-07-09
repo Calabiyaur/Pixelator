@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.control.basic.BasicTextField;
+import com.calabi.pixelator.control.basic.BasicNumberField;
 
 public class ColorSelection extends BorderPane {
 
@@ -24,10 +24,10 @@ public class ColorSelection extends BorderPane {
         colorPicker.setMinSize(125, 125);
         colorPreview.setMinWidth(100);
 
-        BasicTextField redField = model.getRedField();
-        BasicTextField greenField = model.getGreenField();
-        BasicTextField blueField = model.getBlueField();
-        BasicTextField alphaField = model.getAlphaField();
+        BasicNumberField redField = model.getRedField();
+        BasicNumberField greenField = model.getGreenField();
+        BasicNumberField blueField = model.getBlueField();
+        BasicNumberField alphaField = model.getAlphaField();
         Slider redSlider = model.getRedSlider();
         Slider greenSlider = model.getGreenSlider();
         Slider blueSlider = model.getBlueSlider();

@@ -7,8 +7,6 @@ import javafx.util.StringConverter;
 
 public class BasicIntegerField extends BasicNumberField<Integer> {
 
-    private Integer maxValue;
-
     public BasicIntegerField(String title) {
         this(title, null);
     }
@@ -22,11 +20,8 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
 
         TextFormatter<Object> textFormatter = createFormatter();
         textField.setTextFormatter(textFormatter);
-    }
 
-    @Override
-    public StringConverter<Integer> createConverter() {
-        return new StringConverter<>() {
+        setConverter(new StringConverter<>() {
             @Override
             public String toString(Integer object) {
                 if (object == null) {
@@ -43,15 +38,7 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
                     return 0;
                 }
             }
-        };
-    }
-
-    public Integer getMaxValue() {
-        return maxValue;
-    }
-
-    public void setMaxValue(Integer maxValue) {
-        this.maxValue = maxValue;
+        });
     }
 
     private TextFormatter<Object> createFormatter() {
@@ -63,9 +50,16 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
                 return null;
             }
 
-            if (maxValue != null && converter.fromString(fullText) > maxValue) {
+            if (minValue != null && getConverter().fromString(fullText) < minValue) {
                 int caretPosition = change.getCaretPosition();
-                textField.setText(converter.toString(maxValue));
+                textField.setText(getConverter().toString(minValue));
+                textField.positionCaret(caretPosition);
+                return null;
+            }
+
+            if (maxValue != null && getConverter().fromString(fullText) > maxValue) {
+                int caretPosition = change.getCaretPosition();
+                textField.setText(getConverter().toString(maxValue));
                 textField.positionCaret(caretPosition);
                 return null;
             }

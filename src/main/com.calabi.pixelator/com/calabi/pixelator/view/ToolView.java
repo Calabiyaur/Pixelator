@@ -153,6 +153,7 @@ public class ToolView extends VBox {
         replaceColorField = new BasicCheckBox("Replace");
         fillShapeField = new BasicCheckBox("Fill shape");
         shapeWidthField = new BasicIntegerField("Width");
+        shapeWidthField.setMinValue(1);
         shapeWidthField.setMaxValue(10);
         replaceColorField.valueProperty().addListener((ov, o, n) -> replaceColor.set(n));
         fillShapeField.valueProperty().addListener((ov, o, n) -> fillShape.set(n));
