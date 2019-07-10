@@ -17,7 +17,7 @@ public abstract class PixelFile {
 
     private final Category category;
     private File file;
-    private Image image;
+    private Image image; //TODO: Delete this and leave it up to the subclass to define how the data should be stored
     private StringProperty name = new SimpleStringProperty();
     private Extension extension;
     private Properties properties = new Properties();
@@ -33,9 +33,11 @@ public abstract class PixelFile {
 
     public final void setFile(File file) {
         this.file = file;
-        this.name.set(file == null ? "New Image" : FileUtil.removeType(file.getName()));
+        this.name.set(updateName(file));
         this.extension = FileUtil.getExtension(file);
     }
+
+    abstract String updateName(File file);
 
     public final Category getCategory() {
         return category;

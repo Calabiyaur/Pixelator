@@ -2,6 +2,7 @@ package com.calabi.pixelator.view.palette;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 
 import com.calabi.pixelator.files.PaletteFile;
@@ -28,8 +29,8 @@ final class PaletteSelectionModel {
 
     public void addPalette(PaletteFile file) {
         PaletteEditor editor = new PaletteEditor(file);
-        PaletteToggleButton button = tabButtons.create(/*TODO: file.getPreview()*/
-                Images.NEW.getImage(), editor, file.isNew() ? "New Palette" : file.getName(), true);
+        Image preview = file.getPreview() == null ? Images.NEW.getImage() : new Image(file.getPreview().getPath());
+        PaletteToggleButton button = tabButtons.create(preview, editor, file.isNew() ? "New Palette" : file.getName(), true);
         button.fire();
     }
 

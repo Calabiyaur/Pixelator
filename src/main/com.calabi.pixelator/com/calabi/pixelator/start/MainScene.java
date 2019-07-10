@@ -48,6 +48,7 @@ import com.calabi.pixelator.view.palette.PaletteSelection;
 
 import static com.calabi.pixelator.res.Action.BACKGROUND;
 import static com.calabi.pixelator.res.Action.CHANGE_PALETTE;
+import static com.calabi.pixelator.res.Action.CHANGE_PALETTE_PREVIEW;
 import static com.calabi.pixelator.res.Action.CLOSE;
 import static com.calabi.pixelator.res.Action.CLOSE_PALETTE;
 import static com.calabi.pixelator.res.Action.COPY;
@@ -56,6 +57,7 @@ import static com.calabi.pixelator.res.Action.CROP;
 import static com.calabi.pixelator.res.Action.CROSSHAIR;
 import static com.calabi.pixelator.res.Action.CUT;
 import static com.calabi.pixelator.res.Action.DELETE;
+import static com.calabi.pixelator.res.Action.EDIT_PALETTE;
 import static com.calabi.pixelator.res.Action.EXTRACT_PALETTE;
 import static com.calabi.pixelator.res.Action.FLIP_HORIZONTALLY;
 import static com.calabi.pixelator.res.Action.FLIP_VERTICALLY;
@@ -185,9 +187,9 @@ public class MainScene extends Scene {
         imageContainer.showBackgroundProperty().addListener((ov, o, n) -> backgroundItem.setSelected(n));
 
         BasicMenu imageMenu = new BasicMenu("Image"); // Center
-        imageMenu.addItem(MOVE_IMAGE, "Move image", e -> moveAction(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(RESIZE, "Resize", e -> resizeAction(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(STRETCH, "Stretch", e -> stretchAction(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(MOVE_IMAGE, "Move Image...", e -> moveAction(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(RESIZE, "Resize...", e -> resizeAction(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(STRETCH, "Stretch...", e -> stretchAction(), ImageWindowContainer.imageSelectedProperty());
         imageMenu.addItem(CROP, "Crop", e -> getEditor().crop(), ImageWindowContainer.imageSelectedProperty());
         imageMenu.addSeparator();
         imageMenu.addItem(FLIP_HORIZONTALLY, "Flip horizontally", e -> getEditor().flipHorizontally(),
@@ -199,19 +201,22 @@ public class MainScene extends Scene {
         imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, "Rotate counter-clockwise",
                 e -> getEditor().rotateCounterClockwise(),
                 ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(INVERT, "Invert colors", e -> getEditor().invert(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(INVERT, "Invert Colors", e -> getEditor().invert(), ImageWindowContainer.imageSelectedProperty());
 
         BasicMenu paletteMenu = new BasicMenu("Palette");
         paletteMenu.addItem(NEW_PALETTE, "New...", e -> paletteSelection.createPalette());
         paletteMenu.addItem(OPEN_PALETTE, "Open...", e -> paletteSelection.openPalette());
+        paletteMenu.addItem(EDIT_PALETTE, "Edit palette", e -> paletteSelection.editPalette());
+        paletteMenu.addItem(CHANGE_PALETTE_PREVIEW, "Change Preview...", e -> paletteSelection.changePreview(),
+                paletteSelection.paletteSelectedProperty().and(paletteSelection.defaultPaletteSelectedProperty().not()));
         paletteMenu.addItem(CLOSE_PALETTE, "Close", e -> paletteSelection.closeCurrent(),
                 paletteSelection.paletteSelectedProperty());
         BasicMenu toolMenu = new BasicMenu("Tools");
-        toolMenu.addItem(OUTLINE, "Outline", e -> outline(), ImageWindowContainer.imageSelectedProperty());
+        toolMenu.addItem(OUTLINE, "Outline...", e -> outline(), ImageWindowContainer.imageSelectedProperty());
         toolMenu.addSeparator();
-        toolMenu.addItem(EXTRACT_PALETTE, "Extract palette", e -> extractPalette(),
+        toolMenu.addItem(EXTRACT_PALETTE, "Extract Palette...", e -> extractPalette(),
                 ImageWindowContainer.imageSelectedProperty());
-        toolMenu.addItem(CHANGE_PALETTE, "Change palette", e -> changePalette(),
+        toolMenu.addItem(CHANGE_PALETTE, "Change Palette...", e -> changePalette(),
                 ImageWindowContainer.imageSelectedProperty());
 
         menuBar.getMenus().setAll(fileMenu, editMenu, viewMenu, imageMenu, paletteMenu, toolMenu);

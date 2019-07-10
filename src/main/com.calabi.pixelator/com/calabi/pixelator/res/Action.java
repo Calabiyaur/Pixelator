@@ -6,6 +6,7 @@ public enum Action {
 
     BACKGROUND(true, true, false, KeyCode.B),
     CHANGE_PALETTE(),
+    CHANGE_PALETTE_PREVIEW(),
     CLOSE(true, false, false, KeyCode.F4),
     CLOSE_PALETTE(true, false, true, KeyCode.F4),
     COPY(true, false, false, KeyCode.C),
@@ -15,6 +16,7 @@ public enum Action {
     CUT(true, false, false, KeyCode.X),
     DELETE(false, false, false, KeyCode.DELETE),
     DOWN(false, false, false, KeyCode.DOWN),
+    EDIT_PALETTE(),
     ESCAPE(false, false, false, KeyCode.ESCAPE),
     EXTRACT_PALETTE(true, false, true, KeyCode.P),
     FIT_WINDOW(false, false, false, KeyCode.F4),

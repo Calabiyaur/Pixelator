@@ -6,7 +6,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -16,7 +15,6 @@ import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.view.ColorView;
-import com.calabi.pixelator.view.dialog.ColorDialog;
 import com.calabi.pixelator.view.editor.Editor;
 import com.calabi.pixelator.view.tool.Pick;
 
@@ -53,12 +51,7 @@ public class PaletteEditor extends Editor {
     }
 
     private void onMousePressed(MouseEvent event) {
-        if (event.getClickCount() == 2) {
-            Point mp = getMousePosition(event.getX(), event.getY());
-            ColorDialog.chooseColor(ColorView.getColor(), color -> setColor(mp.getX(), mp.getY(), color));
-        } else {
-            choose(event);
-        }
+        choose(event);
     }
 
     private void onMouseDragged(MouseEvent e) {
@@ -70,22 +63,11 @@ public class PaletteEditor extends Editor {
         if (ImageUtil.outOfBounds(getImage(), mp)) {
             return;
         }
-        if (event.isControlDown()) {
-            setColor(mp.getX(), mp.getY(), ColorView.getColor());
-        } else {
-            takeColor(mp.getX(), mp.getY());
-        }
+        takeColor(mp.getX(), mp.getY());
     }
 
     private void takeColor(int x, int y) {
         Color color = getImage().getPixelReader().getColor(x, y);
-        ColorView.setColor(color);
-    }
-
-    public void setColor(int x, int y, Color color) {
-        WritableImage image = (WritableImage) getImageView().getImage();
-        image.getPixelWriter().setColor(x, y, color);
-
         ColorView.setColor(color);
     }
 

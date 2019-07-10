@@ -13,6 +13,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -21,8 +22,10 @@ import javafx.scene.layout.VBox;
 
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.files.Files;
+import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.view.dialog.MessageDialog;
 import com.calabi.pixelator.view.dialog.NewPaletteDialog;
 import com.calabi.pixelator.view.editor.ImageWindowContainer;
 
@@ -93,6 +96,20 @@ public class PaletteSelection extends BorderPane {
 
     public void editPalette() {
         ImageWindowContainer.getInstance().addImage(getFile());
+    }
+
+    public void changePreview() {
+        ImageFile imageFile = Files.get().openSingleImage();
+        Image image = imageFile.getImage();
+        if (image.getWidth() > 20 || image.getHeight() > 20) {
+            MessageDialog dialog = new MessageDialog();
+            dialog.setTitle("This is too big to be a preview!");
+            dialog.setMessage("The size of a palette preview can at most be 20 x 20 pixels.");
+            dialog.show();
+        } else {
+            getFile().setPreview(imageFile.getFile());
+            model.getTabButtons().getSelected().setGraphic(new ImageView(image));
+        }
     }
 
     public void addPalette(PaletteFile file) {

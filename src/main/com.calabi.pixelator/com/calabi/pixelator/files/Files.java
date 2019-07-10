@@ -147,8 +147,8 @@ public class Files {
         return result;
     }
 
-    public PaletteFile openSingleImage() {
-        return (PaletteFile) openSingle(Category.IMAGE);
+    public ImageFile openSingleImage() {
+        return (ImageFile) openSingle(Category.IMAGE);
     }
 
     public PaletteFile openSinglePalette() {
