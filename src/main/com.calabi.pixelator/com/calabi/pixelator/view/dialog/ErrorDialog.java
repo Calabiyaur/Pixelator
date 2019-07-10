@@ -44,7 +44,6 @@ public class ErrorDialog extends BasicDialog {
 
     @Override
     public void focus() {
-
     }
 
 }

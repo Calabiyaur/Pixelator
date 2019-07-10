@@ -19,7 +19,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import com.calabi.pixelator.start.ExceptionHandler;
 import com.calabi.pixelator.util.ReflectionUtil;
 
-public class PixelatedImageView extends ImageView {
+public class PixelatedImageView extends ImageView { //FIXME: Horizontally, pixels vary in size (e.g. 2, 2, 2, 3, 1, 2, ...)
 
     private IntegerProperty width = new SimpleIntegerProperty();
     private IntegerProperty height = new SimpleIntegerProperty();
