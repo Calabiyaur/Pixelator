@@ -14,7 +14,7 @@ import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.control.parent.BasicWindow;
 import com.calabi.pixelator.files.Files;
-import com.calabi.pixelator.files.ImageFile;
+import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.res.ImageConfig;
 import com.calabi.pixelator.res.Images;
@@ -27,9 +27,9 @@ import com.calabi.pixelator.view.dialog.SaveRequestDialog;
 public class ImageWindow extends BasicWindow {
 
     private ImageEditor imageEditor;
-    private ImageFile imageFile;
+    private PixelFile imageFile;
 
-    public ImageWindow(ScalableImageView imageView, ImageFile imageFile) {
+    public ImageWindow(ScalableImageView imageView, PixelFile imageFile) {
         super(true);
         this.imageFile = imageFile;
         imageView.imageProperty().addListener((ov, o, n) -> this.imageFile.setImage(n));
@@ -221,7 +221,7 @@ public class ImageWindow extends BasicWindow {
         return imageEditor;
     }
 
-    public ImageFile getFile() {
+    public PixelFile getFile() {
         return imageFile;
     }
 

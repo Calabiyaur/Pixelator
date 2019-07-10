@@ -101,7 +101,7 @@ public class MainScene extends Scene {
         styleSheets.add(getClass().getResource("/style/bright-theme.css").toExternalForm());
         getStylesheets().addAll(getStyle());
 
-        imageContainer = new ImageWindowContainer();
+        imageContainer = ImageWindowContainer.getInstance();
 
         createKeyListener();
         imageContainer.setOnKeyPressed(this.getOnKeyPressed());
@@ -246,10 +246,6 @@ public class MainScene extends Scene {
         ActionManager.registerAction(Action.FIT_WINDOW, e -> imageContainer.fitWindow());
         ActionManager.registerAction(Action.LEFT, e -> move(-1, 0));
         ActionManager.registerAction(Action.MINUS, e -> imageContainer.zoomOut());
-        ActionManager.registerAction(Action.P_DOWN, e -> movePaletteSelection(0, 1));
-        ActionManager.registerAction(Action.P_LEFT, e -> movePaletteSelection(-1, 0));
-        ActionManager.registerAction(Action.P_RIGHT, e -> movePaletteSelection(1, 0));
-        ActionManager.registerAction(Action.P_UP, e -> movePaletteSelection(0, -1));
         ActionManager.registerAction(Action.RANDOM_COLOR, e -> ColorView.setColor(ColorUtil.getRandomPleasant()));
         ActionManager.registerAction(Action.PLUS, e -> imageContainer.zoomIn());
         ActionManager.registerAction(Action.RIGHT, e -> move(1, 0));
@@ -268,12 +264,6 @@ public class MainScene extends Scene {
             } catch (AWTException e) {
                 ExceptionHandler.handle(e);
             }
-        }
-    }
-
-    private void movePaletteSelection(int right, int down) {
-        if (paletteSelection.getEditor() != null) {
-            paletteSelection.getEditor().moveSelection(right, down);
         }
     }
 

@@ -4,12 +4,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.WritableImage;
 
-import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.PaletteFile;
-import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.res.PaletteConfig;
-import com.calabi.pixelator.view.dialog.SaveRequestDialog;
 
 final class PaletteSelectionModel {
 
@@ -21,63 +17,23 @@ final class PaletteSelectionModel {
 
     public PaletteSelectionModel() {
         paletteEditor.addListener((ov, o, n) -> palettePane.setContent(n));
+        tabButtons.selectedToggleProperty().addListener((ov, o, n) -> paletteEditor.set(n == null ? null : n.getEditor()));
 
         WritableImage image = new WritableImage(PaletteEditor.DEFAULT_WIDTH, PaletteEditor.DEFAULT_HEIGHT);
         PaletteFile file = new PaletteFile(null, image);
         defaultEditor = new PaletteEditor(file);
-        PaletteToggleButton button = tabButtons.create(Images.ASTERISK.getImage(), "Current Image", false);
-        button.setOnAction(e -> paletteEditor.set(defaultEditor));
+        PaletteToggleButton button = tabButtons.create(Images.ASTERISK.getImage(), defaultEditor, "Current Image", false);
         button.fire();
     }
 
     public void addPalette(PaletteFile file) {
         PaletteEditor editor = new PaletteEditor(file);
-        PaletteToggleButton button = tabButtons
-                .create(/*TODO: file.getPreview()*/ Images.NEW.getImage(), file.isNew() ? "New Palette" : file.getName(), true);
-        button.setOnAction(e -> paletteEditor.set(editor));
+        PaletteToggleButton button = tabButtons.create(/*TODO: file.getPreview()*/
+                Images.NEW.getImage(), editor, file.isNew() ? "New Palette" : file.getName(), true);
         button.fire();
     }
 
-    public void saveAndUndirty() {
-        updateConfig();
-        Files.get().save(getEditor().getFile());
-        undirty();
-    }
-
-    public void initConfig() {
-        String x = getEditor().getFile().getProperties().getProperty(PaletteConfig.SELECTED_X.name());
-        String y = getEditor().getFile().getProperties().getProperty(PaletteConfig.SELECTED_Y.name());
-        if (x != null && y != null) {
-            getEditor().select(new Point(Integer.parseInt(x), Integer.parseInt(y)));
-        }
-    }
-
-    private void updateConfig() {
-        Point point = getEditor().getSelected();
-        getEditor().getFile().getProperties().put(PaletteConfig.SELECTED_X.name(), Integer.toString(point.getX()));
-        getEditor().getFile().getProperties().put(PaletteConfig.SELECTED_Y.name(), Integer.toString(point.getY()));
-    }
-
-    public void undirty() {
-        getEditor().undirty();
-    }
-
-    public boolean closeIfClean() {
-        if (tabButtons.isDefaultSelected()) {
-            return false;
-        }
-        if (getEditor().isDirty()) {
-            switch(SaveRequestDialog.display()) {
-                case OK:
-                    saveAndUndirty();
-                    break;
-                case NO:
-                    Files.get().saveConfig(getEditor().getFile());
-                    break;
-                case CANCEL:
-                    return false;
-            }
-        }
+    public boolean close() {
         return tabButtons.closeSelected();
     }
 

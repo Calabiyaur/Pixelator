@@ -16,8 +16,11 @@ public class PalettePane extends GridPane {
         if (this.content != null) {
             getChildren().remove(this.content);
         }
-        add(content, 0, 0);
-        GridPane.setMargin(content, new Insets(2));
+
+        if (content != null) {
+            add(content, 0, 0);
+            GridPane.setMargin(content, new Insets(2));
+        }
 
         this.content = content;
     }

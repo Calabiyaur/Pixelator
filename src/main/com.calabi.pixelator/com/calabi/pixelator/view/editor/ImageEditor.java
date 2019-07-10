@@ -24,7 +24,7 @@ import com.calabi.pixelator.control.image.Grid;
 import com.calabi.pixelator.control.image.OutlineRect;
 import com.calabi.pixelator.control.image.OutlineShape;
 import com.calabi.pixelator.control.image.ScalableImageView;
-import com.calabi.pixelator.files.ImageFile;
+import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.meta.PixelArray;
 import com.calabi.pixelator.meta.Point;
@@ -65,7 +65,7 @@ public class ImageEditor extends Editor {
 
     private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>();
 
-    public ImageEditor(ImageFile file, ScalableImageView imageView) {
+    public ImageEditor(PixelFile file, ScalableImageView imageView) {
         super(file, imageView);
         currentTool = ToolManager.getTool(ToolView.getInstance().getCurrentTool());
         makeWritable();
@@ -647,8 +647,8 @@ public class ImageEditor extends Editor {
     public void updateColorCount() {
         InfoView.setColorCount(ImageUtil.countColors(getImage()));
         //TODO: Update default palette only if colors changed && default palette is visible
-        ColorView.getPaletteSelection().getDefaultEditor().updateImage(PaletteMaster.extractPalette(getImage(),
-                Config.PALETTE_MAX_COLORS.getInt()));
+        ColorView.getPaletteSelection().getDefaultEditor()
+                .updateImage(PaletteMaster.extractPalette(getImage(), Config.PALETTE_MAX_COLORS.getInt()));
     }
 
     public ToolLayer getToolLayer() {

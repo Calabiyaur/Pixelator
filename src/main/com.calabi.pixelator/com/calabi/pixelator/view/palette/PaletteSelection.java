@@ -1,6 +1,7 @@
 package com.calabi.pixelator.view.palette;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.beans.binding.BooleanBinding;
@@ -23,11 +24,13 @@ import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.view.dialog.NewPaletteDialog;
+import com.calabi.pixelator.view.editor.ImageWindowContainer;
 
 public class PaletteSelection extends BorderPane {
 
     private final PaletteSelectionModel model;
     private BooleanProperty paletteSelected = new SimpleBooleanProperty(false);
+    private BooleanProperty defaultPaletteSelected = new SimpleBooleanProperty(true);
 
     public PaletteSelection() {
         model = new PaletteSelectionModel();
@@ -37,11 +40,17 @@ public class PaletteSelection extends BorderPane {
         Label title = new Label("PALETTE");
         ImageButton create = new ImageButton(Images.NEW);
         ImageButton open = new ImageButton(Images.OPEN);
+        ImageButton edit = new ImageButton(Images.EDIT);
+        Arrays.asList(create, open, edit).forEach(button -> button.getStyleClass().setAll("tool-button"));
         create.setOnAction(e -> createPalette());
         open.setOnAction(e -> openPalette());
+        edit.setOnAction(e -> editPalette());
+
+        edit.setDisable(true);
+        edit.disableProperty().bind(paletteSelectedProperty().not().or(defaultPaletteSelectedProperty()));
 
         GridPane titlePane = new GridPane();
-        ToolBar buttonBox = new ToolBar(create, open);
+        ToolBar buttonBox = new ToolBar(create, open, edit);
         titlePane.add(title, 0, 0);
         titlePane.add(buttonBox, 1, 0);
         GridPane.setHgrow(title, Priority.ALWAYS);
@@ -59,6 +68,7 @@ public class PaletteSelection extends BorderPane {
         palettePane.visibleProperty().bind(paletteVisible);
 
         model.editorProperty().addListener((ov, o, n) -> paletteSelected.set(n != null));
+        model.editorProperty().addListener((ov, o, n) -> defaultPaletteSelected.set(n != null && n == getDefaultEditor()));
     }
 
     public void createPalette() {
@@ -81,13 +91,12 @@ public class PaletteSelection extends BorderPane {
         }
     }
 
-    public void savePalette() {
-        model.saveAndUndirty();
+    public void editPalette() {
+        ImageWindowContainer.getInstance().addImage(getFile());
     }
 
     public void addPalette(PaletteFile file) {
         model.addPalette(file);
-        model.initConfig();
     }
 
     public Image getPalette() {
@@ -123,8 +132,12 @@ public class PaletteSelection extends BorderPane {
         return paletteSelected;
     }
 
+    public BooleanProperty defaultPaletteSelectedProperty() {
+        return defaultPaletteSelected;
+    }
+
     public void closeCurrent() {
-        model.closeIfClean();
+        model.close();
     }
 
 }

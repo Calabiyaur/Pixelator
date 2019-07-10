@@ -24,13 +24,16 @@ import com.calabi.pixelator.util.Do;
 
 public class PaletteToggleButton extends ToggleButton {
 
+    private final PaletteEditor editor;
     private final Text textPane;
     private final PopupControl popup;
     private EventHandler<? super MouseEvent> onClose;
 
-    public PaletteToggleButton(Image image, String text, boolean closable) {
+    public PaletteToggleButton(Image image, PaletteEditor editor, String text, boolean closable) {
         getStyleClass().add("palette-toggle-button");
         setGraphic(new ImageView(image));
+
+        this.editor = editor;
 
         GridPane content = new GridPane();
         content.setStyle("-fx-background-color: #f4f4f4");
@@ -84,6 +87,10 @@ public class PaletteToggleButton extends ToggleButton {
 
     public void setPopupText(String text) {
         textPane.setText(text);
+    }
+
+    public PaletteEditor getEditor() {
+        return editor;
     }
 
     private void close(MouseEvent e) {

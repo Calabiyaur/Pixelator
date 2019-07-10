@@ -17,21 +17,27 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.meta.Frac;
 import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.util.ColorUtil;
 
 public class HilbertPartition implements Partition {
 
     private final static Frac TWO = Frac.of(2);
 
     private final Part root;
+    private final Set<Color> uniqueColors;
 
     public HilbertPartition() {
         Frac f = Frac.of(.5);
         root = new Part(0, Direction.NORTH, f, f, f, f, f, f, f);
+        uniqueColors = new HashSet<>();
     }
 
     @Override
     public void add(Color color) {
-        add(root, color);
+        Color opaqueColor = ColorUtil.makeOpaque(color);
+        if (uniqueColors.add(opaqueColor)) {
+            add(root, opaqueColor);
+        }
     }
 
     private void add(Part part, Color color) {

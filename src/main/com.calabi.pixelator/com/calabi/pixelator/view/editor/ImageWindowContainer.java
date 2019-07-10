@@ -12,7 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 import com.calabi.pixelator.control.image.ScalableImageView;
-import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.res.ImageConfig;
 import com.calabi.pixelator.view.InfoView;
@@ -22,8 +21,9 @@ import com.calabi.pixelator.view.tool.ToolManager;
 
 public class ImageWindowContainer extends Pane {
 
-    private ObjectProperty<ImageWindow> currentWindow;
+    private static ImageWindowContainer instance;
     private static BooleanProperty imageSelected = new SimpleBooleanProperty(false);
+    private ObjectProperty<ImageWindow> currentWindow;
     private BooleanProperty showGrid = new SimpleBooleanProperty(false);
     private BooleanProperty showCrossHair = new SimpleBooleanProperty(false);
     private BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
@@ -32,7 +32,7 @@ public class ImageWindowContainer extends Pane {
     private BooleanProperty dirty = new SimpleBooleanProperty(false);
     private BooleanProperty showBackground = new SimpleBooleanProperty(false);
 
-    public ImageWindowContainer() {
+    private ImageWindowContainer() {
         currentWindow = new SimpleObjectProperty<>();
         ToolManager.imageWindowProperty().bind(currentWindow);
         currentWindow.addListener((ov, o, window) -> {
@@ -69,6 +69,13 @@ public class ImageWindowContainer extends Pane {
         });
     }
 
+    public static ImageWindowContainer getInstance() {
+        if (instance == null) {
+            instance = new ImageWindowContainer();
+        }
+        return instance;
+    }
+
     public ImageEditor getEditor() {
         if (currentWindow.get() != null) {
             return currentWindow.get().getEditor();
@@ -89,12 +96,12 @@ public class ImageWindowContainer extends Pane {
         currentWindow.get().saveAndUndirty();
     }
 
-    public void addImage(ImageFile imageFile) {
+    public void addImage(PixelFile imageFile) {
         ImageWindow imageWindow = addImage(new ScalableImageView(imageFile.getImage()), imageFile);
         imageWindow.initConfig();
     }
 
-    private ImageWindow addImage(ScalableImageView imageView, ImageFile imageFile) {
+    private ImageWindow addImage(ScalableImageView imageView, PixelFile imageFile) {
         ImageWindow window = new ImageWindow(imageView, imageFile);
         window.setMinX(0);
         window.setMinY(0);

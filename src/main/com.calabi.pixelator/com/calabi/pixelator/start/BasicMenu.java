@@ -29,7 +29,7 @@ public class BasicMenu extends Menu {
 
     public CheckMenuItem addCheckItem(Action key, String text, EventHandler<ActionEvent> event,
             BooleanExpression condition) {
-        CheckMenuItem item = new CheckMenuItem(text, Images.get(key));
+        CheckMenuItem item = new CheckMenuItem(text, Images.getImageView(key));
         accelerate(key, item);
         register(key, item, event);
         item.disableProperty().bind(condition.not());
@@ -37,7 +37,7 @@ public class BasicMenu extends Menu {
     }
 
     public MenuItem addItem(Action key, String text, EventHandler<ActionEvent> event) {
-        MenuItem item = new MenuItem(text, Images.get(key));
+        MenuItem item = new MenuItem(text, Images.getImageView(key));
         accelerate(key, item);
         register(key, item, event);
         return item;

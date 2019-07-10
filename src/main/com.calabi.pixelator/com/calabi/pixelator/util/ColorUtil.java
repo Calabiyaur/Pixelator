@@ -93,4 +93,10 @@ public final class ColorUtil {
         );
     }
 
+    /**
+     * Return a color with the same red, green and blue values as the given color, but with full opaqueness.
+     */
+    public static Color makeOpaque(Color color) {
+        return Color.color(color.getRed(), color.getGreen(), color.getBlue());
+    }
 }

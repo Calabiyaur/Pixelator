@@ -1,7 +1,9 @@
 package com.calabi.pixelator.view.palette;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.Toggle;
@@ -15,6 +17,7 @@ class PaletteTabButtons extends VBox {
 
     private final ToggleGroup tg = new ToggleGroup();
     private final IntegerProperty size = new SimpleIntegerProperty();
+    private final ObjectProperty<PaletteToggleButton> selectedToggle = new SimpleObjectProperty<>();
     private PaletteToggleButton defaultToggle;
 
     public PaletteTabButtons() {
@@ -23,6 +26,9 @@ class PaletteTabButtons extends VBox {
         tg.selectedToggleProperty().addListener((ov, o, n) -> {
             if (n == null) {
                 o.setSelected(true);
+                selectedToggle.set((PaletteToggleButton) o);
+            } else {
+                selectedToggle.set((PaletteToggleButton) n);
             }
         });
 
@@ -44,8 +50,8 @@ class PaletteTabButtons extends VBox {
         });
     }
 
-    public PaletteToggleButton create(Image image, String text, boolean closable) {
-        PaletteToggleButton button = new PaletteToggleButton(image, text, closable);
+    public PaletteToggleButton create(Image image, PaletteEditor editor, String text, boolean closable) {
+        PaletteToggleButton button = new PaletteToggleButton(image, editor, text, closable);
         if (defaultToggle == null) {
             defaultToggle = button;
         }
@@ -61,8 +67,8 @@ class PaletteTabButtons extends VBox {
         return (PaletteToggleButton) tg.getSelectedToggle();
     }
 
-    public boolean isDefaultSelected() {
-        return getSelected() == defaultToggle;
+    public ObjectProperty<PaletteToggleButton> selectedToggleProperty() {
+        return selectedToggle;
     }
 
     public IntegerProperty sizeProperty() {

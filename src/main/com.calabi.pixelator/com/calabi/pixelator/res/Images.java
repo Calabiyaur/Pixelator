@@ -24,6 +24,7 @@ public enum Images {
     CROSSHAIR,
     CUT,
     ELLIPSE,
+    EDIT,
     ERROR_20,
     FILL,
     FILL_COLOR,
@@ -78,20 +79,24 @@ public enum Images {
         return Images.get(getUrl());
     }
 
+    public ImageView getImageView() {
+        return new ImageView(Images.get(getUrl()));
+    }
+
     public static Image get(String url) {
         try {
             return new Image(url);
         } catch (IllegalArgumentException e) {
-            if (ERROR_20.url.equals(url)) {
+            if (ERROR_20.getUrl().equals(url)) {
                 System.out.println("Image not found: " + url);
                 return null;
             } else {
-                return get(ERROR_20.url);
+                return get(ERROR_20.getUrl());
             }
         }
     }
 
-    public static ImageView get(Action action) {
+    public static ImageView getImageView(Action action) {
         ImageView imageView = new ImageView();
         try {
             imageView.setImage(Images.valueOf(action.name()).getImage());
