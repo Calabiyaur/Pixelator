@@ -101,10 +101,10 @@ public class PaletteSelection extends BorderPane {
     public void changePreview() {
         ImageFile imageFile = Files.get().openSingleImage();
         Image image = imageFile.getImage();
-        if (image.getWidth() > 20 || image.getHeight() > 20) {
+        if (image.getWidth() > 16 || image.getHeight() > 16) {
             MessageDialog dialog = new MessageDialog();
             dialog.setTitle("This is too big to be a preview!");
-            dialog.setMessage("The size of a palette preview can at most be 20 x 20 pixels.");
+            dialog.setMessage("The size of a palette preview can at most be 16 x 16 pixels.");
             dialog.show();
         } else {
             getFile().setPreview(imageFile.getFile());
