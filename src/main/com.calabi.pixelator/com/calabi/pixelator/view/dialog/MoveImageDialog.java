@@ -1,6 +1,7 @@
 package com.calabi.pixelator.view.dialog;
 
 import com.calabi.pixelator.control.basic.BasicIntegerField;
+import com.calabi.pixelator.control.basic.number.IntPattern;
 
 public class MoveImageDialog extends BasicDialog {
 
@@ -11,8 +12,8 @@ public class MoveImageDialog extends BasicDialog {
         setTitle("Move the Image");
         setOkText("Move");
 
-        hField = new BasicIntegerField("Horizontal", 0);
-        vField = new BasicIntegerField("Vertical", 0);
+        hField = new BasicIntegerField("Horizontal", 0, IntPattern.INTEGER);
+        vField = new BasicIntegerField("Vertical", 0, IntPattern.INTEGER);
 
         addContent(hField, 0, 0);
         addContent(vField, 0, 1);

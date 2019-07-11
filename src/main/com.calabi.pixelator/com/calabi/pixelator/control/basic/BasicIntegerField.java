@@ -5,7 +5,11 @@ import java.util.function.UnaryOperator;
 import javafx.scene.control.TextFormatter;
 import javafx.util.StringConverter;
 
+import com.calabi.pixelator.control.basic.number.IntPattern;
+
 public class BasicIntegerField extends BasicNumberField<Integer> {
+
+    private IntPattern pattern = IntPattern.POSITIVE;
 
     public BasicIntegerField(String title) {
         this(title, null);
@@ -13,6 +17,15 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
 
     public BasicIntegerField(String title, Integer value) {
         this(title, null, value);
+    }
+
+    public BasicIntegerField(String title, Integer value, IntPattern pattern) {
+        this(title, null, value, pattern);
+    }
+
+    public BasicIntegerField(String title, String tail, Integer value, IntPattern pattern) {
+        this(title, tail, value);
+        this.pattern = pattern;
     }
 
     public BasicIntegerField(String title, String tail, Integer value) {
@@ -46,7 +59,7 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
             String text = change.getText();
             String fullText = change.getControlNewText();
 
-            if (!text.matches("[0-9]*")) {
+            if (!text.matches(pattern.getRegex())) {
                 return null;
             }
 
@@ -69,4 +82,11 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
         return new TextFormatter<>(filter);
     }
 
+    public IntPattern getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(IntPattern pattern) {
+        this.pattern = pattern;
+    }
 }

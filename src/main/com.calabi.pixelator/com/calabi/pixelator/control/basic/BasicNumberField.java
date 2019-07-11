@@ -12,6 +12,7 @@ public abstract class BasicNumberField<T extends Number> extends BasicControl<T>
     ObjectProperty<StringConverter<T>> converter = new SimpleObjectProperty<>();
     T minValue;
     T maxValue;
+    boolean allowNegativeValues = false;
 
     public BasicNumberField(String title, String tail, T value) {
         super(title, tail, value);

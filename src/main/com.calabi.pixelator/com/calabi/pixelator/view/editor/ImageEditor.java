@@ -438,6 +438,9 @@ public class ImageEditor extends Editor {
     public void moveImage(int h, int v) {
         currentTool.lockAndReset();
 
+        h = Math.floorMod(h, width.get());
+        v = Math.floorMod(v, height.get());
+
         for (int i = 0; i < width.get(); i++) {
             int di = (i + h) % width.get();
             for (int j = 0; j < height.get(); j++) {
