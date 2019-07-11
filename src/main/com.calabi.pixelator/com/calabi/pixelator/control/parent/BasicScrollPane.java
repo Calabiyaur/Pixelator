@@ -1,13 +1,10 @@
 package com.calabi.pixelator.control.parent;
 
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.skin.ScrollPaneSkin;
+import javafx.scene.control.Skin;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-
-import com.calabi.pixelator.util.ReflectionUtil;
 
 public class BasicScrollPane extends ScrollPane {
 
@@ -16,33 +13,17 @@ public class BasicScrollPane extends ScrollPane {
     private boolean scrollByMouse = false;
     private EventHandler<ScrollEvent> onRawScroll;
 
-    public BasicScrollPane(Region content) {
-        this();
-        setContent(content);
-    }
-
     public BasicScrollPane() {
-        skinProperty().addListener((o, v, n) -> {
-            if (n != null) {
-                initialize();
-            }
-        });
+        super();
     }
 
-    private void initialize() {
-        ScrollPaneSkin skin = (ScrollPaneSkin) getSkin();
+    public BasicScrollPane(Node content) {
+        super(content);
+    }
 
-        // Disable scrolling from scroll pane content
-        StackPane viewRect = ReflectionUtil.getField(skin, "viewRect");
-        viewRect.addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
-
-        // Disable scrolling from scroll bars
-        skin.getHorizontalScrollBar().addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
-        skin.getVerticalScrollBar().addEventFilter(ScrollEvent.SCROLL, event -> filterScrolling(event));
-
-        // Set scroll bar size
-        skin.getVerticalScrollBar().setPrefWidth(BAR_BREADTH);
-        skin.getHorizontalScrollBar().setPrefHeight(BAR_BREADTH);
+    @Override
+    protected Skin<?> createDefaultSkin() {
+        return new BasicScrollPaneSkin(this);
     }
 
     private void filterScrolling(ScrollEvent e) {

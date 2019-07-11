@@ -100,6 +100,9 @@ public class PaletteSelection extends BorderPane {
 
     public void changePreview() {
         ImageFile imageFile = Files.get().openSingleImage();
+        if (imageFile == null) {
+            return;
+        }
         Image image = imageFile.getImage();
         if (image.getWidth() > 16 || image.getHeight() > 16) {
             MessageDialog dialog = new MessageDialog();
