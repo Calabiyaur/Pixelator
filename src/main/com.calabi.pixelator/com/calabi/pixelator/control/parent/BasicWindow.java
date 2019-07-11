@@ -24,10 +24,10 @@ public class BasicWindow extends DraggablePane {
 
     private static final int HEADER_HEIGHT = 21;
 
-    private Label text = new Label("");
-    private HBox buttonBox = new HBox();
-    private ImageButton close = new ImageButton(Images.CLOSE);
-    private BasicScrollPane innerContent = new BasicScrollPane();
+    private final Label text = new Label("");
+    private final HBox buttonBox = new HBox();
+    private final ImageButton close = new ImageButton(Images.CLOSE);
+    private final BasicScrollPane innerContent = new BasicScrollPane();
     private EventHandler<Event> onClose;
 
     public BasicWindow(boolean showTitle) {

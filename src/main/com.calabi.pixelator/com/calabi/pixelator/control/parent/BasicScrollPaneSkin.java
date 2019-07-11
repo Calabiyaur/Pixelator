@@ -321,6 +321,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         viewRect = new StackPane() {
             @Override protected void layoutChildren() {
                 viewContent.resize(getWidth(), getHeight());
+                updatePosX();
+                updatePosY();
             }
         };
 
@@ -390,6 +392,9 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
             posX = Utils.clamp(getSkinnable().getHmin(), hsb.getValue(), getSkinnable().getHmax());
             updatePosX();
         });
+
+        consumeMouseEvents(false);
+        scrollNode.addEventHandler(MouseEvent.ANY, e -> e.consume());
 
         hsb.setValue(control.getHvalue());
         vsb.setValue(control.getVvalue());
@@ -466,7 +471,13 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
     private void updatePosY() {
         final ScrollPane sp = getSkinnable();
         double minY = Math.min((-posY / (vsb.getMax() - vsb.getMin()) * (nodeHeight - contentHeight)), 0);
-        viewContent.setLayoutY(snapPositionY(minY));
+
+        double extraY = 0;
+        if (viewRect.getHeight() > nodeHeight) {
+            extraY = (viewRect.getHeight() - nodeHeight) / 2;
+        }
+        viewContent.setLayoutY(snapPositionY(minY + extraY));
+
         if (!sp.vvalueProperty().isBound()) {
             sp.setVvalue(Utils.clamp(sp.getVmin(), posY, sp.getVmax()));
         }
@@ -476,7 +487,13 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         final ScrollPane sp = getSkinnable();
         double x = isReverseNodeOrientation() ? (hsb.getMax() - (posX - hsb.getMin())) : posX;
         double minX = Math.min((-x / (hsb.getMax() - hsb.getMin()) * (nodeWidth - contentWidth)), 0);
-        viewContent.setLayoutX(snapPositionX(minX));
+
+        double extraX = 0;
+        if (viewRect.getWidth() > nodeWidth) {
+            extraX = (viewRect.getWidth() - nodeWidth) / 2;
+        }
+        viewContent.setLayoutX(snapPositionX(minX + extraX));
+
         if (!sp.hvalueProperty().isBound()) {
             sp.setHvalue(Utils.clamp(sp.getHmin(), posX, sp.getHmax()));
         }
