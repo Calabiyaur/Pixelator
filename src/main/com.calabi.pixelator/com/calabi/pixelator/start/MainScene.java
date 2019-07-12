@@ -246,17 +246,13 @@ public class MainScene extends Scene {
     }
 
     private void createKeyListener() {
-        ActionManager.registerAction(Action.DOWN, e -> move(0, 1));
         ActionManager.registerAction(Action.ESCAPE, e -> imageContainer.escape());
         ActionManager.registerAction(Action.FIT_WINDOW, e -> imageContainer.fitWindow());
-        ActionManager.registerAction(Action.LEFT, e -> move(-1, 0));
         ActionManager.registerAction(Action.MINUS, e -> imageContainer.zoomOut());
         ActionManager.registerAction(Action.RANDOM_COLOR, e -> ColorView.setColor(ColorUtil.getRandomPleasant()));
         ActionManager.registerAction(Action.PLUS, e -> imageContainer.zoomIn());
-        ActionManager.registerAction(Action.RIGHT, e -> move(1, 0));
         ActionManager.registerAction(Action.SWITCH_TAB, e -> imageContainer.selectNextWindow());
         ActionManager.registerAction(Action.SWITCH_TAB_BACK, e -> imageContainer.selectPreviousWindow());
-        ActionManager.registerAction(Action.UP, e -> move(0, -1));
     }
 
     private void move(int right, int down) {
