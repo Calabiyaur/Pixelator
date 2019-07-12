@@ -14,7 +14,7 @@ public class BasicScrollPane extends ScrollPane {
     private EventHandler<ScrollEvent> onRawScroll;
 
     public BasicScrollPane() {
-        super();
+        this(null);
     }
 
     public BasicScrollPane(Node content) {
@@ -26,19 +26,16 @@ public class BasicScrollPane extends ScrollPane {
         return new BasicScrollPaneSkin(this);
     }
 
-    private void filterScrolling(ScrollEvent e) {
-        if (!e.isControlDown()) {
-            if (onRawScroll != null) {
-                onRawScroll.handle(e);
-            }
-            if (!scrollByMouse) {
-                e.consume();
-            }
-        }
+    public boolean isScrollByMouse() {
+        return scrollByMouse;
     }
 
     public void setScrollByMouse(boolean value) {
         this.scrollByMouse = value;
+    }
+
+    public EventHandler<ScrollEvent> getOnRawScroll() {
+        return onRawScroll;
     }
 
     public void setOnRawScroll(EventHandler<ScrollEvent> value) {

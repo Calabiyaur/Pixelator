@@ -38,7 +38,6 @@ public class ImageWindow extends BasicWindow {
         imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
         setContent(imageEditor);
 
-        getContent().setOnRawScroll(e -> onScroll(e));
         setOnScroll(e -> onScroll(e));
         setOnMouseClicked(e -> mouseClick(e));
         getEditor().mousePositionProperty().addListener((ov, o, n) -> updateMouse(n));

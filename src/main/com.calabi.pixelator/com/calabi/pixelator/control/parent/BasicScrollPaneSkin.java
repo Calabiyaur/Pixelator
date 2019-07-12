@@ -16,9 +16,12 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
+import com.sun.javafx.scene.control.behavior.BehaviorBase;
+import com.sun.javafx.scene.control.behavior.ScrollPaneBehavior;
 import com.sun.javafx.util.Utils;
 
 import static com.sun.javafx.scene.control.skin.Utils.boundedSize;
@@ -28,9 +31,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
     private static final double DEFAULT_SB_BREADTH = 8.;
     private static final double DEFAULT_PREF_SIZE = 100.;
     private static final double DEFAULT_MIN_SIZE = 36.;
-
+    private final BehaviorBase<ScrollPane> behavior;
     private Node scrollNode;
-
     private double nodeWidth;
     private double nodeHeight;
     private boolean nodeSizeInvalid = true;
@@ -117,6 +119,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
     public BasicScrollPaneSkin(BasicScrollPane control) {
         super(control);
 
+        behavior = new ScrollPaneBehavior(control);
+
         initialize();
 
         Consumer<ObservableValue<?>> viewportSizeHintConsumer = e -> getSkinnable().requestLayout();
@@ -158,6 +162,15 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         registerChangeListener(control.prefViewportHeightProperty(), viewportSizeHintConsumer);
         registerChangeListener(control.minViewportWidthProperty(), viewportSizeHintConsumer);
         registerChangeListener(control.minViewportHeightProperty(), viewportSizeHintConsumer);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        if (behavior != null) {
+            behavior.dispose();
+        }
     }
 
     @Override
@@ -315,7 +328,7 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
     }
 
     private void initialize() {
-        ScrollPane control = getSkinnable();
+        BasicScrollPane control = getSkinnable();
         scrollNode = control.getContent();
 
         viewRect = new StackPane() {
@@ -391,6 +404,68 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         hsb.valueProperty().addListener(valueModel -> {
             posX = Utils.clamp(getSkinnable().getHmin(), hsb.getValue(), getSkinnable().getHmax());
             updatePosX();
+        });
+
+        /*
+         * listen for ScrollEvents over the whole of the ScrollPane
+         * area, the above dispatcher having removed the ScrollBars
+         * scroll event handling.
+         *
+         * Note that we use viewRect here, rather than setting the eventHandler
+         * on the ScrollPane itself. This is for RT-31582, and effectively
+         * allows for us to prioritise handling (and consuming) the event
+         * internally, before it is made available to users listening to events
+         * on the control. This is consistent with the VirtualFlow-based controls.
+         */
+        viewRect.addEventHandler(ScrollEvent.SCROLL, event -> {
+
+            if (!event.isControlDown()) {
+                if (control.getOnRawScroll() != null) {
+                    control.getOnRawScroll().handle(event);
+                }
+                if (!control.isScrollByMouse()) {
+                    return;
+                }
+            }
+
+            /*
+             ** if we're completely visible then do nothing....
+             ** we only consume an event that we've used.
+             */
+            if (vsb.getVisibleAmount() < vsb.getMax()) {
+                double vRange = getSkinnable().getVmax() - getSkinnable().getVmin();
+                double vPixelValue;
+                if (nodeHeight > 0.0) {
+                    vPixelValue = vRange / nodeHeight;
+                } else {
+                    vPixelValue = 0.0;
+                }
+                double newValue = vsb.getValue() + (-event.getDeltaY()) * vPixelValue;
+                if ((event.getDeltaY() > 0.0 && vsb.getValue() > vsb.getMin()) ||
+                        (event.getDeltaY() < 0.0 && vsb.getValue() < vsb.getMax())) {
+                    vsb.setValue(newValue);
+                    event.consume();
+                }
+
+            }
+
+            if (hsb.getVisibleAmount() < hsb.getMax()) {
+                double hRange = getSkinnable().getHmax() - getSkinnable().getHmin();
+                double hPixelValue;
+                if (nodeWidth > 0.0) {
+                    hPixelValue = hRange / nodeWidth;
+                } else {
+                    hPixelValue = 0.0;
+                }
+
+                double newValue = hsb.getValue() + (-event.getDeltaX()) * hPixelValue;
+                if ((event.getDeltaX() > 0.0 && hsb.getValue() > hsb.getMin()) ||
+                        (event.getDeltaX() < 0.0 && hsb.getValue() < hsb.getMax())) {
+                    hsb.setValue(newValue);
+                    event.consume();
+                }
+
+            }
         });
 
         consumeMouseEvents(false);
