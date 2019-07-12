@@ -70,6 +70,10 @@ public class OutlineRect extends ShapeStack {
         this.y2.set(Math.min(getPixelHeight(), Math.max(0, (y1 < y2 ? y2 : y1) + 1)));
     }
 
+    public void clear() {
+        setEdges(-1, -1, -1, -1);
+    }
+
     public void playAnimation(boolean play) {
         if (play) {
             timeline.play();

@@ -20,8 +20,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
-import com.sun.javafx.scene.control.behavior.BehaviorBase;
-import com.sun.javafx.scene.control.behavior.ScrollPaneBehavior;
 import com.sun.javafx.util.Utils;
 
 import static com.sun.javafx.scene.control.skin.Utils.boundedSize;
@@ -31,7 +29,7 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
     private static final double DEFAULT_SB_BREADTH = 8.;
     private static final double DEFAULT_PREF_SIZE = 100.;
     private static final double DEFAULT_MIN_SIZE = 36.;
-    private final BehaviorBase<ScrollPane> behavior;
+
     private Node scrollNode;
     private double nodeWidth;
     private double nodeHeight;
@@ -119,8 +117,6 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
     public BasicScrollPaneSkin(BasicScrollPane control) {
         super(control);
 
-        behavior = new ScrollPaneBehavior(control);
-
         initialize();
 
         Consumer<ObservableValue<?>> viewportSizeHintConsumer = e -> getSkinnable().requestLayout();
@@ -162,15 +158,6 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         registerChangeListener(control.prefViewportHeightProperty(), viewportSizeHintConsumer);
         registerChangeListener(control.minViewportWidthProperty(), viewportSizeHintConsumer);
         registerChangeListener(control.minViewportHeightProperty(), viewportSizeHintConsumer);
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-
-        if (behavior != null) {
-            behavior.dispose();
-        }
     }
 
     @Override

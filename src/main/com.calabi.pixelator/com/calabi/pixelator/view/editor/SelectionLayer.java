@@ -39,7 +39,7 @@ public class SelectionLayer extends EditorLayer {
         if (position != null) {
             active.set(true);
         } else {
-            outlineRect.setEdges(-1, -1, -1, -1);
+            outlineRect.clear();
         }
     }
 
@@ -63,18 +63,21 @@ public class SelectionLayer extends EditorLayer {
         clearImage();
         getPixels().reset();
 
+        PointArray effectivePoints = new PointArray();
         for (int i = 0; i < points.size(); i++) {
             int x = points.getX(i);
             int y = points.getY(i);
             if (ImageUtil.outOfBounds(getImage(), x, y)) {
                 continue;
             }
+            effectivePoints.add(x, y);
             Color color = getReader().getColor(x, y);
             getWriter().setColor(x, y, color);
             getPixels().addForcefully(x, y, color, color);
         }
         active.set(true);
-        outlineShape.define(points);
+        outlineShape.define(effectivePoints);
+        outlineRect.clear();
     }
 
     public void defineImage(Image image) {
@@ -146,6 +149,7 @@ public class SelectionLayer extends EditorLayer {
         clearImage();
         getPixels().reset();
         active.set(false);
+        outlineRect.clear();
         outlineShape.clear();
         setTranslateX(0);
         setTranslateY(0);

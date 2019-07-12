@@ -24,11 +24,11 @@ public class Rectangle extends Tool {
     }
 
     @Override public void pressPrimary() {
-        getEditor().getToolLayer().setStart(getMouse());
+        getToolLayer().setStart(getMouse());
     }
 
     @Override public void dragPrimary() {
-        getEditor().getToolLayer().setPixels(ShapeUtil.getRectanglePoints(
+        getToolLayer().setPixels(ShapeUtil.getRectanglePoints(
                 getToolLayer().getStart(),
                 getMouse(),
                 ToolView.getInstance().isFillShape()));
