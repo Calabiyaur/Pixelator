@@ -295,15 +295,15 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
 
         vsb.setVisible(vsbVis);
         if (vsbVis) {
-            vsb.resizeRelocate(snappedLeftInset() + w - vsbWidth + (rightPadding < 1 ? 0 : rightPadding - 1), cy,
-                    vsbWidth, vsbHeight);
+            vsb.resizeRelocate(snappedLeftInset() + w - vsbWidth + (rightPadding < 1 ? 0 : rightPadding - 1), cy - 1,
+                    vsbWidth, vsbHeight + 2);
         }
         updateVerticalSB();
 
         hsb.setVisible(hsbVis);
         if (hsbVis) {
-            hsb.resizeRelocate(cx, snappedTopInset() + h - hsbHeight + (bottomPadding < 1 ? 0 : bottomPadding - 1),
-                    hsbWidth, hsbHeight);
+            hsb.resizeRelocate(cx - 1, snappedTopInset() + h - hsbHeight + (bottomPadding < 1 ? 0 : bottomPadding - 1),
+                    hsbWidth + 2, hsbHeight);
         }
         updateHorizontalSB();
 
@@ -333,8 +333,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         clipRect = new Rectangle();
         viewRect.setClip(clipRect);
 
-        hsb = new ScrollBar();
-        vsb = new ScrollBar();
+        hsb = new BasicScrollBar();
+        vsb = new BasicScrollBar();
         vsb.setOrientation(Orientation.VERTICAL);
 
         EventHandler<MouseEvent> barHandler = ev -> {

@@ -31,6 +31,9 @@ public class BasicWindow extends DraggablePane {
     private EventHandler<Event> onClose;
 
     public BasicWindow(boolean showTitle) {
+
+        add(innerContent, 1, 3);
+
         if (showTitle) {
             add(text, 1, 2);
             GridPane.setValignment(text, VPos.TOP);
@@ -39,7 +42,6 @@ public class BasicWindow extends DraggablePane {
             buttonBox.getChildren().add(close);
             buttonBox.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         }
-        add(innerContent, 1, 3);
 
         setHgrow(text, Priority.ALWAYS);
         setHalignment(buttonBox, HPos.RIGHT);
