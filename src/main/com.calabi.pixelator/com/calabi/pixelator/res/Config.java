@@ -11,6 +11,8 @@ public enum Config {
     FULLSCREEN(ConfigType.BOOLEAN, false),
     HEIGHT(ConfigType.DOUBLE, 400d),
     IMAGE_DIRECTORY(ConfigType.STRING, ""),
+    NEW_IMAGE_HEIGHT(ConfigType.INT, 32),
+    NEW_IMAGE_WIDTH(ConfigType.INT, 32),
     PALETTE_DIRECTORY(ConfigType.STRING, ""),
     PALETTE_MAX_COLORS(ConfigType.INT, 128),
     REPLACE(ConfigType.BOOLEAN, false),
