@@ -9,6 +9,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
@@ -64,6 +65,7 @@ public class PaletteSelection extends BorderPane {
         setLeft(tabButtonBox);
         BorderPane.setMargin(tabButtonBox, new Insets(0, 6, 0, 0));
         setCenter(palettePane);
+        BorderPane.setAlignment(palettePane, Pos.TOP_LEFT);
         VBox.setVgrow(this, Priority.ALWAYS);
 
         BooleanBinding paletteVisible = tabButtonBox.sizeProperty().greaterThan(0);
