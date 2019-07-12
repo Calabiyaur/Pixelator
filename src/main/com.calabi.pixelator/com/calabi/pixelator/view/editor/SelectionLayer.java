@@ -20,6 +20,7 @@ public class SelectionLayer extends EditorLayer {
 
     private Point drag;
     private BooleanProperty active = new SimpleBooleanProperty(false);
+    private boolean pasted = false;
     private OutlineRect outlineRect;
     private OutlineShape outlineShape;
 
@@ -59,6 +60,10 @@ public class SelectionLayer extends EditorLayer {
         return getPixels().isEmpty();
     }
 
+    public boolean isPasted() {
+        return pasted;
+    }
+
     public void definePixels(PointArray points) {
         clearImage();
         getPixels().reset();
@@ -80,7 +85,7 @@ public class SelectionLayer extends EditorLayer {
         outlineRect.clear();
     }
 
-    public void defineImage(Image image) {
+    public void defineImage(Image image, boolean pasted) {
         clear();
         PointArray points = new PointArray();
 
@@ -107,6 +112,7 @@ public class SelectionLayer extends EditorLayer {
             }
         }
         active.set(true);
+        this.pasted = pasted;
         outlineShape.define(points);
     }
 
@@ -149,6 +155,7 @@ public class SelectionLayer extends EditorLayer {
         clearImage();
         getPixels().reset();
         active.set(false);
+        pasted = false;
         outlineRect.clear();
         outlineShape.clear();
         setTranslateX(0);

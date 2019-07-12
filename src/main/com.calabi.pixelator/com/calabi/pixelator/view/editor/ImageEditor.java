@@ -619,7 +619,7 @@ public class ImageEditor extends Editor {
         if (clipboard.hasImage()) {
             Image image = clipboard.getImage();
             lockSelection();
-            selectionLayer.defineImage(image);
+            selectionLayer.defineImage(image, true);
         }
     }
 
@@ -630,7 +630,7 @@ public class ImageEditor extends Editor {
     }
 
     public void removeSelection() {
-        if (!selectionLayer.isDragging()) {
+        if (!selectionLayer.isDragging() && !selectionLayer.isPasted()) {
             removePixels(getSelectionLayer().getPixels());
         }
     }

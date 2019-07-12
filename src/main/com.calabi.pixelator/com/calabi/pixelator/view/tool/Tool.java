@@ -91,6 +91,10 @@ public abstract class Tool {
         stillSincePress = true;
         updateTool();
 
+        if (!actingTool.isSelectionTool() || !getSelectionLayer().contains(mouse)) {
+            getEditor().lockSelection();
+        }
+
         actingTool.pressPrimary();
     }
 
