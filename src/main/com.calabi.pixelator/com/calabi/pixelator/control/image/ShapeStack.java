@@ -3,8 +3,9 @@ package com.calabi.pixelator.control.image;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberExpression;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -13,14 +14,14 @@ import javafx.scene.shape.Shape;
 
 public abstract class ShapeStack extends StackPane {
 
-    protected IntegerProperty pixelWidth;
-    protected IntegerProperty pixelHeight;
+    protected DoubleProperty pixelWidth;
+    protected DoubleProperty pixelHeight;
 
     public ShapeStack(int pixelWidth, int pixelHeight) {
         setAlignment(Pos.TOP_LEFT);
         setPrefSize(pixelWidth, pixelHeight);
-        this.pixelWidth = new SimpleIntegerProperty(pixelWidth);
-        this.pixelHeight = new SimpleIntegerProperty(pixelHeight);
+        this.pixelWidth = new SimpleDoubleProperty(pixelWidth);
+        this.pixelHeight = new SimpleDoubleProperty(pixelHeight);
     }
 
     public abstract void draw();
@@ -35,28 +36,28 @@ public abstract class ShapeStack extends StackPane {
         draw();
     }
 
-    protected int getPixelWidth() {
+    protected double getPixelWidth() {
         return pixelWidth.get();
     }
 
-    public int getPixelHeight() {
+    public double getPixelHeight() {
         return pixelHeight.get();
     }
 
     protected DoubleBinding x(double i) {
-        return prefWidthProperty().multiply(i / (double) getPixelWidth());
+        return prefWidthProperty().multiply(i / getPixelWidth());
     }
 
     protected DoubleBinding y(double j) {
-        return prefHeightProperty().multiply(j / (double) getPixelHeight());
+        return prefHeightProperty().multiply(j / getPixelHeight());
     }
 
     protected DoubleBinding x(NumberExpression i) {
-        return prefWidthProperty().multiply(i.divide((double) getPixelWidth()));
+        return prefWidthProperty().multiply(i.divide(pixelWidth));
     }
 
     protected DoubleBinding y(NumberExpression j) {
-        return prefHeightProperty().multiply(j.divide((double) getPixelHeight()));
+        return prefHeightProperty().multiply(j.divide(pixelHeight));
     }
 
     protected Line scalableLine(IntegerProperty x1, IntegerProperty y1, IntegerProperty x2, IntegerProperty y2,

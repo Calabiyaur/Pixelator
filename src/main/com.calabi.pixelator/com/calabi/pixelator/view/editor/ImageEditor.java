@@ -122,6 +122,8 @@ public class ImageEditor extends Editor {
             pixels = new PixelChange(writer);
             toolLayer.resize(width.get(), height.get(), reader);
             selectionLayer.resize(width.get(), height.get(), reader);
+            outlineRect.resize(width.get(), height.get());
+            outlineShape.resize(width.get(), height.get());
             grid.resize(width.get(), height.get());
             crosshair.resize(width.get(), height.get());
             updateColorCount();
