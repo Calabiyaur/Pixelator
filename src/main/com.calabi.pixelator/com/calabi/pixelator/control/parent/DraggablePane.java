@@ -84,8 +84,7 @@ public abstract class DraggablePane extends GridPane {
     }
 
     protected void mousePressed(MouseEvent event) {
-        setFocused(false);
-        setFocused(true);
+        requestFocus();
 
         resizing = Direction.getDirection(getCursor());
         if (resizing == Direction.NONE) {

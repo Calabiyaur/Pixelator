@@ -2,6 +2,7 @@ package com.calabi.pixelator.view.tool;
 
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.ShapeUtil;
+import com.calabi.pixelator.view.ToolView;
 
 public class Line extends Tool {
 
@@ -28,7 +29,10 @@ public class Line extends Tool {
     }
 
     @Override public void dragPrimary() {
-        getEditor().getToolLayer().setPixels(ShapeUtil.getLinePoints(getToolLayer().getStart(), getMouse()));
+        getEditor().getToolLayer().setPixels(ShapeUtil.getLinePoints(
+                getToolLayer().getStart(),
+                getMouse(),
+                ToolView.getInstance().getThickness()));
     }
 
     @Override public void releasePrimary() {

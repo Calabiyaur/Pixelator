@@ -271,7 +271,7 @@ public class MainScene extends Scene {
     public void openFiles(Collection<String> files) {
         for (PixelFile pixelFile : Files.get().openByName(files)) {
             if (pixelFile instanceof ImageFile) {
-                imageContainer.addImage((ImageFile) pixelFile);
+                imageContainer.addImage(pixelFile);
             } else if (pixelFile instanceof PaletteFile) {
                 paletteSelection.addPalette((PaletteFile) pixelFile);
             } else {

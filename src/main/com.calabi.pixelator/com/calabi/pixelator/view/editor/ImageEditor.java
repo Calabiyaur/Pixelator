@@ -304,17 +304,17 @@ public class ImageEditor extends Editor {
         }
     }
 
-    public void paintPoint(int x, int y) {
+    public void paintPixel(int x, int y) {
         paintPixel(x, y, ColorView.getColor(), ToolView.getInstance().isReplaceColor());
     }
 
     public void paintPoint(Point point) {
-        paintPixel(point.getX(), point.getY(), ColorView.getColor(), ToolView.getInstance().isReplaceColor());
+        paintPoints(ShapeUtil.getCirclePoints(point.getX(), point.getY(), ToolView.getInstance().getThickness()));
     }
 
     public void paintPoints(PointArray points) {
         for (int i = 0; i < points.size(); i++) {
-            paintPoint(points.getX(i), points.getY(i));
+            paintPixel(points.getX(i), points.getY(i));
         }
     }
 
@@ -325,7 +325,7 @@ public class ImageEditor extends Editor {
     }
 
     public void paintLine(Point p1, Point p2) {
-        paintPoints(ShapeUtil.getLinePoints(p1, p2));
+        paintPoints(ShapeUtil.getLinePoints(p1, p2, ToolView.getInstance().getThickness()));
     }
 
     public void paintFill(Point point) {

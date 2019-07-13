@@ -31,7 +31,8 @@ public class Ellipse extends Tool {
         getEditor().getToolLayer().setPixels(ShapeUtil.getEllipsePoints(
                 getToolLayer().getStart(),
                 getMouse(),
-                ToolView.getInstance().isFillShape()));
+                ToolView.getInstance().isFillShape(),
+                ToolView.getInstance().getThickness()));
     }
 
     @Override public void releasePrimary() {

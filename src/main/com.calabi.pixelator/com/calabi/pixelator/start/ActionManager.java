@@ -21,12 +21,16 @@ public class ActionManager {
     }
 
     public static void fire(KeyEvent event) {
+        fire(event, false);
+    }
+
+    public static void fire(KeyEvent event, boolean forceFire) {
         Action action = Action.get(event.isControlDown(), event.isShiftDown(), event.isAltDown(), event.getCode());
         if (action != null) {
             Logger.logEvent(event, action.name());
 
             MenuItem control = controlMap.get(action);
-            if (control == null || control.getAccelerator() == null) {
+            if (control == null || control.getAccelerator() == null || forceFire) {
                 fire(action);
             }
         }

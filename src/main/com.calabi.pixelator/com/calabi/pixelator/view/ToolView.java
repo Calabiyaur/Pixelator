@@ -37,10 +37,10 @@ public class ToolView extends VBox {
     private ObjectProperty<Tools> currentTool = new SimpleObjectProperty<>();
     private BasicCheckBox replaceColorField;
     private BasicCheckBox fillShapeField;
-    private BasicIntegerField shapeWidthField;
+    private BasicIntegerField thicknessField;
     private BooleanProperty replaceColor = new SimpleBooleanProperty();
     private BooleanProperty fillShape = new SimpleBooleanProperty();
-    private IntegerProperty shapeWidth = new SimpleIntegerProperty();
+    private IntegerProperty thickness = new SimpleIntegerProperty();
     private Label preview = new Label();
     private Label previewTool = new Label();
     private Label previewSelection = new Label();
@@ -152,22 +152,22 @@ public class ToolView extends VBox {
     private VBox createPrefLayer() {
         replaceColorField = new BasicCheckBox("Replace");
         fillShapeField = new BasicCheckBox("Fill shape");
-        shapeWidthField = new BasicIntegerField("Width");
-        shapeWidthField.setMinValue(1);
-        shapeWidthField.setMaxValue(10);
+        thicknessField = new BasicIntegerField("Thickness");
+        thicknessField.setMinValue(1);
+        thicknessField.setMaxValue(10);
         replaceColorField.valueProperty().addListener((ov, o, n) -> replaceColor.set(n));
         fillShapeField.valueProperty().addListener((ov, o, n) -> fillShape.set(n));
-        shapeWidthField.valueProperty().addListener((ov, o, n) -> shapeWidth.set(n));
-        return new VBox(replaceColorField, fillShapeField, shapeWidthField);
+        thicknessField.valueProperty().addListener((ov, o, n) -> thickness.set(n));
+        return new VBox(replaceColorField, fillShapeField, thicknessField);
     }
 
     private void initConfig() {
         setReplace(Config.REPLACE.getBoolean());
         setFillShape(Config.FILL_SHAPE.getBoolean());
-        setShapeWidth(Config.SHAPE_WIDTH.getInt());
+        setThickness(Config.THICKNESS.getInt());
         replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(n));
         fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(n));
-        shapeWidth.addListener((ov, o, n) -> Config.SHAPE_WIDTH.putInt(n.intValue()));
+        thickness.addListener((ov, o, n) -> Config.THICKNESS.putInt(n.intValue()));
     }
 
     public void setPreview(Image image, Image toolImage, Image selectionImage) {
@@ -243,6 +243,10 @@ public class ToolView extends VBox {
         return fillShape.get();
     }
 
+    public int getThickness() {
+        return thickness.get();
+    }
+
     public void setReplace(boolean value) {
         replaceColorField.setValue(value);
     }
@@ -251,8 +255,8 @@ public class ToolView extends VBox {
         fillShapeField.setValue(value);
     }
 
-    public void setShapeWidth(int value) {
-        shapeWidthField.setValue(value);
+    public void setThickness(int value) {
+        thicknessField.setValue(value);
     }
 
 }
