@@ -22,10 +22,11 @@ public class Drag extends Tool {
     }
 
     @Override public void pressPrimary() {
-        getEditor().removeSelection();
         if (MouseButton.SECONDARY.equals(getMouseButton())) {
             getEditor().paintPixels(getSelectionLayer().getPixelsTransformed());
             getEditor().register();
+        } else {
+            getEditor().removeSelection();
         }
         getSelectionLayer().setDragStart(getMouse());
         getSelectionLayer().playBorder(false);

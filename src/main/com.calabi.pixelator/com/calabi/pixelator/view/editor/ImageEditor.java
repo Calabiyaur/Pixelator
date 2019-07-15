@@ -191,6 +191,7 @@ public class ImageEditor extends Editor {
     }
 
     private void onMousePressed(MouseEvent e) {
+        requestFocus();
         for (Parent parent = getParent(); parent != null; parent = parent.getParent()) {
             if (parent instanceof ImageWindow) {
                 ImageWindow imageWindow = (ImageWindow) parent;
@@ -295,9 +296,11 @@ public class ImageEditor extends Editor {
         Color previousColor = reader.getColor(x, y);
         Color newColor = replace ? color : ColorUtil.addColors(previousColor, color);
 
-        writer.setColor(x, y, newColor);
-        ColorView.addRecentColor(color);
-        pixels.add(x, y, previousColor, newColor);
+        if (!newColor.equals(previousColor)) {
+            writer.setColor(x, y, newColor);
+            ColorView.addRecentColor(color);
+            pixels.add(x, y, previousColor, newColor);
+        }
     }
 
     private void paintPoints(PointArray points, Color color, boolean replace) {
