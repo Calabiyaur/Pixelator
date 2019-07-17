@@ -10,10 +10,12 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public abstract class ShapeStack extends StackPane {
 
+    // Size of the image (in pixels)
     protected DoubleProperty pixelWidth;
     protected DoubleProperty pixelHeight;
 
@@ -87,5 +89,21 @@ public abstract class ShapeStack extends StackPane {
         line.translateYProperty().bind(Bindings.min(line.startYProperty(), line.endYProperty()));
         line.visibleProperty().bind(visibleProperty());
         return line;
+    }
+
+    protected Rectangle scalableSquare(Rectangle base) {
+        double x = base.getX();
+        double y = base.getY();
+        double width = base.getWidth();
+        double height = base.getHeight();
+        Rectangle square = new Rectangle();
+        square.xProperty().bind(x(x));
+        square.yProperty().bind(y(y));
+        square.widthProperty().bind(x(width).subtract(1));
+        square.heightProperty().bind(y(height).subtract(1));
+        square.translateXProperty().bind(square.xProperty());
+        square.translateYProperty().bind(square.yProperty());
+        square.visibleProperty().bind(visibleProperty());
+        return square;
     }
 }

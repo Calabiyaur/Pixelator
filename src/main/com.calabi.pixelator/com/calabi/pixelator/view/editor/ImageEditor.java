@@ -24,6 +24,7 @@ import com.calabi.pixelator.control.image.Grid;
 import com.calabi.pixelator.control.image.OutlineRect;
 import com.calabi.pixelator.control.image.OutlineShape;
 import com.calabi.pixelator.control.image.ScalableImageView;
+import com.calabi.pixelator.control.image.SquareStack;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.meta.PixelArray;
@@ -56,6 +57,7 @@ public class ImageEditor extends Editor {
     private Tool currentTool;
 
     private ToolLayer toolLayer;
+    private SquareStack squareStack;
     private SelectionLayer selectionLayer;
     private OutlineRect outlineRect;
     private OutlineShape outlineShape;
@@ -77,6 +79,10 @@ public class ImageEditor extends Editor {
         background = new Pane();
         background.setBackground(BackgroundUtil.repeat(Images.CHECKERS));
 
+        //TODO: Refactor this. ImageEditor does not need to know about square stack / outline shape, rect
+        squareStack = new SquareStack(getImageWidth(), getImageHeight());
+        toolLayer.setSquareStack(squareStack);
+
         outlineRect = new OutlineRect(getImageWidth(), getImageHeight());
         outlineShape = new OutlineShape(getImageWidth(), getImageHeight());
         outlineShape.visibleProperty().bind(selectionLayer.activeProperty());
@@ -93,13 +99,15 @@ public class ImageEditor extends Editor {
         crosshair.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         crosshair.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
 
+        squareStack.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
+        squareStack.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
         outlineRect.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         outlineRect.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
         outlineShape.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         outlineShape.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
 
         getChildren().addAll(
-                background, imageView, toolLayer, selectionLayer, crosshair, grid, outlineShape, outlineRect);
+                background, imageView, toolLayer, squareStack, selectionLayer, crosshair, grid, outlineShape, outlineRect);
 
         setBorderColor("transparent"); //TODO: use parameters from preferences
         setShowGrid(false);
@@ -122,8 +130,6 @@ public class ImageEditor extends Editor {
             pixels = new PixelChange(writer);
             toolLayer.resize(width.get(), height.get(), reader);
             selectionLayer.resize(width.get(), height.get(), reader);
-            outlineRect.resize(width.get(), height.get());
-            outlineShape.resize(width.get(), height.get());
             grid.resize(width.get(), height.get());
             crosshair.resize(width.get(), height.get());
             updateColorCount();
@@ -247,18 +253,15 @@ public class ImageEditor extends Editor {
     }
 
     public void registerToolLayer() {
-        PixelChange change = toolLayer.retrievePixels();
-        change.setWriter(writer);
-        writeAndRegister(change);
+        pixels.add(addToImage(toolLayer.retrievePixels()));
+        writeAndRegister(pixels);
     }
 
-    public boolean lockSelection() {
+    public void lockSelection() {
         if (!selectionLayer.isEmpty()) {
             pixels.add(addToImage(selectionLayer.retrievePixels()));
             writeAndRegister(pixels);
-            return true;
         }
-        return false;
     }
 
     public void escape() {
@@ -372,7 +375,7 @@ public class ImageEditor extends Editor {
         }
     }
 
-    private PixelChange addToImage(PixelChange add) {
+    private PixelChange addToImage(PixelArray add) {
         PixelChange result = new PixelChange(writer);
         for (int i = 0; i < add.size(); i++) {
             int x = add.getX(i);

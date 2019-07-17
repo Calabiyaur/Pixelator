@@ -35,13 +35,21 @@ public class SelectionLayer extends EditorLayer {
         });
     }
 
-    @Override public void setStart(Point position) {
+    @Override
+    public void setStart(Point position) {
         super.setStart(position);
         if (position != null) {
             active.set(true);
         } else {
             outlineRect.clear();
         }
+    }
+
+    @Override
+    void resize(int width, int height, PixelReader reader) {
+        super.resize(width, height, reader);
+        outlineRect.resize(width, height);
+        outlineShape.resize(width, height);
     }
 
     public boolean contains(Point p) {

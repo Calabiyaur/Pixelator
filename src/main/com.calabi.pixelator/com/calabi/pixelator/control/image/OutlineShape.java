@@ -31,6 +31,7 @@ public class OutlineShape extends ShapeStack {
     }
 
     public void draw() {
+        //TODO: Refactor this. Is the existence of this method justified?
     }
 
     public void define(PointArray points) {
@@ -90,7 +91,7 @@ public class OutlineShape extends ShapeStack {
             column.add(y);
         });
 
-        // Gather the vertical lines on the edge of each continuous series of points in a line
+        // Gather the horizontal lines on the edge of each continuous series of points in a line
         List<Integer> columnIndices = columnMap.keySet().stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
         Map<Integer, Line> linesOfThePreviousColumnTop = new HashMap<>();
         Map<Integer, Line> linesOfThePreviousColumnBottom = new HashMap<>();
@@ -128,6 +129,7 @@ public class OutlineShape extends ShapeStack {
             linesOfThePreviousColumnBottom.keySet().retainAll(retainBottom);
         }
 
+        // Create scalable white / dashed black lines from the gathered data
         List<Line> whiteLines = new ArrayList<>();
         List<Line> dashedLines = new ArrayList<>();
         for (Line leftLine : leftLines) {
