@@ -143,17 +143,23 @@ public class ShapeUtil {
      */
     public static PointArray getEllipsePoints(Point p1, Point p2, boolean fill, int thickness) {
         PointArray points = new PointArray();
-        int cx = (p1.getX() + p2.getX());
-        int cy = (p1.getY() + p2.getY());
-        int rx = Math.abs(p1.getX() - p2.getX());
-        int ry = Math.abs(p1.getY() - p2.getY());
+        int cx = (p1.getX() + p2.getX()) / 2;
+        int cy = (p1.getY() + p2.getY()) / 2;
+        int rx = Math.abs(p1.getX() - p2.getX()) / 2;
+        int ry = Math.abs(p1.getY() - p2.getY()) / 2;
 
         if (rx == 0 || ry == 0) {
-            return getLinePoints(p1, p2, 1);
+            return getLinePoints(p1, p2, thickness);
         }
 
         int a = 2 * rx * rx;
         int b = 2 * ry * ry;
+
+        int lx1 = 0;
+        int ly1 = 0;
+        int lx2 = 0;
+        int ly2 = 0;
+
         int x = rx;
         int y = 0;
         int dx = ry * ry * (1 - 2 * rx);
@@ -162,22 +168,21 @@ public class ShapeUtil {
         int sx = b * rx;
         int sy = 0;
 
-        while (sx >= sy) {
-            points.add((int) Math.floor((cx + x) / 2f), (int) Math.floor((cy + y) / 2f));
-            points.add((int) Math.ceil((cx - x) / 2f), (int) Math.floor((cy + y) / 2f));
-            points.add((int) Math.ceil((cx - x) / 2f), (int) Math.ceil((cy - y) / 2f));
-            points.add((int) Math.floor((cx + x) / 2f), (int) Math.ceil((cy - y) / 2f));
+        while (sx > sy) {
+            addPointsToEllipse(points, cx, cy, x, y);
+            lx1 = x;
+            ly1 = y;
 
-            y += 2;
-            sy += 2 * a;
-            ee += 2 * dy;
-            dy += 2 * a;
+            y++;
+            sy += a;
+            ee += dy;
+            dy += a;
 
             if ((2 * ee + dx > 0)) {
-                x -= 2;
-                sx -= 2 * b;
-                ee += 2 * dx;
-                dx += 2 * b;
+                x--;
+                sx -= b;
+                ee += dx;
+                dx += b;
             }
         }
 
@@ -189,26 +194,36 @@ public class ShapeUtil {
         sx = 0;
         sy = a * ry;
 
-        while (sx <= sy) {
-            points.add((int) Math.floor((cx + x) / 2f), (int) Math.floor((cy + y) / 2f));
-            points.add((int) Math.ceil((cx - x) / 2f), (int) Math.floor((cy + y) / 2f));
-            points.add((int) Math.ceil((cx - x) / 2f), (int) Math.ceil((cy - y) / 2f));
-            points.add((int) Math.floor((cx + x) / 2f), (int) Math.ceil((cy - y) / 2f));
+        while (sx < sy) {
+            addPointsToEllipse(points, cx, cy, x, y);
+            lx2 = x;
+            ly2 = y;
 
-            x += 2;
-            sx += 2 * b;
-            ee += 2 * dx;
-            dx += 2 * b;
+            x++;
+            sx += b;
+            ee += dx;
+            dx += b;
 
             if ((2 * ee + dy) > 0) {
-                y -= 2;
-                sy -= 2 * a;
-                ee += 2 * dy;
-                dy += 2 * a;
+                y--;
+                sy -= a;
+                ee += dy;
+                dy += a;
             }
         }
 
+        getLinePoints(new Point(lx1, ly1), new Point(lx2, ly2), thickness).forEach((lx, ly) -> {
+            addPointsToEllipse(points, cx, cy, lx, ly);
+        });
+
         return points;
+    }
+
+    private static void addPointsToEllipse(PointArray points, int cx, int cy, int x, int y) {
+        points.add(cx + x, cy + y);
+        points.add(cx - x, cy + y);
+        points.add(cx - x, cy - y);
+        points.add(cx + x, cy - y);
     }
 
     /**
