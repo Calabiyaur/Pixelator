@@ -34,4 +34,11 @@ class ShapeUtilTest {
         Assert.assertEquals(16, ShapeUtil.getEllipsePoints(p1, p2, false, 1).size());
     }
 
+    @Test
+    void testGetFilledEllipsePoints() {
+        Point p1 = new Point(0, 0);
+        Point p2 = new Point(8, 2);
+        Assert.assertEquals(23, ShapeUtil.getEllipsePoints(p1, p2, true, 1).size());
+    }
+
 }

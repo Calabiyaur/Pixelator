@@ -37,9 +37,9 @@ public class SquareStack extends ShapeStack {
         clear();
 
         // Maps a row index y to the x values of that row
-        Map<Integer, List<Integer>> rowMap = new HashMap<>();
+        Map<Integer, Set<Integer>> rowMap = new HashMap<>();
         points.forEach((x, y) -> {
-            List<Integer> row = rowMap.computeIfAbsent(y, key -> new ArrayList<>());
+            Set<Integer> row = rowMap.computeIfAbsent(y, key -> new HashSet<>());
             row.add(x);
         });
 
@@ -48,7 +48,7 @@ public class SquareStack extends ShapeStack {
         List<Rectangle> squares = new ArrayList<>();
         for (Integer y : rowIndices) {
             Set<Point> retainedSquares = new HashSet<>();
-            List<Integer> xValues = rowMap.get(y);
+            Set<Integer> xValues = rowMap.get(y);
             for (Point pair : CollectionUtil.getExtrema(xValues)) {
 
                 Rectangle square = squaresOfThePreviousRow.get(pair);

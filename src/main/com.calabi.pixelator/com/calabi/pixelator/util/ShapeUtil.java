@@ -169,7 +169,7 @@ public class ShapeUtil {
         int sy = 0;
 
         while (sx > sy) {
-            addPointsToEllipse(points, cx, cy, x, y);
+            addPointsToEllipse(points, cx, cy, x, y, fill, 0);
             lx1 = x;
             ly1 = y;
 
@@ -186,6 +186,8 @@ public class ShapeUtil {
             }
         }
 
+        int yOff = y - 1;
+
         x = 0;
         y = ry;
         dx = ry * ry;
@@ -195,7 +197,7 @@ public class ShapeUtil {
         sy = a * ry;
 
         while (sx < sy) {
-            addPointsToEllipse(points, cx, cy, x, y);
+            addPointsToEllipse(points, cx, cy, x, y, fill, yOff);
             lx2 = x;
             ly2 = y;
 
@@ -214,22 +216,73 @@ public class ShapeUtil {
 
         PointArray linePoints = getLinePoints(new Point(lx1, ly1), new Point(lx2, ly2), thickness);
         for (int i = 1; i < linePoints.size() - 1; i++) {
-            addPointsToEllipse(points, cx, cy, linePoints.getX(i), linePoints.getY(i));
+            addPointsToEllipse(points, cx, cy, linePoints.getX(i), linePoints.getY(i), false, 0);
         }
 
         return points;
     }
 
-    private static void addPointsToEllipse(PointArray points, int cx, int cy, int x, int y) {
-        points.add(cx + x, cy + y);
+    private static void addPointsToEllipse(PointArray points, int cx, int cy, int x, int y, boolean fill, int yOffset) {
+        if (!fill) {
+            points.add(cx + x, cy + y);
+        } else {
+            if (yOffset == 0) {
+                for (int i = cx; i < cx + x + 1; i++) {
+                    points.add(i, cy + y);
+                }
+            } else {
+                for (int i = cy + yOffset; i < cy + y + 1; i++) {
+                    points.add(cx + x, i);
+                }
+            }
+        }
+
         if (x != 0) {
-            points.add(cx - x, cy + y);
+            if (!fill) {
+                points.add(cx - x, cy + y);
+            } else {
+                if (yOffset == 0) {
+                    for (int i = cx - x; i < cx; i++) {
+                        points.add(i, cy + y);
+                    }
+                } else {
+                    for (int i = cy + yOffset; i < cy + y + 1; i++) {
+                        points.add(cx - x, i);
+                    }
+                }
+            }
         }
+
         if ((x != 0 || y != 0) && (x == 0 || y != 0)) {
-            points.add(cx - x, cy - y);
+            if (!fill) {
+                points.add(cx - x, cy - y);
+            } else {
+                if (yOffset == 0) {
+                    for (int i = cx - x; i < cx; i++) {
+                        points.add(i, cy - y);
+                    }
+                } else {
+                    for (int i = cy - y; i < cy - yOffset; i++) {
+                        points.add(cx - x, i);
+                    }
+                }
+            }
         }
+
         if (x != 0 && y != 0) {
-            points.add(cx + x, cy - y);
+            if (!fill) {
+                points.add(cx + x, cy - y);
+            } else {
+                if (yOffset == 0) {
+                    for (int i = cx; i < cx + x + 1; i++) {
+                        points.add(i, cy - y);
+                    }
+                } else {
+                    for (int i = cy - y; i < cy - yOffset; i++) {
+                        points.add(cx + x, i);
+                    }
+                }
+            }
         }
     }
 
