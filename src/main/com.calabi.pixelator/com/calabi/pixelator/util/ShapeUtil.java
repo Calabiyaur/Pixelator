@@ -212,18 +212,25 @@ public class ShapeUtil {
             }
         }
 
-        getLinePoints(new Point(lx1, ly1), new Point(lx2, ly2), thickness).forEach((lx, ly) -> {
-            addPointsToEllipse(points, cx, cy, lx, ly);
-        });
+        PointArray linePoints = getLinePoints(new Point(lx1, ly1), new Point(lx2, ly2), thickness);
+        for (int i = 1; i < linePoints.size() - 1; i++) {
+            addPointsToEllipse(points, cx, cy, linePoints.getX(i), linePoints.getY(i));
+        }
 
         return points;
     }
 
     private static void addPointsToEllipse(PointArray points, int cx, int cy, int x, int y) {
         points.add(cx + x, cy + y);
-        points.add(cx - x, cy + y);
-        points.add(cx - x, cy - y);
-        points.add(cx + x, cy - y);
+        if (x != 0) {
+            points.add(cx - x, cy + y);
+        }
+        if ((x != 0 || y != 0) && (x == 0 || y != 0)) {
+            points.add(cx - x, cy - y);
+        }
+        if (x != 0 && y != 0) {
+            points.add(cx + x, cy - y);
+        }
     }
 
     /**
