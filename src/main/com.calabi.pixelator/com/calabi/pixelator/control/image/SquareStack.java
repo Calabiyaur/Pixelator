@@ -75,7 +75,7 @@ public class SquareStack extends ShapeStack {
             Color color = ToolView.getInstance().isReplaceColor()
                     ? ColorUtil.addColors(Color.LIGHTGREY, ColorView.getColor())
                     : ColorView.getColor();
-            scalableSquare.setStroke(color);
+            scalableSquare.setStrokeWidth(0);
             scalableSquare.setFill(color);
 
             scalableSquares.add(scalableSquare);

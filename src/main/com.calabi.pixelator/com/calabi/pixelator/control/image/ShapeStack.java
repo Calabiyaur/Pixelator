@@ -99,8 +99,8 @@ public abstract class ShapeStack extends StackPane {
         Rectangle square = new Rectangle();
         square.xProperty().bind(x(x));
         square.yProperty().bind(y(y));
-        square.widthProperty().bind(x(width).subtract(1));
-        square.heightProperty().bind(y(height).subtract(1));
+        square.widthProperty().bind(x(width));
+        square.heightProperty().bind(y(height));
         square.translateXProperty().bind(square.xProperty());
         square.translateYProperty().bind(square.yProperty());
         square.visibleProperty().bind(visibleProperty());
