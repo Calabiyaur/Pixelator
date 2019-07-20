@@ -20,6 +20,7 @@ import com.calabi.pixelator.res.ImageConfig;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.start.ActionManager;
 import com.calabi.pixelator.start.Pixelator;
+import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
@@ -173,7 +174,11 @@ public class ImageWindow extends BasicWindow {
             double posX = p.getX();
             double posY = p.getY();
             ToolView.getInstance().setPreviewPosition(posX, posY);
-            InfoView.setMousePosition(new Point((int) posX, (int) posY));
+            if (ImageUtil.outOfBounds(getImageView().getImage(), (int) posX, (int) posY)) {
+                InfoView.setMousePosition(null);
+            } else {
+                InfoView.setMousePosition(new Point((int) posX, (int) posY));
+            }
         } else {
             InfoView.setMousePosition(null);
         }

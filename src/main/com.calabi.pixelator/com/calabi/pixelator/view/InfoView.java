@@ -1,5 +1,6 @@
 package com.calabi.pixelator.view;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -32,6 +33,10 @@ public class InfoView extends GridPane {
 
     public static void setMousePosition(Point position) {
         mousePosition.setText(position == null ? null : "Mouse: " + position.toString());
+    }
+
+    public static BooleanBinding mousePositionVisibleProperty() {
+        return mousePosition.textProperty().isNotNull();
     }
 
     public static void setColorCount(Integer count) {

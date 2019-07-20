@@ -3,6 +3,7 @@ package com.calabi.pixelator.view.editor;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
@@ -66,6 +67,7 @@ public class ImageEditor extends Editor {
     private Pane background;
 
     private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>();
+    private BooleanProperty showCrossHair = new SimpleBooleanProperty();
 
     public ImageEditor(PixelFile file, ScalableImageView imageView) {
         super(file, imageView);
@@ -98,6 +100,7 @@ public class ImageEditor extends Editor {
         crosshair.draw();
         crosshair.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         crosshair.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
+        crosshair.visibleProperty().bind(showCrossHair.and(InfoView.mousePositionVisibleProperty()));
 
         squareStack.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         squareStack.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
@@ -160,11 +163,11 @@ public class ImageEditor extends Editor {
     }
 
     public boolean isShowCrossHair() {
-        return crosshair.isVisible();
+        return showCrossHair.get();
     }
 
     public void setShowCrossHair(boolean showCrossHair) {
-        crosshair.setVisible(showCrossHair);
+        this.showCrossHair.set(showCrossHair);
     }
 
     public boolean isShowBackground() {
@@ -223,9 +226,9 @@ public class ImageEditor extends Editor {
     }
 
     private void updateCrossHair() {
-        if (crosshair.isVisible()) {
+        if (isShowCrossHair()) {
             Point mouse = Tool.getMouse();
-            if (mouse.getX() < width.get() && mouse.getY() < height.get()) {
+            if (mouse.getX() >= 0 && mouse.getX() < width.get() && mouse.getY() >= 0 && mouse.getY() < height.get()) {
                 crosshair.setPosition(mouse);
             }
         }
