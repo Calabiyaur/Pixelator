@@ -53,6 +53,8 @@ public class ImageWindow extends BasicWindow {
         ImageButton popup = new ImageButton(Images.POPUP);
         addButton(popup);
         popup.setOnAction(e -> popupAction());
+
+        popup.setDisable(true);
     }
 
     public void initConfig() {
