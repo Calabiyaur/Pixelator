@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pixelator.app</groupId>
     <artifactId>pixelator</artifactId>
-    <version>0.1.1</version>
+    <version>0.2.0-Snapshot</version>
 
     <build>
         <directory>target</directory>
@@ -57,6 +57,7 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
         </resources>
     </build>

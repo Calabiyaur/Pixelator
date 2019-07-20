@@ -9,7 +9,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.input.Clipboard;
 import javafx.stage.Stage;
 
+import com.sun.glass.ui.ClipboardAssistance;
+
 import com.calabi.pixelator.logging.Logger;
+import com.calabi.pixelator.res.BuildInfo;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 
@@ -39,7 +42,8 @@ public class Pixelator extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        Logger.log("Application started!");
+        String title = TITLE + " " + BuildInfo.VERSION;
+        Logger.log("Started " + title + "!");
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> ExceptionHandler.handle(e));
         initClipboardListener();
 
@@ -51,7 +55,7 @@ public class Pixelator extends Application {
         primaryStage.setMinHeight(530);
 
         primaryStage.setScene(scene);
-        primaryStage.setTitle(TITLE);
+        primaryStage.setTitle(title);
         primaryStage.setOnCloseRequest(e -> {
             if (!scene.closeAll()) {
                 // If closing the scene is unsuccessful, don't close the stage.
@@ -71,7 +75,7 @@ public class Pixelator extends Application {
     private void initClipboardListener() {
         final Clipboard systemClipboard = Clipboard.getSystemClipboard();
 
-        new com.sun.glass.ui.ClipboardAssistance(com.sun.glass.ui.Clipboard.SYSTEM) {
+        new ClipboardAssistance(com.sun.glass.ui.Clipboard.SYSTEM) {
             @Override
             public void contentChanged() {
                 clipboardActive.set(systemClipboard.hasImage());
