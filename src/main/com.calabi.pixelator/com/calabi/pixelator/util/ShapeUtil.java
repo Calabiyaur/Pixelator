@@ -137,28 +137,47 @@ public class ShapeUtil {
         return points;
     }
 
-    /**
-     * Return all points that lie between (x1, y1) and (x2, y2),
-     * in an elliptic shape.
-     */
     public static PointArray getEllipsePoints(Point p1, Point p2, boolean fill, int thickness) {
-        PointArray points = new PointArray();
-        int cx = (p1.getX() + p2.getX()) / 2;
-        int cy = (p1.getY() + p2.getY()) / 2;
-        int rx = Math.abs(p1.getX() - p2.getX()) / 2;
-        int ry = Math.abs(p1.getY() - p2.getY()) / 2;
+        // If width is odd, stretch by factor 2 to avoid half-ints
+        int stretchH = (p1.getX() + p2.getX()) % 2 == 0 ? 1 : 2;
+        int stretchV = (p1.getY() + p2.getY()) % 2 == 0 ? 1 : 2;
+        int cx = (p1.getX() + p2.getX()) / (2 / stretchH);
+        int cy = (p1.getY() + p2.getY()) / (2 / stretchV);
+        int rx = Math.abs(p1.getX() - p2.getX()) / (2 / stretchH);
+        int ry = Math.abs(p1.getY() - p2.getY()) / (2 / stretchV);
 
         if (rx == 0 || ry == 0) {
             return getLinePoints(p1, p2, thickness);
         }
+        if (Math.abs(p1.getX() - p2.getX()) == 1 || Math.abs(p1.getY() - p2.getY()) == 1) {
+            return getRectanglePoints(p1, p2, fill);
+        }
+        PointArray stretchedPoints = getEllipsePointsStretched(cx, cy, rx, ry, stretchH, stretchV, fill, thickness);
+        PointArray points = new PointArray();
+        stretchedPoints.forEach((x, y) -> {
+            if (x % stretchH == 0 && y % stretchV == 0) {
+                points.add(x / stretchH, y / stretchV);
+            } else if (x % stretchH == 0 || y % stretchV == 0) {
+                double x1 = ((double) x / (double) stretchH);
+                double y1 = ((double) y / (double) stretchV);
+                double x2 = x > cx ? Math.floor(x1) : Math.ceil(x1);
+                double y2 = y > cy ? Math.floor(y1) : Math.ceil(y1);
+                points.add((int) x2, (int) y2);
+            }
+        });
+        return points;
+    }
+
+    /**
+     * Return all points that form an ellipse around (cx|cy) with radii rx and ry.
+     */
+    private static PointArray getEllipsePointsStretched(int cx, int cy, int rx, int ry, int sH, int sV,
+            boolean fill, int thickness) {
+
+        PointArray points = new PointArray();
 
         int a = 2 * rx * rx;
         int b = 2 * ry * ry;
-
-        int lx1 = 0;
-        int ly1 = 0;
-        int lx2 = 0;
-        int ly2 = 0;
 
         int x = rx;
         int y = 0;
@@ -168,18 +187,21 @@ public class ShapeUtil {
         int sx = b * rx;
         int sy = 0;
 
+        int lx1 = 0;
+        int ly1 = 0;
+
         while (sx > sy) {
             addPointsToEllipse(points, cx, cy, x, y, fill, 0);
             lx1 = x;
             ly1 = y;
 
-            y++;
+            y += 1;
             sy += a;
             ee += dy;
             dy += a;
 
             if ((2 * ee + dx > 0)) {
-                x--;
+                x -= 1;
                 sx -= b;
                 ee += dx;
                 dx += b;
@@ -196,18 +218,21 @@ public class ShapeUtil {
         sx = 0;
         sy = a * ry;
 
+        int lx2 = 0;
+        int ly2 = 0;
+
         while (sx < sy) {
             addPointsToEllipse(points, cx, cy, x, y, fill, yOff);
             lx2 = x;
             ly2 = y;
 
-            x++;
+            x += 1;
             sx += b;
             ee += dx;
             dx += b;
 
             if ((2 * ee + dy) > 0) {
-                y--;
+                y -= 1;
                 sy -= a;
                 ee += dy;
                 dy += a;

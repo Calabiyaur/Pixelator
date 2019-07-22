@@ -35,6 +35,13 @@ class ShapeUtilTest {
     }
 
     @Test
+    void testGetEllipsePointsOdd() {
+        Point p1 = new Point(0, 0);
+        Point p2 = new Point(5, 5);
+        Assert.assertEquals(10, ShapeUtil.getEllipsePoints(p1, p2, false, 1).size());
+    }
+
+    @Test
     void testGetFilledEllipsePoints() {
         Point p1 = new Point(0, 0);
         Point p2 = new Point(8, 2);
