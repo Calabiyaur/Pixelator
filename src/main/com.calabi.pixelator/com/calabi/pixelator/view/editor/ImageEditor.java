@@ -1,5 +1,9 @@
 package com.calabi.pixelator.view.editor;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -612,6 +616,56 @@ public class ImageEditor extends Editor {
                 for (int j = 0; j < height.get(); j++) {
                     Color color = reader.getColor(i, j);
                     pixels.add(i, j, color, ColorUtil.invert(color));
+                }
+            }
+        }
+        writeAndRegister(pixels);
+    }
+
+    public void invertWithinPalette() {
+        Set<Color> colorSet = PaletteMaster.extractColors(getImage(), Integer.MAX_VALUE);
+        List<Color> colors = colorSet.stream().sorted((o1, o2) -> {
+            if (o1 == null || o2 == null) {
+                return 0;
+            }
+            double sum1 = o1.getRed() + o1.getGreen() + o1.getBlue();
+            double sum2 = o2.getRed() + o2.getGreen() + o2.getBlue();
+            if (sum1 != sum2) {
+                return Double.compare(sum1, sum2);
+            }
+            if (o1.getRed() != o2.getRed()) {
+                return Double.compare(o1.getRed(), o2.getRed());
+            }
+            if (o1.getGreen() != o2.getGreen()) {
+                return Double.compare(o1.getGreen(), o2.getGreen());
+            }
+            return Double.compare(o1.getBlue(), o2.getBlue());
+        }).collect(Collectors.toList());
+
+        if (selectionActiveProperty().get()) {
+            PixelChange selectedPixels = selectionLayer.getPixels().clone();
+            currentTool.lockAndReset();
+
+            selectedPixels.forEach((x, y, prev, color) -> {
+                int index = colors.indexOf(color);
+                if (index != -1) {
+                    Color temp = colors.get(colors.size() - index - 1);
+                    Color inverted = Color.color(temp.getRed(), temp.getGreen(), temp.getBlue(), color.getOpacity());
+                    pixels.add(x, y, color, inverted);
+                }
+            });
+        } else {
+            currentTool.lockAndReset();
+
+            for (int i = 0; i < width.get(); i++) {
+                for (int j = 0; j < height.get(); j++) {
+                    Color color = reader.getColor(i, j);
+                    int index = colors.indexOf(color);
+                    if (index != -1) {
+                        Color temp = colors.get(colors.size() - index - 1);
+                        Color inverted = Color.color(temp.getRed(), temp.getGreen(), temp.getBlue(), color.getOpacity());
+                        pixels.add(i, j, color, inverted);
+                    }
                 }
             }
         }

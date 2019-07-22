@@ -13,12 +13,12 @@ public enum Category {
     IMAGE(
             Config.IMAGE_DIRECTORY,
             new Filter[] {
-                    new Filter(Extension.GIF),
-                    new Filter(Extension.JPEG, Extension.JPG),
                     new Filter(Extension.PNG),
+                    new Filter(Extension.JPEG, Extension.JPG),
+                    new Filter(Extension.GIF),
+                    new Filter(Extension.PIX),
                     new Filter(Extension.PAL),
-                    new Filter(Extension.PALI),
-                    new Filter(Extension.PIX)
+                    new Filter(Extension.PALI)
             },
             new Filter[] {
                     new Filter("Image files",

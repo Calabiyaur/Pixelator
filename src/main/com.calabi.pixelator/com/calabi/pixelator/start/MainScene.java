@@ -201,7 +201,9 @@ public class MainScene extends Scene {
         imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, "Rotate counter-clockwise",
                 e -> getEditor().rotateCounterClockwise(),
                 ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(INVERT, "Invert Colors", e -> getEditor().invert(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(INVERT, "Invert", e -> getEditor().invert(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(INVERT, "Invert within Palette", e -> getEditor().invertWithinPalette(),
+                ImageWindowContainer.imageSelectedProperty());
 
         BasicMenu paletteMenu = new BasicMenu("Palette");
         paletteMenu.addItem(NEW_PALETTE, "New...", e -> paletteSelection.createPalette());
