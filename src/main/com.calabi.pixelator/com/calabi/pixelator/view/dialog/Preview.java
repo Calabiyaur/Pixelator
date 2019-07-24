@@ -52,6 +52,10 @@ class Preview extends BasicScrollPane {
         return (WritableImage) imageView.getImage();
     }
 
+    ScalableImageView getImageView() {
+        return imageView;
+    }
+
     public void setOnAction(EventHandler<? super MouseEvent> event) {
         getContent().setOnMousePressed(e -> {
             if (enabled) {

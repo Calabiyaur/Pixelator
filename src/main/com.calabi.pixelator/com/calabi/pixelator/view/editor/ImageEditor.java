@@ -2,7 +2,6 @@ package com.calabi.pixelator.view.editor;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -46,6 +45,7 @@ import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.palette.PaletteMaster;
+import com.calabi.pixelator.view.palette.SortMaster;
 import com.calabi.pixelator.view.tool.Tool;
 import com.calabi.pixelator.view.tool.ToolManager;
 import com.calabi.pixelator.view.undo.ImageChange;
@@ -623,24 +623,8 @@ public class ImageEditor extends Editor {
     }
 
     public void invertWithinPalette() {
-        Set<Color> colorSet = PaletteMaster.extractColors(getImage(), Integer.MAX_VALUE);
-        List<Color> colors = colorSet.stream().sorted((o1, o2) -> {
-            if (o1 == null || o2 == null) {
-                return 0;
-            }
-            double sum1 = o1.getRed() + o1.getGreen() + o1.getBlue();
-            double sum2 = o2.getRed() + o2.getGreen() + o2.getBlue();
-            if (sum1 != sum2) {
-                return Double.compare(sum1, sum2);
-            }
-            if (o1.getRed() != o2.getRed()) {
-                return Double.compare(o1.getRed(), o2.getRed());
-            }
-            if (o1.getGreen() != o2.getGreen()) {
-                return Double.compare(o1.getGreen(), o2.getGreen());
-            }
-            return Double.compare(o1.getBlue(), o2.getBlue());
-        }).collect(Collectors.toList());
+        Set<Color> colorSet = PaletteMaster.extractColors(getImage());
+        List<Color> colors = SortMaster.sortByValues(colorSet);
 
         if (selectionActiveProperty().get()) {
             PixelChange selectedPixels = selectionLayer.getPixels().clone();

@@ -2,6 +2,8 @@ package com.calabi.pixelator.view.palette;
 
 import java.io.File;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -14,7 +16,6 @@ import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.util.ImageUtil;
-import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.editor.Editor;
 import com.calabi.pixelator.view.tool.Pick;
 
@@ -22,6 +23,8 @@ public class PaletteEditor extends Editor {
 
     public static int DEFAULT_WIDTH = 8;
     public static int DEFAULT_HEIGHT = 5;
+
+    private final ObjectProperty<Color> selectedColor = new SimpleObjectProperty<>();
 
     public PaletteEditor(PaletteFile file) {
         super(file, new PixelatedImageView(ImageUtil.makeWritableIfNot(file.getImage())));
@@ -68,7 +71,7 @@ public class PaletteEditor extends Editor {
 
     private void takeColor(int x, int y) {
         Color color = getImage().getPixelReader().getColor(x, y);
-        ColorView.setColor(color);
+        selectedColor.set(color);
     }
 
     @Override
@@ -89,4 +92,11 @@ public class PaletteEditor extends Editor {
         this.getPixelFile().setFile(file);
     }
 
+    public Color getSelectedColor() {
+        return selectedColor.get();
+    }
+
+    public ObjectProperty<Color> selectedColorProperty() {
+        return selectedColor;
+    }
 }

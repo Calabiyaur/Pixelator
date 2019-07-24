@@ -25,8 +25,9 @@ import com.calabi.pixelator.view.palette.partition.HilbertPartition;
 import com.calabi.pixelator.view.palette.partition.Mapping;
 import com.calabi.pixelator.view.palette.partition.Partition;
 
-public class PaletteMaster {
+public final class PaletteMaster {
 
+    public static final int MAX_COLORS = Integer.MAX_VALUE;
     public static final int HUE_VARIETY = 8;
 
     public static WritableImage extractPalette(Image image, int maxColors) {
@@ -43,6 +44,10 @@ public class PaletteMaster {
         }
 
         return palette;
+    }
+
+    public static Set<Color> extractColors(Image image) {
+        return extractColors(image, MAX_COLORS);
     }
 
     public static Set<Color> extractColors(Image image, Integer maxColors) {

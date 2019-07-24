@@ -7,6 +7,8 @@ import javafx.scene.image.WritableImage;
 
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.util.Do;
+import com.calabi.pixelator.view.ColorView;
 
 final class PaletteSelectionModel {
 
@@ -23,12 +25,14 @@ final class PaletteSelectionModel {
         WritableImage image = new WritableImage(PaletteEditor.DEFAULT_WIDTH, PaletteEditor.DEFAULT_HEIGHT);
         PaletteFile file = new PaletteFile(null, image);
         defaultEditor = new PaletteEditor(file);
+        defaultEditor.selectedColorProperty().addListener((ov, o, n) -> Do.when(n != null, () -> ColorView.setColor(n)));
         PaletteToggleButton button = tabButtons.create(Images.ASTERISK.getImage(), defaultEditor, "Current Image", false);
         button.fire();
     }
 
     public void addPalette(PaletteFile file) {
         PaletteEditor editor = new PaletteEditor(file);
+        editor.selectedColorProperty().addListener((ov, o, n) -> Do.when(n != null, () -> ColorView.setColor(n)));
         Image preview = file.getPreview() == null ? Images.NEW.getImage() : new Image(file.getPreview().getPath());
         PaletteToggleButton button = tabButtons.create(preview, editor, file.isNew() ? "New Palette" : file.getName(), true);
         button.fire();

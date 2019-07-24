@@ -76,6 +76,10 @@ public abstract class PreviewDialog extends BasicDialog {
         leftContent.add(node, columnIndex, rowIndex, colSpan, rowSpan);
     }
 
+    public Preview getPreview() {
+        return preview;
+    }
+
     public Image getImage() {
         return preview.getImage();
     }
