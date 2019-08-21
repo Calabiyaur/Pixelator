@@ -1,5 +1,7 @@
 package com.calabi.pixelator.view;
 
+import java.util.Arrays;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -14,6 +16,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -26,6 +29,7 @@ import javafx.scene.text.Text;
 import com.calabi.pixelator.control.basic.BasicCheckBox;
 import com.calabi.pixelator.control.basic.BasicIntegerField;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
+import com.calabi.pixelator.control.basic.UndeselectableToggleGroup;
 import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
@@ -35,9 +39,6 @@ public class ToolView extends VBox {
 
     private static ToolView instance;
     private ObjectProperty<Tools> currentTool = new SimpleObjectProperty<>();
-    private BasicCheckBox replaceColorField;
-    private BasicCheckBox fillShapeField;
-    private BasicIntegerField thicknessField;
     private BooleanProperty replaceColor = new SimpleBooleanProperty();
     private BooleanProperty fillShape = new SimpleBooleanProperty();
     private IntegerProperty thickness = new SimpleIntegerProperty();
@@ -55,12 +56,7 @@ public class ToolView extends VBox {
         setPadding(new Insets(6, 0, 6, 6));
 
         getChildren().add(new Label("TOOLS"));
-        ToggleGroup tg = new ToggleGroup();
-        tg.selectedToggleProperty().addListener((ov, o, n) -> {
-            if (n == null && o != null) {
-                o.setSelected(true);
-            }
-        });
+        ToggleGroup tg = new UndeselectableToggleGroup();
 
         FlowPane tools1 = createFirstToolLayer(tg);
         tools1.setVgap(1);
@@ -76,10 +72,7 @@ public class ToolView extends VBox {
 
         getChildren().add(4, new Separator());
 
-        VBox prefBox = createPrefLayer();
-        prefBox.setFillWidth(false);
-        prefBox.setSpacing(3);
-        getChildren().add(5, prefBox);
+        getChildren().add(5, createPrefLayer());
 
         getChildren().add(6, new Separator());
 
@@ -149,16 +142,38 @@ public class ToolView extends VBox {
         return new FlowPane(select, wand, fillSelect);
     }
 
-    private VBox createPrefLayer() {
-        replaceColorField = new BasicCheckBox("Replace");
-        fillShapeField = new BasicCheckBox("Fill shape");
-        thicknessField = new BasicIntegerField("Thickness");
+    private Pane createPrefLayer() {
+        BasicCheckBox replaceColorField = new BasicCheckBox("Replace");
+        BasicCheckBox fillShapeField = new BasicCheckBox("Fill shape");
+        BasicIntegerField thicknessField = new BasicIntegerField("Thickness");
+        Arrays.asList(replaceColorField, fillShapeField, thicknessField).forEach(field -> {
+            field.getControl().setPrefWidth(36);
+            field.setMinWidth(100);
+        });
+
         thicknessField.setMinValue(1);
         thicknessField.setMaxValue(10);
+        ToggleGroup tg = new UndeselectableToggleGroup();
+        ToggleImageButton bulgeLeft = new ToggleImageButton(tg, Images.BULGE_LEFT);
+        ToggleImageButton bulgeCenter = new ToggleImageButton(tg, Images.BULGE_CENTER);
+        ToggleImageButton bulgeRight = new ToggleImageButton(tg, Images.BULGE_RIGHT);
+
         replaceColorField.valueProperty().addListener((ov, o, n) -> replaceColor.set(n));
         fillShapeField.valueProperty().addListener((ov, o, n) -> fillShape.set(n));
         thicknessField.valueProperty().addListener((ov, o, n) -> thickness.set(n));
-        return new VBox(replaceColorField, fillShapeField, thicknessField);
+        thickness.addListener((ov, o, n) -> Arrays.asList(bulgeLeft, bulgeCenter, bulgeRight)
+                .forEach(b -> b.setDisable(n.intValue() == 1)));
+
+        GridPane prefBox = new GridPane();
+        prefBox.addRow(0, replaceColorField);
+        prefBox.addRow(1, fillShapeField);
+        prefBox.addRow(2, thicknessField, bulgeLeft, bulgeCenter, bulgeRight);
+        prefBox.setVgap(3);
+        GridPane.setMargin(bulgeLeft, new Insets(0, 0, 0, 3));
+
+        bulgeCenter.fire();
+
+        return prefBox;
     }
 
     private void initConfig() {
@@ -248,15 +263,15 @@ public class ToolView extends VBox {
     }
 
     public void setReplace(boolean value) {
-        replaceColorField.setValue(value);
+        replaceColor.setValue(value);
     }
 
     public void setFillShape(boolean value) {
-        fillShapeField.setValue(value);
+        fillShape.setValue(value);
     }
 
     public void setThickness(int value) {
-        thicknessField.setValue(value);
+        thickness.setValue(value);
     }
 
 }

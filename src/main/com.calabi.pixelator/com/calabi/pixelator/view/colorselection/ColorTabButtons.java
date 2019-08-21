@@ -5,18 +5,15 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 
+import com.calabi.pixelator.control.basic.UndeselectableToggleGroup;
+
 public class ColorTabButtons extends Group {
 
     private final ToggleButton rgb;
     private final ToggleButton hsb;
 
     public ColorTabButtons() {
-        ToggleGroup tg = new ToggleGroup();
-        tg.selectedToggleProperty().addListener((ov, o, n) -> {
-            if (n == null) {
-                tg.selectToggle(o);
-            }
-        });
+        ToggleGroup tg = new UndeselectableToggleGroup();
 
         rgb = new ToggleButton(ColorSpace.RGB.name());
         hsb = new ToggleButton(ColorSpace.HSB.name());

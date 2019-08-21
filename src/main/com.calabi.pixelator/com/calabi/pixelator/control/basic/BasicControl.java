@@ -64,7 +64,7 @@ public abstract class BasicControl<T> extends GridPane {
         return tailText;
     }
 
-    protected final void addControl(Control control, int columnIndex) {
+    public final void addControl(Control control, int columnIndex) {
         getChildren().forEach(c -> {
             int oldIndex = getColumnIndex(c);
             if (oldIndex >= columnIndex) {

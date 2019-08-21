@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import com.calabi.pixelator.control.basic.UndeselectableToggleGroup;
 import com.calabi.pixelator.meta.Direction;
 
 public class ResizableTabPane<T extends BasicTab> extends ResizableBorderPane {
@@ -22,7 +23,7 @@ public class ResizableTabPane<T extends BasicTab> extends ResizableBorderPane {
 
     private StackPane stackPane = new StackPane();
     private ObservableList<T> tabs = FXCollections.observableArrayList();
-    private ToggleGroup toggleGroup = new ToggleGroup();
+    private ToggleGroup toggleGroup = new UndeselectableToggleGroup();
     private SingleSelectionModel<T> selectionModel = new SingleSelectionModel<T>() {
         @Override protected T getModelItem(int index) {
             return tabs.get(index);
@@ -46,12 +47,6 @@ public class ResizableTabPane<T extends BasicTab> extends ResizableBorderPane {
         setCenter(stackPane);
         setRight(null);
         getSplitPane().setDividerPosition(0, 0.25);
-
-        toggleGroup.selectedToggleProperty().addListener((ov, o, n) -> {
-            if (n == null) {
-                o.setSelected(true);
-            }
-        });
     }
 
     @SuppressWarnings("Duplicates")

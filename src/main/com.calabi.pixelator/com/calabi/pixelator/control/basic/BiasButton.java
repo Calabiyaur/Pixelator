@@ -22,12 +22,8 @@ public class BiasButton extends GridPane {
     private Direction bias;
 
     public BiasButton() {
-        ToggleGroup tg = new ToggleGroup();
-        tg.selectedToggleProperty().addListener((ov, o, n) -> {
-            if (n == null && o != null) {
-                o.setSelected(true);
-            }
-        });
+        ToggleGroup tg = new UndeselectableToggleGroup();
+
         ToggleButton c = new ToggleImageButton(tg, Images.ARROW_C);
         ToggleButton e = new ToggleImageButton(tg, Images.ARROW_E);
         ToggleButton ne = new ToggleImageButton(tg, Images.ARROW_NE);
