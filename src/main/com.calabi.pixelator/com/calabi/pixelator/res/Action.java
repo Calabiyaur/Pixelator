@@ -1,37 +1,41 @@
 package com.calabi.pixelator.res;
 
+import java.util.Set;
+
 import javafx.scene.input.KeyCode;
+
+import com.calabi.pixelator.util.CollectionUtil;
 
 public enum Action {
 
     BACKGROUND(true, true, false, KeyCode.B),
-    CHANGE_PALETTE(),
-    CHANGE_PALETTE_PREVIEW(),
+    CHANGE_PALETTE,
+    CHANGE_PALETTE_PREVIEW,
     CLOSE(true, false, false, KeyCode.F4),
     CLOSE_PALETTE(true, false, true, KeyCode.F4),
     COPY(true, false, false, KeyCode.C),
-    CREATE_FROM_CLIPBOARD(),
-    CROP(),
+    CREATE_FROM_CLIPBOARD,
+    CROP,
     CROSSHAIR(true, true, false, KeyCode.C),
     CUT(true, false, false, KeyCode.X),
     DELETE(false, false, false, KeyCode.DELETE),
     DOWN(false, false, false, KeyCode.DOWN),
-    EDIT_PALETTE(),
+    EDIT_PALETTE,
     ESCAPE(false, false, false, KeyCode.ESCAPE),
     EXTRACT_PALETTE(true, false, true, KeyCode.P),
     FIT_WINDOW(false, false, false, KeyCode.F4),
-    FLIP_HORIZONTALLY(),
-    FLIP_VERTICALLY(),
+    FLIP_HORIZONTALLY,
+    FLIP_VERTICALLY,
     GRID(true, true, false, KeyCode.G),
-    INVERT(),
+    INVERT,
     LEFT(false, false, false, KeyCode.LEFT),
     MINUS(false, false, false, KeyCode.MINUS),
-    MOVE_IMAGE(),
+    MOVE_IMAGE,
     NEW(true, false, false, KeyCode.N),
     NEW_PALETTE(true, false, true, KeyCode.N),
     OPEN(true, false, false, KeyCode.O),
     OPEN_PALETTE(true, false, true, KeyCode.O),
-    OUTLINE(),
+    OUTLINE,
     P_DOWN(false, false, true, KeyCode.DOWN),
     P_LEFT(false, false, true, KeyCode.LEFT),
     P_RIGHT(false, false, true, KeyCode.RIGHT),
@@ -41,20 +45,22 @@ public enum Action {
     RANDOM_COLOR(false, false, false, KeyCode.R),
     REDO(true, false, false, KeyCode.Y),
     REDO_PALETTE(true, false, true, KeyCode.Y),
-    RESIZE(),
+    RESIZE,
     RIGHT(false, false, false, KeyCode.RIGHT),
-    ROTATE_CLOCKWISE(),
-    ROTATE_COUNTER_CLOCKWISE(),
+    ROTATE_CLOCKWISE,
+    ROTATE_COUNTER_CLOCKWISE,
     SAVE(true, false, false, KeyCode.S),
     SAVE_AS(true, true, false, KeyCode.S),
     SAVE_PALETTE(true, false, true, KeyCode.S),
     SELECT_ALL(true, false, false, KeyCode.A),
-    STRETCH(),
+    STRETCH,
     SWITCH_TAB(true, false, false, KeyCode.TAB),
     SWITCH_TAB_BACK(true, true, false, KeyCode.TAB),
     UNDO(true, false, false, KeyCode.Z),
     UNDO_PALETTE(true, false, true, KeyCode.Z),
     UP(false, false, false, KeyCode.UP);
+
+    static Set<Action> BETA_ACTIONS = CollectionUtil.toSet(CHANGE_PALETTE);
 
     private boolean ctrl;
     private boolean shift;

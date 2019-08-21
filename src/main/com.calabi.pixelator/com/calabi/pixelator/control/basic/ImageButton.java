@@ -8,7 +8,11 @@ import com.calabi.pixelator.res.Images;
 public class ImageButton extends Button {
 
     public ImageButton(Images image) {
-        super("", new ImageView(image.getImage()));
+        this(new ImageView(image.getImage()));
+    }
+
+    public ImageButton(ImageView imageView) {
+        super("", imageView);
         getStyleClass().setAll("default-button");
     }
 }

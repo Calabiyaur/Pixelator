@@ -1,6 +1,7 @@
 package com.calabi.pixelator.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -12,6 +13,14 @@ import java.util.stream.Collectors;
 import com.calabi.pixelator.meta.Point;
 
 public class CollectionUtil {
+
+    public static <T> Set<T> toSet(T... elements) {
+        return new HashSet<>(Arrays.asList(elements));
+    }
+
+    public static <T> List<T> toList(T... elements) {
+        return new ArrayList<>(Arrays.asList(elements));
+    }
 
     public static List<Point> getExtrema(Collection<Integer> collection) {
         List<Point> result = new ArrayList<>();

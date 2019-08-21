@@ -16,6 +16,7 @@ public enum Images {
     ARROW_SE,
     ASTERISK,
     BACKGROUND,
+    BETA,
     CHECKERS,
     CHOOSE_COLOR,
     CLOSE,
@@ -98,10 +99,15 @@ public enum Images {
 
     public static ImageView getImageView(Action action) {
         ImageView imageView = new ImageView();
-        try {
-            imageView.setImage(Images.valueOf(action.name()).getImage());
-        } catch (IllegalArgumentException e) {
-            // Do nothing.
+
+        if (Action.BETA_ACTIONS.contains(action)) {
+            imageView.setImage(Images.BETA.getImage());
+        } else {
+            try {
+                imageView.setImage(Images.valueOf(action.name()).getImage());
+            } catch (IllegalArgumentException e) {
+                // Do nothing.
+            }
         }
         return imageView;
     }

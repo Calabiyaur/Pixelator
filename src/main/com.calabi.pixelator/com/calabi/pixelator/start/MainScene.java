@@ -229,14 +229,14 @@ public class MainScene extends Scene {
         BasicToolBar toolBar = new BasicToolBar();
         toolBar.setOnMouseEntered(e -> toolBar.setCursor(Cursor.DEFAULT));
 
-        toolBar.addButton(NEW, Images.NEW);
-        toolBar.addButton(OPEN, Images.OPEN);
-        toolBar.addButton(SAVE, Images.SAVE);
-        toolBar.addButton(UNDO, Images.UNDO);
-        toolBar.addButton(REDO, Images.REDO);
-        toolBar.addButton(CUT, Images.CUT);
-        toolBar.addButton(COPY, Images.COPY);
-        toolBar.addButton(PASTE, Images.PASTE);
+        toolBar.addButton(NEW);
+        toolBar.addButton(OPEN);
+        toolBar.addButton(SAVE);
+        toolBar.addButton(UNDO);
+        toolBar.addButton(REDO);
+        toolBar.addButton(CUT);
+        toolBar.addButton(COPY);
+        toolBar.addButton(PASTE);
         ToggleButton grid = toolBar.addToggle(GRID, Images.GRID);
         imageContainer.showGridProperty().addListener((ov, o, n) -> grid.setSelected(n));
         ToggleButton crosshair = toolBar.addToggle(CROSSHAIR, Images.CROSSHAIR);
