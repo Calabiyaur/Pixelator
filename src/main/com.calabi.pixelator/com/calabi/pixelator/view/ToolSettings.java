@@ -2,9 +2,6 @@ package com.calabi.pixelator.view;
 
 public class ToolSettings {
 
-    public static final ToolSettings DEFAULT = new ToolSettings(null, false, 1, 0);
-    public static final ToolSettings FILL = new ToolSettings(null, true, 1, 0);
-
     public Boolean replace;
     public Boolean fill;
     public Integer thick;

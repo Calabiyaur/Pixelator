@@ -36,6 +36,10 @@ public class Logger {
         log(subject, "", what);
     }
 
+    public static void error(String message) {
+        log("ERROR", message);
+    }
+
     public static void logEvent(InputEvent e, String action) {
         StringBuilder sb = new StringBuilder(e.getClass().getSimpleName() + ": ");
         if (EventUtil.isControlDown(e)) {

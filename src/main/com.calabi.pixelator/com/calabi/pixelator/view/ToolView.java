@@ -1,6 +1,7 @@
 package com.calabi.pixelator.view;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -151,7 +152,8 @@ public class ToolView extends VBox {
     private Pane createPrefLayer() {
         BasicCheckBox replaceColorField = new BasicCheckBox("Replace", Config.REPLACE.getBoolean());
         BasicCheckBox fillShapeField = new BasicCheckBox("Fill shape", Config.FILL_SHAPE.getBoolean());
-        BasicIntegerField thicknessField = new BasicIntegerField("Thickness", Config.THICKNESS.getInt());
+        BasicIntegerField thicknessField = new BasicIntegerField("Thickness", 1);
+        thicknessField.setDisable(true);
         Arrays.asList(replaceColorField, fillShapeField, thicknessField).forEach(field -> {
             field.getControl().setPrefWidth(36);
             field.setMinWidth(100);
@@ -178,8 +180,9 @@ public class ToolView extends VBox {
         replaceColor.bind(replaceColorField.valueProperty());
         fillShape.bind(fillShapeField.valueProperty());
         thickness.bind(thicknessField.valueProperty());
-        thickness.addListener((ov, o, n) -> Arrays.asList(bulgeLeft, bulgeCenter, bulgeRight)
-                .forEach(b -> b.setDisable(n.intValue() == 1)));
+        List<ToggleImageButton> bulgeButtons = Arrays.asList(bulgeLeft, bulgeCenter, bulgeRight);
+        thickness.addListener((ov, o, n) -> bulgeButtons.forEach(b -> b.setDisable(n.intValue() == 1)));
+        bulgeButtons.forEach(b -> b.setDisable(true));
         bulgeLeft.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(-1)));
         bulgeCenter.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(0)));
         bulgeRight.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(1)));

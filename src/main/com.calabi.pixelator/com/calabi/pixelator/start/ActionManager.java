@@ -47,7 +47,7 @@ public class ActionManager {
             event.handle(new ActionEvent());
             return;
         }
-        throw new IllegalArgumentException("There is no action key '" + key + "'!");
+        Logger.error("There is no action key '" + key + "'!");
     }
 
     public static void registerItem(Action key, MenuItem control) {

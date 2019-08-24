@@ -1,7 +1,7 @@
 package com.calabi.pixelator.view.tool;
 
 import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.util.ShapeUtil;
+import com.calabi.pixelator.util.shape.RectangleMaker;
 import com.calabi.pixelator.view.ToolView;
 
 public class Rectangle extends Tool {
@@ -28,10 +28,10 @@ public class Rectangle extends Tool {
     }
 
     @Override public void dragPrimary() {
-        getToolLayer().setPixels(ShapeUtil.getRectanglePoints(
+        getToolLayer().setPixels(RectangleMaker.getRectanglePoints(
                 getToolLayer().getStart(),
                 getMouse(),
-                ToolView.getInstance().getSettings()));
+                ToolView.getInstance().isFillShape()));
     }
 
     @Override public void releasePrimary() {

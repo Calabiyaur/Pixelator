@@ -2,8 +2,7 @@ package com.calabi.pixelator.view.tool;
 
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.util.ShapeUtil;
-import com.calabi.pixelator.view.ToolSettings;
+import com.calabi.pixelator.util.shape.RectangleMaker;
 
 public class Select extends Tool {
 
@@ -40,7 +39,7 @@ public class Select extends Tool {
     @Override public void releasePrimary() {
         Point start = getSelectionLayer().getStart();
         if (start != null) {
-            getSelectionLayer().definePixels(ShapeUtil.getRectanglePoints(start, getMouse(), ToolSettings.FILL));
+            getSelectionLayer().definePixels(RectangleMaker.getRectanglePoints(start, getMouse(), true));
             getSelectionLayer().playRect(true);
         }
     }

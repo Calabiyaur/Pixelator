@@ -1,7 +1,7 @@
 package com.calabi.pixelator.view.tool;
 
 import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.util.ShapeUtil;
+import com.calabi.pixelator.util.shape.ShapeMaster;
 import com.calabi.pixelator.view.ToolView;
 
 public class Ellipse extends Tool {
@@ -28,7 +28,7 @@ public class Ellipse extends Tool {
     }
 
     @Override public void dragPrimary() {
-        getEditor().getToolLayer().setPixels(ShapeUtil.getEllipsePoints(
+        getEditor().getToolLayer().setPixels(ShapeMaster.getEllipsePoints(
                 getToolLayer().getStart(),
                 getMouse(),
                 ToolView.getInstance().getSettings()));

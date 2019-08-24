@@ -40,10 +40,10 @@ import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.BackgroundUtil;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.ImageUtil;
-import com.calabi.pixelator.util.ShapeUtil;
+import com.calabi.pixelator.util.shape.RectangleMaker;
+import com.calabi.pixelator.util.shape.ShapeMaster;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
-import com.calabi.pixelator.view.ToolSettings;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.palette.PaletteMaster;
 import com.calabi.pixelator.view.palette.SortMaster;
@@ -325,7 +325,7 @@ public class ImageEditor extends Editor {
     }
 
     public void paintPoint(Point point) {
-        paintPoints(ShapeUtil.getCirclePoints(point.getX(), point.getY(), ToolView.getInstance().getThickness()));
+        paintPoints(RectangleMaker.getCirclePoints(point.getX(), point.getY(), ToolView.getInstance().getThickness()));
     }
 
     public void paintPoints(PointArray points) {
@@ -341,7 +341,7 @@ public class ImageEditor extends Editor {
     }
 
     public void paintLine(Point p1, Point p2) {
-        paintPoints(ShapeUtil.getLinePoints(p1, p2, ToolView.getInstance().getSettings()));
+        paintPoints(ShapeMaster.getLinePoints(p1, p2, ToolView.getInstance().getSettings()));
     }
 
     public void paintFill(Point point) {
@@ -349,7 +349,7 @@ public class ImageEditor extends Editor {
             return;
         }
         Color c = reader.getColor(point.getX(), point.getY());
-        paintPoints(ShapeUtil.getFillPoints(point, c, reader, width.get(), height.get()));
+        paintPoints(ShapeMaster.getFillPoints(point, c, reader, width.get(), height.get()));
     }
 
     public void fillColor(Point point) {
@@ -357,14 +357,14 @@ public class ImageEditor extends Editor {
             return;
         }
         Color color = reader.getColor(point.getX(), point.getY());
-        paintPoints(ShapeUtil.getPointsOfColor(color, reader, width.get(), height.get()));
+        paintPoints(ShapeMaster.getPointsOfColor(color, reader, width.get(), height.get()));
     }
 
     public void selectFill(Point point) {
         if (ImageUtil.outOfBounds(getImage(), point)) {
             return;
         }
-        selectionLayer.definePixels(ShapeUtil.getFillPoints(point,
+        selectionLayer.definePixels(ShapeMaster.getFillPoints(point,
                 reader.getColor(point.getX(), point.getY()), reader, width.get(), height.get()));
         removePixels(selectionLayer.getPixels());
     }
@@ -374,7 +374,7 @@ public class ImageEditor extends Editor {
             return;
         }
         Color color = reader.getColor(point.getX(), point.getY());
-        selectionLayer.definePixels(ShapeUtil.getPointsOfColor(color, reader, width.get(), height.get()));
+        selectionLayer.definePixels(ShapeMaster.getPointsOfColor(color, reader, width.get(), height.get()));
     }
 
     public void pickColor(Point p) {
@@ -524,10 +524,10 @@ public class ImageEditor extends Editor {
 
     public void selectAll() {
         currentTool.lockAndReset();
-        selectionLayer.definePixels(ShapeUtil.getRectanglePoints(
+        selectionLayer.definePixels(RectangleMaker.getRectanglePoints(
                 new Point(0, 0),
                 new Point(width.get() - 1, height.get() - 1),
-                ToolSettings.FILL));
+                true));
     }
 
     public void crop() {

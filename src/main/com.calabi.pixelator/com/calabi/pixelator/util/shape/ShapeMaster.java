@@ -1,13 +1,15 @@
-package com.calabi.pixelator.util;
+package com.calabi.pixelator.util.shape;
 
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
+import com.calabi.pixelator.util.Check;
+import com.calabi.pixelator.util.Rotate;
 import com.calabi.pixelator.view.ToolSettings;
 
-public class ShapeUtil {
+public class ShapeMaster {
 
     /**
      * Return all points which lie between (x1, y1) and (x2, y2),
@@ -17,59 +19,35 @@ public class ShapeUtil {
         Check.notNull(settings.thick);
         Check.notNull(settings.bulge);
 
-        PointArray points = new PointArray();
-        int x1 = p1.getX();
-        int y1 = p1.getY();
-        int x2 = p2.getX();
-        int y2 = p2.getY();
-
-        int yDiff = y1 - y2;
-        int ySign = yDiff < 0 ? 1 : -1;
-        int xDiff = x1 - x2;
-        int xSign = xDiff < 0 ? 1 : -1;
-        if (yDiff == 0 && xDiff == 0) {
-            points.add(x1, y1);
+        PointArray points = LineMaker.getLinePoints(p1, p2);
+        if (settings.thick == 1) {
             return points;
         }
-        double slope = (double) yDiff / (double) xDiff;
 
-        if (Math.abs(slope) <= 1) {
-            int x, y;
-            for (int i = 0; i <= Math.abs(xDiff); i++) {
-                x = x1 + xSign * i;
-                y = y1 + (int) Math.round(ySign * i * Math.abs(slope));
-                points.add(x, y);
-            }
+        if (settings.thick > points.size()) {
+            //TODO
         } else {
-            int x, y;
-            for (int i = 0; i <= Math.abs(yDiff); i++) {
-                x = x1 + (int) Math.round(xSign * i / Math.abs(slope));
-                y = y1 + ySign * i;
-                points.add(x, y);
-            }
-        }
+            if (settings.bulge == 0) {
+                for (int i = 1; i < (settings.thick + 1) / 2; i++) {
+                    Point left = Rotate.rotateLeft(p1, points.getX(i), points.getY(i));
+                    points.add(LineMaker.getLinePoints(
+                            left.getX(),
+                            left.getY(),
+                            p2.getX() + (left.getX() - p1.getX()),
+                            p2.getY() + (left.getY() - p1.getY())
+                    ));
 
-        return points;
-    }
-
-    /**
-     * Return all points that lie between (x1, y1) and (x2, y2),
-     * in a rectangular shape.
-     */
-    public static PointArray getRectanglePoints(Point p1, Point p2, ToolSettings settings) {
-        PointArray points = new PointArray();
-        int x1 = p1.getX() < p2.getX() ? p1.getX() : p2.getX();
-        int y1 = p1.getY() < p2.getY() ? p1.getY() : p2.getY();
-        int x2 = p1.getX() < p2.getX() ? p2.getX() : p1.getX();
-        int y2 = p1.getY() < p2.getY() ? p2.getY() : p1.getY();
-
-        for (int x = x1; x <= x2; x++) {
-            for (int y = y1; y <= y2; y++) {
-                if (settings.fill || x == x1 || x == x2 || y == y1 || y == y2) {
-                    points.add(x, y);
+                    Point right = Rotate.rotateRight(p1, points.getX(i), points.getY(i));
+                    points.add(LineMaker.getLinePoints(
+                            right.getX(),
+                            right.getY(),
+                            p2.getX() + (right.getX() - p1.getX()),
+                            p2.getY() + (right.getY() - p1.getY())
+                    ));
                 }
             }
         }
+
         return points;
     }
 
@@ -86,7 +64,7 @@ public class ShapeUtil {
             return getLinePoints(p1, p2, settings);
         }
         if (Math.abs(p1.getX() - p2.getX()) == 1 || Math.abs(p1.getY() - p2.getY()) == 1) {
-            return getRectanglePoints(p1, p2, settings);
+            return RectangleMaker.getRectanglePoints(p1, p2, settings.fill);
         }
         PointArray stretchedPoints = getEllipsePointsStretched(cx, cy, rx, ry, stretchH, stretchV, settings);
         PointArray points = new PointArray();
@@ -245,43 +223,6 @@ public class ShapeUtil {
                 }
             }
         }
-    }
-
-    /**
-     * Return all points that have a distance <= radius to (x, y).
-     * (Using the 1-norm)
-     */
-    public static PointArray getDiamondPoints(int x, int y, int radius) {
-        PointArray points = new PointArray();
-        for (int i = x - radius; i <= x + radius; i++) {
-            for (int j = y - radius; j <= y + radius; j++) {
-                if (Math.abs(i - x) + Math.abs(j - y) <= radius) {
-                    points.add(i, j);
-                }
-            }
-        }
-        return points;
-    }
-
-    /**
-     * Return all points that have a distance <= width / 2 to (x, y).
-     * (Using the 2-norm)
-     */
-    public static PointArray getCirclePoints(int x, int y, int width) {
-        PointArray points = new PointArray();
-        if (width == 1) {
-            points.add(x, y);
-            return points;
-        }
-        int radius = width / 2;
-        for (int i = x - radius; i <= x + radius; i++) {
-            for (int j = y - radius; j <= y + radius; j++) {
-                if (Math.sqrt(Math.pow(i - x, 2) + Math.pow(j - y, 2)) <= radius) {
-                    points.add(i, j);
-                }
-            }
-        }
-        return points;
     }
 
     /**
