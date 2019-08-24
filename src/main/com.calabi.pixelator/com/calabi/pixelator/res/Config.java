@@ -6,6 +6,7 @@ import com.calabi.pixelator.meta.Direction;
 
 public enum Config {
 
+    BULGE(ConfigType.INT, 0),
     COLOR(ConfigType.STRING, null),
     FILL_SHAPE(ConfigType.BOOLEAN, false),
     FULLSCREEN(ConfigType.BOOLEAN, false),

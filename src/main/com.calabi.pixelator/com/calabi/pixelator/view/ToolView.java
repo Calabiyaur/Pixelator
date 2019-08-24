@@ -33,6 +33,7 @@ import com.calabi.pixelator.control.basic.UndeselectableToggleGroup;
 import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.view.tool.Tools;
 
 public class ToolView extends VBox {
@@ -42,6 +43,7 @@ public class ToolView extends VBox {
     private BooleanProperty replaceColor = new SimpleBooleanProperty();
     private BooleanProperty fillShape = new SimpleBooleanProperty();
     private IntegerProperty thickness = new SimpleIntegerProperty();
+    private IntegerProperty bulge = new SimpleIntegerProperty();
     private Label preview = new Label();
     private Label previewTool = new Label();
     private Label previewSelection = new Label();
@@ -110,6 +112,10 @@ public class ToolView extends VBox {
         return instance;
     }
 
+    public ToolSettings getSettings() {
+        return new ToolSettings(replaceColor.get(), fillShape.get(), thickness.get(), bulge.get());
+    }
+
     private FlowPane createFirstToolLayer(ToggleGroup tg) {
         ToggleButton pen = new ToggleImageButton(tg, Images.PEN);
         pen.setOnAction(e -> currentTool.set(Tools.PEN));
@@ -143,9 +149,9 @@ public class ToolView extends VBox {
     }
 
     private Pane createPrefLayer() {
-        BasicCheckBox replaceColorField = new BasicCheckBox("Replace");
-        BasicCheckBox fillShapeField = new BasicCheckBox("Fill shape");
-        BasicIntegerField thicknessField = new BasicIntegerField("Thickness");
+        BasicCheckBox replaceColorField = new BasicCheckBox("Replace", Config.REPLACE.getBoolean());
+        BasicCheckBox fillShapeField = new BasicCheckBox("Fill shape", Config.FILL_SHAPE.getBoolean());
+        BasicIntegerField thicknessField = new BasicIntegerField("Thickness", Config.THICKNESS.getInt());
         Arrays.asList(replaceColorField, fillShapeField, thicknessField).forEach(field -> {
             field.getControl().setPrefWidth(36);
             field.setMinWidth(100);
@@ -157,12 +163,26 @@ public class ToolView extends VBox {
         ToggleImageButton bulgeLeft = new ToggleImageButton(tg, Images.BULGE_LEFT);
         ToggleImageButton bulgeCenter = new ToggleImageButton(tg, Images.BULGE_CENTER);
         ToggleImageButton bulgeRight = new ToggleImageButton(tg, Images.BULGE_RIGHT);
+        switch(Config.BULGE.getInt()) {
+            case -1:
+                bulgeLeft.fire();
+                break;
+            case 1:
+                bulgeRight.fire();
+                break;
+            default:
+                bulgeCenter.fire();
+                break;
+        }
 
-        replaceColorField.valueProperty().addListener((ov, o, n) -> replaceColor.set(n));
-        fillShapeField.valueProperty().addListener((ov, o, n) -> fillShape.set(n));
-        thicknessField.valueProperty().addListener((ov, o, n) -> thickness.set(n));
+        replaceColor.bind(replaceColorField.valueProperty());
+        fillShape.bind(fillShapeField.valueProperty());
+        thickness.bind(thicknessField.valueProperty());
         thickness.addListener((ov, o, n) -> Arrays.asList(bulgeLeft, bulgeCenter, bulgeRight)
                 .forEach(b -> b.setDisable(n.intValue() == 1)));
+        bulgeLeft.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(-1)));
+        bulgeCenter.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(0)));
+        bulgeRight.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(1)));
 
         GridPane prefBox = new GridPane();
         prefBox.addRow(0, replaceColorField);
@@ -170,16 +190,12 @@ public class ToolView extends VBox {
         prefBox.addRow(2, thicknessField, bulgeLeft, bulgeCenter, bulgeRight);
         prefBox.setVgap(3);
         GridPane.setMargin(bulgeLeft, new Insets(0, 0, 0, 3));
-
-        bulgeCenter.fire();
+        GridPane.setMargin(bulgeCenter, new Insets(0, 1, 0, 1));
 
         return prefBox;
     }
 
     private void initConfig() {
-        setReplace(Config.REPLACE.getBoolean());
-        setFillShape(Config.FILL_SHAPE.getBoolean());
-        setThickness(Config.THICKNESS.getInt());
         replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(n));
         fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(n));
         thickness.addListener((ov, o, n) -> Config.THICKNESS.putInt(n.intValue()));

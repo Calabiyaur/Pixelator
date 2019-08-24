@@ -43,6 +43,7 @@ import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.ShapeUtil;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
+import com.calabi.pixelator.view.ToolSettings;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.palette.PaletteMaster;
 import com.calabi.pixelator.view.palette.SortMaster;
@@ -340,7 +341,7 @@ public class ImageEditor extends Editor {
     }
 
     public void paintLine(Point p1, Point p2) {
-        paintPoints(ShapeUtil.getLinePoints(p1, p2, ToolView.getInstance().getThickness()));
+        paintPoints(ShapeUtil.getLinePoints(p1, p2, ToolView.getInstance().getSettings()));
     }
 
     public void paintFill(Point point) {
@@ -526,7 +527,7 @@ public class ImageEditor extends Editor {
         selectionLayer.definePixels(ShapeUtil.getRectanglePoints(
                 new Point(0, 0),
                 new Point(width.get() - 1, height.get() - 1),
-                true));
+                ToolSettings.FILL));
     }
 
     public void crop() {

@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
+import com.calabi.pixelator.view.ToolSettings;
 
 public class ShapeUtil {
 
@@ -12,7 +13,10 @@ public class ShapeUtil {
      * Return all points which lie between (x1, y1) and (x2, y2),
      * in a straight line. End points included.
      */
-    public static PointArray getLinePoints(Point p1, Point p2, int thickness) {
+    public static PointArray getLinePoints(Point p1, Point p2, ToolSettings settings) {
+        Check.notNull(settings.thick);
+        Check.notNull(settings.bulge);
+
         PointArray points = new PointArray();
         int x1 = p1.getX();
         int y1 = p1.getY();
@@ -49,78 +53,10 @@ public class ShapeUtil {
     }
 
     /**
-     * Return all points that are directly connected to the
-     * starting point through color.
-     *
-     * @param point the starting point
-     * @param cStart color of the starting point
-     */
-    public static PointArray getFillPoints(Point point, Color cStart, PixelReader reader, int width, int height) {
-
-        PointArray result = new PointArray();
-
-        Boolean[][] activeMap = new Boolean[width][height];
-        activeMap[point.getX()][point.getY()] = true;
-        PointArray activeSet = new PointArray();
-        PointArray newActiveSet = new PointArray();
-        activeSet.add(point.getX(), point.getY());
-
-        boolean done = false;
-        while (!done) {
-            done = true;
-            newActiveSet.reset();
-            for (int i = 0; i < activeSet.size(); i++) {
-                int x = activeSet.getX(i);
-                int y = activeSet.getY(i);
-                if (activeMap[x][y]) {
-
-                    result.add(x, y);
-
-                    for (int j = 0; j < 4; j++) {
-
-                        int newX = j % 2 == 1 ? x : x + 1 - j;
-                        int newY = j % 2 == 0 ? y : y - 2 + j;
-
-                        try {
-                            if (activeMap[newX][newY] == null) {
-                                if (cStart.equals(reader.getColor(newX, newY))) {
-                                    activeMap[newX][newY] = true;
-                                    newActiveSet.add(newX, newY);
-                                    done = false;
-                                }
-                            }
-                        } catch (IndexOutOfBoundsException e) {
-                            // no new points here ;)
-                        }
-                    }
-                    activeMap[x][y] = false;
-                }
-            }
-            activeSet = newActiveSet.clone();
-        }
-        return result;
-    }
-
-    /**
-     * Return all points in the image that have the given color.
-     */
-    public static PointArray getPointsOfColor(Color color, PixelReader reader, int width, int height) {
-        PointArray result = new PointArray();
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (reader.getColor(i, j).equals(color)) {
-                    result.add(i, j);
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
      * Return all points that lie between (x1, y1) and (x2, y2),
      * in a rectangular shape.
      */
-    public static PointArray getRectanglePoints(Point p1, Point p2, boolean fill) {
+    public static PointArray getRectanglePoints(Point p1, Point p2, ToolSettings settings) {
         PointArray points = new PointArray();
         int x1 = p1.getX() < p2.getX() ? p1.getX() : p2.getX();
         int y1 = p1.getY() < p2.getY() ? p1.getY() : p2.getY();
@@ -129,7 +65,7 @@ public class ShapeUtil {
 
         for (int x = x1; x <= x2; x++) {
             for (int y = y1; y <= y2; y++) {
-                if (fill || x == x1 || x == x2 || y == y1 || y == y2) {
+                if (settings.fill || x == x1 || x == x2 || y == y1 || y == y2) {
                     points.add(x, y);
                 }
             }
@@ -137,7 +73,7 @@ public class ShapeUtil {
         return points;
     }
 
-    public static PointArray getEllipsePoints(Point p1, Point p2, boolean fill, int thickness) {
+    public static PointArray getEllipsePoints(Point p1, Point p2, ToolSettings settings) {
         // If width is odd, stretch by factor 2 to avoid half-ints
         int stretchH = (p1.getX() + p2.getX()) % 2 == 0 ? 1 : 2;
         int stretchV = (p1.getY() + p2.getY()) % 2 == 0 ? 1 : 2;
@@ -147,12 +83,12 @@ public class ShapeUtil {
         int ry = Math.abs(p1.getY() - p2.getY()) / (2 / stretchV);
 
         if (rx == 0 || ry == 0) {
-            return getLinePoints(p1, p2, thickness);
+            return getLinePoints(p1, p2, settings);
         }
         if (Math.abs(p1.getX() - p2.getX()) == 1 || Math.abs(p1.getY() - p2.getY()) == 1) {
-            return getRectanglePoints(p1, p2, fill);
+            return getRectanglePoints(p1, p2, settings);
         }
-        PointArray stretchedPoints = getEllipsePointsStretched(cx, cy, rx, ry, stretchH, stretchV, fill, thickness);
+        PointArray stretchedPoints = getEllipsePointsStretched(cx, cy, rx, ry, stretchH, stretchV, settings);
         PointArray points = new PointArray();
         stretchedPoints.forEach((x, y) -> {
             if (x % stretchH == 0 && y % stretchV == 0) {
@@ -172,7 +108,7 @@ public class ShapeUtil {
      * Return all points that form an ellipse around (cx|cy) with radii rx and ry.
      */
     private static PointArray getEllipsePointsStretched(int cx, int cy, int rx, int ry, int sH, int sV,
-            boolean fill, int thickness) {
+            ToolSettings settings) {
 
         PointArray points = new PointArray();
 
@@ -191,7 +127,7 @@ public class ShapeUtil {
         int ly1 = 0;
 
         while (sx > sy) {
-            addPointsToEllipse(points, cx, cy, x, y, fill, 0);
+            addPointsToEllipse(points, cx, cy, x, y, settings.fill, 0);
             lx1 = x;
             ly1 = y;
 
@@ -222,7 +158,7 @@ public class ShapeUtil {
         int ly2 = 0;
 
         while (sx < sy) {
-            addPointsToEllipse(points, cx, cy, x, y, fill, yOff);
+            addPointsToEllipse(points, cx, cy, x, y, settings.fill, yOff);
             lx2 = x;
             ly2 = y;
 
@@ -239,7 +175,7 @@ public class ShapeUtil {
             }
         }
 
-        PointArray linePoints = getLinePoints(new Point(lx1, ly1), new Point(lx2, ly2), thickness);
+        PointArray linePoints = getLinePoints(new Point(lx1, ly1), new Point(lx2, ly2), settings);
         for (int i = 1; i < linePoints.size() - 1; i++) {
             addPointsToEllipse(points, cx, cy, linePoints.getX(i), linePoints.getY(i), false, 0);
         }
@@ -346,6 +282,74 @@ public class ShapeUtil {
             }
         }
         return points;
+    }
+
+    /**
+     * Return all points that are directly connected to the
+     * starting point through color.
+     *
+     * @param point the starting point
+     * @param cStart color of the starting point
+     */
+    public static PointArray getFillPoints(Point point, Color cStart, PixelReader reader, int width, int height) {
+
+        PointArray result = new PointArray();
+
+        Boolean[][] activeMap = new Boolean[width][height];
+        activeMap[point.getX()][point.getY()] = true;
+        PointArray activeSet = new PointArray();
+        PointArray newActiveSet = new PointArray();
+        activeSet.add(point.getX(), point.getY());
+
+        boolean done = false;
+        while (!done) {
+            done = true;
+            newActiveSet.reset();
+            for (int i = 0; i < activeSet.size(); i++) {
+                int x = activeSet.getX(i);
+                int y = activeSet.getY(i);
+                if (activeMap[x][y]) {
+
+                    result.add(x, y);
+
+                    for (int j = 0; j < 4; j++) {
+
+                        int newX = j % 2 == 1 ? x : x + 1 - j;
+                        int newY = j % 2 == 0 ? y : y - 2 + j;
+
+                        try {
+                            if (activeMap[newX][newY] == null) {
+                                if (cStart.equals(reader.getColor(newX, newY))) {
+                                    activeMap[newX][newY] = true;
+                                    newActiveSet.add(newX, newY);
+                                    done = false;
+                                }
+                            }
+                        } catch (IndexOutOfBoundsException e) {
+                            // no new points here ;)
+                        }
+                    }
+                    activeMap[x][y] = false;
+                }
+            }
+            activeSet = newActiveSet.clone();
+        }
+        return result;
+    }
+
+    /**
+     * Return all points in the image that have the given color.
+     */
+    public static PointArray getPointsOfColor(Color color, PixelReader reader, int width, int height) {
+        PointArray result = new PointArray();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (reader.getColor(i, j).equals(color)) {
+                    result.add(i, j);
+                }
+            }
+        }
+        return result;
     }
 
 }
