@@ -60,6 +60,8 @@ public enum Images {
     USE_PICK,
     USE_RECTANGLE,
     USE_SELECT,
+    USE_SELECT_ADD,
+    USE_SELECT_SUBTRACT,
     USE_WAND,
     WAND;
 

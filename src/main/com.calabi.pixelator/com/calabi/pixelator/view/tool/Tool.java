@@ -2,9 +2,13 @@ package com.calabi.pixelator.view.tool;
 
 import java.util.Objects;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
@@ -24,15 +28,14 @@ public abstract class Tool {
     private static boolean dragging = false;
     private static MouseButton mouseButton;
     private static boolean stillSincePress = true;
-
+    boolean draggableAfterClick;
+    boolean selectionTool;
+    Tool secondary = this;
     private Images image;
     private Images useImage;
     private int hotspotX;
     private int hotspotY;
-
-    boolean draggableAfterClick;
-    boolean selectionTool;
-    Tool secondary = this;
+    private ObjectProperty<Cursor> cursor = new SimpleObjectProperty<>();
 
     protected Tool(Images image, Images useImage, int hotspotX, int hotspotY, boolean draggableAfterClick,
             boolean selectionTool) {
@@ -47,6 +50,8 @@ public abstract class Tool {
         if (actingTool == null) {
             actingTool = None.getMe();
         }
+
+        this.updateCursor();
     }
 
     private static void updateMouse(MouseEvent e) {
@@ -72,6 +77,17 @@ public abstract class Tool {
 
     public static Point getMouseLastPressed() {
         return mouseLastPressed;
+    }
+
+    public static void setActingTool(Tool tool) {
+        actingTool = tool;
+        if (None.getMe() != tool) {
+            Logger.log("Tool", tool.getClass().getSimpleName(), "Activated");
+        }
+    }
+
+    private void updateCursor() {
+        cursor.set(useImage == null ? ImageCursor.NONE : new ImageCursor(new Image(useImage.getUrl()), hotspotX, hotspotY));
     }
 
     private void updateTool() {
@@ -124,6 +140,22 @@ public abstract class Tool {
         }
     }
 
+    public final void keyPress(KeyEvent e) {
+        if (actingTool != None.getMe()) {
+            actingTool.keyPressPrimary(e.getCode());
+        } else {
+            keyPressPrimary(e.getCode());
+        }
+    }
+
+    public final void keyRelease(KeyEvent e) {
+        if (actingTool != None.getMe()) {
+            actingTool.keyReleasePrimary(e.getCode());
+        } else {
+            keyReleasePrimary(e.getCode());
+        }
+    }
+
     public void imitateRelease() {
         actingTool.releasePrimary();
         setActingTool(None.getMe());
@@ -143,6 +175,12 @@ public abstract class Tool {
 
     public abstract void releasePrimary();
 
+    public void keyPressPrimary(KeyCode code) {
+    }
+
+    public void keyReleasePrimary(KeyCode code) {
+    }
+
     public final void escape() {
         getSelectionLayer().clear();
         getToolLayer().clear();
@@ -159,18 +197,24 @@ public abstract class Tool {
     }
 
     public final Cursor getCursor() {
-        return useImage == null ? ImageCursor.NONE : new ImageCursor(new Image(useImage.getUrl()), hotspotX, hotspotY);
+        return cursor.get();
+    }
+
+    public ObjectProperty<Cursor> cursorProperty() {
+        return cursor;
     }
 
     public final ToolLayer getToolLayer() {
         return getEditor().getToolLayer();
     }
 
-    public static void setActingTool(Tool tool) {
-        actingTool = tool;
-        if (None.getMe() != tool) {
-            Logger.log("Tool", tool.getClass().getSimpleName(), "Activated");
-        }
+    public Images getUseImage() {
+        return useImage;
+    }
+
+    public void setUseImage(Images useImage) {
+        this.useImage = useImage;
+        updateCursor();
     }
 
     public final Images getImage() {

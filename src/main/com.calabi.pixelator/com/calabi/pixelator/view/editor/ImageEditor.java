@@ -9,6 +9,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
@@ -17,6 +18,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -61,6 +63,7 @@ public class ImageEditor extends Editor {
 
     private PixelChange pixels;
     private Tool currentTool;
+    private boolean updateCursor;
 
     private ToolLayer toolLayer;
     private SquareStack squareStack;
@@ -126,8 +129,16 @@ public class ImageEditor extends Editor {
         setOnMouseMoved(this::onMouseMoved);
         setOnMouseDragged(this::onMouseDragged);
         setOnMouseReleased(this::onMouseReleased);
-        setOnMouseEntered(e -> setCursor(currentTool.getCursor()));
-        setOnMouseExited(e -> setCursor(Cursor.DEFAULT));
+        //setOnKeyPressed(this::onKeyPressed);
+        //setOnKeyReleased(this::onKeyReleased);
+        setOnMouseEntered(e -> {
+            updateCursor = true;
+            updateCursor();
+        });
+        setOnMouseExited(e -> {
+            updateCursor = false;
+            updateCursor();
+        });
 
         imageView.imageProperty().addListener((ov, o, n) -> {
             WritableImage image = (WritableImage) n;
@@ -143,11 +154,16 @@ public class ImageEditor extends Editor {
             updateColorCount();
         });
 
+        ChangeListener<Cursor> cursorChangeListener = (ov1, o1, n1) -> {
+            updateCursor();
+        };
         ToolView.getInstance().currentToolProperty().addListener((ov, o, n) -> {
+            currentTool.cursorProperty().removeListener(cursorChangeListener);
             if (o == null || ToolManager.getTool(o).isSelectionTool() != ToolManager.getTool(n).isSelectionTool()) {
                 currentTool.lockAndReset();
             }
             currentTool = ToolManager.getTool(n);
+            currentTool.cursorProperty().addListener(cursorChangeListener);
         });
 
         updateColorCount();
@@ -219,15 +235,25 @@ public class ImageEditor extends Editor {
     private void onMouseMoved(MouseEvent e) {
         currentTool.move(e);
         updateCrossHair();
+        updateCursor();
     }
 
     private void onMouseDragged(MouseEvent e) {
         currentTool.drag(e);
         updateCrossHair();
+        updateCursor();
     }
 
     private void onMouseReleased(MouseEvent e) {
         currentTool.release(e);
+    }
+
+    public void onKeyPressed(KeyEvent e) {
+        currentTool.keyPress(e);
+    }
+
+    public void onKeyReleased(KeyEvent e) {
+        currentTool.keyRelease(e);
     }
 
     private void updateCrossHair() {
@@ -236,6 +262,14 @@ public class ImageEditor extends Editor {
             if (mouse.getX() >= 0 && mouse.getX() < width.get() && mouse.getY() >= 0 && mouse.getY() < height.get()) {
                 crosshair.setPosition(mouse);
             }
+        }
+    }
+
+    private void updateCursor() {
+        if (updateCursor) {
+            setCursor(currentTool.getCursor());
+        } else {
+            setCursor(Cursor.DEFAULT);
         }
     }
 

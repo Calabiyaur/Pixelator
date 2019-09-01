@@ -130,7 +130,17 @@ public class MainScene extends Scene {
         ToolBar toolBar = createToolBar();
         barBox.getChildren().addAll(menuBar, toolBar);
 
-        setOnKeyPressed(e -> ActionManager.fire(e));
+        setOnKeyPressed(e -> {
+            ActionManager.fire(e);
+            if (getEditor() != null) {
+                getEditor().onKeyPressed(e);
+            }
+        });
+        setOnKeyReleased(e -> {
+            if (getEditor() != null) {
+                getEditor().onKeyReleased(e);
+            }
+        });
     }
 
     public static List<String> getStyle() {
