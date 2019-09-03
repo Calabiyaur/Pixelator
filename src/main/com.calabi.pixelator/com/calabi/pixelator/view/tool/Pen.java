@@ -50,6 +50,6 @@ public class Pen extends Tool {
     }
 
     @Override protected boolean isFlexible() {
-        return PickSelect.getMe().getType() == Select.SelectType.SELECT;
+        return PickSelect.getMe().isFlexible();
     }
 }

@@ -6,9 +6,13 @@ import com.calabi.pixelator.res.Images;
 
 public abstract class SelectionTool extends Tool {
 
-    private SelectType type = SelectType.SELECT;
+    protected SelectType type = SelectType.SELECT;
 
-    SelectionTool(Images image, Images useImage) {
+    private Images useImageSelect;
+    private Images useImageAdd;
+    private Images useImageSubtract;
+
+    SelectionTool(Images image, Images useImage, Images useImageAdd, Images useImageSubtract) {
         super(
                 image,
                 useImage,
@@ -17,6 +21,9 @@ public abstract class SelectionTool extends Tool {
                 true,
                 true
         );
+        this.useImageSelect = useImage;
+        this.useImageAdd = useImageAdd;
+        this.useImageSubtract = useImageSubtract;
     }
 
     private static SelectType getType(KeyCode code, boolean released) {
@@ -33,7 +40,16 @@ public abstract class SelectionTool extends Tool {
         }
     }
 
-    protected abstract Images getUseImage(SelectType type);
+    private Images getUseImage(SelectType type) {
+        switch(type) {
+            case ADD:
+                return useImageAdd;
+            case SUBTRACT:
+                return useImageSubtract;
+            default:
+                return useImageSelect;
+        }
+    }
 
     @Override public final void keyPressPrimary(KeyCode code) {
         type = getType(code, false);
@@ -56,7 +72,7 @@ public abstract class SelectionTool extends Tool {
         }
     }
 
-    private enum SelectType {
+    enum SelectType {
         SELECT,
         ADD,
         SUBTRACT

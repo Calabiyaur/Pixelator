@@ -143,8 +143,8 @@ public class ToolView extends VBox {
         select.setOnAction(e -> currentTool.set(Tools.SELECT));
         ToggleButton wand = new ToggleImageButton(tg, Images.WAND);
         wand.setOnAction(e -> currentTool.set(Tools.WAND));
-        ToggleButton fillSelect = new ToggleImageButton(tg, Images.FILL_SELECT);
-        fillSelect.setOnAction(e -> currentTool.set(Tools.FILL_SELECT));
+        ToggleButton fillSelect = new ToggleImageButton(tg, Images.SELECT_COLOR);
+        fillSelect.setOnAction(e -> currentTool.set(Tools.SELECT_COLOR));
 
         return new FlowPane(select, wand, fillSelect);
     }

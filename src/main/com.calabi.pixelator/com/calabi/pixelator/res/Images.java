@@ -32,7 +32,7 @@ public enum Images {
     ERROR_20,
     FILL,
     FILL_COLOR,
-    FILL_SELECT,
+    SELECT_COLOR,
     GRID,
     ICON("/images/icon256.png"),
     LINE,
@@ -54,7 +54,9 @@ public enum Images {
     USE_ELLIPSE,
     USE_FILL,
     USE_FILL_COLOR,
-    USE_FILL_SELECT,
+    USE_SELECT_COLOR,
+    USE_SELECT_COLOR_ADD,
+    USE_SELECT_COLOR_SUBTRACT,
     USE_LINE,
     USE_PEN,
     USE_PICK,
@@ -63,6 +65,8 @@ public enum Images {
     USE_SELECT_ADD,
     USE_SELECT_SUBTRACT,
     USE_WAND,
+    USE_WAND_ADD,
+    USE_WAND_SUBTRACT,
     WAND;
 
     private final static String DIR = "/images/";

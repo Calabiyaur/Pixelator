@@ -391,21 +391,20 @@ public class ImageEditor extends Editor {
         paintPoints(ShapeMaster.getPointsOfColor(color, reader, width.get(), height.get()));
     }
 
-    public void selectFill(Point point) {
+    public PointArray getSelectFill(Point point) {
         if (ImageUtil.outOfBounds(getImage(), point)) {
-            return;
+            return null;
         }
-        selectionLayer.definePixels(ShapeMaster.getFillPoints(point,
-                reader.getColor(point.getX(), point.getY()), reader, width.get(), height.get()));
-        removePixels(selectionLayer.getPixels());
+        return ShapeMaster.getFillPoints(
+                point, reader.getColor(point.getX(), point.getY()), reader, width.get(), height.get());
     }
 
-    public void selectFillSelect(Point point) {
+    public PointArray getSelectColor(Point point) {
         if (ImageUtil.outOfBounds(getImage(), point)) {
-            return;
+            return null;
         }
         Color color = reader.getColor(point.getX(), point.getY());
-        selectionLayer.definePixels(ShapeMaster.getPointsOfColor(color, reader, width.get(), height.get()));
+        return ShapeMaster.getPointsOfColor(color, reader, width.get(), height.get());
     }
 
     public void pickColor(Point p) {

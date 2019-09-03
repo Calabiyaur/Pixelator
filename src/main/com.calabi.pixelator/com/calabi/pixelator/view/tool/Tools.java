@@ -6,7 +6,7 @@ public enum Tools {
     ELLIPSE, // draw an elliptic shape
     FILL, // fill an area of equal color
     FILL_COLOR, // change one color globally
-    FILL_SELECT, // change one color globally
+    SELECT_COLOR, // change one color globally
     LASSO, // UNUSED
     LINE, // draw a line between two points
     PEN, // draw one point

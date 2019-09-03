@@ -33,8 +33,8 @@ public abstract class Tool {
     Tool secondary = this;
     private Images image;
     private Images useImage;
-    private int hotspotX;
-    private int hotspotY;
+    int hotspotX;
+    int hotspotY;
     private ObjectProperty<Cursor> cursor = new SimpleObjectProperty<>();
 
     protected Tool(Images image, Images useImage, int hotspotX, int hotspotY, boolean draggableAfterClick,

@@ -3,38 +3,39 @@ package com.calabi.pixelator.view.tool;
 import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.res.Images;
 
-public class Wand extends SelectionTool {
+public class SelectColor extends SelectionTool {
 
-    private static Wand me = new Wand();
+    private static SelectColor me = new SelectColor();
 
-    private Wand() {
+    private SelectColor() {
         super(
-                Images.WAND,
-                Images.USE_WAND,
-                Images.USE_WAND_ADD,
-                Images.USE_WAND_SUBTRACT
+                Images.SELECT_COLOR,
+                Images.USE_SELECT_COLOR,
+                Images.USE_SELECT_COLOR_ADD,
+                Images.USE_SELECT_COLOR_SUBTRACT
         );
+        hotspotX = 8;
     }
 
-    public static Wand getMe() {
+    public static SelectColor getMe() {
         return me;
     }
 
     @Override public void pressPrimary() {
         PointArray pixels = getSelectionLayer().getPixels().clone(); //TODO: This line is normally not necessary
-        PointArray selectFillPoints = getEditor().getSelectFill(getMouse());
-        if (selectFillPoints == null) {
+        PointArray selectColorPoints = getEditor().getSelectColor(getMouse());
+        if (selectColorPoints == null) {
             return;
         }
         switch(type) {
             case ADD:
-                pixels.addExclusive(selectFillPoints);
+                pixels.addExclusive(selectColorPoints);
                 break;
             case SUBTRACT:
-                pixels.subtract(selectFillPoints);
+                pixels.subtract(selectColorPoints);
                 break;
             default:
-                pixels = selectFillPoints;
+                pixels = selectColorPoints;
                 break;
         }
         getSelectionLayer().definePixels(pixels);
