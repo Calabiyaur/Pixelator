@@ -30,7 +30,7 @@ public class Select extends Tool {
     }
 
     private static SelectType getType(KeyCode code, boolean released) {
-        if (released || !getSelectionLayer().isActive()) {
+        if (released || !getSelectionLayer().isActive() || getSelectionLayer().isDragging()) {
             return SelectType.SELECT;
         }
         switch(code) {
