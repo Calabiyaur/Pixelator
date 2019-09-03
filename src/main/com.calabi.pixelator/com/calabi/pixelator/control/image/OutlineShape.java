@@ -23,7 +23,6 @@ import com.calabi.pixelator.util.CollectionUtil;
 
 public class OutlineShape extends ShapeStack {
 
-    private PointArray points;
     private Timeline timeline = new Timeline();
 
     public OutlineShape(int pixelWidth, int pixelHeight) {
@@ -37,7 +36,6 @@ public class OutlineShape extends ShapeStack {
 
     public void define(PointArray points) {
         getChildren().clear();
-        this.points = points;
 
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -55,7 +53,13 @@ public class OutlineShape extends ShapeStack {
         Map<Integer, Line> linesOfThePreviousRowRight = new HashMap<>();
         List<Line> leftLines = new ArrayList<>();
         List<Line> rightLines = new ArrayList<>();
+        int lastRowIndex = -1;
         for (int y : rowIndices) {
+            if (y - lastRowIndex > 1) {
+                linesOfThePreviousRowLeft.clear(); //TODO: Potential time-safe by not filling them here in the first place
+                linesOfThePreviousRowRight.clear();
+            }
+            lastRowIndex = y;
             Set<Integer> retainLeft = new HashSet<>();
             Set<Integer> retainRight = new HashSet<>();
             for (Point pair : CollectionUtil.getExtrema(rowMap.get(y))) {
@@ -100,7 +104,13 @@ public class OutlineShape extends ShapeStack {
         Map<Integer, Line> linesOfThePreviousColumnBottom = new HashMap<>();
         List<Line> topLines = new ArrayList<>();
         List<Line> bottomLines = new ArrayList<>();
+        int lastColumnIndex = -1;
         for (int x : columnIndices) {
+            if (x - lastColumnIndex > 1) {
+                linesOfThePreviousColumnTop.clear();
+                linesOfThePreviousColumnBottom.clear();
+            }
+            lastColumnIndex = x;
             Set<Integer> retainTop = new HashSet<>();
             Set<Integer> retainBottom = new HashSet<>();
             for (Point pair : CollectionUtil.getExtrema(columnMap.get(x))) {
@@ -181,10 +191,6 @@ public class OutlineShape extends ShapeStack {
     public void clear() {
         getChildren().clear();
         timeline.stop();
-    }
-
-    public PointArray getPoints() {
-        return points;
     }
 
     public void playAnimation(boolean play) {

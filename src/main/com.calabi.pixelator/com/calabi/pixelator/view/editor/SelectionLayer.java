@@ -97,10 +97,6 @@ public class SelectionLayer extends EditorLayer {
         outlineShape.define(points);
     }
 
-    public PointArray getShape() {
-        return outlineShape.getPoints();
-    }
-
     public void defineImage(Image image, boolean pasted) {
         clear();
         PointArray points = new PointArray();
