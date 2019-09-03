@@ -29,6 +29,10 @@ public class Select extends Tool {
         return me;
     }
 
+    public SelectType getType() {
+        return type;
+    }
+
     private static SelectType getType(KeyCode code, boolean released) {
         if (released || !getSelectionLayer().isActive() || getSelectionLayer().isDragging()) {
             return SelectType.SELECT;
@@ -115,7 +119,7 @@ public class Select extends Tool {
         }
     }
 
-    private enum SelectType {
+    enum SelectType {
         SELECT,
         ADD,
         SUBTRACT

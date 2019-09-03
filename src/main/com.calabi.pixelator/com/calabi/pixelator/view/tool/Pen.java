@@ -1,5 +1,7 @@
 package com.calabi.pixelator.view.tool;
 
+import javafx.scene.input.KeyCode;
+
 import com.calabi.pixelator.res.Images;
 
 public class Pen extends Tool {
@@ -39,4 +41,15 @@ public class Pen extends Tool {
         getEditor().register();
     }
 
+    @Override public void keyPressPrimary(KeyCode code) {
+        PickSelect.getMe().keyPressPrimary(code);
+    }
+
+    @Override public void keyReleasePrimary(KeyCode code) {
+        PickSelect.getMe().keyReleasePrimary(code);
+    }
+
+    @Override protected boolean isFlexible() {
+        return PickSelect.getMe().getType() == Select.SelectType.SELECT;
+    }
 }

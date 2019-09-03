@@ -107,7 +107,7 @@ public abstract class Tool {
         stillSincePress = true;
         updateTool();
 
-        if (!actingTool.isSelectionTool() || (!getSelectionLayer().contains(mouse) && isFlexible())) {
+        if (!actingTool.isSelectionTool() || (!getSelectionLayer().contains(mouse) && actingTool.isFlexible())) {
             getEditor().lockSelection();
         }
 
@@ -158,9 +158,7 @@ public abstract class Tool {
 
     public void imitateRelease() {
         actingTool.releasePrimary();
-        //if (isFlexible()) {
-            setActingTool(None.getMe());
-        //}
+        setActingTool(None.getMe());
         dragging = false;
         mouseButton = null;
     }

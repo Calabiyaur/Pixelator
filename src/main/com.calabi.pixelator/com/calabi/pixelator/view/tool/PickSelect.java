@@ -6,7 +6,6 @@ public class PickSelect extends Select {
 
     public PickSelect() {
         draggableAfterClick = false;
-        selectionTool = false;
     }
 
     public static PickSelect getMe() {
@@ -17,7 +16,7 @@ public class PickSelect extends Select {
         if (isStillSincePress() && getSelectionLayer().isEmpty()) {
             Pick.getMe().releasePrimary();
         } else {
-            Select.getMe().releasePrimary();
+            super.releasePrimary();
         }
     }
 }
