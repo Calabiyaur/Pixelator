@@ -91,7 +91,7 @@ public abstract class Tool {
     }
 
     private void updateTool() {
-        if (getSelectionLayer().contains(mouse)) {
+        if (getSelectionLayer().contains(mouse) && isFlexible()) {
             actingTool = Drag.getMe();
         } else if (MouseButton.SECONDARY.equals(mouseButton)) {
             actingTool = getSecondary();
@@ -107,7 +107,7 @@ public abstract class Tool {
         stillSincePress = true;
         updateTool();
 
-        if (!actingTool.isSelectionTool() || !getSelectionLayer().contains(mouse)) {
+        if (!actingTool.isSelectionTool() || (!getSelectionLayer().contains(mouse) && isFlexible())) {
             getEditor().lockSelection();
         }
 
@@ -158,7 +158,9 @@ public abstract class Tool {
 
     public void imitateRelease() {
         actingTool.releasePrimary();
-        setActingTool(None.getMe());
+        //if (isFlexible()) {
+            setActingTool(None.getMe());
+        //}
         dragging = false;
         mouseButton = null;
     }
@@ -179,6 +181,14 @@ public abstract class Tool {
     }
 
     public void keyReleasePrimary(KeyCode code) {
+    }
+
+    /**
+     * @return TRUE if the tool should be able to function as DRAG / initiate a new tool action depending on the mouse click
+     * position.
+     */
+    protected boolean isFlexible() {
+        return true;
     }
 
     public final void escape() {

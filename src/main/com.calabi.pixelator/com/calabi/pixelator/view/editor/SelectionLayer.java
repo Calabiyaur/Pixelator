@@ -93,6 +93,14 @@ public class SelectionLayer extends EditorLayer {
         outlineRect.clear();
     }
 
+    public void defineShape(PointArray points) {
+        outlineShape.define(points);
+    }
+
+    public PointArray getShape() {
+        return outlineShape.getPoints();
+    }
+
     public void defineImage(Image image, boolean pasted) {
         clear();
         PointArray points = new PointArray();
@@ -200,6 +208,10 @@ public class SelectionLayer extends EditorLayer {
     public void drag(int dX, int dY) {
         setDragStart(new Point(0, 0));
         dragTo(new Point(dX, dY));
+    }
+
+    public boolean isActive() {
+        return active.get();
     }
 
     public BooleanProperty activeProperty() {

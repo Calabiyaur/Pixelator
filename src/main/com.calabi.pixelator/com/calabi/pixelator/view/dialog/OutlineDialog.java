@@ -10,7 +10,7 @@ import com.calabi.pixelator.control.basic.BasicIntegerField;
 import com.calabi.pixelator.control.basic.SwapColorButton;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
-import com.calabi.pixelator.util.shape.RectangleMaker;
+import com.calabi.pixelator.util.shape.RectangleHelper;
 import com.calabi.pixelator.view.ColorView;
 
 public class OutlineDialog extends PreviewDialog {
@@ -88,10 +88,10 @@ public class OutlineDialog extends PreviewDialog {
     private boolean isNeighbor(PixelReader reader, int x, int y, int width, Color outside, boolean inside) {
         PointArray points;
         if (solidEdges.getValue()) {
-            points = RectangleMaker.getRectanglePoints(
+            points = RectangleHelper.getRectanglePoints(
                     new Point(x - width, y - width), new Point(x + width, y + width), true);
         } else {
-            points = RectangleMaker.getDiamondPoints(x, y, width);
+            points = RectangleHelper.getDiamondPoints(x, y, width);
         }
         for (int i = 0; i < points.size(); i++) {
             try {

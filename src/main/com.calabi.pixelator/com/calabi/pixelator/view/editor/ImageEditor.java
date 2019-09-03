@@ -42,7 +42,7 @@ import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.BackgroundUtil;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.ImageUtil;
-import com.calabi.pixelator.util.shape.RectangleMaker;
+import com.calabi.pixelator.util.shape.RectangleHelper;
 import com.calabi.pixelator.util.shape.ShapeMaster;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
@@ -159,9 +159,6 @@ public class ImageEditor extends Editor {
         };
         ToolView.getInstance().currentToolProperty().addListener((ov, o, n) -> {
             currentTool.cursorProperty().removeListener(cursorChangeListener);
-            if (o == null || ToolManager.getTool(o).isSelectionTool() != ToolManager.getTool(n).isSelectionTool()) {
-                currentTool.lockAndReset();
-            }
             currentTool = ToolManager.getTool(n);
             currentTool.cursorProperty().addListener(cursorChangeListener);
         });
@@ -359,7 +356,7 @@ public class ImageEditor extends Editor {
     }
 
     public void paintPoint(Point point) {
-        paintPoints(RectangleMaker.getCirclePoints(point.getX(), point.getY(), ToolView.getInstance().getThickness()));
+        paintPoints(RectangleHelper.getCirclePoints(point.getX(), point.getY(), ToolView.getInstance().getThickness()));
     }
 
     public void paintPoints(PointArray points) {
@@ -558,7 +555,7 @@ public class ImageEditor extends Editor {
 
     public void selectAll() {
         currentTool.lockAndReset();
-        selectionLayer.definePixels(RectangleMaker.getRectanglePoints(
+        selectionLayer.definePixels(RectangleHelper.getRectanglePoints(
                 new Point(0, 0),
                 new Point(width.get() - 1, height.get() - 1),
                 true));

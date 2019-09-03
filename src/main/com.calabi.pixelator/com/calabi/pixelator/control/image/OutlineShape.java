@@ -23,6 +23,7 @@ import com.calabi.pixelator.util.CollectionUtil;
 
 public class OutlineShape extends ShapeStack {
 
+    private PointArray points;
     private Timeline timeline = new Timeline();
 
     public OutlineShape(int pixelWidth, int pixelHeight) {
@@ -36,6 +37,8 @@ public class OutlineShape extends ShapeStack {
 
     public void define(PointArray points) {
         getChildren().clear();
+        this.points = points;
+
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
 
@@ -178,6 +181,10 @@ public class OutlineShape extends ShapeStack {
     public void clear() {
         getChildren().clear();
         timeline.stop();
+    }
+
+    public PointArray getPoints() {
+        return points;
     }
 
     public void playAnimation(boolean play) {

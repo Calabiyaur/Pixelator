@@ -19,7 +19,7 @@ public class ShapeMaster {
         Check.notNull(settings.thick);
         Check.notNull(settings.bulge);
 
-        PointArray points = LineMaker.getLinePoints(p1, p2);
+        PointArray points = LineHelper.getLinePoints(p1, p2);
         if (settings.thick == 1) {
             return points;
         }
@@ -30,7 +30,7 @@ public class ShapeMaster {
             if (settings.bulge == 0) {
                 for (int i = 1; i < (settings.thick + 1) / 2; i++) {
                     Point left = Rotate.rotateLeft(p1, points.getX(i), points.getY(i));
-                    points.add(LineMaker.getLinePoints(
+                    points.add(LineHelper.getLinePoints(
                             left.getX(),
                             left.getY(),
                             p2.getX() + (left.getX() - p1.getX()),
@@ -38,7 +38,7 @@ public class ShapeMaster {
                     ));
 
                     Point right = Rotate.rotateRight(p1, points.getX(i), points.getY(i));
-                    points.add(LineMaker.getLinePoints(
+                    points.add(LineHelper.getLinePoints(
                             right.getX(),
                             right.getY(),
                             p2.getX() + (right.getX() - p1.getX()),
@@ -64,7 +64,7 @@ public class ShapeMaster {
             return getLinePoints(p1, p2, settings);
         }
         if (Math.abs(p1.getX() - p2.getX()) == 1 || Math.abs(p1.getY() - p2.getY()) == 1) {
-            return RectangleMaker.getRectanglePoints(p1, p2, settings.fill);
+            return RectangleHelper.getRectanglePoints(p1, p2, settings.fill);
         }
         PointArray stretchedPoints = getEllipsePointsStretched(cx, cy, rx, ry, stretchH, stretchV, settings);
         PointArray points = new PointArray();

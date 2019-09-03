@@ -1,6 +1,7 @@
 package com.calabi.pixelator.meta;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -58,13 +59,31 @@ public class PointArray { //TODO: Make 'Array' interface and let this and 'Pixel
         return false;
     }
 
-    public boolean containsAll(PointArray points) {
-        for (int i = 0; i < points.size(); i++) {
-            if (!contains(points.getX(i), points.getY(i))) {
-                return false;
+    public void addExclusive(PointArray other) {
+        other.forEach((px, py) -> addExclusive(px, py));
+    }
+
+    public void addExclusive(int px, int py) {
+        if (!this.contains(px, py)) {
+            this.add(px, py);
+        }
+    }
+
+    public void subtract(PointArray other) {
+        other.forEach((px, py) -> subtract(px, py));
+    }
+
+    public void subtract(int px, int py) {
+        Iterator<Integer> xIter = x.iterator();
+        Iterator<Integer> yIter = y.iterator();
+        while (xIter.hasNext()) {
+            Integer tx = xIter.next();
+            Integer ty = yIter.next();
+            if (tx.equals(px) && ty.equals(py)) {
+                xIter.remove();
+                yIter.remove();
             }
         }
-        return true;
     }
 
     @Override public boolean equals(Object o) {
