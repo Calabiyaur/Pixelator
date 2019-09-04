@@ -15,6 +15,7 @@ public class SelectColor extends SelectionTool {
                 Images.USE_SELECT_COLOR_SUBTRACT
         );
         hotspotX = 8;
+        draggableAfterClick = false;
     }
 
     public static SelectColor getMe() {
@@ -27,7 +28,7 @@ public class SelectColor extends SelectionTool {
         if (selectColorPoints == null) {
             return;
         }
-        switch(type) {
+        switch(type.get()) {
             case ADD:
                 pixels.addExclusive(selectColorPoints);
                 break;

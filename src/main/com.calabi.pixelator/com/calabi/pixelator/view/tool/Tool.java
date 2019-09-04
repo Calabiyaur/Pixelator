@@ -21,7 +21,7 @@ import com.calabi.pixelator.view.editor.ToolLayer;
 
 public abstract class Tool {
 
-    private static Tool actingTool;
+    private static ObjectProperty<Tool> actingTool = new SimpleObjectProperty<>();
     private static Point mousePrevious;
     private static Point mouse;
     private static Point mouseLastPressed;
@@ -47,8 +47,8 @@ public abstract class Tool {
         this.draggableAfterClick = draggableAfterClick;
         this.selectionTool = selectionTool;
 
-        if (actingTool == null) {
-            actingTool = None.getMe();
+        if (actingTool.get() == null) {
+            actingTool.set(None.getMe());
         }
 
         this.updateCursor();
@@ -79,24 +79,32 @@ public abstract class Tool {
         return mouseLastPressed;
     }
 
+    public static ObjectProperty<Tool> actingToolProperty() {
+        return actingTool;
+    }
+
     public static void setActingTool(Tool tool) {
-        actingTool = tool;
+        actingTool.set(tool);
         if (None.getMe() != tool) {
             Logger.log("Tool", tool.getClass().getSimpleName(), "Activated");
         }
     }
 
     private void updateCursor() {
-        cursor.set(useImage == null ? ImageCursor.NONE : new ImageCursor(new Image(useImage.getUrl()), hotspotX, hotspotY));
+        if (useImage != null) {
+            cursor.set(new ImageCursor(new Image(useImage.getUrl()), hotspotX, hotspotY));
+        } else {
+            Logger.log("Tool without useImage: ", this);
+        }
     }
 
     private void updateTool() {
         if (getSelectionLayer().contains(mouse) && isFlexible()) {
-            actingTool = Drag.getMe();
+            actingTool.set(Drag.getMe());
         } else if (MouseButton.SECONDARY.equals(mouseButton)) {
-            actingTool = getSecondary();
+            actingTool.set(getSecondary());
         } else {
-            actingTool = this;
+            actingTool.set(this);
         }
     }
 
@@ -107,18 +115,18 @@ public abstract class Tool {
         stillSincePress = true;
         updateTool();
 
-        if (!actingTool.isSelectionTool() || (!getSelectionLayer().contains(mouse) && actingTool.isFlexible())) {
+        if (!actingTool.get().isSelectionTool() || (!getSelectionLayer().contains(mouse) && actingTool.get().isFlexible())) {
             getEditor().lockSelection();
         }
 
-        actingTool.pressPrimary();
+        actingTool.get().pressPrimary();
     }
 
     public final void move(MouseEvent e) {
         updateMouse(e);
         stillSincePress = false;
         if (!Objects.equals(mouse, mousePrevious)) {
-            actingTool.movePrimary();
+            actingTool.get().movePrimary();
         }
     }
 
@@ -126,13 +134,13 @@ public abstract class Tool {
         updateMouse(e);
         stillSincePress = false;
         if (!Objects.equals(mouse, mousePrevious)) {
-            actingTool.dragPrimary();
+            actingTool.get().dragPrimary();
         }
     }
 
     public final void release(MouseEvent e) {
         updateMouse(e);
-        if (actingTool.isDraggableAfterClick() && !dragging && isStillSincePress()) {
+        if (actingTool.get().isDraggableAfterClick() && !dragging && isStillSincePress()) {
             dragging = true;
             mouseButton = null;
         } else {
@@ -141,23 +149,23 @@ public abstract class Tool {
     }
 
     public final void keyPress(KeyEvent e) {
-        if (actingTool != None.getMe()) {
-            actingTool.keyPressPrimary(e.getCode());
+        if (actingTool.get() != None.getMe()) {
+            actingTool.get().keyPressPrimary(e.getCode());
         } else {
             keyPressPrimary(e.getCode());
         }
     }
 
     public final void keyRelease(KeyEvent e) {
-        if (actingTool != None.getMe()) {
-            actingTool.keyReleasePrimary(e.getCode());
+        if (actingTool.get() != None.getMe()) {
+            actingTool.get().keyReleasePrimary(e.getCode());
         } else {
             keyReleasePrimary(e.getCode());
         }
     }
 
     public void imitateRelease() {
-        actingTool.releasePrimary();
+        actingTool.get().releasePrimary();
         setActingTool(None.getMe());
         dragging = false;
         mouseButton = null;
@@ -166,7 +174,7 @@ public abstract class Tool {
     public abstract void pressPrimary();
 
     public void movePrimary() {
-        if (this == actingTool && draggableAfterClick) {
+        if (this == actingTool.get() && draggableAfterClick) {
             dragPrimary();
         }
     }
@@ -249,4 +257,11 @@ public abstract class Tool {
         return stillSincePress;
     }
 
+    @Override public String toString() {
+        String s = this.getClass().getSimpleName() + " (" + secondary.getClass().getSimpleName() + ") ";
+        if (useImage != null) {
+            s += useImage.name();
+        }
+        return s;
+    }
 }

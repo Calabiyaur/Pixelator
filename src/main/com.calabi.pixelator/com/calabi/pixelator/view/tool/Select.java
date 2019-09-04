@@ -24,14 +24,14 @@ public class Select extends SelectionTool {
     }
 
     @Override public void pressPrimary() {
-        if (type == SelectType.SELECT) {
+        if (type.get() == SelectType.SELECT) {
             getSelectionLayer().setStart(getMouse());
         } else {
             Check.ensure(getSelectionLayer().isActive());
             getSelectionLayer().defineShape(getSelectionLayer().getPixels());
             getSelectionLayer().setStart(getMouse());
         }
-        getSelectionLayer().playBorder(false);
+        //getSelectionLayer().playBorder(false);
         getSelectionLayer().playRect(false);
     }
 
@@ -50,7 +50,7 @@ public class Select extends SelectionTool {
             if (rectanglePoints == null) {
                 return;
             }
-            switch(type) {
+            switch(type.get()) {
                 case ADD:
                     pixels.addExclusive(rectanglePoints);
                     break;

@@ -3,13 +3,13 @@ package com.calabi.pixelator.view.editor;
 import java.util.List;
 import java.util.Set;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
@@ -154,9 +154,7 @@ public class ImageEditor extends Editor {
             updateColorCount();
         });
 
-        ChangeListener<Cursor> cursorChangeListener = (ov1, o1, n1) -> {
-            updateCursor();
-        };
+        InvalidationListener cursorChangeListener = (ov) -> updateCursor();
         ToolView.getInstance().currentToolProperty().addListener((ov, o, n) -> {
             currentTool.cursorProperty().removeListener(cursorChangeListener);
             currentTool = ToolManager.getTool(n);

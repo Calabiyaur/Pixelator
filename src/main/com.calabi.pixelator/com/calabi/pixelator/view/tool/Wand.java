@@ -14,6 +14,7 @@ public class Wand extends SelectionTool {
                 Images.USE_WAND_ADD,
                 Images.USE_WAND_SUBTRACT
         );
+        draggableAfterClick = false;
     }
 
     public static Wand getMe() {
@@ -26,7 +27,7 @@ public class Wand extends SelectionTool {
         if (selectFillPoints == null) {
             return;
         }
-        switch(type) {
+        switch(type.get()) {
             case ADD:
                 pixels.addExclusive(selectFillPoints);
                 break;

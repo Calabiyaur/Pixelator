@@ -35,6 +35,8 @@ import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;
+import com.calabi.pixelator.view.tool.Select;
+import com.calabi.pixelator.view.tool.Tool;
 import com.calabi.pixelator.view.tool.Tools;
 
 public class ToolView extends VBox {
@@ -102,6 +104,8 @@ public class ToolView extends VBox {
 
         previewGrid.visibleProperty().bind(preview.graphicProperty().isNotNull());
         getChildren().add(7, previewGrid);
+
+        //getChildren().add(8, createTextView());
 
         initConfig();
     }
@@ -196,6 +200,22 @@ public class ToolView extends VBox {
         GridPane.setMargin(bulgeCenter, new Insets(0, 1, 0, 1));
 
         return prefBox;
+    }
+
+    private Pane createTextView() {
+        GridPane grid = new GridPane();
+        grid.setVgap(6);
+        grid.setHgap(6);
+
+        Text actingText = new Text();
+        Tool.actingToolProperty().addListener((ov, o, n) -> actingText.setText(n.toString()));
+        grid.addRow(0, new Text("actingTool ="), actingText);
+
+        Text selectText = new Text();
+        Select.getMe().typeProperty().addListener((ov, o, n) -> selectText.setText(n.name()));
+        grid.addRow(1, new Text("select.type ="), selectText);
+
+        return grid;
     }
 
     private void initConfig() {

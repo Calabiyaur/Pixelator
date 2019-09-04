@@ -1,12 +1,14 @@
 package com.calabi.pixelator.view.tool;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.input.KeyCode;
 
 import com.calabi.pixelator.res.Images;
 
 public abstract class SelectionTool extends Tool {
 
-    protected SelectType type = SelectType.SELECT;
+    protected ObjectProperty<SelectType> type = new SimpleObjectProperty<>(SelectType.SELECT);
 
     private Images useImageSelect;
     private Images useImageAdd;
@@ -52,27 +54,35 @@ public abstract class SelectionTool extends Tool {
     }
 
     @Override public final void keyPressPrimary(KeyCode code) {
-        type = getType(code, false);
+        type.set(getType(code, false));
         updateUseImage();
     }
 
     @Override public final void keyReleasePrimary(KeyCode code) {
-        type = getType(code, true);
+        type.set(getType(code, true));
         updateUseImage();
     }
 
     @Override protected final boolean isFlexible() {
-        return type == SelectType.SELECT;
+        return type.get() == SelectType.SELECT;
     }
 
     private void updateUseImage() {
-        Images useImage = getUseImage(type);
+        Images useImage = getUseImage(type.get());
         if (!useImage.equals(super.getUseImage())) {
             setUseImage(useImage);
         }
     }
 
-    enum SelectType {
+    public ObjectProperty<SelectType> typeProperty() {
+        return type;
+    }
+
+    @Override public String toString() {
+        return super.toString() + ", type = " + type.get().name();
+    }
+
+    public enum SelectType {
         SELECT,
         ADD,
         SUBTRACT
