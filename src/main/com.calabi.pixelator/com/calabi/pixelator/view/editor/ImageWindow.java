@@ -14,6 +14,7 @@ import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.control.parent.BasicWindow;
 import com.calabi.pixelator.files.Files;
+import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.res.ImageConfig;
@@ -36,6 +37,9 @@ public class ImageWindow extends BasicWindow {
         imageView.imageProperty().addListener((ov, o, n) -> this.imageFile.setImage(n));
         imageEditor = new ImageEditor(imageFile, imageView);
         setText(imageFile.getName());
+        if (imageFile instanceof PaletteFile) {
+            setGraphic(Images.PALETTE.getImageView());
+        }
         imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
         setContent(imageEditor);
 

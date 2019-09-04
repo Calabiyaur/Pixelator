@@ -40,6 +40,7 @@ public enum Images {
     LOCK_OPEN,
     NEW,
     OPEN,
+    PALETTE,
     PASTE,
     PEN,
     PICK,

@@ -126,6 +126,10 @@ public class BasicWindow extends DraggablePane {
         this.text.setText(text);
     }
 
+    public void setGraphic(Node graphic) {
+        this.text.setGraphic(graphic);
+    }
+
     public String getText() {
         return this.text.getText();
     }
