@@ -93,8 +93,8 @@ public abstract class Tool {
     private void updateCursor() {
         if (useImage != null) {
             cursor.set(new ImageCursor(new Image(useImage.getUrl()), hotspotX, hotspotY));
-        } else {
-            Logger.log("Tool without useImage: ", this);
+        } else if (this == None.getMe()) {
+            throw new IllegalStateException("Tool without useImage: " + this);
         }
     }
 

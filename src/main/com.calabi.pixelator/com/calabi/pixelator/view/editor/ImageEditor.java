@@ -129,8 +129,6 @@ public class ImageEditor extends Editor {
         setOnMouseMoved(this::onMouseMoved);
         setOnMouseDragged(this::onMouseDragged);
         setOnMouseReleased(this::onMouseReleased);
-        //setOnKeyPressed(this::onKeyPressed);
-        //setOnKeyReleased(this::onKeyReleased);
         setOnMouseEntered(e -> {
             updateCursor = true;
             updateCursor();

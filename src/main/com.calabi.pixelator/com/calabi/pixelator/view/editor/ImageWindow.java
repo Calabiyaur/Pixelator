@@ -13,8 +13,9 @@ import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.control.parent.BasicWindow;
+import com.calabi.pixelator.files.Category;
+import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.Files;
-import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.res.ImageConfig;
@@ -22,11 +23,16 @@ import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.start.ActionManager;
 import com.calabi.pixelator.start.Pixelator;
 import com.calabi.pixelator.util.ImageUtil;
+import com.calabi.pixelator.util.NumberUtil;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
+import com.calabi.pixelator.view.palette.PaletteEditor;
 
 public class ImageWindow extends BasicWindow {
+
+    public static final double MIN_WIDTH = 172;
+    public static final double MIN_HEIGHT = 112;
 
     private ImageEditor imageEditor;
     private PixelFile imageFile;
@@ -37,8 +43,14 @@ public class ImageWindow extends BasicWindow {
         imageView.imageProperty().addListener((ov, o, n) -> this.imageFile.setImage(n));
         imageEditor = new ImageEditor(imageFile, imageView);
         setText(imageFile.getName());
-        if (imageFile instanceof PaletteFile) {
+        if (imageFile.getCategory() == Category.PALETTE) {
             setGraphic(Images.PALETTE.getImageView());
+            if (imageFile.getExtension() != Extension.PALI) {
+                imageView.setZoomMinimum(4);
+                imageView.setZoomMaximum(24);
+                imageView.setScaleX(PaletteEditor.ZOOM_FACTOR);
+                imageView.setScaleY(PaletteEditor.ZOOM_FACTOR);
+            }
         }
         imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
         setContent(imageEditor);
@@ -141,8 +153,8 @@ public class ImageWindow extends BasicWindow {
             additionalWidth = BasicScrollPane.BAR_BREADTH;
         }
 
-        setPrefWidth(Math.min(prefWidth + additionalWidth, maxWidth));
-        setPrefHeight(Math.min(prefHeight + additionalHeight, maxHeight));
+        setPrefWidth(NumberUtil.minMax(MIN_WIDTH, prefWidth + additionalWidth, maxWidth));
+        setPrefHeight(NumberUtil.minMax(MIN_HEIGHT, prefHeight + additionalHeight, maxHeight));
 
         Platform.runLater(() -> {
             resetPosition(getPrefWidth(), getPrefHeight());
