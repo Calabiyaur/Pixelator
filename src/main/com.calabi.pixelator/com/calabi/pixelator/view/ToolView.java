@@ -301,16 +301,4 @@ public class ToolView extends VBox {
         return thickness.get();
     }
 
-    public void setReplace(boolean value) {
-        replaceColor.setValue(value);
-    }
-
-    public void setFillShape(boolean value) {
-        fillShape.setValue(value);
-    }
-
-    public void setThickness(int value) {
-        thickness.setValue(value);
-    }
-
 }

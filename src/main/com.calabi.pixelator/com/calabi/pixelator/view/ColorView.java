@@ -108,7 +108,8 @@ public class ColorView extends BorderPane {
     }
 
     public static void addPalette(Image image) {
-        paletteSelection.addPalette(new PaletteFile(null, image));
+        PaletteFile file = new PaletteFile(null, image);
+        paletteSelection.addPalette(file);
     }
 
 }

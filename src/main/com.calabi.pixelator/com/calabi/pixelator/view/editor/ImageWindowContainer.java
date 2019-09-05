@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 import com.calabi.pixelator.control.image.ScalableImageView;
+import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.res.ImageConfig;
 import com.calabi.pixelator.view.InfoView;
@@ -146,14 +147,16 @@ public class ImageWindowContainer extends Pane {
 
     void setCurrentWindow(ImageWindow window) {
         currentWindow.set(window);
-
     }
 
     private void updateImage(ImageWindow window) {
-        ToolView.getInstance().setPreview(window.getImageView().getImage(), getEditor().getToolImage(),
-                getEditor().getSelectionImage());
-        ToolView.getInstance().setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
-        ToolView.getInstance().setZoom(window.getImageView().scaleXProperty().doubleValue());
+        if (window.getFile().getCategory() == Category.IMAGE) {
+            ToolView.getInstance().setPreview(window.getImageView().getImage(),
+                    window.getEditor().getToolImage(),
+                    window.getEditor().getSelectionImage());
+            ToolView.getInstance().setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
+            ToolView.getInstance().setZoom(window.getImageView().scaleXProperty().doubleValue());
+        }
     }
 
     public boolean closeAll() {

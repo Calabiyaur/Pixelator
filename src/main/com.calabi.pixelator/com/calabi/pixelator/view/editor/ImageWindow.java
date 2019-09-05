@@ -75,8 +75,8 @@ public class ImageWindow extends BasicWindow {
 
     public void initConfig() {
         String zoom = getConfig(ImageConfig.ZOOM_LEVEL);
-        getImageView().setScaleX(zoom == null ? 1 : Double.valueOf(zoom));
-        getImageView().setScaleY(zoom == null ? 1 : Double.valueOf(zoom));
+        getImageView().setScaleX(zoom == null ? getImageView().getScaleX() : Double.valueOf(zoom));
+        getImageView().setScaleY(zoom == null ? getImageView().getScaleY() : Double.valueOf(zoom));
         String width = getConfig(ImageConfig.WIDTH);
         if (width != null) {
             setPrefWidth(Double.valueOf(width));
