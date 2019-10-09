@@ -12,9 +12,11 @@ public class Wand extends SelectionTool {
                 Images.WAND,
                 Images.USE_WAND,
                 Images.USE_WAND_ADD,
-                Images.USE_WAND_SUBTRACT
+                Images.USE_WAND_SUBTRACT,
+                15,
+                16,
+                false
         );
-        draggableAfterClick = false;
     }
 
     public static Wand getMe() {

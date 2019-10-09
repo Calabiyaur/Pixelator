@@ -28,13 +28,13 @@ public abstract class Tool {
     private static boolean dragging = false;
     private static MouseButton mouseButton;
     private static boolean stillSincePress = true;
-    boolean draggableAfterClick;
-    boolean selectionTool;
+    private boolean draggableAfterClick;
+    private boolean selectionTool;
     Tool secondary = this;
     private Images image;
     private Images useImage;
-    int hotspotX;
-    int hotspotY;
+    private int hotspotX;
+    private int hotspotY;
     private ObjectProperty<Cursor> cursor = new SimpleObjectProperty<>();
 
     protected Tool(Images image, Images useImage, int hotspotX, int hotspotY, boolean draggableAfterClick,

@@ -12,10 +12,11 @@ public class SelectColor extends SelectionTool {
                 Images.SELECT_COLOR,
                 Images.USE_SELECT_COLOR,
                 Images.USE_SELECT_COLOR_ADD,
-                Images.USE_SELECT_COLOR_SUBTRACT
+                Images.USE_SELECT_COLOR_SUBTRACT,
+                8,
+                16,
+                false
         );
-        hotspotX = 8;
-        draggableAfterClick = false;
     }
 
     public static SelectColor getMe() {

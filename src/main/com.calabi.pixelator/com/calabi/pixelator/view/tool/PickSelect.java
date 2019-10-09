@@ -5,7 +5,7 @@ public class PickSelect extends Select {
     private static PickSelect me = new PickSelect();
 
     public PickSelect() {
-        draggableAfterClick = false;
+        super(false);
     }
 
     public static PickSelect getMe() {

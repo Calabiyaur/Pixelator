@@ -58,7 +58,12 @@ public abstract class PreviewDialog extends BasicDialog {
             control.getControl().focusedProperty().addListener((ov, o, n) -> {
                 preview.setEnabled(n);
                 if (n) {
-                    preview.setOnAction(e -> control.setValue(preview.getColor(e)));
+                    preview.setOnAction(e -> {
+                        Color color = preview.getColor(e);
+                        if (color != null) {
+                            control.setValue(color);
+                        }
+                    });
                 }
             });
         }
