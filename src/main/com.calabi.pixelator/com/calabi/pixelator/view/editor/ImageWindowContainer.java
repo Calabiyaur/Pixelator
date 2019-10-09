@@ -64,7 +64,6 @@ public class ImageWindowContainer extends Pane {
                 showBackground.setValue(window.getEditor().isShowBackground());
                 updateImage(window);
                 window.toFront();
-                window.adjustSize();
                 window.getEditor().updateColorCount();
             }
         });
@@ -141,6 +140,7 @@ public class ImageWindowContainer extends Pane {
         }
 
         setCurrentWindow(window);
+        window.adjustSize();
         window.getImageView().imageProperty().addListener((ov, o, n) -> updateImage(window));
         return window;
     }

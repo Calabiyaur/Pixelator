@@ -25,6 +25,7 @@ import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PaletteFile;
+import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.view.dialog.MessageDialog;
 import com.calabi.pixelator.view.dialog.NewPaletteDialog;
@@ -101,6 +102,19 @@ public class PaletteSelection extends BorderPane {
     }
 
     public void changePreview() {
+        changePreview(model.getTabButtons().getSelected());
+    }
+
+    public void changePreview(PixelFile previewFile) {
+        for (PaletteToggleButton toggle : model.getTabButtons().getToggles()) {
+            if (toggle.getEditor().getPixelFile() == previewFile) {
+                changePreview(toggle);
+                return;
+            }
+        }
+    }
+
+    private void changePreview(PaletteToggleButton toggle) {
         ImageFile imageFile = Files.get().openSingleImage();
         if (imageFile == null) {
             return;
@@ -113,7 +127,8 @@ public class PaletteSelection extends BorderPane {
             dialog.show();
         } else {
             getFile().setPreview(imageFile.getFile());
-            model.getTabButtons().getSelected().setGraphic(new ImageView(image));
+            getFile().setPreviewImage(imageFile.getImage());
+            toggle.setGraphic(new ImageView(image));
         }
     }
 

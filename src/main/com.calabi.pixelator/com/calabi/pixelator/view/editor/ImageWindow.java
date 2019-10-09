@@ -3,10 +3,16 @@ package com.calabi.pixelator.view.editor;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 import com.calabi.pixelator.control.basic.ImageButton;
@@ -16,6 +22,7 @@ import com.calabi.pixelator.control.parent.BasicWindow;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.Files;
+import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.res.ImageConfig;
@@ -24,6 +31,7 @@ import com.calabi.pixelator.start.ActionManager;
 import com.calabi.pixelator.start.Pixelator;
 import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.NumberUtil;
+import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
@@ -44,7 +52,8 @@ public class ImageWindow extends BasicWindow {
         imageEditor = new ImageEditor(imageFile, imageView);
         setText(imageFile.getName());
         if (imageFile.getCategory() == Category.PALETTE) {
-            setGraphic(Images.PALETTE.getImageView());
+            Image previewImage = ((PaletteFile) imageFile).getPreviewImage();
+            setGraphic(previewImage != null ? new ImageView(previewImage) : Images.PALETTE.getImageView());
             if (imageFile.getExtension() != Extension.PALI) {
                 imageView.setZoomMinimum(4);
                 imageView.setZoomMaximum(24);
@@ -53,7 +62,22 @@ public class ImageWindow extends BasicWindow {
             }
         }
         imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
-        setContent(imageEditor);
+        if (imageFile.getCategory() == Category.IMAGE) {
+            setContent(imageEditor);
+        } else {
+            setContent(imageEditor);
+            Button preview = new Button("Preview");
+            preview.setOnAction(e -> ColorView.getPaletteSelection().changePreview(imageFile));
+            Button apply = new Button("Apply");
+            ColorView.getPaletteSelection().getEditor().updateImage(imageEditor.getImage());
+            apply.setDisable(true);
+
+            preview.setGraphic(Images.OPEN.getImageView());
+            Region space = new Region();
+            HBox.setHgrow(space, Priority.ALWAYS);
+            HBox buttons = new HBox(preview, space, apply);
+            setLowerContent(buttons);
+        }
 
         setOnScroll(e -> onScroll(e));
         setOnMouseClicked(e -> mouseClick(e));
@@ -138,8 +162,10 @@ public class ImageWindow extends BasicWindow {
     public void adjustSize() {
         double prefWidth = Math.ceil(getImageView().getWidth() * getImageView().getScaleX()
                 + BasicWindow.RESIZE_MARGIN * 2);
-        double prefHeight = Math.ceil(getImageView().getHeight() * getImageView().getScaleY() + getHeaderHeight()
-                + BasicWindow.RESIZE_MARGIN * 2);
+        double prefHeight = Math.ceil(getImageView().getHeight() * getImageView().getScaleY()
+                + getHeaderHeight()
+                + BasicWindow.RESIZE_MARGIN * 2
+                + (Category.PALETTE.equals(getFile().getCategory()) ? 24 : 0));
 
         double maxWidth = ((ImageWindowContainer) getParent()).getWidth();
         double maxHeight = ((ImageWindowContainer) getParent()).getHeight();

@@ -1,5 +1,8 @@
 package com.calabi.pixelator.view.palette;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -77,6 +80,12 @@ class PaletteTabButtons extends VBox {
 
     public boolean closeSelected() {
         return close(getSelected());
+    }
+
+    public List<PaletteToggleButton> getToggles() {
+        return super.getChildren().stream()
+                .filter(c -> c instanceof PaletteToggleButton)
+                .map(c -> ((PaletteToggleButton) c)).collect(Collectors.toList());
     }
 
     private boolean close(PaletteToggleButton button) {

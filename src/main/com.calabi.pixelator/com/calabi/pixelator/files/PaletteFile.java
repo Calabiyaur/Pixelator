@@ -9,6 +9,7 @@ import com.calabi.pixelator.util.FileUtil;
 public class PaletteFile extends PixelFile {
 
     private File preview;
+    private Image previewImage;
 
     public PaletteFile(File file, Image palette) {
         super(Category.PALETTE, file, palette);
@@ -25,5 +26,13 @@ public class PaletteFile extends PixelFile {
 
     public void setPreview(File preview) {
         this.preview = preview;
+    }
+
+    public Image getPreviewImage() {
+        return previewImage;
+    }
+
+    public void setPreviewImage(Image previewImage) {
+        this.previewImage = previewImage;
     }
 }

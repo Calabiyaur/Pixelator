@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.res.Images;
@@ -27,11 +28,13 @@ public class BasicWindow extends DraggablePane {
     private final Label text = new Label("");
     private final HBox buttonBox = new HBox();
     private final ImageButton close = new ImageButton(Images.CLOSE);
-    private final BasicScrollPane innerContent = new BasicScrollPane();
+    private final VBox innerContent = new VBox();
+    private final BasicScrollPane scrollPane = new BasicScrollPane();
     private EventHandler<Event> onClose;
 
     public BasicWindow(boolean showTitle) {
 
+        innerContent.getChildren().add(scrollPane);
         add(innerContent, 1, 3);
 
         if (showTitle) {
@@ -46,6 +49,7 @@ public class BasicWindow extends DraggablePane {
         setHgrow(text, Priority.ALWAYS);
         setHalignment(buttonBox, HPos.RIGHT);
         setVgrow(innerContent, Priority.ALWAYS);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
         initStyle();
     }
@@ -114,8 +118,16 @@ public class BasicWindow extends DraggablePane {
         onClose.handle(new Event(Event.ANY));
     }
 
-    public void setContent(Region graphic) {
-        innerContent.setContent(graphic);
+    public void setContent(Region region) {
+        scrollPane.setContent(region);
+    }
+
+    public void setLowerContent(Region region) {
+        if (innerContent.getChildren().size() <= 1) {
+            innerContent.getChildren().add(region);
+        } else {
+            innerContent.getChildren().set(1, region);
+        }
     }
 
     public double getHeaderHeight() {
@@ -143,6 +155,6 @@ public class BasicWindow extends DraggablePane {
     }
 
     public BasicScrollPane getContent() {
-        return innerContent;
+        return scrollPane;
     }
 }
