@@ -31,9 +31,9 @@ class Preview extends BasicScrollPane {
         setOnRawScroll(e -> imageView.scroll(e));
         reader = image.getPixelReader();
         writer = writableImage.getPixelWriter();
-        setStyle("-fx-background-color: #F4F4F4");
 
         ImagePreview content = new ImagePreview(imageView);
+        content.setStyle("-fx-background-color: #DDDDDD");
         setContent(content);
 
         content.setOnMouseEntered(e -> {

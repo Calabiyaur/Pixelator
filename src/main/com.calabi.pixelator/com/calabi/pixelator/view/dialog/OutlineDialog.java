@@ -1,11 +1,17 @@
 package com.calabi.pixelator.view.dialog;
 
+import java.util.Arrays;
+
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.control.basic.BasicCheckBox;
 import com.calabi.pixelator.control.basic.BasicColorField;
+import com.calabi.pixelator.control.basic.BasicControl;
 import com.calabi.pixelator.control.basic.BasicIntegerField;
 import com.calabi.pixelator.control.basic.SwapColorButton;
 import com.calabi.pixelator.meta.Point;
@@ -24,6 +30,7 @@ public class OutlineDialog extends PreviewDialog {
 
     public OutlineDialog(Image image) {
         super(image);
+        setPrefSize(640, 480);
         setTitle("Outline");
         setOkText("Apply");
 
@@ -41,6 +48,18 @@ public class OutlineDialog extends PreviewDialog {
         addContent(outsideField, 0, 3);
         addContent(inside, 0, 4);
         addContent(solidEdges, 0, 5);
+
+        GridPane.setHalignment(swapColorButton, HPos.RIGHT);
+        GridPane.setMargin(swapColorButton, new Insets(-6, 0, -6, 0));
+
+        for (BasicControl field : Arrays.asList(widthField, inside, solidEdges)) {
+            field.getControl().setPrefWidth(80);
+            field.setMinWidth(160);
+        }
+        for (BasicControl field : Arrays.asList(colorField, outsideField)) {
+            field.getControl().setPrefWidth(52);
+            field.setMinWidth(160);
+        }
 
         addColorControl(colorField, outsideField);
         listenToUpdate(widthField, colorField, outsideField, inside, solidEdges);

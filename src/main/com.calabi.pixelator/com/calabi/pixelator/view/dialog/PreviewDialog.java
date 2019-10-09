@@ -43,6 +43,7 @@ public abstract class PreviewDialog extends BasicDialog {
     protected final void listenToUpdate(BasicControl... controls) {
         for (BasicControl control : controls) {
             control.valueProperty().addListener(o -> Platform.runLater(() -> updateImage()));
+            //TODO: Double performance of swap button (outline dialog) by buffering updates
         }
     }
 

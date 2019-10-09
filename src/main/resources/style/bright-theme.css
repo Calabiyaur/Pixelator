@@ -7,6 +7,7 @@
     -px_bright_default: #AAAAAA;
     -px_bright_hover: #AAAAAA;
     -px_bright_selected: #BBBBBB;
+    -px-custom-background: #000000;
 }
 
 .draggable-pane {
@@ -283,17 +284,17 @@
 }
 
 .scroll-pane > {
-    -fx-background-color: -px_default;
+    -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-padding: 0.0;
 }
 
 .scroll-pane > .viewport {
-    -fx-background-color: -px_default;
+    -fx-background-color: transparent;
 }
 
 .scroll-pane:focused {
-    -fx-background-color: -px_default;
+    -fx-background-color: transparent;
     -fx-background-insets: 0;
 }
 
@@ -308,6 +309,27 @@
 }
 
 .scroll-pane > .corner {
-    -fx-background-color: -px_default;
+    -fx-background-color: transparent;
     -fx-background-insets: 0;
+}
+
+.color-field {
+    -fx-background-color: -px_selected, -px_default, -px-custom-background;
+    -fx-background-insets: 0, 1, 4;
+    -fx-background-radius: 3, 2, 2;
+    -fx-padding: 0.25em 0.416667em 0.333333em 0.416667em;
+}
+
+.color-field:focused {
+    -fx-background-color: -fx-focus-color, -px_default, -px-custom-background;
+    -fx-background-insets: -0.4, 1, 3;
+    -fx-background-radius: 3.4, 2, 2;
+}
+
+.color-field:disabled {
+    -fx-opacity: -fx-disabled-opacity;
+}
+
+.dialog-pane > .button-bar > .container {
+    -fx-padding: 0;
 }

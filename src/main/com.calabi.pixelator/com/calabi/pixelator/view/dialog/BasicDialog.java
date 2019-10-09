@@ -2,6 +2,7 @@ package com.calabi.pixelator.view.dialog;
 
 import java.util.function.Consumer;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -61,6 +62,7 @@ public abstract class BasicDialog extends Dialog<Button> {
         HBox buttonBox = new HBox(buttons);
         buttonBox.setAlignment(Pos.BOTTOM_RIGHT);
         buttonBox.setSpacing(6);
+        buttonBox.setPadding(new Insets(6, 0, 0, 0));
         borderPane.setBottom(buttonBox);
     }
 
