@@ -26,4 +26,11 @@ class CollectionUtilTest {
         Assert.assertEquals(Arrays.asList(3, 4, 5, 6, 7), CollectionUtil.intsBetween(3, 7));
     }
 
+    @Test
+    void testReduceEvenly() {
+        List<String> list = Arrays.asList("A", "1", "2", "B", "3", "4", "C");
+        List<String> reduced = Arrays.asList("A", "B", "C");
+        Assert.assertEquals(reduced, CollectionUtil.reduceEvenly(list, 3));
+    }
+
 }

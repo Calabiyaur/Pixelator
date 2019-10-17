@@ -1,13 +1,11 @@
 package com.calabi.pixelator.view.palette;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -19,7 +17,6 @@ import com.calabi.pixelator.meta.HashMatrix;
 import com.calabi.pixelator.meta.Matrix;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.util.CollectionUtil;
-import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.MapUtil;
 import com.calabi.pixelator.view.palette.partition.HilbertPartition;
 import com.calabi.pixelator.view.palette.partition.Mapping;
@@ -62,25 +59,8 @@ public final class PaletteMaster {
         if (maxColors == null || colors.size() <= maxColors) {
             return colors;
         } else {
-            return CollectionUtil.subset(colors, maxColors);
+            return new HashSet<>(CollectionUtil.reduceEvenly(SortMaster.sortByValues(colors), maxColors));
         }
-    }
-
-    public static List<Color> extractAndSort(Image image) {
-        Set<Color> colors = extractColors(image, null);
-        return sort(colors);
-    }
-
-    public static List<Color> sort(Set<Color> colors) {
-        List<Color> result = sortInternal(colors).stream().flatMap(List::stream).collect(Collectors.toList());
-        if (result.size() != colors.size()) {
-            throw new IllegalStateException("List size was reduced from " + colors.size() + " to " + result.size());
-        }
-        return result;
-    }
-
-    private static List<List<Color>> sortInternal(Set<Color> colors) {
-        return sort3(colors);
     }
 
     /**
@@ -178,52 +158,6 @@ public final class PaletteMaster {
             }
         }
         return new Mapping(retainedColumns.size(), retainedRows.size(), result);
-    }
-
-    /**
-     * Sort the colors by hue, saturation and brightness.
-     *
-     * @return a list of lists, each list only containing colors of similar hue.
-     */
-    private static List<List<Color>> sort3(Set<Color> colors) {
-        if (HUE_VARIETY < 1) {
-            throw new IllegalArgumentException("Columns must be at least 1");
-        }
-        List<Color> originalList = new ArrayList<>(colors);
-        List<List<Color>> result = new ArrayList<>();
-        double margin = 180. / HUE_VARIETY;
-
-        for (int i = 0; i < HUE_VARIETY; i++) {
-            final double hue = 360. * ((double) i / (double) HUE_VARIETY);
-
-            List<Color> column = originalList.stream().filter(
-                    c -> Math.abs(c.getHue() - hue) <= margin
-                    || Math.abs(c.getHue() - hue + 360) <= margin
-                    || Math.abs(c.getHue() - hue - 360) <= margin
-            ).collect(Collectors.toList());
-
-            originalList.removeAll(column);
-            result.add(sort2(column));
-        }
-        return result;
-    }
-
-    /**
-     * Sort the colors by saturation and brightness.
-     */
-    private static List<Color> sort2(Collection<Color> colors) {
-        double p = 0.05;
-        return colors.stream().sorted((o1, o2) -> {
-            if (o1 == null || o2 == null) {
-                return 0;
-            }
-
-            return Double.compare(
-                    o1.getSaturation() * p + ColorUtil.getLuminosity(o1) * (1 - p),
-                    o2.getSaturation() * p + ColorUtil.getLuminosity(o2) * (1 - p)
-            );
-
-        }).collect(Collectors.toList());
     }
 
 }

@@ -68,4 +68,25 @@ public class CollectionUtil {
         return result;
     }
 
+    public static <T> Collection<T> reduceEvenly(Collection<T> collection, int reducedSize) {
+        List<T> list = new ArrayList<>(collection);
+        int n = list.size() - 1;
+        int d = reducedSize - 1;
+        int r = 0;
+        for (Iterator<T> iter = list.iterator(); iter.hasNext();) {
+            iter.next();
+            if (n == 0) {
+                break;
+            } else if (r == 0) {
+                r = (int) Math.round((double) n / (double) d);
+                d--;
+            } else {
+                iter.remove();
+            }
+            n--;
+            r--;
+        }
+        return list;
+    }
+
 }

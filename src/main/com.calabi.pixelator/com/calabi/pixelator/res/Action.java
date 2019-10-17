@@ -60,7 +60,7 @@ public enum Action {
     UNDO_PALETTE(true, false, true, KeyCode.Z),
     UP(false, false, false, KeyCode.UP);
 
-    static Set<Action> BETA_ACTIONS = CollectionUtil.toSet(CHANGE_PALETTE);
+    static Set<Action> BETA_ACTIONS = CollectionUtil.toSet();
 
     private boolean ctrl;
     private boolean shift;
