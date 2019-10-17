@@ -98,6 +98,8 @@ public class PaletteSelection extends BorderPane {
 
     public void editPalette() {
         ImageWindowContainer.getInstance().addImage(getFile());
+        ImageWindowContainer.getInstance().getEditor().setCleanImage(getEditor().getCleanImage());
+        ImageWindowContainer.getInstance().getEditor().updateDirty();
     }
 
     public void changePreview() {

@@ -50,6 +50,10 @@ public abstract class Editor extends StackPane {
 
     public abstract void updateImage(Image image);
 
+    public final Image getCleanImage() {
+        return cleanImage;
+    }
+
     public final void setCleanImage(Image cleanImage) {
         this.cleanImage = cleanImage;
     }
