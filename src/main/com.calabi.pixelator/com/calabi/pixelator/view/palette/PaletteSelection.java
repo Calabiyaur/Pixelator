@@ -34,7 +34,6 @@ import com.calabi.pixelator.view.editor.ImageWindowContainer;
 public class PaletteSelection extends BorderPane {
 
     private final PaletteSelectionModel model;
-    private BooleanProperty paletteSelected = new SimpleBooleanProperty(false);
     private BooleanProperty defaultPaletteSelected = new SimpleBooleanProperty(true);
 
     public PaletteSelection() {
@@ -52,7 +51,7 @@ public class PaletteSelection extends BorderPane {
         edit.setOnAction(e -> editPalette());
 
         edit.setDisable(true);
-        edit.disableProperty().bind(paletteSelectedProperty().not().or(defaultPaletteSelectedProperty()));
+        edit.disableProperty().bind(paletteSelectedProperty().not());
 
         GridPane titlePane = new GridPane();
         ToolBar buttonBox = new ToolBar(create, open, edit);
@@ -69,11 +68,9 @@ public class PaletteSelection extends BorderPane {
         BorderPane.setAlignment(palettePane, Pos.TOP_LEFT);
         VBox.setVgrow(this, Priority.ALWAYS);
 
-        BooleanBinding paletteVisible = tabButtonBox.sizeProperty().greaterThan(0);
-        tabButtonBox.visibleProperty().bind(paletteVisible);
-        palettePane.visibleProperty().bind(paletteVisible);
+        tabButtonBox.visibleProperty().bind(paletteSelectedProperty());
+        palettePane.visibleProperty().bind(paletteSelectedProperty());
 
-        model.editorProperty().addListener((ov, o, n) -> paletteSelected.set(n != null));
         model.editorProperty().addListener((ov, o, n) -> defaultPaletteSelected.set(n != null && n == getDefaultEditor()));
     }
 
@@ -86,7 +83,9 @@ public class PaletteSelection extends BorderPane {
             }
             dialog.close();
             WritableImage image = new WritableImage(dialog.getImageWidth(), dialog.getImageHeight());
-            addPalette(new PaletteFile(null, image));
+            PaletteFile file = new PaletteFile(null, image);
+            addPalette(file);
+            ImageWindowContainer.getInstance().addImage(file);
         });
     }
 
@@ -165,8 +164,8 @@ public class PaletteSelection extends BorderPane {
         getEditor().redo();
     }
 
-    public BooleanProperty paletteSelectedProperty() {
-        return paletteSelected;
+    public BooleanBinding paletteSelectedProperty() {
+        return model.getTabButtons().sizeProperty().greaterThan(0);
     }
 
     public BooleanProperty defaultPaletteSelectedProperty() {

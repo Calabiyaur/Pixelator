@@ -222,7 +222,7 @@ public class MainScene extends Scene {
         paletteMenu.addItem(CHANGE_PALETTE_PREVIEW, "Change Preview...", e -> paletteSelection.changePreview(),
                 paletteSelection.paletteSelectedProperty().and(paletteSelection.defaultPaletteSelectedProperty().not()));
         paletteMenu.addItem(CLOSE_PALETTE, "Close", e -> paletteSelection.closeCurrent(),
-                paletteSelection.paletteSelectedProperty());
+                paletteSelection.paletteSelectedProperty().and(paletteSelection.defaultPaletteSelectedProperty().not()));
         BasicMenu toolMenu = new BasicMenu("Tools");
         toolMenu.addItem(OUTLINE, "Outline...", e -> outline(), ImageWindowContainer.imageSelectedProperty());
         toolMenu.addSeparator();
