@@ -127,9 +127,9 @@ public class PaletteSelection extends BorderPane {
             dialog.setMessage("The size of a palette preview can at most be 16 x 16 pixels.");
             dialog.show();
         } else {
-            getFile().setPreview(imageFile.getFile());
-            getFile().setPreviewImage(imageFile.getImage());
+            getFile().setPreview(imageFile.getImage());
             toggle.setGraphic(new ImageView(image));
+            Files.get().savePreview(getFile());
         }
     }
 

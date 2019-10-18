@@ -10,6 +10,7 @@ import javafx.scene.image.PixelReader;
 import javax.imageio.ImageIO;
 
 import com.calabi.pixelator.files.Extension;
+import com.calabi.pixelator.files.FileConfig;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.util.FileUtil;
 
@@ -48,7 +49,7 @@ public abstract class PixelFileWriter {
 
     File findConfig(File directory) {
         for (File file : directory.listFiles()) {
-            if (file.getName().contains(".properties")) {
+            if (FileConfig.NAME_PROPERTIES.equals(file.getName())) {
                 return file;
             }
         }

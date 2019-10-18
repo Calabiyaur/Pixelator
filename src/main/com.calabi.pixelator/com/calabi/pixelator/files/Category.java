@@ -21,8 +21,7 @@ public enum Category {
                     new Filter(Extension.PALI)
             },
             new Filter[] {
-                    new Filter("Image files",
-                            Extension.GIF, Extension.JPG, Extension.JPEG, Extension.PNG, Extension.PIX),
+                    new Filter("Image files", Extension.GIF, Extension.JPG, Extension.JPEG, Extension.PNG, Extension.PIX),
                     new Filter("Palette files", Extension.PAL, Extension.PALI),
                     new Filter("All", Extension.values())
             }

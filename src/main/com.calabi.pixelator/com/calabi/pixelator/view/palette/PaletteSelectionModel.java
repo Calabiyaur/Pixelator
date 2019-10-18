@@ -33,7 +33,7 @@ final class PaletteSelectionModel {
     public void addPalette(PaletteFile file) {
         PaletteEditor editor = new PaletteEditor(file);
         editor.selectedColorProperty().addListener((ov, o, n) -> Do.when(n != null, () -> ColorView.setColor(n)));
-        Image preview = file.getPreview() == null ? Images.PALETTE.getImage() : new Image(file.getPreview().getPath());
+        Image preview = file.getPreview() == null ? Images.PALETTE.getImage() : file.getPreview();
         PaletteToggleButton button = tabButtons.create(preview, editor, file.isNew() ? "New Palette" : file.getName(), true);
         button.fire();
     }

@@ -10,6 +10,7 @@ import java.util.Properties;
 import javafx.scene.image.Image;
 
 import com.calabi.pixelator.files.Extension;
+import com.calabi.pixelator.files.FileConfig;
 import com.calabi.pixelator.files.PixelFileBuilder;
 import com.calabi.pixelator.logging.Logger;
 import com.calabi.pixelator.util.FileUtil;
@@ -18,9 +19,10 @@ public abstract class PixelFileReader {
 
     public abstract PixelFileBuilder read(File file) throws IOException;
 
-    Image findImage(File directory) throws MalformedURLException {
+    Image findImage(File directory, String name) throws MalformedURLException {
         for (File file : directory.listFiles()) {
-            if (Extension.PNG.equals(FileUtil.getExtension(file))) {
+            if (name.equals(file.getName())
+                    && Extension.PNG.equals(FileUtil.getExtension(file))) {
                 return new Image(file.toURI().toURL().toString());
             }
         }
@@ -30,7 +32,7 @@ public abstract class PixelFileReader {
     Properties findProperties(File directory) {
         Properties properties = new Properties();
         for (File file : directory.listFiles()) {
-            if (file.getName().contains(".properties")) {
+            if (FileConfig.NAME_PROPERTIES.equals(file.getName())) {
                 try {
                     InputStream inputStream = new FileInputStream(file);
                     properties.load(inputStream);

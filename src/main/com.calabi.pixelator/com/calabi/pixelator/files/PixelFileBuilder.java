@@ -11,6 +11,7 @@ public class PixelFileBuilder implements Builder<PixelFile> {
     private Category category;
     private File file;
     private Image image;
+    private Image preview;
     private Properties properties = new Properties();
 
     public PixelFileBuilder() {
@@ -25,19 +26,24 @@ public class PixelFileBuilder implements Builder<PixelFile> {
         this.image = image;
     }
 
-    public void setCategory(Category category) {
+    public PixelFileBuilder category(Category category) {
         this.category = category;
+        return this;
     }
 
-    public void setFile(File file) {
+    public void file(File file) {
         this.file = file;
     }
 
-    public void setImage(Image image) {
+    public void image(Image image) {
         this.image = image;
     }
 
-    public void setProperties(Properties properties) {
+    public void preview(Image preview) {
+        this.preview = preview;
+    }
+
+    public void properties(Properties properties) {
         this.properties = properties;
     }
 
@@ -47,6 +53,7 @@ public class PixelFileBuilder implements Builder<PixelFile> {
             pixelFile = new ImageFile(file, image);
         } else {
             pixelFile = new PaletteFile(file, image);
+            ((PaletteFile) pixelFile).setPreview(preview);
         }
         pixelFile.getProperties().putAll(properties);
         return pixelFile;

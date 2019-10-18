@@ -27,16 +27,15 @@ public class Files {
     private static Map<Extension, PixelFileReader> readers = new HashMap<>();
 
     static {
-        writers.put(null, new BasicImageWriter());
         PIXImageWriter writer = new PIXImageWriter();
+        PIXImageReader reader = new PIXImageReader();
+
+        writers.put(null, new BasicImageWriter());
         writers.put(Extension.PIX, writer);
         writers.put(Extension.PAL, writer);
         writers.put(Extension.PALI, writer);
-    }
 
-    static {
         readers.put(null, new BasicImageReader());
-        PIXImageReader reader = new PIXImageReader();
         readers.put(Extension.PIX, reader);
         readers.put(Extension.PAL, reader);
         readers.put(Extension.PALI, reader);
@@ -101,6 +100,15 @@ public class Files {
         }
     }
 
+    public void savePreview(PaletteFile paletteFile) {
+        PIXImageWriter writer = new PIXImageWriter();
+        try {
+            writer.writePreview(paletteFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save preview " + paletteFile, e);
+        }
+    }
+
     public List<ImageFile> openImages() {
         return open(Category.IMAGE).stream().map(f -> (ImageFile) f).collect(Collectors.toList());
     }
@@ -130,9 +138,7 @@ public class Files {
     private PixelFile openFile(File file, Category category) {
         PixelFileReader reader = getReader(FileUtil.getExtension(file));
         try {
-            PixelFileBuilder builder = reader.read(file);
-            builder.setCategory(category);
-            return builder.build();
+            return reader.read(file).category(category).build();
         } catch (IOException e) {
             throw new RuntimeException("Failed to read file " + file, e);
         }

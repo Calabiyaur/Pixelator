@@ -52,7 +52,7 @@ public class ImageWindow extends BasicWindow {
         imageEditor = new ImageEditor(imageFile, imageView);
         setText(imageFile.getName());
         if (imageFile.getCategory() == Category.PALETTE) {
-            Image previewImage = ((PaletteFile) imageFile).getPreviewImage();
+            Image previewImage = ((PaletteFile) imageFile).getPreview();
             setGraphic(previewImage != null ? new ImageView(previewImage) : Images.PALETTE.getImageView());
             if (imageFile.getExtension() != Extension.PALI) {
                 imageView.setZoomMinimum(4);
