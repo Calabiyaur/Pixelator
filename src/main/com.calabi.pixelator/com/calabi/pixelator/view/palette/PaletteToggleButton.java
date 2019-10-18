@@ -75,7 +75,10 @@ public class PaletteToggleButton extends ToggleButton {
         content.setOnMouseExited(e -> maybeHidePopup(e));
 
         setOnMouseClicked(e -> {
-            if (MouseButton.MIDDLE.equals(e.getButton())) {
+            if (MouseButton.PRIMARY.equals(e.getButton()) && e.getClickCount() == 2) {
+                PaletteSelection.editPalette(getEditor());
+                popup.hide();
+            } else if (MouseButton.MIDDLE.equals(e.getButton())) {
                 close(e);
             }
         });
@@ -118,7 +121,6 @@ public class PaletteToggleButton extends ToggleButton {
                 });
             }
         };
-        popup.setAutoFix(true);
         popup.setConsumeAutoHidingEvents(false);
         popup.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_TOP_RIGHT);
         return popup;

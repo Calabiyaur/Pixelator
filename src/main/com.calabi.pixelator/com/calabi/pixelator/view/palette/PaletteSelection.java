@@ -97,8 +97,12 @@ public class PaletteSelection extends BorderPane {
     }
 
     public void editPalette() {
-        ImageWindowContainer.getInstance().addImage(getFile());
-        ImageWindowContainer.getInstance().getEditor().setCleanImage(getEditor().getCleanImage());
+        editPalette(getEditor());
+    }
+
+    public static void editPalette(PaletteEditor editor) {
+        ImageWindowContainer.getInstance().addImage(editor.getFile());
+        ImageWindowContainer.getInstance().getEditor().setCleanImage(editor.getCleanImage());
         ImageWindowContainer.getInstance().getEditor().updateDirty();
     }
 
