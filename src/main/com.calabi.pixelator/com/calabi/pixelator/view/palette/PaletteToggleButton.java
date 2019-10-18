@@ -137,7 +137,8 @@ public class PaletteToggleButton extends ToggleButton {
         if (popup.isShowing()) {
             Bounds rightBounds = localToScreen(getBoundsInLocal());
             Bounds leftBounds = popup.getSkin().getNode().localToScreen(popup.getSkin().getNode().getBoundsInLocal());
-            if (e.getScreenX() < leftBounds.getMinX()
+            if (rightBounds == null
+                    || e.getScreenX() < leftBounds.getMinX()
                     || e.getScreenX() > rightBounds.getMaxX()
                     || e.getScreenY() < leftBounds.getMinY()
                     || e.getScreenY() > rightBounds.getMaxY()) {

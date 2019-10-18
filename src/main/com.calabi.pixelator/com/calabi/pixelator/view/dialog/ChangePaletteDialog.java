@@ -53,6 +53,7 @@ public class ChangePaletteDialog extends BasicDialog {
         splitPane.getItems().addAll(original, new HBox(buttonPane, preview));
 
         GridPane.setHgrow(splitPane, Priority.ALWAYS);
+        GridPane.setVgrow(splitPane, Priority.ALWAYS);
         HBox.setHgrow(preview, Priority.ALWAYS);
 
         addContent(splitPane, 0, 0);
