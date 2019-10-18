@@ -239,7 +239,7 @@ public class ToolView extends VBox {
             previewSelection.setGraphic(new PixelatedImageView(selectionImage));
             previewSelection.setTranslateX(0);
             previewSelection.setTranslateY(0);
-            //TODO: Re-format the preview stack so it can fit itself to the new image size
+            preview.requestLayout();
         }
     }
 

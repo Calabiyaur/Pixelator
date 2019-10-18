@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.control.image.PixelatedImageView;
+import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.meta.Point;
@@ -30,9 +30,17 @@ public class PaletteEditor extends Editor {
     private final ObjectProperty<Color> selectedColor = new SimpleObjectProperty<>();
 
     public PaletteEditor(PaletteFile file) {
-        super(file, new PixelatedImageView(ImageUtil.makeWritableIfNot(file.getImage())));
+        super(file, new ScalableImageView(ImageUtil.makeWritableIfNot(file.getImage())));
         getFile().setImage(getImage());
-        PixelatedImageView imageView = getImageView();
+
+        ScalableImageView imageView = (ScalableImageView) getImageView();
+        imageView.setZoomMinimum(4);
+        imageView.setZoomMaximum(24);
+        setOnScroll(e -> {
+            imageView.scroll(e);
+            requestLayout();
+        });
+
         undirty();
 
         if (file.getExtension() != Extension.PALI) {
