@@ -32,7 +32,7 @@ public class Line extends Tool {
         getEditor().getToolLayer().setPixels(ShapeMaster.getLinePoints(
                 getToolLayer().getStart(),
                 getMouse(),
-                ToolView.getInstance().getSettings()));
+                ToolView.get().getSettings()));
     }
 
     @Override public void releasePrimary() {

@@ -42,8 +42,8 @@ import com.calabi.pixelator.view.dialog.NewImageDialog;
 import com.calabi.pixelator.view.dialog.OutlineDialog;
 import com.calabi.pixelator.view.dialog.ResizeDialog;
 import com.calabi.pixelator.view.dialog.StretchDialog;
+import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.editor.ImageEditor;
-import com.calabi.pixelator.view.editor.ImageWindowContainer;
 import com.calabi.pixelator.view.palette.PaletteMaster;
 import com.calabi.pixelator.view.palette.PaletteSelection;
 
@@ -85,7 +85,6 @@ import static com.calabi.pixelator.res.Action.UNDO;
 public class MainScene extends Scene {
 
     private static List<String> styleSheets = new ArrayList<>();
-    private ImageWindowContainer imageContainer;
     private PaletteSelection paletteSelection;
 
     public MainScene() {
@@ -105,27 +104,25 @@ public class MainScene extends Scene {
         styleSheets.add(getClass().getResource("/style/bright-theme.css").toExternalForm());
         getStylesheets().addAll(getStyle());
 
-        imageContainer = ImageWindowContainer.getInstance();
-
         createKeyListener();
-        imageContainer.setOnKeyPressed(this.getOnKeyPressed());
+        IWC.get().setOnKeyPressed(this.getOnKeyPressed());
 
-        BorderPane center = new BorderPane(imageContainer);
+        BorderPane center = new BorderPane(IWC.get());
         center.setStyle("-fx-background-color: #BBBBBB");
         root.setCenter(center);
 
         VBox barBox = new VBox();
         root.setTop(barBox);
 
-        ToolView toolView = ToolView.getInstance();
+        ToolView toolView = ToolView.get();
         root.setLeft(toolView);
 
-        ColorView colorView = ColorView.getInstance();
+        ColorView colorView = ColorView.get();
         colorView.setPrefWidth(291);
         root.setRight(colorView);
         this.paletteSelection = ColorView.getPaletteSelection();
 
-        InfoView infoView = InfoView.getInstance();
+        InfoView infoView = InfoView.get();
         center.setBottom(infoView);
 
         MenuBar menuBar = createMenuBar();
@@ -153,7 +150,7 @@ public class MainScene extends Scene {
      * True if closing is successful
      */
     public boolean closeAll() {
-        return imageContainer.closeAll();
+        return IWC.get().closeAll();
     }
 
     private MenuBar createMenuBar() {
@@ -163,53 +160,44 @@ public class MainScene extends Scene {
         BasicMenu fileMenu = new BasicMenu("File");
         fileMenu.addItem(NEW, e -> newImage());
         fileMenu.addItem(OPEN, e -> openImages());
-        fileMenu.addItem(SAVE, e -> imageContainer.saveCurrentFile(),
-                ImageWindowContainer.imageSelectedProperty().and(imageContainer.dirtyProperty()));
-        fileMenu.addItem(SAVE_AS, e -> Files.get().create(imageContainer.getCurrentFile()),
-                ImageWindowContainer.imageSelectedProperty());
+        fileMenu.addItem(SAVE, e -> IWC.get().saveCurrentFile(), IWC.imageSelectedProperty().and(IWC.get().dirtyProperty()));
+        fileMenu.addItem(SAVE_AS, e -> Files.get().create(IWC.get().getCurrentFile()), IWC.imageSelectedProperty());
         fileMenu.addItem(CREATE_FROM_CLIPBOARD, e -> createFromClipboard(), Pixelator.clipboardActiveProperty());
-        fileMenu.addItem(CLOSE, e -> imageContainer.closeCurrent(), ImageWindowContainer.imageSelectedProperty());
+        fileMenu.addItem(CLOSE, e -> IWC.get().closeCurrent(), IWC.imageSelectedProperty());
 
         BasicMenu editMenu = new BasicMenu("Edit");
-        editMenu.addItem(UNDO, e -> imageContainer.undo(), imageContainer.undoEnabledProperty());
-        editMenu.addItem(REDO, e -> imageContainer.redo(), imageContainer.redoEnabledProperty());
+        editMenu.addItem(UNDO, e -> IWC.get().undo(), IWC.get().undoEnabledProperty());
+        editMenu.addItem(REDO, e -> IWC.get().redo(), IWC.get().redoEnabledProperty());
         editMenu.addSeparator();
-        editMenu.addItem(CUT, e -> getEditor().cut(), imageContainer.selectionActiveProperty());
-        editMenu.addItem(COPY, e -> getEditor().copyImage(), imageContainer.selectionActiveProperty());
-        editMenu.addItem(PASTE, e -> getEditor().paste(), ImageWindowContainer.imageSelectedProperty());
-        editMenu.addItem(DELETE, e -> getEditor().removeSelectionAndRegister(), imageContainer.selectionActiveProperty());
-        editMenu.addItem(SELECT_ALL, e -> getEditor().selectAll(), ImageWindowContainer.imageSelectedProperty());
+        editMenu.addItem(CUT, e -> getEditor().cut(), IWC.get().selectionActiveProperty());
+        editMenu.addItem(COPY, e -> getEditor().copyImage(), IWC.get().selectionActiveProperty());
+        editMenu.addItem(PASTE, e -> getEditor().paste(), IWC.imageSelectedProperty());
+        editMenu.addItem(DELETE, e -> getEditor().removeSelectionAndRegister(), IWC.get().selectionActiveProperty());
+        editMenu.addItem(SELECT_ALL, e -> getEditor().selectAll(), IWC.imageSelectedProperty());
 
         BasicMenu viewMenu = new BasicMenu("View");
         CheckMenuItem gridItem = viewMenu.addCheckItem(GRID,
-                e -> imageContainer.setShowGrid(!imageContainer.showGridProperty().get()),
-                ImageWindowContainer.imageSelectedProperty());
-        imageContainer.showGridProperty().addListener((ov, o, n) -> gridItem.setSelected(n));
+                e -> IWC.get().setShowGrid(!IWC.get().showGridProperty().get()), IWC.imageSelectedProperty());
+        IWC.get().showGridProperty().addListener((ov, o, n) -> gridItem.setSelected(n));
         CheckMenuItem crossHairItem = viewMenu.addCheckItem(CROSSHAIR,
-                e -> imageContainer.setShowCrossHair(!imageContainer.showCrossHairProperty().get()),
-                ImageWindowContainer.imageSelectedProperty());
-        imageContainer.showCrossHairProperty().addListener((ov, o, n) -> crossHairItem.setSelected(n));
+                e -> IWC.get().setShowCrossHair(!IWC.get().showCrossHairProperty().get()), IWC.imageSelectedProperty());
+        IWC.get().showCrossHairProperty().addListener((ov, o, n) -> crossHairItem.setSelected(n));
         CheckMenuItem backgroundItem = viewMenu.addCheckItem(BACKGROUND,
-                e -> imageContainer.setShowBackground(!imageContainer.showBackgroundProperty().get()),
-                ImageWindowContainer.imageSelectedProperty());
-        imageContainer.showBackgroundProperty().addListener((ov, o, n) -> backgroundItem.setSelected(n));
+                e -> IWC.get().setShowBackground(!IWC.get().showBackgroundProperty().get()), IWC.imageSelectedProperty());
+        IWC.get().showBackgroundProperty().addListener((ov, o, n) -> backgroundItem.setSelected(n));
 
         BasicMenu imageMenu = new BasicMenu("Image"); // Center
-        imageMenu.addItem(MOVE_IMAGE, e -> moveAction(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(RESIZE, e -> resizeAction(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(STRETCH, e -> stretchAction(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(CROP, e -> getEditor().crop(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(MOVE_IMAGE, e -> moveAction(), IWC.imageSelectedProperty());
+        imageMenu.addItem(RESIZE, e -> resizeAction(), IWC.imageSelectedProperty());
+        imageMenu.addItem(STRETCH, e -> stretchAction(), IWC.imageSelectedProperty());
+        imageMenu.addItem(CROP, e -> getEditor().crop(), IWC.imageSelectedProperty());
         imageMenu.addSeparator();
-        imageMenu.addItem(FLIP_HORIZONTALLY, e -> getEditor().flipHorizontally(),
-                ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(FLIP_VERTICALLY, e -> getEditor().flipVertically(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(ROTATE_CLOCKWISE, e -> getEditor().rotateClockwise(),
-                ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, e -> getEditor().rotateCounterClockwise(),
-                ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(INVERT, e -> getEditor().invert(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(INVERT_WITHIN_PALETTE, e -> getEditor().invertWithinPalette(),
-                ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(FLIP_HORIZONTALLY, e -> getEditor().flipHorizontally(), IWC.imageSelectedProperty());
+        imageMenu.addItem(FLIP_VERTICALLY, e -> getEditor().flipVertically(), IWC.imageSelectedProperty());
+        imageMenu.addItem(ROTATE_CLOCKWISE, e -> getEditor().rotateClockwise(), IWC.imageSelectedProperty());
+        imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, e -> getEditor().rotateCounterClockwise(), IWC.imageSelectedProperty());
+        imageMenu.addItem(INVERT, e -> getEditor().invert(), IWC.imageSelectedProperty());
+        imageMenu.addItem(INVERT_WITHIN_PALETTE, e -> getEditor().invertWithinPalette(), IWC.imageSelectedProperty());
 
         BasicMenu paletteMenu = new BasicMenu("Palette");
         paletteMenu.addItem(NEW_PALETTE, e -> paletteSelection.createPalette());
@@ -220,10 +208,10 @@ public class MainScene extends Scene {
         paletteMenu.addItem(CLOSE_PALETTE, e -> paletteSelection.closeCurrent(),
                 paletteSelection.paletteSelectedProperty().and(paletteSelection.defaultPaletteSelectedProperty().not()));
         BasicMenu toolMenu = new BasicMenu("Tools");
-        toolMenu.addItem(OUTLINE, e -> outline(), ImageWindowContainer.imageSelectedProperty());
+        toolMenu.addItem(OUTLINE, e -> outline(), IWC.imageSelectedProperty());
         toolMenu.addSeparator();
-        toolMenu.addItem(EXTRACT_PALETTE, e -> extractPalette(), ImageWindowContainer.imageSelectedProperty());
-        toolMenu.addItem(CHANGE_PALETTE, e -> changePalette(), ImageWindowContainer.imageSelectedProperty());
+        toolMenu.addItem(EXTRACT_PALETTE, e -> extractPalette(), IWC.imageSelectedProperty());
+        toolMenu.addItem(CHANGE_PALETTE, e -> changePalette(), IWC.imageSelectedProperty());
 
         menuBar.getMenus().setAll(fileMenu, editMenu, viewMenu, imageMenu, paletteMenu, toolMenu);
         return menuBar;
@@ -242,7 +230,7 @@ public class MainScene extends Scene {
         toolBar.addButton(COPY);
         toolBar.addButton(PASTE);
         ToggleButton grid = toolBar.addToggle(GRID, Images.GRID);
-        imageContainer.showGridProperty().addListener((ov, o, n) -> grid.setSelected(n));
+        IWC.get().showGridProperty().addListener((ov, o, n) -> grid.setSelected(n));
 
         GridConfig gridConfig = Config.GRID_CONFIG.getObject();
         grid.setContextMenu(gridConfig.getContextMenu());
@@ -253,21 +241,21 @@ public class MainScene extends Scene {
         });
 
         ToggleButton crosshair = toolBar.addToggle(CROSSHAIR, Images.CROSSHAIR);
-        imageContainer.showCrossHairProperty().addListener((ov, o, n) -> crosshair.setSelected(n));
+        IWC.get().showCrossHairProperty().addListener((ov, o, n) -> crosshair.setSelected(n));
         ToggleButton background = toolBar.addToggle(BACKGROUND, Images.BACKGROUND);
-        imageContainer.showBackgroundProperty().addListener((ov, o, n) -> background.setSelected(n));
+        IWC.get().showBackgroundProperty().addListener((ov, o, n) -> background.setSelected(n));
 
         return toolBar;
     }
 
     private void createKeyListener() {
-        ActionManager.registerAction(Action.ESCAPE, e -> imageContainer.escape());
-        ActionManager.registerAction(Action.FIT_WINDOW, e -> imageContainer.fitWindow());
-        ActionManager.registerAction(Action.MINUS, e -> imageContainer.zoomOut());
+        ActionManager.registerAction(Action.ESCAPE, e -> IWC.get().escape());
+        ActionManager.registerAction(Action.FIT_WINDOW, e -> IWC.get().fitWindow());
+        ActionManager.registerAction(Action.MINUS, e -> IWC.get().zoomOut());
         ActionManager.registerAction(Action.RANDOM_COLOR, e -> ColorView.setColor(ColorUtil.getRandomPleasant()));
-        ActionManager.registerAction(Action.PLUS, e -> imageContainer.zoomIn());
-        ActionManager.registerAction(Action.SWITCH_TAB, e -> imageContainer.selectNextWindow());
-        ActionManager.registerAction(Action.SWITCH_TAB_BACK, e -> imageContainer.selectPreviousWindow());
+        ActionManager.registerAction(Action.PLUS, e -> IWC.get().zoomIn());
+        ActionManager.registerAction(Action.SWITCH_TAB, e -> IWC.get().selectNextWindow());
+        ActionManager.registerAction(Action.SWITCH_TAB_BACK, e -> IWC.get().selectPreviousWindow());
     }
 
     private void move(int right, int down) {
@@ -286,7 +274,7 @@ public class MainScene extends Scene {
     public void openFiles(Collection<String> files) {
         for (PixelFile pixelFile : Files.get().openByName(files)) {
             if (pixelFile instanceof ImageFile) {
-                imageContainer.addImage(pixelFile);
+                IWC.get().addImage(pixelFile);
             } else if (pixelFile instanceof PaletteFile) {
                 paletteSelection.addPalette((PaletteFile) pixelFile);
             } else {
@@ -303,15 +291,14 @@ public class MainScene extends Scene {
                 return;
             }
             dialog.close();
-            imageContainer
-                    .addImage(new ImageFile(null, new WritableImage(dialog.getNewWidth(), dialog.getNewHeight())));
+            IWC.get().addImage(new ImageFile(null, new WritableImage(dialog.getNewWidth(), dialog.getNewHeight())));
         });
     }
 
     private void createFromClipboard() {
         Image image = ImageUtil.getFromClipboard();
         if (image != null) {
-            imageContainer.addImage(new ImageFile(null, image));
+            IWC.get().addImage(new ImageFile(null, image));
             getEditor().setCleanImage(new WritableImage((int) image.getWidth(), (int) image.getHeight()));
             getEditor().updateDirty();
         }
@@ -319,12 +306,12 @@ public class MainScene extends Scene {
 
     private void openImages() {
         for (ImageFile pair : Files.get().openImages()) {
-            imageContainer.addImage(pair);
+            IWC.get().addImage(pair);
         }
     }
 
     private ImageEditor getEditor() {
-        return imageContainer.getEditor();
+        return IWC.get().getEditor();
     }
 
     private void moveAction() {
@@ -372,7 +359,7 @@ public class MainScene extends Scene {
     }
 
     private void outline() {
-        OutlineDialog dialog = new OutlineDialog(imageContainer.getCurrentImage());
+        OutlineDialog dialog = new OutlineDialog(IWC.get().getCurrentImage());
         dialog.setOnOk(e -> {
             getEditor().updateImage(dialog.getImage());
             dialog.close();
@@ -381,7 +368,7 @@ public class MainScene extends Scene {
     }
 
     private void extractPalette() {
-        ColorView.addPalette(PaletteMaster.extractPalette(imageContainer.getCurrentImage(),
+        ColorView.addPalette(PaletteMaster.extractPalette(IWC.get().getCurrentImage(),
                 Config.PALETTE_MAX_COLORS.getInt()));
     }
 
@@ -391,7 +378,7 @@ public class MainScene extends Scene {
             return;
         }
 
-        ChangePaletteDialog dialog = new ChangePaletteDialog(imageContainer.getCurrentImage(), paletteFile);
+        ChangePaletteDialog dialog = new ChangePaletteDialog(IWC.get().getCurrentImage(), paletteFile);
         dialog.setOnOk(e -> {
             getEditor().updateImage(dialog.getImage());
             dialog.close();

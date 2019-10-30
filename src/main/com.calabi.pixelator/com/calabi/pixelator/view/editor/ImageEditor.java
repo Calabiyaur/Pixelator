@@ -79,7 +79,7 @@ public class ImageEditor extends Editor {
 
     public ImageEditor(PixelFile file, ScalableImageView imageView) {
         super(file, imageView);
-        currentTool = ToolManager.getTool(ToolView.getInstance().getCurrentTool());
+        currentTool = ToolManager.getTool(ToolView.get().getCurrentTool());
         makeWritable();
 
         setMinSize(1, 1);
@@ -153,7 +153,7 @@ public class ImageEditor extends Editor {
         });
 
         InvalidationListener cursorChangeListener = (ov) -> updateCursor();
-        ToolView.getInstance().currentToolProperty().addListener((ov, o, n) -> {
+        ToolView.get().currentToolProperty().addListener((ov, o, n) -> {
             currentTool.cursorProperty().removeListener(cursorChangeListener);
             currentTool = ToolManager.getTool(n);
             currentTool.cursorProperty().addListener(cursorChangeListener);
@@ -196,7 +196,7 @@ public class ImageEditor extends Editor {
         grid.setXInterval(xInterval);
         grid.setYInterval(yInterval);
         grid.draw();
-        ImageWindowContainer.getInstance().setShowGrid(true);
+        IWC.get().setShowGrid(true);
     }
 
     private void makeWritable() {
@@ -225,7 +225,7 @@ public class ImageEditor extends Editor {
         for (Parent parent = getParent(); parent != null; parent = parent.getParent()) {
             if (parent instanceof ImageWindow) {
                 ImageWindow imageWindow = (ImageWindow) parent;
-                ((ImageWindowContainer) imageWindow.getParent()).setCurrentWindow(imageWindow);
+                ((IWC) imageWindow.getParent()).setCurrentWindow(imageWindow);
                 break;
             }
         }
@@ -355,11 +355,11 @@ public class ImageEditor extends Editor {
     }
 
     public void paintPixel(int x, int y) {
-        paintPixel(x, y, ColorView.getColor(), ToolView.getInstance().isReplaceColor());
+        paintPixel(x, y, ColorView.getColor(), ToolView.get().isReplaceColor());
     }
 
     public void paintPoint(Point point) {
-        paintPoints(RectangleHelper.getCirclePoints(point.getX(), point.getY(), ToolView.getInstance().getThickness()));
+        paintPoints(RectangleHelper.getCirclePoints(point.getX(), point.getY(), ToolView.get().getThickness()));
     }
 
     public void paintPoints(PointArray points) {
@@ -370,12 +370,12 @@ public class ImageEditor extends Editor {
 
     public void paintPixels(PixelArray pixels) {
         for (int i = 0; i < pixels.size(); i++) {
-            paintPixel(pixels.getX(i), pixels.getY(i), pixels.getColor(i), ToolView.getInstance().isReplaceColor());
+            paintPixel(pixels.getX(i), pixels.getY(i), pixels.getColor(i), ToolView.get().isReplaceColor());
         }
     }
 
     public void paintLine(Point p1, Point p2) {
-        paintPoints(ShapeMaster.getLinePoints(p1, p2, ToolView.getInstance().getSettings()));
+        paintPoints(ShapeMaster.getLinePoints(p1, p2, ToolView.get().getSettings()));
     }
 
     public void paintFill(Point point) {
@@ -424,7 +424,7 @@ public class ImageEditor extends Editor {
             if (!ImageUtil.outOfBounds(getImage(), x, y)) {
                 Color previousColor = reader.getColor(x, y);
                 Color color =
-                        ToolView.getInstance().isReplaceColor() ? add.getColor(i) :
+                        ToolView.get().isReplaceColor() ? add.getColor(i) :
                                 ColorUtil.addColors(previousColor, add.getColor(i));
                 result.add(x, y, previousColor, color);
             }

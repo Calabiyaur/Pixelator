@@ -85,7 +85,7 @@ public class ImageWindow extends BasicWindow {
         getEditor().setOnMouseExited(e -> updateMouse(null));
         getClose().setOnAction(e -> closeIfClean());
         getEditor().dirtyProperty().addListener((ov, o, n) -> updateDirtyText());
-        getImageView().scaleXProperty().addListener((ov, o, n) -> ToolView.getInstance().setZoom(n.doubleValue()));
+        getImageView().scaleXProperty().addListener((ov, o, n) -> ToolView.get().setZoom(n.doubleValue()));
 
         ImageButton adjustSize = new ImageButton(Images.RECTANGLE);
         addButton(adjustSize);
@@ -167,8 +167,8 @@ public class ImageWindow extends BasicWindow {
                 + BasicWindow.RESIZE_MARGIN * 2
                 + (Category.PALETTE.equals(getFile().getCategory()) ? 24 : 0));
 
-        double maxWidth = ((ImageWindowContainer) getParent()).getWidth();
-        double maxHeight = ((ImageWindowContainer) getParent()).getHeight();
+        double maxWidth = ((IWC) getParent()).getWidth();
+        double maxHeight = ((IWC) getParent()).getHeight();
 
         double additionalWidth = 0;
         double additionalHeight = 0;
@@ -217,7 +217,7 @@ public class ImageWindow extends BasicWindow {
         if (p != null) {
             double posX = p.getX();
             double posY = p.getY();
-            ToolView.getInstance().setPreviewPosition(posX, posY);
+            ToolView.get().setPreviewPosition(posX, posY);
             if (ImageUtil.outOfBounds(getImageView().getImage(), (int) posX, (int) posY)) {
                 InfoView.setMousePosition(null);
             } else {

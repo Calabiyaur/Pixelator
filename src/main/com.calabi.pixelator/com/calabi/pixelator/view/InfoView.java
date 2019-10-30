@@ -12,35 +12,38 @@ import com.calabi.pixelator.meta.Point;
 public class InfoView extends GridPane {
 
     private static InfoView instance;
-    private static Label mousePosition;
-    private static Label colorCount;
+    private Label mousePosition;
+    private Label colorCount;
 
-    public static InfoView getInstance() {
+    private InfoView() {
+        setStyle("-fx-background-color: #f4f4f4");
+        setHgap(6);
+        setPadding(new Insets(2));
+        setAlignment(Pos.TOP_LEFT);
+
+        mousePosition = new Label();
+        colorCount = new Label();
+        addRow(0, mousePosition, colorCount);
+        GridPane.setHgrow(mousePosition, Priority.ALWAYS);
+    }
+
+    public static InfoView get() {
         if (instance == null) {
             instance = new InfoView();
-            instance.setStyle("-fx-background-color: #f4f4f4");
-            instance.setHgap(6);
-            instance.setPadding(new Insets(2));
-            instance.setAlignment(Pos.TOP_LEFT);
-
-            mousePosition = new Label();
-            colorCount = new Label();
-            instance.addRow(0, mousePosition, colorCount);
-            GridPane.setHgrow(mousePosition, Priority.ALWAYS);
         }
         return instance;
     }
 
     public static void setMousePosition(Point position) {
-        mousePosition.setText(position == null ? null : "Mouse: " + position.toString());
+        get().mousePosition.setText(position == null ? null : "Mouse: " + position.toString());
     }
 
     public static BooleanBinding mousePositionVisibleProperty() {
-        return mousePosition.textProperty().isNotNull();
+        return get().mousePosition.textProperty().isNotNull();
     }
 
     public static void setColorCount(Integer count) {
-        colorCount.setText(count == null ? null : count + " color" + (count > 1 ? "s" : ""));
+        get().colorCount.setText(count == null ? null : count + " color" + (count > 1 ? "s" : ""));
     }
 
 }

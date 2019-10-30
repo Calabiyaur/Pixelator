@@ -29,7 +29,7 @@ import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.view.dialog.MessageDialog;
 import com.calabi.pixelator.view.dialog.NewPaletteDialog;
-import com.calabi.pixelator.view.editor.ImageWindowContainer;
+import com.calabi.pixelator.view.editor.IWC;
 
 public class PaletteSelection extends BorderPane {
 
@@ -85,7 +85,7 @@ public class PaletteSelection extends BorderPane {
             WritableImage image = new WritableImage(dialog.getNewWidth(), dialog.getNewHeight());
             PaletteFile file = new PaletteFile(null, image);
             addPalette(file);
-            ImageWindowContainer.getInstance().addImage(file);
+            IWC.get().addImage(file);
         });
     }
 
@@ -101,9 +101,9 @@ public class PaletteSelection extends BorderPane {
     }
 
     public static void editPalette(PaletteEditor editor) {
-        ImageWindowContainer.getInstance().addImage(editor.getFile());
-        ImageWindowContainer.getInstance().getEditor().setCleanImage(editor.getCleanImage());
-        ImageWindowContainer.getInstance().getEditor().updateDirty();
+        IWC.get().addImage(editor.getFile());
+        IWC.get().getEditor().setCleanImage(editor.getCleanImage());
+        IWC.get().getEditor().updateDirty();
     }
 
     public void changePreview() {

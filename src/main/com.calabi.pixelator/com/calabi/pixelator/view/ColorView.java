@@ -24,34 +24,36 @@ import com.calabi.pixelator.view.palette.PaletteSelection;
 public class ColorView extends BorderPane {
 
     private static ColorView instance;
-    private static ColorSelection colorSelection;
-    private static PaletteSelection paletteSelection;
+    private ColorSelection colorSelection;
+    private PaletteSelection paletteSelection;
 
-    public static ColorView getInstance() {
+    private ColorView() {
+        VBox box = new VBox();
+        setStyle("-fx-background-color: #f4f4f4");
+        box.setSpacing(6);
+        box.setPadding(new Insets(6, 6, 6, 1));
+        box.setAlignment(Pos.TOP_RIGHT);
+
+        ImageButton popup = new ImageButton(Images.POPUP);
+        //box.getChildren().add(popup); //TODO: Make 'Popupable' superclass
+        popup.setOnAction(e -> popupAction());
+
+        colorSelection = new ColorSelection();
+        box.getChildren().add(colorSelection);
+
+        Separator halfSeparator = new Separator();
+        halfSeparator.setPadding(new Insets(0, 0, -6, 0));
+        box.getChildren().add(halfSeparator);
+
+        paletteSelection = new PaletteSelection();
+        box.getChildren().add(paletteSelection);
+
+        setCenter(box);
+    }
+
+    public static ColorView get() {
         if (instance == null) {
             instance = new ColorView();
-
-            VBox box = new VBox();
-            instance.setStyle("-fx-background-color: #f4f4f4");
-            box.setSpacing(6);
-            box.setPadding(new Insets(6, 6, 6, 1));
-            box.setAlignment(Pos.TOP_RIGHT);
-
-            ImageButton popup = new ImageButton(Images.POPUP);
-            //box.getChildren().add(popup); //TODO: Make 'Popupable' superclass
-            popup.setOnAction(e -> popupAction());
-
-            colorSelection = new ColorSelection();
-            box.getChildren().add(colorSelection);
-
-            Separator halfSeparator = new Separator();
-            halfSeparator.setPadding(new Insets(0, 0, -6, 0));
-            box.getChildren().add(halfSeparator);
-
-            paletteSelection = new PaletteSelection();
-            box.getChildren().add(paletteSelection);
-
-            instance.setCenter(box);
         }
         return instance;
     }
@@ -80,36 +82,36 @@ public class ColorView extends BorderPane {
     }
 
     public static Color getColor() {
-        return colorSelection.getColor();
+        return get().colorSelection.getColor();
     }
 
     public static void setColor(Color color) {
-        colorSelection.setColor(color);
+        get().colorSelection.setColor(color);
     }
 
     public static void addRecentColor(Color color) {
-        colorSelection.addRecentColor(color);
+        get().colorSelection.addRecentColor(color);
     }
 
     public static PaletteSelection getPaletteSelection() {
-        return paletteSelection;
+        return get().paletteSelection;
     }
 
     public static Image getCurrentPalette() {
-        return paletteSelection.getPalette();
+        return get().paletteSelection.getPalette();
     }
 
     public static void setPaletteFile(File file) {
-        paletteSelection.setFile(file);
+        get().paletteSelection.setFile(file);
     }
 
     public static String getCurrentPaletteName() {
-        return paletteSelection.getFile() == null ? "New Palette" : paletteSelection.getFile().getName();
+        return get().paletteSelection.getFile() == null ? "New Palette" : get().paletteSelection.getFile().getName();
     }
 
     public static void addPalette(Image image) {
         PaletteFile file = new PaletteFile(null, image);
-        paletteSelection.addPalette(file);
+        get().paletteSelection.addPalette(file);
     }
 
 }

@@ -20,9 +20,9 @@ import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
 import com.calabi.pixelator.view.tool.ToolManager;
 
-public class ImageWindowContainer extends Pane {
+public class IWC extends Pane {
 
-    private static ImageWindowContainer instance;
+    private static IWC instance;
     private static BooleanProperty imageSelected = new SimpleBooleanProperty(false);
     private ObjectProperty<ImageWindow> currentWindow;
     private BooleanProperty showGrid = new SimpleBooleanProperty(false);
@@ -33,7 +33,7 @@ public class ImageWindowContainer extends Pane {
     private BooleanProperty dirty = new SimpleBooleanProperty(false);
     private BooleanProperty showBackground = new SimpleBooleanProperty(false);
 
-    private ImageWindowContainer() {
+    private IWC() {
         currentWindow = new SimpleObjectProperty<>();
         ToolManager.imageWindowProperty().bind(currentWindow);
         currentWindow.addListener((ov, o, window) -> {
@@ -51,7 +51,7 @@ public class ImageWindowContainer extends Pane {
                 dirty.set(false);
                 showBackground.unbind();
                 showBackground.set(false);
-                ToolView.getInstance().setPreview(null, null, null);
+                ToolView.get().setPreview(null, null, null);
                 InfoView.setMousePosition(null);
                 InfoView.setColorCount(null);
             } else {
@@ -69,9 +69,9 @@ public class ImageWindowContainer extends Pane {
         });
     }
 
-    public static ImageWindowContainer getInstance() {
+    public static IWC get() {
         if (instance == null) {
-            instance = new ImageWindowContainer();
+            instance = new IWC();
         }
         return instance;
     }
@@ -151,11 +151,11 @@ public class ImageWindowContainer extends Pane {
 
     private void updateImage(ImageWindow window) {
         if (window.getFile().getCategory() == Category.IMAGE) {
-            ToolView.getInstance().setPreview(window.getImageView().getImage(),
+            ToolView.get().setPreview(window.getImageView().getImage(),
                     window.getEditor().getToolImage(),
                     window.getEditor().getSelectionImage());
-            ToolView.getInstance().setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
-            ToolView.getInstance().setZoom(window.getImageView().scaleXProperty().doubleValue());
+            ToolView.get().setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
+            ToolView.get().setZoom(window.getImageView().scaleXProperty().doubleValue());
         }
     }
 

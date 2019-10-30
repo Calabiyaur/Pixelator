@@ -110,7 +110,7 @@ public class ToolView extends VBox {
         initConfig();
     }
 
-    public static ToolView getInstance() {
+    public static ToolView get() {
         if (instance == null) {
             instance = new ToolView();
         }

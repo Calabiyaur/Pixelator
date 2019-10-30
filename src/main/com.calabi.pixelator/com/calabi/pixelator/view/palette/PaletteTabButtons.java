@@ -14,7 +14,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 
-import com.calabi.pixelator.view.editor.ImageWindowContainer;
+import com.calabi.pixelator.view.editor.IWC;
 
 class PaletteTabButtons extends VBox {
 
@@ -37,7 +37,7 @@ class PaletteTabButtons extends VBox {
 
         getChildren().addListener((ListChangeListener<Node>) c -> size.set(getChildren().size()));
 
-        ImageWindowContainer.imageSelectedProperty().addListener((ov, o, n) -> {
+        IWC.imageSelectedProperty().addListener((ov, o, n) -> {
             if (n) {
                 if (!getChildren().contains(defaultToggle)) {
                     getChildren().add(0, defaultToggle);
@@ -60,7 +60,7 @@ class PaletteTabButtons extends VBox {
         }
         button.setOnClose(e -> close(button));
         button.setToggleGroup(tg);
-        if (button != defaultToggle || ImageWindowContainer.imageSelectedProperty().get()) {
+        if (button != defaultToggle || IWC.imageSelectedProperty().get()) {
             getChildren().add(button);
         }
         return button;
