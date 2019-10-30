@@ -1,8 +1,11 @@
 package com.calabi.pixelator.res;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.prefs.Preferences;
 
 import com.calabi.pixelator.meta.Direction;
+import com.calabi.pixelator.start.ExceptionHandler;
 
 public enum Config {
 
@@ -10,6 +13,7 @@ public enum Config {
     COLOR(ConfigType.STRING, null),
     FILL_SHAPE(ConfigType.BOOLEAN, false),
     FULLSCREEN(ConfigType.BOOLEAN, false),
+    GRID_CONFIG(ConfigType.OBJECT, GridConfig.class, GridConfig.getDefault()),
     HEIGHT(ConfigType.DOUBLE, 400d),
     IMAGE_DIRECTORY(ConfigType.STRING, ""),
     NEW_IMAGE_HEIGHT(ConfigType.INT, 32),
@@ -23,11 +27,27 @@ public enum Config {
     THICKNESS(ConfigType.INT, 1),
     WIDTH(ConfigType.DOUBLE, 600d);
 
+    //TODO: Add image config here (flexibility!)
+    //HEIGHT,
+    //H_SCROLL,
+    //V_SCROLL,
+    //WIDTH,
+    //X,
+    //Y,
+    //ZOOM_LEVEL
+
     private ConfigType configType;
+    private Class<? extends ConfigObject> c;
     private Object def;
 
     Config(ConfigType configType, Object def) {
         this.configType = configType;
+        this.def = def;
+    }
+
+    Config(ConfigType configType, Class<? extends ConfigObject> c, Object def) {
+        this.configType = configType;
+        this.c = c;
         this.def = def;
     }
 
@@ -55,6 +75,21 @@ public enum Config {
         return (String) get(ConfigType.STRING, def);
     }
 
+    public <T extends ConfigObject> T getObject() {
+        String string = (String) get(ConfigType.OBJECT, def);
+        if (string != null) {
+            try {
+                Constructor<T> constructor = (Constructor<T>) c.getConstructor();
+                T instance = constructor.newInstance();
+                instance.build(string);
+                return instance;
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                ExceptionHandler.handle(e);
+            }
+        }
+        return (T) def;
+    }
+
     private Object get(ConfigType configType, Object def) {
         if (!configType.equals(this.configType)) {
             throw new UnsupportedOperationException();
@@ -68,6 +103,8 @@ public enum Config {
                 return Preferences.userRoot().getInt(name(), (int) def);
             case STRING:
                 return Preferences.userRoot().get(name(), (String) def);
+            case OBJECT:
+                return Preferences.userRoot().get(name(), null);
             default:
                 throw new UnsupportedOperationException();
         }
@@ -89,6 +126,10 @@ public enum Config {
         put(ConfigType.STRING, value);
     }
 
+    public <T> void putObject(ConfigObject value) {
+        put(ConfigType.OBJECT, value);
+    }
+
     private void put(ConfigType configType, Object value) {
         if (!configType.equals(this.configType)) {
             throw new UnsupportedOperationException();
@@ -105,6 +146,9 @@ public enum Config {
                 break;
             case STRING:
                 Preferences.userRoot().put(name(), (String) value);
+                break;
+            case OBJECT:
+                Preferences.userRoot().put(name(), ((ConfigObject) value).toConfig());
                 break;
             default:
                 throw new UnsupportedOperationException();

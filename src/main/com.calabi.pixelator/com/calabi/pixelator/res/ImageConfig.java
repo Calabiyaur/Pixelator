@@ -1,6 +1,6 @@
 package com.calabi.pixelator.res;
 
-public enum ImageConfig {
+public enum ImageConfig { //TODO: Delete this enum
 
     HEIGHT,
     H_SCROLL,

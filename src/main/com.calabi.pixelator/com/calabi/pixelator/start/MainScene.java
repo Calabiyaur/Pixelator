@@ -29,6 +29,7 @@ import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.res.Action;
 import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.res.GridConfig;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.ImageUtil;
@@ -63,6 +64,7 @@ import static com.calabi.pixelator.res.Action.FLIP_HORIZONTALLY;
 import static com.calabi.pixelator.res.Action.FLIP_VERTICALLY;
 import static com.calabi.pixelator.res.Action.GRID;
 import static com.calabi.pixelator.res.Action.INVERT;
+import static com.calabi.pixelator.res.Action.INVERT_WITHIN_PALETTE;
 import static com.calabi.pixelator.res.Action.MOVE_IMAGE;
 import static com.calabi.pixelator.res.Action.NEW;
 import static com.calabi.pixelator.res.Action.NEW_PALETTE;
@@ -159,77 +161,69 @@ public class MainScene extends Scene {
         menuBar.setOnMouseEntered(e -> menuBar.setCursor(Cursor.DEFAULT));
 
         BasicMenu fileMenu = new BasicMenu("File");
-        fileMenu.addItem(NEW, "New...", e -> newImage());
-        fileMenu.addItem(OPEN, "Open...", e -> openImages());
-        fileMenu.addItem(SAVE, "Save", e -> imageContainer.saveCurrentFile(),
+        fileMenu.addItem(NEW, e -> newImage());
+        fileMenu.addItem(OPEN, e -> openImages());
+        fileMenu.addItem(SAVE, e -> imageContainer.saveCurrentFile(),
                 ImageWindowContainer.imageSelectedProperty().and(imageContainer.dirtyProperty()));
-        fileMenu.addItem(SAVE_AS, "Save As...", e -> Files.get().create(imageContainer.getCurrentFile()),
+        fileMenu.addItem(SAVE_AS, e -> Files.get().create(imageContainer.getCurrentFile()),
                 ImageWindowContainer.imageSelectedProperty());
-        fileMenu.addItem(CREATE_FROM_CLIPBOARD, "Create from clipboard", e -> createFromClipboard(),
-                Pixelator.clipboardActiveProperty());
-        fileMenu.addItem(CLOSE, "Close", e -> imageContainer.closeCurrent(),
-                ImageWindowContainer.imageSelectedProperty());
+        fileMenu.addItem(CREATE_FROM_CLIPBOARD, e -> createFromClipboard(), Pixelator.clipboardActiveProperty());
+        fileMenu.addItem(CLOSE, e -> imageContainer.closeCurrent(), ImageWindowContainer.imageSelectedProperty());
 
         BasicMenu editMenu = new BasicMenu("Edit");
-        editMenu.addItem(UNDO, "Undo", e -> imageContainer.undo(), imageContainer.undoEnabledProperty());
-        editMenu.addItem(REDO, "Redo", e -> imageContainer.redo(), imageContainer.redoEnabledProperty());
+        editMenu.addItem(UNDO, e -> imageContainer.undo(), imageContainer.undoEnabledProperty());
+        editMenu.addItem(REDO, e -> imageContainer.redo(), imageContainer.redoEnabledProperty());
         editMenu.addSeparator();
-        editMenu.addItem(CUT, "Cut", e -> getEditor().cut(), imageContainer.selectionActiveProperty());
-        editMenu.addItem(COPY, "Copy", e -> getEditor().copyImage(), imageContainer.selectionActiveProperty());
-        editMenu.addItem(PASTE, "Paste", e -> getEditor().paste(), ImageWindowContainer.imageSelectedProperty());
-        editMenu.addItem(DELETE, "Delete", e -> getEditor().removeSelectionAndRegister(),
-                imageContainer.selectionActiveProperty());
-        editMenu.addItem(SELECT_ALL, "Select All", e -> getEditor().selectAll(),
-                ImageWindowContainer.imageSelectedProperty());
+        editMenu.addItem(CUT, e -> getEditor().cut(), imageContainer.selectionActiveProperty());
+        editMenu.addItem(COPY, e -> getEditor().copyImage(), imageContainer.selectionActiveProperty());
+        editMenu.addItem(PASTE, e -> getEditor().paste(), ImageWindowContainer.imageSelectedProperty());
+        editMenu.addItem(DELETE, e -> getEditor().removeSelectionAndRegister(), imageContainer.selectionActiveProperty());
+        editMenu.addItem(SELECT_ALL, e -> getEditor().selectAll(), ImageWindowContainer.imageSelectedProperty());
 
         BasicMenu viewMenu = new BasicMenu("View");
-        CheckMenuItem gridItem = viewMenu.addCheckItem(GRID, "Show Grid",
+        CheckMenuItem gridItem = viewMenu.addCheckItem(GRID,
                 e -> imageContainer.setShowGrid(!imageContainer.showGridProperty().get()),
                 ImageWindowContainer.imageSelectedProperty());
         imageContainer.showGridProperty().addListener((ov, o, n) -> gridItem.setSelected(n));
-        CheckMenuItem crossHairItem = viewMenu.addCheckItem(CROSSHAIR, "Show Cross-Hair",
+        CheckMenuItem crossHairItem = viewMenu.addCheckItem(CROSSHAIR,
                 e -> imageContainer.setShowCrossHair(!imageContainer.showCrossHairProperty().get()),
                 ImageWindowContainer.imageSelectedProperty());
         imageContainer.showCrossHairProperty().addListener((ov, o, n) -> crossHairItem.setSelected(n));
-        CheckMenuItem backgroundItem = viewMenu.addCheckItem(BACKGROUND, "Show Background",
+        CheckMenuItem backgroundItem = viewMenu.addCheckItem(BACKGROUND,
                 e -> imageContainer.setShowBackground(!imageContainer.showBackgroundProperty().get()),
                 ImageWindowContainer.imageSelectedProperty());
         imageContainer.showBackgroundProperty().addListener((ov, o, n) -> backgroundItem.setSelected(n));
 
         BasicMenu imageMenu = new BasicMenu("Image"); // Center
-        imageMenu.addItem(MOVE_IMAGE, "Move Image...", e -> moveAction(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(RESIZE, "Resize...", e -> resizeAction(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(STRETCH, "Stretch...", e -> stretchAction(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(CROP, "Crop", e -> getEditor().crop(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(MOVE_IMAGE, e -> moveAction(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(RESIZE, e -> resizeAction(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(STRETCH, e -> stretchAction(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(CROP, e -> getEditor().crop(), ImageWindowContainer.imageSelectedProperty());
         imageMenu.addSeparator();
-        imageMenu.addItem(FLIP_HORIZONTALLY, "Flip horizontally", e -> getEditor().flipHorizontally(),
+        imageMenu.addItem(FLIP_HORIZONTALLY, e -> getEditor().flipHorizontally(),
                 ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(FLIP_VERTICALLY, "Flip vertically", e -> getEditor().flipVertically(),
+        imageMenu.addItem(FLIP_VERTICALLY, e -> getEditor().flipVertically(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(ROTATE_CLOCKWISE, e -> getEditor().rotateClockwise(),
                 ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(ROTATE_CLOCKWISE, "Rotate clockwise", e -> getEditor().rotateClockwise(),
+        imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, e -> getEditor().rotateCounterClockwise(),
                 ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, "Rotate counter-clockwise",
-                e -> getEditor().rotateCounterClockwise(),
-                ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(INVERT, "Invert", e -> getEditor().invert(), ImageWindowContainer.imageSelectedProperty());
-        imageMenu.addItem(INVERT, "Invert within Palette", e -> getEditor().invertWithinPalette(),
+        imageMenu.addItem(INVERT, e -> getEditor().invert(), ImageWindowContainer.imageSelectedProperty());
+        imageMenu.addItem(INVERT_WITHIN_PALETTE, e -> getEditor().invertWithinPalette(),
                 ImageWindowContainer.imageSelectedProperty());
 
         BasicMenu paletteMenu = new BasicMenu("Palette");
-        paletteMenu.addItem(NEW_PALETTE, "New...", e -> paletteSelection.createPalette());
-        paletteMenu.addItem(OPEN_PALETTE, "Open...", e -> paletteSelection.openPalette());
-        paletteMenu.addItem(EDIT_PALETTE, "Edit palette", e -> paletteSelection.editPalette());
-        paletteMenu.addItem(CHANGE_PALETTE_PREVIEW, "Change Preview...", e -> paletteSelection.changePreview(),
+        paletteMenu.addItem(NEW_PALETTE, e -> paletteSelection.createPalette());
+        paletteMenu.addItem(OPEN_PALETTE, e -> paletteSelection.openPalette());
+        paletteMenu.addItem(EDIT_PALETTE, e -> paletteSelection.editPalette());
+        paletteMenu.addItem(CHANGE_PALETTE_PREVIEW, e -> paletteSelection.changePreview(),
                 paletteSelection.paletteSelectedProperty().and(paletteSelection.defaultPaletteSelectedProperty().not()));
-        paletteMenu.addItem(CLOSE_PALETTE, "Close", e -> paletteSelection.closeCurrent(),
+        paletteMenu.addItem(CLOSE_PALETTE, e -> paletteSelection.closeCurrent(),
                 paletteSelection.paletteSelectedProperty().and(paletteSelection.defaultPaletteSelectedProperty().not()));
         BasicMenu toolMenu = new BasicMenu("Tools");
-        toolMenu.addItem(OUTLINE, "Outline...", e -> outline(), ImageWindowContainer.imageSelectedProperty());
+        toolMenu.addItem(OUTLINE, e -> outline(), ImageWindowContainer.imageSelectedProperty());
         toolMenu.addSeparator();
-        toolMenu.addItem(EXTRACT_PALETTE, "Extract Palette...", e -> extractPalette(),
-                ImageWindowContainer.imageSelectedProperty());
-        toolMenu.addItem(CHANGE_PALETTE, "Change Palette...", e -> changePalette(),
-                ImageWindowContainer.imageSelectedProperty());
+        toolMenu.addItem(EXTRACT_PALETTE, e -> extractPalette(), ImageWindowContainer.imageSelectedProperty());
+        toolMenu.addItem(CHANGE_PALETTE, e -> changePalette(), ImageWindowContainer.imageSelectedProperty());
 
         menuBar.getMenus().setAll(fileMenu, editMenu, viewMenu, imageMenu, paletteMenu, toolMenu);
         return menuBar;
@@ -249,6 +243,15 @@ public class MainScene extends Scene {
         toolBar.addButton(PASTE);
         ToggleButton grid = toolBar.addToggle(GRID, Images.GRID);
         imageContainer.showGridProperty().addListener((ov, o, n) -> grid.setSelected(n));
+
+        GridConfig gridConfig = Config.GRID_CONFIG.getObject();
+        grid.setContextMenu(gridConfig.getContextMenu());
+        gridConfig.setOnSelection((xInterval, yInterval) -> {
+            if (getEditor() != null) {
+                getEditor().setGridInterval(xInterval, yInterval);
+            }
+        });
+
         ToggleButton crosshair = toolBar.addToggle(CROSSHAIR, Images.CROSSHAIR);
         imageContainer.showCrossHairProperty().addListener((ov, o, n) -> crosshair.setSelected(n));
         ToggleButton background = toolBar.addToggle(BACKGROUND, Images.BACKGROUND);
@@ -296,12 +299,12 @@ public class MainScene extends Scene {
         NewImageDialog dialog = new NewImageDialog();
         dialog.showAndFocus();
         dialog.setOnOk(e -> {
-            if (dialog.getImageWidth() == null || dialog.getImageHeight() == null) {
+            if (dialog.getNewWidth() == null || dialog.getNewHeight() == null) {
                 return;
             }
             dialog.close();
             imageContainer
-                    .addImage(new ImageFile(null, new WritableImage(dialog.getImageWidth(), dialog.getImageHeight())));
+                    .addImage(new ImageFile(null, new WritableImage(dialog.getNewWidth(), dialog.getNewHeight())));
         });
     }
 

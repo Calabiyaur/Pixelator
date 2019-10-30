@@ -78,11 +78,11 @@ public class PaletteSelection extends BorderPane {
         NewPaletteDialog dialog = new NewPaletteDialog();
         dialog.showAndFocus();
         dialog.setOnOk(e -> {
-            if (dialog.getImageWidth() == null || dialog.getImageHeight() == null) {
+            if (dialog.getNewWidth() == null || dialog.getNewHeight() == null) {
                 return;
             }
             dialog.close();
-            WritableImage image = new WritableImage(dialog.getImageWidth(), dialog.getImageHeight());
+            WritableImage image = new WritableImage(dialog.getNewWidth(), dialog.getNewHeight());
             PaletteFile file = new PaletteFile(null, image);
             addPalette(file);
             ImageWindowContainer.getInstance().addImage(file);

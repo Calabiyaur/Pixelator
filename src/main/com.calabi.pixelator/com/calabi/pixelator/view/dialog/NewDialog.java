@@ -15,11 +15,11 @@ public abstract class NewDialog extends BasicDialog {
         addContent(heightField, 0, 1);
     }
 
-    public Integer getImageWidth() {
+    public Integer getNewWidth() {
         return widthField.getValue();
     }
 
-    public Integer getImageHeight() {
+    public Integer getNewHeight() {
         return heightField.getValue();
     }
 

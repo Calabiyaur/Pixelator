@@ -21,23 +21,23 @@ public class BasicMenu extends Menu {
         super(text);
     }
 
-    public MenuItem addItem(Action key, String text, EventHandler<ActionEvent> event, BooleanExpression condition) {
-        MenuItem item = addItem(key, text, event);
+    public MenuItem addItem(Action key, EventHandler<ActionEvent> event, BooleanExpression condition) {
+        MenuItem item = addItem(key, event);
         item.disableProperty().bind(condition.not());
         return item;
     }
 
-    public CheckMenuItem addCheckItem(Action key, String text, EventHandler<ActionEvent> event,
+    public CheckMenuItem addCheckItem(Action key, EventHandler<ActionEvent> event,
             BooleanExpression condition) {
-        CheckMenuItem item = new CheckMenuItem(text, Images.getImageView(key));
+        CheckMenuItem item = new CheckMenuItem(key.getText(), Images.getImageView(key));
         accelerate(key, item);
         register(key, item, event);
         item.disableProperty().bind(condition.not());
         return item;
     }
 
-    public MenuItem addItem(Action key, String text, EventHandler<ActionEvent> event) {
-        MenuItem item = new MenuItem(text, Images.getImageView(key));
+    public MenuItem addItem(Action key, EventHandler<ActionEvent> event) {
+        MenuItem item = new MenuItem(key.getText(), Images.getImageView(key));
         accelerate(key, item);
         register(key, item, event);
         return item;

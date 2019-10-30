@@ -192,6 +192,13 @@ public class ImageEditor extends Editor {
         background.setVisible(showBackground);
     }
 
+    public void setGridInterval(int xInterval, int yInterval) {
+        grid.setXInterval(xInterval);
+        grid.setYInterval(yInterval);
+        grid.draw();
+        ImageWindowContainer.getInstance().setShowGrid(true);
+    }
+
     private void makeWritable() {
         WritableImage image = ImageUtil.createWritableImage(getImage());
         reader = image.getPixelReader();

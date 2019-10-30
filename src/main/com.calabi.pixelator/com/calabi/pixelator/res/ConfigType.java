@@ -5,7 +5,8 @@ enum ConfigType {
     INT,
     DOUBLE,
     BOOLEAN,
-    STRING;
+    STRING,
+    OBJECT;
 
     public String toString() {
         return name();
