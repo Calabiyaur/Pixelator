@@ -28,6 +28,7 @@ public enum Action {
     FLIP_VERTICALLY("Flip vertically"),
     GRID("Show Grid", true, true, false, KeyCode.G),
     INVERT("Invert"),
+    INVERT_SELECTION("Invert selection"),
     INVERT_WITHIN_PALETTE("Invert within Palette"),
     LEFT("Left", false, false, false, KeyCode.LEFT),
     MINUS("Minus", false, false, false, KeyCode.MINUS),

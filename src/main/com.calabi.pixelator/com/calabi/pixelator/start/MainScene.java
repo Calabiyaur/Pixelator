@@ -64,6 +64,7 @@ import static com.calabi.pixelator.res.Action.FLIP_HORIZONTALLY;
 import static com.calabi.pixelator.res.Action.FLIP_VERTICALLY;
 import static com.calabi.pixelator.res.Action.GRID;
 import static com.calabi.pixelator.res.Action.INVERT;
+import static com.calabi.pixelator.res.Action.INVERT_SELECTION;
 import static com.calabi.pixelator.res.Action.INVERT_WITHIN_PALETTE;
 import static com.calabi.pixelator.res.Action.MOVE_IMAGE;
 import static com.calabi.pixelator.res.Action.NEW;
@@ -174,6 +175,7 @@ public class MainScene extends Scene {
         editMenu.addItem(PASTE, e -> getEditor().paste(), IWC.imageSelectedProperty());
         editMenu.addItem(DELETE, e -> getEditor().removeSelectionAndRegister(), IWC.get().selectionActiveProperty());
         editMenu.addItem(SELECT_ALL, e -> getEditor().selectAll(), IWC.imageSelectedProperty());
+        editMenu.addItem(INVERT_SELECTION, e -> getEditor().invertSelection(), IWC.imageSelectedProperty());
 
         BasicMenu viewMenu = new BasicMenu("View");
         CheckMenuItem gridItem = viewMenu.addCheckItem(GRID,

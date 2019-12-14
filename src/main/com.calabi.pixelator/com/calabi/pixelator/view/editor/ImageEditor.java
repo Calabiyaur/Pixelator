@@ -563,6 +563,17 @@ public class ImageEditor extends Editor {
                 true));
     }
 
+    public void invertSelection() {
+        PixelChange current = selectionLayer.getPixels();
+        PointArray inverted = RectangleHelper.getRectanglePoints(
+                new Point(0, 0),
+                new Point(width.get() - 1, height.get() - 1),
+                true);
+        inverted.subtract(current);
+        currentTool.lockAndReset();
+        selectionLayer.definePixels(inverted);
+    }
+
     public void crop() {
         if (selectionActiveProperty().get()) {
             cropToSelection();
