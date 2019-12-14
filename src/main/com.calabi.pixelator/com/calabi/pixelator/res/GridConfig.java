@@ -60,16 +60,18 @@ public class GridConfig extends ConfigObject {
     @Override
     public String toConfig() {
         StringBuilder sb = new StringBuilder();
+        boolean first = true;
         for (MenuItem item : contextMenu.getItems()) {
             if (item instanceof GridMenuItem) {
                 GridMenuItem gridItem = (GridMenuItem) item;
-                if (gridItem.isSelected()) {
+                if (first) {
                     sb.append("+");
                 }
                 sb.append(gridItem.getXInterval());
                 sb.append("/");
                 sb.append(gridItem.getYInterval());
                 sb.append(";");
+                first = false;
             }
         }
         return sb.toString();

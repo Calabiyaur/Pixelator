@@ -24,7 +24,7 @@ public class Grid extends ShapeStack {
             line.endYProperty().bind(prefHeightProperty().subtract(1));
             line.translateXProperty().bind(line.startXProperty());
 
-            line.visibleProperty().bind(prefWidthProperty().greaterThan(getPixelWidth()));
+            line.visibleProperty().bind(prefWidthProperty().multiply(Math.min(2, xInterval)).greaterThan(getPixelWidth()));
             getChildren().add(line);
         }
         for (int j = yInterval; j < getPixelHeight(); j += yInterval) {
@@ -37,7 +37,7 @@ public class Grid extends ShapeStack {
             line.endYProperty().bind(y(j));
             line.translateYProperty().bind(line.startYProperty());
 
-            line.visibleProperty().bind(prefHeightProperty().greaterThan(getPixelHeight()));
+            line.visibleProperty().bind(prefHeightProperty().multiply(Math.min(2, yInterval)).greaterThan(getPixelHeight()));
             getChildren().add(line);
         }
     }
