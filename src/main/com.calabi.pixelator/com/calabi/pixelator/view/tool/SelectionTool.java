@@ -8,21 +8,16 @@ import com.calabi.pixelator.res.Images;
 
 public abstract class SelectionTool extends Tool {
 
-    protected ObjectProperty<SelectType> type = new SimpleObjectProperty<>(SelectType.SELECT);
+    protected final ObjectProperty<SelectType> type = new SimpleObjectProperty<>(SelectType.SELECT);
 
-    private Images useImageSelect;
-    private Images useImageAdd;
-    private Images useImageSubtract;
+    private final Images useImageSelect;
+    private final Images useImageAdd;
+    private final Images useImageSubtract;
 
-    SelectionTool(Tools tool,
-            Images image, Images useImage, Images useImageAdd, Images useImageSubtract, int hotspotX, int hotspotY) {
-        super(
-                image,
-                useImage,
-                hotspotX,
-                hotspotY
-        );
-        this.useImageSelect = useImage;
+    private Images useImage;
+
+    SelectionTool(Images useImageSelect, Images useImageAdd, Images useImageSubtract) {
+        this.useImageSelect = useImageSelect;
         this.useImageAdd = useImageAdd;
         this.useImageSubtract = useImageSubtract;
     }
@@ -67,9 +62,10 @@ public abstract class SelectionTool extends Tool {
     }
 
     private void updateUseImage() {
-        Images useImage = getUseImage(type.get());
-        if (!useImage.equals(super.getUseImage())) {
-            setUseImage(useImage);
+        Images newImage = getUseImage(type.get());
+        if (!newImage.equals(useImage)) {
+            updateCursor(newImage);
+            useImage = newImage;
         }
     }
 

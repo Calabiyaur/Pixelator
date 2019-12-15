@@ -2,19 +2,11 @@ package com.calabi.pixelator.view.tool;
 
 import javafx.scene.input.KeyCode;
 
-import com.calabi.pixelator.res.Images;
-
 public class Pen extends Tool {
 
     private static Pen me = new Pen();
 
     private Pen() {
-        super(
-                Images.PEN,
-                Images.USE_PEN,
-                6,
-                25
-        );
         secondary = PickSelect.getMe();
     }
 

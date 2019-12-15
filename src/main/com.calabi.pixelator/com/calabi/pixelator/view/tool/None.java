@@ -5,12 +5,6 @@ public class None extends Tool {
     private static None me = new None();
 
     private None() {
-        super(
-                null,
-                null,
-                0,
-                0
-        );
     }
 
     public static None getMe() {

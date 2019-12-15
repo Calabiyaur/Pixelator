@@ -28,24 +28,13 @@ public abstract class Tool {
     private static MouseButton mouseButton;
     private static boolean stillSincePress = true;
     Tool secondary = this;
-    private final Images image;
-    private Images useImage;
-    private final int hotspotX;
-    private final int hotspotY;
     private final ObjectProperty<Cursor> cursor = new SimpleObjectProperty<>();
 
-    protected Tool(Images image, Images useImage, int hotspotX, int hotspotY) {
-
-        this.image = image;
-        this.useImage = useImage;
-        this.hotspotX = hotspotX;
-        this.hotspotY = hotspotY;
-
+    protected Tool() {
         if (actingTool.get() == null) {
             actingTool.set(None.getMe());
         }
-
-        this.updateCursor();
+        this.updateCursor(getUseImage());
     }
 
     private static void updateMouse(MouseEvent e) {
@@ -80,9 +69,9 @@ public abstract class Tool {
         }
     }
 
-    private void updateCursor() {
+    void updateCursor(Images useImage) {
         if (useImage != null) {
-            cursor.set(new ImageCursor(new Image(useImage.getUrl()), hotspotX, hotspotY));
+            cursor.set(new ImageCursor(new Image(useImage.getUrl()), getHotspotX(), getHotspotY()));
         } else if (this == None.getMe()) {
             throw new IllegalStateException("Tool without useImage: " + this);
         }
@@ -213,17 +202,20 @@ public abstract class Tool {
         return getEditor().getToolLayer();
     }
 
-    public Images getUseImage() {
-        return useImage;
-    }
-
-    public void setUseImage(Images useImage) {
-        this.useImage = useImage;
-        updateCursor();
-    }
-
     public final Images getImage() {
-        return image;
+        return ToolManager.fromTool(this).getImage();
+    }
+
+    public Images getUseImage() {
+        return ToolManager.fromTool(this).getUseImage();
+    }
+
+    private int getHotspotX() {
+        return ToolManager.fromTool(this).getHotspotX();
+    }
+
+    private int getHotspotY() {
+        return ToolManager.fromTool(this).getHotspotY();
     }
 
     public final boolean isDraggableAfterClick() {
@@ -252,8 +244,8 @@ public abstract class Tool {
 
     @Override public String toString() {
         String s = this.getClass().getSimpleName() + " (" + secondary.getClass().getSimpleName() + ") ";
-        if (useImage != null) {
-            s += useImage.name();
+        if (getUseImage() != null) {
+            s += getUseImage().name();
         }
         return s;
     }

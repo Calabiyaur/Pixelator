@@ -9,13 +9,9 @@ public class SelectColor extends SelectionTool {
 
     private SelectColor() {
         super(
-                Tools.SELECT_COLOR,
-                Images.SELECT_COLOR,
                 Images.USE_SELECT_COLOR,
                 Images.USE_SELECT_COLOR_ADD,
-                Images.USE_SELECT_COLOR_SUBTRACT,
-                8,
-                16
+                Images.USE_SELECT_COLOR_SUBTRACT
         );
     }
 

@@ -7,12 +7,6 @@ public class Drag extends Tool {
     private static Drag me = new Drag();
 
     private Drag() {
-        super(
-                null,
-                null,
-                0,
-                0
-        );
     }
 
     public static Drag getMe() {

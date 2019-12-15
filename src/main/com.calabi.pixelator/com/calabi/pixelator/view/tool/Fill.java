@@ -1,18 +1,10 @@
 package com.calabi.pixelator.view.tool;
 
-import com.calabi.pixelator.res.Images;
-
 public class Fill extends Tool {
 
     private static Fill me = new Fill();
 
     private Fill() {
-        super(
-                Images.FILL,
-                Images.USE_FILL,
-                7,
-                22
-        );
         secondary = Pick.getMe();
     }
 
