@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -86,17 +87,19 @@ public abstract class DraggablePane extends GridPane {
     protected void mousePressed(MouseEvent event) {
         requestFocus();
 
-        resizing = Direction.getDirection(getCursor());
-        if (resizing == Direction.NONE) {
-            dragging = true;
-        }
+        if (MouseButton.PRIMARY.equals(event.getButton())) {
+            resizing = Direction.getDirection(getCursor());
+            if (resizing == Direction.NONE) {
+                dragging = true;
+            }
 
-        previousX = event.getX();
-        previousY = event.getY();
+            previousX = event.getX();
+            previousY = event.getY();
+        }
     }
 
     protected void mouseDragged(MouseEvent event) {
-        if (dragging || resizing != null) {
+        if (MouseButton.PRIMARY.equals(event.getButton()) && dragging || resizing != null) {
             double x = event.getX();
             double y = event.getY();
 
@@ -150,11 +153,13 @@ public abstract class DraggablePane extends GridPane {
     }
 
     protected void mouseReleased(MouseEvent event) {
-        dragging = false;
-        resizing = null;
-        if (exiting) {
-            exiting = false;
-            setCursor(Cursor.DEFAULT);
+        if (MouseButton.PRIMARY.equals(event.getButton())) {
+            dragging = false;
+            resizing = null;
+            if (exiting) {
+                exiting = false;
+                setCursor(Cursor.DEFAULT);
+            }
         }
     }
 

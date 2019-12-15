@@ -154,7 +154,7 @@ public class ImageWindow extends BasicWindow {
     private void mouseClick(MouseEvent e) {
         if (MouseButton.PRIMARY.equals(e.getButton()) && e.getClickCount() == 2) {
             adjustSize();
-        } else if (MouseButton.MIDDLE.equals(e.getButton())) {
+        } else if (MouseButton.MIDDLE.equals(e.getButton()) && e.isStillSincePress()) {
             closeIfClean();
         }
     }

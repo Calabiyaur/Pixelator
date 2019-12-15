@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SkinBase;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
@@ -108,6 +109,10 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         }
     };
     private Rectangle clipRect;
+
+    private double scrollStartX;
+    private double scrollStartY;
+    private boolean scrolling;
 
     /**
      * Constructor for all SkinBase instances.
@@ -452,6 +457,38 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
                     event.consume();
                 }
 
+            }
+        });
+
+        viewRect.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            if (MouseButton.MIDDLE.equals(e.getButton())) {
+                if (hsb.isVisible() || vsb.isVisible()) {
+                    scrollStartX = e.getX();
+                    scrollStartY = e.getY();
+                    scrolling = true;
+                }
+                e.consume();
+            }
+        });
+
+        viewRect.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            if (scrolling && MouseButton.MIDDLE.equals(e.getButton())) {
+                if (hsb.isVisible() || vsb.isVisible()) {
+                    double dX = (scrollStartX - e.getX()) / (nodeWidth * (1 - hsb.getVisibleAmount()));
+                    double dY = (scrollStartY - e.getY()) / (nodeHeight * (1 - vsb.getVisibleAmount()));
+                    hsb.setValue(Utils.clamp(hsb.getMin(), hsb.getValue() + dX, hsb.getMax()));
+                    vsb.setValue(Utils.clamp(vsb.getMin(), vsb.getValue() + dY, vsb.getMax()));
+                    scrollStartX = e.getX();
+                    scrollStartY = e.getY();
+                }
+                e.consume();
+            }
+        });
+
+        viewRect.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
+            if (scrolling && MouseButton.MIDDLE.equals(e.getButton())) {
+                scrolling = false;
+                e.consume();
             }
         });
 
