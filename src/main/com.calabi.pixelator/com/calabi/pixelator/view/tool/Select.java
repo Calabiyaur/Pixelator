@@ -10,19 +10,19 @@ public class Select extends SelectionTool {
 
     private static Select me = new Select();
 
-    Select() {
-        this(true);
+    private Select() {
+        this(Tools.SELECT);
     }
 
-    Select(boolean draggableAfterClick) {
+    Select(Tools tool) {
         super(
+                tool,
                 Images.SELECT,
                 Images.USE_SELECT,
                 Images.USE_SELECT_ADD,
                 Images.USE_SELECT_SUBTRACT,
                 15,
-                16,
-                draggableAfterClick
+                16
         );
     }
 

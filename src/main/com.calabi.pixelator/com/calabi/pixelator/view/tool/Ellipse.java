@@ -13,9 +13,7 @@ public class Ellipse extends Tool {
                 Images.ELLIPSE,
                 Images.USE_ELLIPSE,
                 15,
-                16,
-                true,
-                false
+                16
         );
     }
 

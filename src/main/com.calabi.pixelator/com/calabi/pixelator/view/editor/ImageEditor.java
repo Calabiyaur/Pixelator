@@ -1,6 +1,7 @@
 package com.calabi.pixelator.view.editor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javafx.beans.InvalidationListener;
@@ -72,6 +73,7 @@ public class ImageEditor extends Editor {
     private OutlineShape outlineShape;
     private Grid grid;
     private Crosshair crosshair;
+    private Crosshair crosshair2;
     private Pane background;
 
     private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>();
@@ -110,6 +112,12 @@ public class ImageEditor extends Editor {
         crosshair.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
         crosshair.visibleProperty().bind(showCrossHair.and(InfoView.mousePositionVisibleProperty()));
 
+        crosshair2 = new Crosshair(width.get(), height.get());
+        crosshair2.draw();
+        crosshair2.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
+        crosshair2.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
+        crosshair2.setVisible(false);
+
         squareStack.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         squareStack.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
         outlineRect.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
@@ -118,7 +126,17 @@ public class ImageEditor extends Editor {
         outlineShape.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
 
         getChildren().addAll(
-                background, imageView, toolLayer, squareStack, selectionLayer, crosshair, grid, outlineShape, outlineRect);
+                background,
+                imageView,
+                toolLayer,
+                squareStack,
+                selectionLayer,
+                crosshair,
+                crosshair2,
+                grid,
+                outlineShape,
+                outlineRect
+        );
 
         setBorderColor("transparent"); //TODO: use parameters from preferences
         setShowGrid(false);
@@ -149,6 +167,7 @@ public class ImageEditor extends Editor {
             selectionLayer.resize(width.get(), height.get(), reader);
             grid.resize(width.get(), height.get());
             crosshair.resize(width.get(), height.get());
+            crosshair2.resize(width.get(), height.get());
             updateColorCount();
         });
 
@@ -245,6 +264,7 @@ public class ImageEditor extends Editor {
     }
 
     private void onMouseReleased(MouseEvent e) {
+        crosshair2.setVisible(false);
         currentTool.release(e);
     }
 
@@ -262,6 +282,17 @@ public class ImageEditor extends Editor {
             if (mouse.getX() >= 0 && mouse.getX() < width.get() && mouse.getY() >= 0 && mouse.getY() < height.get()) {
                 crosshair.setPosition(mouse);
             }
+            Point start = selectionActiveProperty().get() ? selectionLayer.getStart() : toolLayer.getStart();
+            if (Tool.actingToolProperty().get().isSecondaryCrosshairEnabled() && !Objects.equals(mouse, start)) {
+                if (!crosshair2.isVisible()) {
+                    crosshair2.setVisible(true);
+                    crosshair2.setPosition(start);
+                }
+            } else {
+                crosshair2.setVisible(false);
+            }
+        } else {
+            crosshair2.setVisible(false);
         }
     }
 

@@ -13,9 +13,7 @@ public class Line extends Tool {
                 Images.LINE,
                 Images.USE_LINE,
                 15,
-                16,
-                true,
-                false
+                16
         );
         secondary = PickSelect.getMe();
     }

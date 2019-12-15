@@ -14,15 +14,13 @@ public abstract class SelectionTool extends Tool {
     private Images useImageAdd;
     private Images useImageSubtract;
 
-    SelectionTool(Images image, Images useImage, Images useImageAdd, Images useImageSubtract,
-            int hotspotX, int hotspotY, boolean draggableAfterClick) {
+    SelectionTool(Tools tool,
+            Images image, Images useImage, Images useImageAdd, Images useImageSubtract, int hotspotX, int hotspotY) {
         super(
                 image,
                 useImage,
                 hotspotX,
-                hotspotY,
-                draggableAfterClick,
-                true
+                hotspotY
         );
         this.useImageSelect = useImage;
         this.useImageAdd = useImageAdd;

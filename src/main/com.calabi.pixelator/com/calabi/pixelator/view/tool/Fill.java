@@ -11,9 +11,7 @@ public class Fill extends Tool {
                 Images.FILL,
                 Images.USE_FILL,
                 7,
-                22,
-                false,
-                false
+                22
         );
         secondary = Pick.getMe();
     }

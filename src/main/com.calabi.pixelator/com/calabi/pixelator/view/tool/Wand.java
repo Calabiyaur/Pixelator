@@ -9,13 +9,13 @@ public class Wand extends SelectionTool {
 
     private Wand() {
         super(
+                Tools.WAND,
                 Images.WAND,
                 Images.USE_WAND,
                 Images.USE_WAND_ADD,
                 Images.USE_WAND_SUBTRACT,
                 15,
-                16,
-                false
+                16
         );
     }
 

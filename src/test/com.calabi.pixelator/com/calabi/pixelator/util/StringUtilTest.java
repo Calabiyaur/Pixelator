@@ -15,4 +15,9 @@ class StringUtilTest {
         Assert.assertEquals("CamelHop", StringUtil.toCamelCap("CAMEL_HOP"));
     }
 
+    @Test
+    void toCaps() {
+        Assert.assertEquals("CAMEL_HOP", StringUtil.toCaps("camelHop"));
+    }
+
 }

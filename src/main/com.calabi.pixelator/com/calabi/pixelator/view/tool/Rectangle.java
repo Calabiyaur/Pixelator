@@ -13,9 +13,7 @@ public class Rectangle extends Tool {
                 Images.RECTANGLE,
                 Images.USE_RECTANGLE,
                 15,
-                16,
-                true,
-                false
+                16
         );
     }
 

@@ -11,9 +11,7 @@ public class FillColor extends Tool {
                 Images.FILL_COLOR,
                 Images.USE_FILL_COLOR,
                 10,
-                16,
-                false,
-                false
+                16
         );
         secondary = Pick.getMe();
     }

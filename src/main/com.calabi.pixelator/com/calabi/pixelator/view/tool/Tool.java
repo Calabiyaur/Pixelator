@@ -21,31 +21,25 @@ import com.calabi.pixelator.view.editor.ToolLayer;
 
 public abstract class Tool {
 
-    private static ObjectProperty<Tool> actingTool = new SimpleObjectProperty<>();
+    private static final ObjectProperty<Tool> actingTool = new SimpleObjectProperty<>();
     private static Point mousePrevious;
     private static Point mouse;
-    private static Point mouseLastPressed;
     private static boolean dragging = false;
     private static MouseButton mouseButton;
     private static boolean stillSincePress = true;
-    private boolean draggableAfterClick;
-    private boolean selectionTool;
     Tool secondary = this;
-    private Images image;
+    private final Images image;
     private Images useImage;
-    private int hotspotX;
-    private int hotspotY;
-    private ObjectProperty<Cursor> cursor = new SimpleObjectProperty<>();
+    private final int hotspotX;
+    private final int hotspotY;
+    private final ObjectProperty<Cursor> cursor = new SimpleObjectProperty<>();
 
-    protected Tool(Images image, Images useImage, int hotspotX, int hotspotY, boolean draggableAfterClick,
-            boolean selectionTool) {
+    protected Tool(Images image, Images useImage, int hotspotX, int hotspotY) {
 
         this.image = image;
         this.useImage = useImage;
         this.hotspotX = hotspotX;
         this.hotspotY = hotspotY;
-        this.draggableAfterClick = draggableAfterClick;
-        this.selectionTool = selectionTool;
 
         if (actingTool.get() == null) {
             actingTool.set(None.getMe());
@@ -73,10 +67,6 @@ public abstract class Tool {
 
     public static Point getMouse() {
         return mouse;
-    }
-
-    public static Point getMouseLastPressed() {
-        return mouseLastPressed;
     }
 
     public static ObjectProperty<Tool> actingToolProperty() {
@@ -111,7 +101,6 @@ public abstract class Tool {
     public final void press(MouseEvent e) {
         updateMouse(e);
         mouseButton = e.getButton();
-        mouseLastPressed = getMouse().copy();
         stillSincePress = true;
         updateTool();
 
@@ -174,7 +163,7 @@ public abstract class Tool {
     public abstract void pressPrimary();
 
     public void movePrimary() {
-        if (this == actingTool.get() && draggableAfterClick) {
+        if (this == actingTool.get() && isDraggableAfterClick()) {
             dragPrimary();
         }
     }
@@ -238,22 +227,26 @@ public abstract class Tool {
     }
 
     public final boolean isDraggableAfterClick() {
-        return draggableAfterClick;
+        return ToolManager.fromTool(this).isDraggableAfterClick();
     }
 
     public final boolean isSelectionTool() {
-        return selectionTool;
+        return ToolManager.fromTool(this).isSelectionTool();
+    }
+
+    public final boolean isSecondaryCrosshairEnabled() {
+        return ToolManager.fromTool(this).isSecondCrosshairEnabled();
     }
 
     public Tool getSecondary() {
         return secondary;
     }
 
-    public MouseButton getMouseButton() {
+    public static MouseButton getMouseButton() {
         return mouseButton;
     }
 
-    public boolean isStillSincePress() {
+    public static boolean isStillSincePress() {
         return stillSincePress;
     }
 

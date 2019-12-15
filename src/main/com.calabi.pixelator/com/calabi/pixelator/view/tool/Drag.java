@@ -11,9 +11,7 @@ public class Drag extends Tool {
                 null,
                 null,
                 0,
-                0,
-                false,
-                true
+                0
         );
     }
 

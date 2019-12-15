@@ -11,9 +11,7 @@ public class Pick extends Tool {
                 Images.PICK,
                 Images.USE_PICK,
                 7,
-                24,
-                false,
-                false
+                24
         );
     }
 

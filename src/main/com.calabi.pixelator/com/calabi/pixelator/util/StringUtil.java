@@ -30,4 +30,21 @@ public class StringUtil {
         String camel = toCamel(caps);
         return camel.substring(0, 1).toUpperCase().concat(camel.substring(1));
     }
+
+    /**
+     * @param camel camelHop
+     * @return CAMEL_HOP
+     */
+    public static String toCaps(String camel) {
+        Pattern pattern = Pattern.compile("([a-z])([A-Z])");
+        Matcher matcher = pattern.matcher(camel);
+
+        StringBuffer result = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(result, matcher.group(1) + "_" + matcher.group(2));
+        }
+        matcher.appendTail(result);
+
+        return result.toString().toUpperCase();
+    }
 }

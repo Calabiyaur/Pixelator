@@ -9,9 +9,7 @@ public class None extends Tool {
                 null,
                 null,
                 0,
-                0,
-                false,
-                false
+                0
         );
     }
 

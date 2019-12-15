@@ -4,8 +4,8 @@ public class PickSelect extends Select {
 
     private static PickSelect me = new PickSelect();
 
-    public PickSelect() {
-        super(false);
+    private PickSelect() {
+        super(Tools.PICK_SELECT);
     }
 
     public static PickSelect getMe() {

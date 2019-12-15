@@ -13,9 +13,7 @@ public class Pen extends Tool {
                 Images.PEN,
                 Images.USE_PEN,
                 6,
-                25,
-                false,
-                false
+                25
         );
         secondary = PickSelect.getMe();
     }
