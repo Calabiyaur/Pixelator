@@ -110,9 +110,9 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
     };
     private Rectangle clipRect;
 
-    private double scrollStartX;
-    private double scrollStartY;
-    private boolean scrolling;
+    private double dragStartX;
+    private double dragStartY;
+    private boolean dragging;
 
     /**
      * Constructor for all SkinBase instances.
@@ -463,31 +463,31 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         viewRect.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             if (MouseButton.MIDDLE.equals(e.getButton())) {
                 if (hsb.isVisible() || vsb.isVisible()) {
-                    scrollStartX = e.getX();
-                    scrollStartY = e.getY();
-                    scrolling = true;
+                    dragStartX = e.getX();
+                    dragStartY = e.getY();
+                    dragging = true;
                 }
                 e.consume();
             }
         });
 
         viewRect.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
-            if (scrolling && MouseButton.MIDDLE.equals(e.getButton())) {
+            if (dragging && MouseButton.MIDDLE.equals(e.getButton())) {
                 if (hsb.isVisible() || vsb.isVisible()) {
-                    double dX = (scrollStartX - e.getX()) / (nodeWidth * (1 - hsb.getVisibleAmount()));
-                    double dY = (scrollStartY - e.getY()) / (nodeHeight * (1 - vsb.getVisibleAmount()));
+                    double dX = (dragStartX - e.getX()) / (nodeWidth * (1 - hsb.getVisibleAmount()));
+                    double dY = (dragStartY - e.getY()) / (nodeHeight * (1 - vsb.getVisibleAmount()));
                     hsb.setValue(Utils.clamp(hsb.getMin(), hsb.getValue() + dX, hsb.getMax()));
                     vsb.setValue(Utils.clamp(vsb.getMin(), vsb.getValue() + dY, vsb.getMax()));
-                    scrollStartX = e.getX();
-                    scrollStartY = e.getY();
+                    dragStartX = e.getX();
+                    dragStartY = e.getY();
                 }
                 e.consume();
             }
         });
 
         viewRect.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
-            if (scrolling && MouseButton.MIDDLE.equals(e.getButton())) {
-                scrolling = false;
+            if (dragging && MouseButton.MIDDLE.equals(e.getButton())) {
+                dragging = false;
                 e.consume();
             }
         });
