@@ -130,17 +130,7 @@ public class ImageWindow extends BasicWindow {
     }
 
     private void onScroll(ScrollEvent e) {
-        // Step 1. Get mouse position
-        //Point mousePosition = getEditor().getMousePosition(e.getX(), e.getY());
-        // Step 2. Scroll image
         getImageView().scroll(e);
-        // Step 3. Translate image to match mouse position //FIXME
-        //Platform.runLater(() -> {
-        //    Point newMousePosition = getEditor().getMousePosition(e.getX(), e.getY());
-        //    double h = (newMousePosition.getX() - mousePosition.getX()) * getImageView().getScaleX();
-        //    double v = (newMousePosition.getY() - mousePosition.getY()) * getImageView().getScaleY();
-        //    getContent().translateContent(h, v);
-        //});
     }
 
     public void zoomIn() {

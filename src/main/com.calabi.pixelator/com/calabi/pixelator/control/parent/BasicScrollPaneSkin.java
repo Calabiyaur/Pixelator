@@ -114,6 +114,9 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
     private double dragStartY;
     private boolean dragging;
 
+    private Double lastMouseX;
+    private Double lastMouseY;
+
     /**
      * Constructor for all SkinBase instances.
      *
@@ -247,6 +250,9 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         contentWidth = w;
         contentHeight = h;
 
+        double oldNodeWidth = nodeWidth;
+        double oldNodeHeight = nodeHeight;
+
         // we want the scrollbars to go right to the border
         double hsbWidth = 0;
         double vsbHeight = 0;
@@ -298,8 +304,43 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         double cx = snappedLeftInset() - leftPadding;
         double cy = snappedTopInset() - topPadding;
 
+        double mouseX = lastMouseX == null ? w / 2 - viewContent.getLayoutX() : lastMouseX;
+        double mouseY = lastMouseY == null ? h / 2 - viewContent.getLayoutY() : lastMouseY;
+
+        double newHsbValue = hsb.getValue();
+        double newVsbValue = vsb.getValue();
+
+        if (oldNodeWidth > w && oldNodeWidth != nodeWidth) {
+
+            double zoomFactor = oldNodeWidth / nodeWidth;
+            zoomFactor = Math.min(1, zoomFactor); //TODO: Remove this line
+            double oldLeftBorder = -viewContent.getLayoutX();
+            double weight = zoomFactor / (2 - zoomFactor);
+
+            newHsbValue = (weight) * hsb.getValue() + (1 - weight) * ((mouseX + oldLeftBorder) / oldNodeWidth);
+
+        } else if (oldNodeWidth == w) {
+
+            newHsbValue = mouseX / oldNodeWidth;
+        }
+
+        if (oldNodeHeight > h && oldNodeHeight != nodeHeight) {
+
+            double zoomFactor = oldNodeHeight / nodeHeight;
+            zoomFactor = Math.min(1, zoomFactor); //TODO: Remove this line
+            double oldTopBorder = -viewContent.getLayoutY();
+            double weight = zoomFactor / (2 - zoomFactor);
+
+            newVsbValue = (weight) * vsb.getValue() + (1 - weight) * ((mouseY + oldTopBorder) / oldNodeHeight);
+
+        } else if (oldNodeHeight == h) {
+
+            newVsbValue = mouseY / oldNodeHeight;
+        }
+
         vsb.setVisible(vsbVis);
         if (vsbVis) {
+            vsb.setValue(newVsbValue);
             vsb.resizeRelocate(snappedLeftInset() + w - vsbWidth + (rightPadding < 1 ? 0 : rightPadding - 1), cy - 1,
                     vsbWidth, vsbHeight + 2);
         }
@@ -307,6 +348,7 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
 
         hsb.setVisible(hsbVis);
         if (hsbVis) {
+            hsb.setValue(newHsbValue);
             hsb.resizeRelocate(cx - 1, snappedTopInset() + h - hsbHeight + (bottomPadding < 1 ? 0 : bottomPadding - 1),
                     hsbWidth + 2, hsbHeight);
         }
@@ -472,6 +514,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         });
 
         viewRect.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            //lastMouseX = e.getX(); //TODO: Is this needed?
+            //lastMouseY = e.getY();
             if (dragging && MouseButton.MIDDLE.equals(e.getButton())) {
                 if (hsb.isVisible() || vsb.isVisible()) {
                     double dX = (dragStartX - e.getX()) / (nodeWidth * (1 - hsb.getVisibleAmount()));
@@ -490,6 +534,16 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
                 dragging = false;
                 e.consume();
             }
+        });
+
+        viewRect.addEventFilter(MouseEvent.MOUSE_MOVED, e -> {
+            lastMouseX = e.getX();
+            lastMouseY = e.getY();
+        });
+
+        viewRect.addEventFilter(MouseEvent.MOUSE_EXITED, e -> {
+            //lastMouseX = null; //TODO: This is needed, but must not be called when mouse is not actually exited
+            //lastMouseY = null;
         });
 
         consumeMouseEvents(false);
