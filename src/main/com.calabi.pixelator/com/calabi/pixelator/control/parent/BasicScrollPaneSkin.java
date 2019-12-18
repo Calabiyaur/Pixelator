@@ -304,13 +304,16 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         double cx = snappedLeftInset() - leftPadding;
         double cy = snappedTopInset() - topPadding;
 
-        double mouseX = lastMouseX == null ? w / 2 - viewContent.getLayoutX() : lastMouseX;
-        double mouseY = lastMouseY == null ? h / 2 - viewContent.getLayoutY() : lastMouseY;
+        double mouseX = lastMouseX == null ? w / 2 : lastMouseX;
+        double mouseY = lastMouseY == null ? h / 2 : lastMouseY;
+
+        double effectiveWidth = w - (vsb.isVisible() ? vsbWidth : 0);
+        double effectiveHeight = h - (hsb.isVisible() ? hsbHeight : 0);
 
         double newHsbValue = hsb.getValue();
         double newVsbValue = vsb.getValue();
 
-        if (oldNodeWidth > w && oldNodeWidth != nodeWidth) {
+        if (oldNodeWidth > effectiveWidth && oldNodeWidth != nodeWidth) {
 
             double zoomFactor = oldNodeWidth / nodeWidth;
             zoomFactor = Math.min(1, zoomFactor); //TODO: Remove this line
@@ -319,12 +322,12 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
 
             newHsbValue = (weight) * hsb.getValue() + (1 - weight) * ((mouseX + oldLeftBorder) / oldNodeWidth);
 
-        } else if (oldNodeWidth == w) {
+        } else if (oldNodeWidth == effectiveWidth) {
 
             newHsbValue = mouseX / oldNodeWidth;
         }
 
-        if (oldNodeHeight > h && oldNodeHeight != nodeHeight) {
+        if (oldNodeHeight > effectiveHeight && oldNodeHeight != nodeHeight) {
 
             double zoomFactor = oldNodeHeight / nodeHeight;
             zoomFactor = Math.min(1, zoomFactor); //TODO: Remove this line
@@ -333,7 +336,7 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
 
             newVsbValue = (weight) * vsb.getValue() + (1 - weight) * ((mouseY + oldTopBorder) / oldNodeHeight);
 
-        } else if (oldNodeHeight == h) {
+        } else if (oldNodeHeight == effectiveHeight) {
 
             newVsbValue = mouseY / oldNodeHeight;
         }
@@ -542,8 +545,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         });
 
         viewRect.addEventFilter(MouseEvent.MOUSE_EXITED, e -> {
-            //lastMouseX = null; //TODO: This is needed, but must not be called when mouse is not actually exited
-            //lastMouseY = null;
+            lastMouseX = null;
+            lastMouseY = null;
         });
 
         consumeMouseEvents(false);
