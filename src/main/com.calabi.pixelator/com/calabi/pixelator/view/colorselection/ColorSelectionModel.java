@@ -264,7 +264,7 @@ final class ColorSelectionModel {
         return alphaSlider;
     }
 
-    private class CustomTextField extends BasicDoubleField {
+    private static class CustomTextField extends BasicDoubleField {
 
         private DoubleProperty target;
         private ObjectProperty<Double> targetAsObject;
@@ -291,7 +291,7 @@ final class ColorSelectionModel {
         }
     }
 
-    private class CustomSlider extends Slider {
+    private static class CustomSlider extends Slider {
 
         private DoubleProperty target;
 

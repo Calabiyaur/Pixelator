@@ -124,7 +124,7 @@ public class MainScene extends Scene {
         ColorView colorView = ColorView.get();
         colorView.setPrefWidth(291);
         root.setRight(colorView);
-        this.paletteSelection = ColorView.getPaletteSelection();
+        paletteSelection = ColorView.getPaletteSelection();
 
         InfoView infoView = InfoView.get();
         center.setBottom(infoView);
@@ -132,6 +132,8 @@ public class MainScene extends Scene {
         MenuBar menuBar = createMenuBar();
         ToolBar toolBar = createToolBar();
         barBox.getChildren().addAll(menuBar, toolBar);
+
+        paletteSelection.init();
 
         setOnKeyPressed(e -> {
             ActionManager.fire(e);
@@ -209,7 +211,7 @@ public class MainScene extends Scene {
         BasicMenu paletteMenu = new BasicMenu("Palette");
         paletteMenu.addItem(NEW_PALETTE, e -> paletteSelection.createPalette());
         paletteMenu.addItem(OPEN_PALETTE, e -> paletteSelection.openPalette());
-        paletteMenu.addItem(EDIT_PALETTE, e -> paletteSelection.editPalette());
+        paletteMenu.addItem(EDIT_PALETTE, e -> paletteSelection.editPalette(), paletteSelection.paletteSelectedProperty());
         paletteMenu.addItem(CHANGE_PALETTE_PREVIEW, e -> paletteSelection.changePreview(),
                 paletteSelection.paletteSelectedProperty().and(paletteSelection.defaultPaletteSelectedProperty().not()));
         paletteMenu.addItem(CLOSE_PALETTE, e -> paletteSelection.closeCurrent(),

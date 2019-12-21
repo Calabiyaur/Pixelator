@@ -19,6 +19,13 @@ public class BasicToolBar extends ToolBar {
         return tool;
     }
 
+    public Button addButton(Action key, Images image) {
+        Button tool = new ImageButton(image);
+        tool.getStyleClass().setAll("tool-button");
+        register(key, tool);
+        return tool;
+    }
+
     public ToggleButton addToggle(Action key, Images image) {
         ToggleButton tool = new ToggleImageButton(image);
         register(key, tool);

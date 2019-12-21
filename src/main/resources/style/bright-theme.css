@@ -10,6 +10,10 @@
     -px-custom-background: #000000;
 }
 
+.root * {
+    -fx-focus-traversable: false;
+}
+
 .draggable-pane {
     -fx-background-color: -px_window;
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;

@@ -1,7 +1,6 @@
 package com.calabi.pixelator.view.palette;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import javafx.beans.binding.BooleanBinding;
@@ -12,7 +11,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -21,12 +19,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.files.PixelFile;
+import com.calabi.pixelator.res.Action;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.start.BasicToolBar;
 import com.calabi.pixelator.view.dialog.MessageDialog;
 import com.calabi.pixelator.view.dialog.NewPaletteDialog;
 import com.calabi.pixelator.view.editor.IWC;
@@ -38,23 +37,19 @@ public class PaletteSelection extends BorderPane {
 
     public PaletteSelection() {
         model = new PaletteSelectionModel();
+    }
+
+    public void init() {
         PaletteTabButtons tabButtonBox = model.getTabButtons();
         PalettePane palettePane = model.getPalettePane();
 
         Label title = new Label("PALETTE");
-        ImageButton create = new ImageButton(Images.NEW);
-        ImageButton open = new ImageButton(Images.OPEN);
-        ImageButton edit = new ImageButton(Images.EDIT);
-        Arrays.asList(create, open, edit).forEach(button -> button.getStyleClass().setAll("tool-button"));
-        create.setOnAction(e -> createPalette());
-        open.setOnAction(e -> openPalette());
-        edit.setOnAction(e -> editPalette());
-
-        edit.setDisable(true);
-        edit.disableProperty().bind(paletteSelectedProperty().not());
 
         GridPane titlePane = new GridPane();
-        ToolBar buttonBox = new ToolBar(create, open, edit);
+        BasicToolBar buttonBox = new BasicToolBar();
+        buttonBox.addButton(Action.NEW_PALETTE, Images.NEW);
+        buttonBox.addButton(Action.OPEN_PALETTE, Images.OPEN);
+        buttonBox.addButton(Action.EDIT_PALETTE, Images.EDIT);
         titlePane.add(title, 0, 0);
         titlePane.add(buttonBox, 1, 0);
         GridPane.setHgrow(title, Priority.ALWAYS);
