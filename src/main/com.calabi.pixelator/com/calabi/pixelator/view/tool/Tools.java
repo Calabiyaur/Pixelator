@@ -4,7 +4,7 @@ import com.calabi.pixelator.res.Images;
 
 public enum Tools {
 
-    DRAG("drag the selection layer's pixels", null, null, 0, 0, false, true, true),
+    DRAG("drag the selection layer's pixels", null, null, 0, 0, false, true, false),
     ELLIPSE("draw an elliptic shape", Images.ELLIPSE, Images.USE_ELLIPSE, 15, 16, true, false, true),
     FILL("fill an area of equal color", Images.FILL, Images.USE_FILL, 7, 22, false, false, false),
     FILL_COLOR("change one color globally", Images.FILL_COLOR, Images.USE_FILL_COLOR, 10, 16, false, false, false),

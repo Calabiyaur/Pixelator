@@ -332,7 +332,7 @@ public class ImageEditor extends Editor {
     }
 
     public void escape() {
-        currentTool.escape();
+        currentTool.lockAndReset();
     }
 
     public void moveSelection(int right, int down) {
