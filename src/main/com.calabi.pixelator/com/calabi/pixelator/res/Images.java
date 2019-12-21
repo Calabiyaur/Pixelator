@@ -37,6 +37,7 @@ public enum Images {
     ERROR_20,
     FILL,
     FILL_COLOR,
+    FULL_SCREEN,
     SELECT_COLOR,
     GRID,
     ICON("icon256"),

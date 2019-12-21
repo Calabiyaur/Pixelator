@@ -8,8 +8,4 @@ enum ConfigType {
     STRING,
     OBJECT;
 
-    public String toString() {
-        return name();
-    }
-
 }

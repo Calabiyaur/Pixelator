@@ -14,7 +14,7 @@ import javafx.scene.layout.Pane;
 import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.PixelFile;
-import com.calabi.pixelator.res.ImageConfig;
+import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
@@ -129,15 +129,10 @@ public class IWC extends Pane {
         });
         ImageWindow current = currentWindow.get();
 
-        String configXString = window.getConfig(ImageConfig.X);
-        String configYString = window.getConfig(ImageConfig.Y);
-        if (current != null) {
-            window.setTranslateX(configXString == null ? current.getTranslateX() + 32 : Double.valueOf(configXString));
-            window.setTranslateY(configYString == null ? current.getTranslateY() + 32 : Double.valueOf(configYString));
-        } else {
-            window.setTranslateX(configXString == null ? 32 - getTranslateX() : Double.valueOf(configXString));
-            window.setTranslateY(configYString == null ? 32 - getTranslateY() : Double.valueOf(configYString));
-        }
+        double defX = current != null ? current.getTranslateX() : 32 - getTranslateX();
+        double defY = current != null ? current.getTranslateY() : 32 - getTranslateY();
+        window.setTranslateX(Config.IMAGE_X.getDouble(window.getFile(), defX));
+        window.setTranslateY(Config.IMAGE_Y.getDouble(window.getFile(), defY));
 
         setCurrentWindow(window);
         window.adjustSize();

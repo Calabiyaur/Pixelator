@@ -4,49 +4,56 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.prefs.Preferences;
 
+import com.calabi.pixelator.files.PixelFile;
+import com.calabi.pixelator.logging.Logger;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.start.ExceptionHandler;
 
 public enum Config {
 
-    BULGE(ConfigType.INT, 0),
-    COLOR(ConfigType.STRING, null),
-    FILL_SHAPE(ConfigType.BOOLEAN, false),
-    FULLSCREEN(ConfigType.BOOLEAN, false),
-    GRID_CONFIG(ConfigType.OBJECT, GridConfig.class, GridConfig.getDefault()),
-    HEIGHT(ConfigType.DOUBLE, 400d),
-    IMAGE_BACKGROUND_COLOR(ConfigType.STRING, "#DDDDDD"),
-    IMAGE_DIRECTORY(ConfigType.STRING, ""),
-    NEW_IMAGE_HEIGHT(ConfigType.INT, 32),
-    NEW_IMAGE_WIDTH(ConfigType.INT, 32),
-    PALETTE_DIRECTORY(ConfigType.STRING, ""),
-    PALETTE_MAX_COLORS(ConfigType.INT, 128),
-    REPLACE(ConfigType.BOOLEAN, false),
-    RESIZE_BIAS(ConfigType.STRING, Direction.NONE.name()),
-    RESIZE_KEEP_RATIO(ConfigType.BOOLEAN, true),
-    STRETCH_KEEP_RATIO(ConfigType.BOOLEAN, true),
-    THICKNESS(ConfigType.INT, 1),
-    WIDTH(ConfigType.DOUBLE, 600d);
+    BULGE(true, ConfigType.INT, 0),
+    COLOR(true, ConfigType.STRING),
+    FILL_SHAPE(true, ConfigType.BOOLEAN, false),
+    FULLSCREEN(true, ConfigType.BOOLEAN, false),
+    GRID_CONFIG(true, ConfigType.OBJECT, GridConfig.class, GridConfig.getDefault()),
+    HEIGHT(true, ConfigType.DOUBLE, 400d),
+    IMAGE_BACKGROUND_COLOR(true, ConfigType.STRING, "#DDDDDD"),
+    IMAGE_DIRECTORY(true, ConfigType.STRING, ""),
+    IMAGE_H_SCROLL(false, ConfigType.DOUBLE),
+    IMAGE_HEIGHT(false, ConfigType.DOUBLE),
+    IMAGE_V_SCROLL(false, ConfigType.DOUBLE),
+    IMAGE_WIDTH(false, ConfigType.DOUBLE),
+    IMAGE_X(false, ConfigType.DOUBLE),
+    IMAGE_Y(false, ConfigType.DOUBLE),
+    IMAGE_ZOOM_LEVEL(false, ConfigType.DOUBLE),
+    NEW_IMAGE_HEIGHT(true, ConfigType.INT, 32),
+    NEW_IMAGE_WIDTH(true, ConfigType.INT, 32),
+    PALETTE_DIRECTORY(true, ConfigType.STRING, ""),
+    PALETTE_MAX_COLORS(true, ConfigType.INT, 128),
+    REPLACE(true, ConfigType.BOOLEAN, false),
+    RESIZE_BIAS(true, ConfigType.STRING, Direction.NONE.name()),
+    RESIZE_KEEP_RATIO(true, ConfigType.BOOLEAN, true),
+    STRETCH_KEEP_RATIO(true, ConfigType.BOOLEAN, true),
+    THICKNESS(true, ConfigType.INT, 1),
+    WIDTH(true, ConfigType.DOUBLE, 600d);
 
-    //TODO: Add image config here (flexibility!)
-    //HEIGHT,
-    //H_SCROLL,
-    //V_SCROLL,
-    //WIDTH,
-    //X,
-    //Y,
-    //ZOOM_LEVEL
-
-    private ConfigType configType;
+    private final boolean global;
+    private final ConfigType configType;
     private Class<? extends ConfigObject> c;
     private Object def;
 
-    Config(ConfigType configType, Object def) {
+    Config(boolean global, ConfigType configType) {
+        this(global, configType, null);
+    }
+
+    Config(boolean global, ConfigType configType, Object def) {
+        this.global = global;
         this.configType = configType;
         this.def = def;
     }
 
-    Config(ConfigType configType, Class<? extends ConfigObject> c, Object def) {
+    Config(boolean global, ConfigType configType, Class<? extends ConfigObject> c, Object def) {
+        this.global = global;
         this.configType = configType;
         this.c = c;
         this.def = def;
@@ -92,7 +99,7 @@ public enum Config {
     }
 
     private Object get(ConfigType configType, Object def) {
-        if (!configType.equals(this.configType)) {
+        if (!global || !configType.equals(this.configType)) {
             throw new UnsupportedOperationException();
         }
         switch(configType) {
@@ -132,7 +139,7 @@ public enum Config {
     }
 
     private void put(ConfigType configType, Object value) {
-        if (!configType.equals(this.configType)) {
+        if (!global || !configType.equals(this.configType)) {
             throw new UnsupportedOperationException();
         }
         switch(configType) {
@@ -154,6 +161,69 @@ public enum Config {
             default:
                 throw new UnsupportedOperationException();
         }
+    }
+
+    public boolean getBoolean(PixelFile file, boolean def) {
+        return (boolean) get(file, ConfigType.BOOLEAN, def);
+    }
+
+    public double getDouble(PixelFile file, double def) {
+        return (double) get(file, ConfigType.DOUBLE, def);
+    }
+
+    public int getInt(PixelFile file, int def) {
+        return (int) get(file, ConfigType.INT, def);
+    }
+
+    public String getString(PixelFile file, String def) {
+        return (String) get(file, ConfigType.STRING, def);
+    }
+
+    private Object get(PixelFile file, ConfigType configType, Object def) {
+        if (global || !configType.equals(this.configType)) {
+            Logger.log(name() + "(" + configType.name() + ")");
+            throw new UnsupportedOperationException();
+        }
+        String stringValue = file.getProperties().getProperty(name());
+        if (stringValue == null) {
+            return def;
+        }
+        switch(configType) {
+            case BOOLEAN:
+                return Boolean.valueOf(stringValue);
+            case DOUBLE:
+                return Double.valueOf(stringValue);
+            case INT:
+                return Integer.valueOf(stringValue);
+            case STRING:
+            case OBJECT:
+                return stringValue;
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
+
+    public void putBoolean(PixelFile file, boolean value) {
+        put(file, ConfigType.BOOLEAN, value);
+    }
+
+    public void putDouble(PixelFile file, double value) {
+        put(file, ConfigType.DOUBLE, value);
+    }
+
+    public void putInt(PixelFile file, int value) {
+        put(file, ConfigType.INT, value);
+    }
+
+    public void putString(PixelFile file, String value) {
+        put(file, ConfigType.STRING, value);
+    }
+
+    private void put(PixelFile file, ConfigType configType, Object value) {
+        if (global || !configType.equals(this.configType)) {
+            throw new UnsupportedOperationException();
+        }
+        file.getProperties().put(name(), String.valueOf(value));
     }
 
 }

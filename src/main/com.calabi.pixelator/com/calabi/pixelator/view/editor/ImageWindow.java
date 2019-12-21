@@ -25,7 +25,7 @@ import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Point;
-import com.calabi.pixelator.res.ImageConfig;
+import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.start.ActionManager;
 import com.calabi.pixelator.start.Pixelator;
@@ -87,7 +87,7 @@ public class ImageWindow extends BasicWindow {
         getEditor().dirtyProperty().addListener((ov, o, n) -> updateDirtyText());
         getImageView().scaleXProperty().addListener((ov, o, n) -> ToolView.get().setZoom(n.doubleValue()));
 
-        ImageButton adjustSize = new ImageButton(Images.RECTANGLE);
+        ImageButton adjustSize = new ImageButton(Images.FULL_SCREEN);
         addButton(adjustSize);
         adjustSize.setOnAction(e -> adjustSize());
         ImageButton popup = new ImageButton(Images.POPUP);
@@ -98,35 +98,20 @@ public class ImageWindow extends BasicWindow {
     }
 
     public void initConfig() {
-        String zoom = getConfig(ImageConfig.ZOOM_LEVEL);
-        getImageView().setScaleX(zoom == null ? getImageView().getScaleX() : Double.valueOf(zoom));
-        getImageView().setScaleY(zoom == null ? getImageView().getScaleY() : Double.valueOf(zoom));
-        String width = getConfig(ImageConfig.WIDTH);
-        if (width != null) {
-            setPrefWidth(Double.valueOf(width));
-        }
-        String height = getConfig(ImageConfig.HEIGHT);
-        if (height != null) {
-            setPrefHeight(Double.valueOf(height));
-        }
+        getImageView().setScaleX(Config.IMAGE_ZOOM_LEVEL.getDouble(getFile(), getImageView().getScaleX()));
+        getImageView().setScaleY(Config.IMAGE_ZOOM_LEVEL.getDouble(getFile(), getImageView().getScaleY()));
+        setPrefWidth(Config.IMAGE_WIDTH.getDouble(getFile(), -1));
+        setPrefHeight(Config.IMAGE_HEIGHT.getDouble(getFile(), -1));
     }
 
     private void updateConfig() {
-        putConfig(ImageConfig.ZOOM_LEVEL, String.valueOf(imageEditor.getImageView().getScaleX()));
-        putConfig(ImageConfig.X, String.valueOf(getTranslateX()));
-        putConfig(ImageConfig.Y, String.valueOf(getTranslateY()));
-        putConfig(ImageConfig.WIDTH, String.valueOf(getWidth()));
-        putConfig(ImageConfig.HEIGHT, String.valueOf(getHeight()));
-        putConfig(ImageConfig.H_SCROLL, String.valueOf(getContent().getHvalue()));
-        putConfig(ImageConfig.V_SCROLL, String.valueOf(getContent().getVvalue()));
-    }
-
-    public String getConfig(ImageConfig config) {
-        return getFile().getProperties().getProperty(config.name());
-    }
-
-    private void putConfig(ImageConfig config, String value) {
-        getFile().getProperties().put(config.name(), value);
+        Config.IMAGE_ZOOM_LEVEL.putDouble(getFile(), imageEditor.getImageView().getScaleX());
+        Config.IMAGE_X.putDouble(getFile(), getTranslateX());
+        Config.IMAGE_Y.putDouble(getFile(), getTranslateY());
+        Config.IMAGE_WIDTH.putDouble(getFile(), getWidth());
+        Config.IMAGE_HEIGHT.putDouble(getFile(), getHeight());
+        Config.IMAGE_H_SCROLL.putDouble(getFile(), getContent().getHvalue());
+        Config.IMAGE_V_SCROLL.putDouble(getFile(), getContent().getVvalue());
     }
 
     private void onScroll(ScrollEvent e) {
