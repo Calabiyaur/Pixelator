@@ -47,21 +47,18 @@ public enum Action {
     PLUS("Plus", false, false, false, KeyCode.PLUS),
     RANDOM_COLOR("Random color", false, false, false, KeyCode.R),
     REDO("Redo", true, false, false, KeyCode.Y),
-    REDO_PALETTE("Redo palette", true, false, true, KeyCode.Y),
     RESIZE("Resize..."),
     RIGHT("Right", false, false, false, KeyCode.RIGHT),
     ROTATE_CLOCKWISE("Rotate clockwise"),
     ROTATE_COUNTER_CLOCKWISE("Rotate counter-clockwise"),
     SAVE("Save", true, false, false, KeyCode.S),
     SAVE_AS("Save As...", true, true, false, KeyCode.S),
-    SAVE_PALETTE("", true, false, true, KeyCode.S),
     SELECT_ALL("Select All", true, false, false, KeyCode.A),
     SETTINGS("Settings...", true, false, true, KeyCode.S),
     STRETCH("Stretch..."),
     SWITCH_TAB("Switch tab", true, false, false, KeyCode.TAB),
     SWITCH_TAB_BACK("Switch tab back", true, true, false, KeyCode.TAB),
     UNDO("Undo", true, false, false, KeyCode.Z),
-    UNDO_PALETTE("Undo palette", true, false, true, KeyCode.Z),
     UP("Up", false, false, false, KeyCode.UP);
 
     static Set<Action> BETA_ACTIONS = CollectionUtil.toSet();
