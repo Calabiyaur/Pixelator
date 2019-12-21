@@ -60,7 +60,7 @@ public class PaletteToggleButton extends ToggleButton {
         content.add(filler, 2, 0);
 
         if (closable) {
-            ImageButton close = new ImageButton(Images.CLOSE_SMALL);
+            ImageButton close = new ImageButton(Images.CLOSE);
             close.getStyleClass().setAll("close-button");
             content.add(close, 1, 0);
             GridPane.setMargin(close, new Insets(0, 0, 0, 0));

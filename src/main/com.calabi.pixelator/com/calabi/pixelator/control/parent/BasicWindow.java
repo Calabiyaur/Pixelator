@@ -27,7 +27,7 @@ public class BasicWindow extends DraggablePane {
 
     private final Label text = new Label("");
     private final HBox buttonBox = new HBox();
-    private final ImageButton close = new ImageButton(Images.CLOSE);
+    private final ImageButton close = new ImageButton(Images.CLOSE_BIG);
     private final VBox innerContent = new VBox();
     private final BasicScrollPane scrollPane = new BasicScrollPane();
     private EventHandler<Event> onClose;

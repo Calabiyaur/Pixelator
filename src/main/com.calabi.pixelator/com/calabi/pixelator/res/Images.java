@@ -28,7 +28,7 @@ public enum Images {
     CHOOSE_COLOR,
     CLOSE,
     CLOSE_ALL("close"),
-    CLOSE_SMALL,
+    CLOSE_BIG,
     COPY,
     CROSSHAIR,
     CUT,
@@ -88,9 +88,9 @@ public enum Images {
         setUrl(name().toLowerCase());
     }
 
-    private void setUrl(String s) {
+    private void setUrl(String url) {
         try {
-            this.url = Images.class.getResource(DIR + s + TYPE).toURI().toString();
+            this.url = Images.class.getResource(DIR + url + TYPE).toURI().toString();
         } catch (URISyntaxException e) {
             Logger.error(e, name());
         }
