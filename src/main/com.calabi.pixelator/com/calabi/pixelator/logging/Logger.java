@@ -24,6 +24,10 @@ public class Logger {
         LOGGER.error("", e);
     }
 
+    public static void error(Throwable e, String message) {
+        LOGGER.error(message, e);
+    }
+
     public static void log(Object subject, Object who, Object what) {
         LOGGER.info(toSubject(subject) + toWho(who) + " " + toWhat(what));
     }

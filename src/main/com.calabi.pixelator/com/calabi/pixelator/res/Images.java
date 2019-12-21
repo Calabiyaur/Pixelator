@@ -1,7 +1,11 @@
 package com.calabi.pixelator.res;
 
+import java.net.URISyntaxException;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import com.calabi.pixelator.logging.Logger;
 
 public enum Images {
 
@@ -23,6 +27,7 @@ public enum Images {
     CHECKERS,
     CHOOSE_COLOR,
     CLOSE,
+    CLOSE_ALL("close"),
     CLOSE_SMALL,
     COPY,
     CROSSHAIR,
@@ -34,7 +39,7 @@ public enum Images {
     FILL_COLOR,
     SELECT_COLOR,
     GRID,
-    ICON("/images/icon256.png"),
+    ICON("icon256"),
     LINE,
     LOCK,
     LOCK_OPEN,
@@ -49,6 +54,7 @@ public enum Images {
     REDO,
     SAVE,
     SELECT,
+    SETTINGS,
     SUBMIT,
     SWAP_COLOR,
     UNDO,
@@ -75,11 +81,19 @@ public enum Images {
     private String url;
 
     Images(String url) {
-        this.url = url;
+        setUrl(url);
     }
 
     Images() {
-        this.url = DIR + name().toLowerCase() + TYPE;
+        setUrl(name().toLowerCase());
+    }
+
+    private void setUrl(String s) {
+        try {
+            this.url = Images.class.getResource(DIR + s + TYPE).toURI().toString();
+        } catch (URISyntaxException e) {
+            Logger.error(e, name());
+        }
     }
 
     public String getUrl() {

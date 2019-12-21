@@ -162,9 +162,7 @@ public class IWC extends Pane {
     public boolean closeAll() {
         boolean dirty = false;
 
-        List<ImageWindow> children = FXCollections.observableArrayList(getChildren()).stream()
-                .filter(node -> node instanceof ImageWindow)
-                .map(node -> (ImageWindow) node).collect(Collectors.toList());
+        List<ImageWindow> children = imageWindows();
 
         for (ImageWindow window : children) {
             if (window.isDirty()) {
@@ -189,7 +187,14 @@ public class IWC extends Pane {
             }
         }
 
+        children.forEach(window -> window.close());
         return true;
+    }
+
+    public List<ImageWindow> imageWindows() {
+        return FXCollections.observableArrayList(getChildren()).stream()
+                    .filter(node -> node instanceof ImageWindow)
+                    .map(node -> (ImageWindow) node).collect(Collectors.toList());
     }
 
     public boolean closeCurrent() {

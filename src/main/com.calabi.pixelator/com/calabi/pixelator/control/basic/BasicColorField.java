@@ -25,7 +25,7 @@ public class BasicColorField extends BasicControl<Color> {
         colorButton.setOnAction(e -> ColorDialog.chooseColor(getValue(), color -> setValue(color)));
         addControl(colorButton, 2);
 
-        this.valueProperty().bindBidirectional(colorField.colorProperty());
+        colorField.colorProperty().bindBidirectional(this.valueProperty());
         this.valueProperty().addListener((ov, o, n) -> {
             if (n == null && o != null) {
                 setValue(o);

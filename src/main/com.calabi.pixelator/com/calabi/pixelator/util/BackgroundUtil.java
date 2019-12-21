@@ -5,11 +5,18 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 
 import com.calabi.pixelator.res.Images;
 
 public class BackgroundUtil {
+
+    public static Background color(Color color) {
+        return new Background(new BackgroundFill(
+                color,
+                CornerRadii.EMPTY, Insets.EMPTY));
+    }
 
     public static Background repeat(Images enumImage) {
         Image image = enumImage.getImage();

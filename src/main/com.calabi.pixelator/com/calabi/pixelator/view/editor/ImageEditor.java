@@ -21,13 +21,13 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.calabi.pixelator.control.image.Crosshair;
 import com.calabi.pixelator.control.image.Grid;
+import com.calabi.pixelator.control.image.ImageBackground;
 import com.calabi.pixelator.control.image.OutlineRect;
 import com.calabi.pixelator.control.image.OutlineShape;
 import com.calabi.pixelator.control.image.ScalableImageView;
@@ -39,8 +39,6 @@ import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.meta.QuadConsumer;
 import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.util.BackgroundUtil;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.shape.RectangleHelper;
@@ -74,7 +72,7 @@ public class ImageEditor extends Editor {
     private Grid grid;
     private Crosshair crosshair;
     private Crosshair crosshair2;
-    private Pane background;
+    private ImageBackground background;
 
     private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>();
     private BooleanProperty showCrossHair = new SimpleBooleanProperty();
@@ -88,8 +86,7 @@ public class ImageEditor extends Editor {
         prefWidthProperty().bind(imageView.scaleXProperty().multiply(imageView.widthProperty()));
         prefHeightProperty().bind(imageView.scaleYProperty().multiply(imageView.heightProperty()));
 
-        background = new Pane();
-        background.setBackground(BackgroundUtil.repeat(Images.CHECKERS));
+        background = new ImageBackground();
 
         //TODO: Refactor this. ImageEditor does not need to know about square stack / outline shape, rect
         squareStack = new SquareStack(getImageWidth(), getImageHeight());
@@ -138,8 +135,7 @@ public class ImageEditor extends Editor {
                 outlineRect
         );
 
-        setBorderColor("transparent"); //TODO: use parameters from preferences
-        setShowGrid(false);
+        setShowGrid(false); //TODO: use parameters from preferences
         setShowCrossHair(false);
         setShowBackground(false);
 
@@ -181,12 +177,6 @@ public class ImageEditor extends Editor {
         updateColorCount();
     }
 
-    public void setBorderColor(String color) {
-        /*stackPane.*/
-        setStyle(/*"-fx-border-color: " + color + "; "
-                + */"-fx-background-color: #DDDDDD;");
-    }
-
     public boolean isShowGrid() {
         return grid.isVisible();
     }
@@ -204,11 +194,15 @@ public class ImageEditor extends Editor {
     }
 
     public boolean isShowBackground() {
-        return background.isVisible();
+        return ImageBackground.FillType.CHECKERS.equals(background.getType());
     }
 
     public void setShowBackground(boolean showBackground) {
-        background.setVisible(showBackground);
+        background.setType(showBackground ? ImageBackground.FillType.CHECKERS : ImageBackground.FillType.SINGLE_COLOR);
+    }
+
+    public ImageBackground getImageBackground() {
+        return background;
     }
 
     public void setGridInterval(int xInterval, int yInterval) {

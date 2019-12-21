@@ -15,6 +15,7 @@ public enum Config {
     FULLSCREEN(ConfigType.BOOLEAN, false),
     GRID_CONFIG(ConfigType.OBJECT, GridConfig.class, GridConfig.getDefault()),
     HEIGHT(ConfigType.DOUBLE, 400d),
+    IMAGE_BACKGROUND_COLOR(ConfigType.STRING, "#DDDDDD"),
     IMAGE_DIRECTORY(ConfigType.STRING, ""),
     NEW_IMAGE_HEIGHT(ConfigType.INT, 32),
     NEW_IMAGE_WIDTH(ConfigType.INT, 32),

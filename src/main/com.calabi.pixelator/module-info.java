@@ -9,4 +9,5 @@ module com.calabi.pixelator {
     requires org.apache.logging.log4j;
 
     exports com.calabi.pixelator.res;
+    exports com.calabi.pixelator.start;
 }

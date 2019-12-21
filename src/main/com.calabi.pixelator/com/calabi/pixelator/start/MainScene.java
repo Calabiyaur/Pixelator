@@ -41,6 +41,7 @@ import com.calabi.pixelator.view.dialog.MoveImageDialog;
 import com.calabi.pixelator.view.dialog.NewImageDialog;
 import com.calabi.pixelator.view.dialog.OutlineDialog;
 import com.calabi.pixelator.view.dialog.ResizeDialog;
+import com.calabi.pixelator.view.dialog.SettingsDialog;
 import com.calabi.pixelator.view.dialog.StretchDialog;
 import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.editor.ImageEditor;
@@ -51,6 +52,7 @@ import static com.calabi.pixelator.res.Action.BACKGROUND;
 import static com.calabi.pixelator.res.Action.CHANGE_PALETTE;
 import static com.calabi.pixelator.res.Action.CHANGE_PALETTE_PREVIEW;
 import static com.calabi.pixelator.res.Action.CLOSE;
+import static com.calabi.pixelator.res.Action.CLOSE_ALL;
 import static com.calabi.pixelator.res.Action.CLOSE_PALETTE;
 import static com.calabi.pixelator.res.Action.COPY;
 import static com.calabi.pixelator.res.Action.CREATE_FROM_CLIPBOARD;
@@ -80,6 +82,7 @@ import static com.calabi.pixelator.res.Action.ROTATE_COUNTER_CLOCKWISE;
 import static com.calabi.pixelator.res.Action.SAVE;
 import static com.calabi.pixelator.res.Action.SAVE_AS;
 import static com.calabi.pixelator.res.Action.SELECT_ALL;
+import static com.calabi.pixelator.res.Action.SETTINGS;
 import static com.calabi.pixelator.res.Action.STRETCH;
 import static com.calabi.pixelator.res.Action.UNDO;
 
@@ -165,6 +168,8 @@ public class MainScene extends Scene {
         fileMenu.addItem(SAVE_AS, e -> Files.get().create(IWC.get().getCurrentFile()), IWC.imageSelectedProperty());
         fileMenu.addItem(CREATE_FROM_CLIPBOARD, e -> createFromClipboard(), Pixelator.clipboardActiveProperty());
         fileMenu.addItem(CLOSE, e -> IWC.get().closeCurrent(), IWC.imageSelectedProperty());
+        fileMenu.addItem(CLOSE_ALL, e -> IWC.get().closeAll(), IWC.imageSelectedProperty());
+        fileMenu.addItem(SETTINGS, e -> showSettings());
 
         BasicMenu editMenu = new BasicMenu("Edit");
         editMenu.addItem(UNDO, e -> IWC.get().undo(), IWC.get().undoEnabledProperty());
@@ -310,6 +315,11 @@ public class MainScene extends Scene {
         for (ImageFile pair : Files.get().openImages()) {
             IWC.get().addImage(pair);
         }
+    }
+
+    private void showSettings() {
+        SettingsDialog dialog = new SettingsDialog();
+        dialog.showAndFocus();
     }
 
     private ImageEditor getEditor() {
