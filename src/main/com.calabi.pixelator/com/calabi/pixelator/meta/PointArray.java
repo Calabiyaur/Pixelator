@@ -9,8 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class PointArray { //TODO: Make 'Array' interface and let this and 'PixelArray' extend it
 
-    ArrayList<Integer> x;
-    ArrayList<Integer> y;
+    List<Integer> x;
+    List<Integer> y;
 
     public PointArray() {
         this.x = new ArrayList<>();
@@ -82,8 +82,69 @@ public class PointArray { //TODO: Make 'Array' interface and let this and 'Pixel
             if (tx.equals(px) && ty.equals(py)) {
                 xIter.remove();
                 yIter.remove();
+                break;
             }
         }
+    }
+
+    public PointArray invert(int maxX, int maxY) {
+        List<List<Boolean>> lines = to2d();
+        for (int j = 0; j < maxY; j++) {
+            List<Boolean> line;
+            if (j >= lines.size()) {
+                line = new ArrayList<>();
+                lines.add(line);
+            } else {
+                line = lines.get(j);
+            }
+            for (int i = 0; i < maxX; i++) {
+                if (i < line.size()) {
+                    line.set(i, !line.get(i));
+                } else {
+                    line.add(true);
+                }
+            }
+        }
+        return from2d(lines);
+    }
+
+    private List<List<Boolean>> to2d() {
+        List<List<Boolean>> lines = new ArrayList<>();
+        forEach((px, py) -> {
+            List<Boolean> line;
+            if (py >= lines.size()) {
+                line = new ArrayList<>();
+                lines.add(line);
+                while (py >= lines.size()) {
+                    line = new ArrayList<>();
+                    lines.add(line);
+                }
+            } else {
+                line = lines.get(py);
+            }
+            if (px >= line.size()) {
+                while (px > line.size()) {
+                    line.add(false);
+                }
+                line.add(true);
+            } else {
+                line.set(px, true);
+            }
+        });
+        return lines;
+    }
+
+    private PointArray from2d(List<List<Boolean>> lines) {
+        PointArray result = new PointArray();
+        for (int j = 0; j < lines.size(); j++) {
+            List<Boolean> line = lines.get(j);
+            for (int i = 0; i < line.size(); i++) {
+                if (line.get(i)) {
+                    result.add(i, j);
+                }
+            }
+        }
+        return result;
     }
 
     @Override public boolean equals(Object o) {

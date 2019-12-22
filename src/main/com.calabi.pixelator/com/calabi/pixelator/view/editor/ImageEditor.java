@@ -590,11 +590,7 @@ public class ImageEditor extends Editor {
 
     public void invertSelection() {
         PixelChange current = selectionLayer.getPixels();
-        PointArray inverted = RectangleHelper.getRectanglePoints(
-                new Point(0, 0),
-                new Point(width.get() - 1, height.get() - 1),
-                true);
-        inverted.subtract(current);
+        PointArray inverted = current.invert(getImageWidth(), getImageHeight());
         currentTool.lockAndReset();
         selectionLayer.definePixels(inverted);
     }
