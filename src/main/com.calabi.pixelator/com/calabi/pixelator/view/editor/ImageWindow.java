@@ -100,8 +100,8 @@ public class ImageWindow extends BasicWindow {
     public void initConfig() {
         getImageView().setScaleX(Config.IMAGE_ZOOM_LEVEL.getDouble(getFile(), getImageView().getScaleX()));
         getImageView().setScaleY(Config.IMAGE_ZOOM_LEVEL.getDouble(getFile(), getImageView().getScaleY()));
-        setPrefWidth(Config.IMAGE_WIDTH.getDouble(getFile(), -1));
-        setPrefHeight(Config.IMAGE_HEIGHT.getDouble(getFile(), -1));
+        setPrefWidth(Config.IMAGE_WIDTH.getDouble(getFile(), getPrefWidth()));
+        setPrefHeight(Config.IMAGE_HEIGHT.getDouble(getFile(), getPrefHeight()));
     }
 
     private void updateConfig() {
