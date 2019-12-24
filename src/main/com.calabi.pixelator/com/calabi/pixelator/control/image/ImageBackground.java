@@ -11,17 +11,19 @@ public class ImageBackground extends Pane {
 
     private FillType type;
     private Color color;
+    private Color borderColor;
 
     public ImageBackground() {
         this.type = FillType.SINGLE_COLOR;
         this.color = Color.valueOf(Config.IMAGE_BACKGROUND_COLOR.getString());
+        this.borderColor = Color.valueOf(Config.IMAGE_BORDER_COLOR.getString());
     }
 
     public void setType(FillType type) {
         this.type = type;
         switch(type) {
             case SINGLE_COLOR:
-                setBackground(BackgroundUtil.color(color));
+                setBackground(BackgroundUtil.colorBordered(color, !borderColor.isOpaque() ? color : borderColor));
                 break;
             case CHECKERS:
                 setBackground(BackgroundUtil.repeat(Images.CHECKERS));
@@ -43,6 +45,14 @@ public class ImageBackground extends Pane {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
     }
 
     public enum FillType {

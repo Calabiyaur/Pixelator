@@ -18,6 +18,19 @@ public class BackgroundUtil {
                 CornerRadii.EMPTY, Insets.EMPTY));
     }
 
+    public static Background colorBordered(Color color, Color borderColor) {
+        return new Background(
+                new BackgroundFill(
+                        borderColor,
+                        CornerRadii.EMPTY, Insets.EMPTY
+                ),
+                new BackgroundFill(
+                        color,
+                        CornerRadii.EMPTY, new Insets(1)
+                )
+        );
+    }
+
     public static Background repeat(Images enumImage) {
         Image image = enumImage.getImage();
         return new Background(new BackgroundFill(

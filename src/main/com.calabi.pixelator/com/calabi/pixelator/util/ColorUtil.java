@@ -38,6 +38,9 @@ public final class ColorUtil {
      * @return null if String is invalid.
      */
     public static Color valueOf(String hex) {
+        if (hex == null) {
+            return null;
+        }
         try {
             return Color.valueOf(hex);
         } catch (IllegalArgumentException e) {

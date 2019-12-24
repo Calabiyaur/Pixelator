@@ -18,6 +18,7 @@ public enum Config {
     GRID_CONFIG(true, ConfigType.OBJECT, GridConfig.class, GridConfig.getDefault()),
     HEIGHT(true, ConfigType.DOUBLE, 400d),
     IMAGE_BACKGROUND_COLOR(true, ConfigType.STRING, "#DDDDDD"),
+    IMAGE_BORDER_COLOR(true, ConfigType.STRING, "#00000000"),
     IMAGE_DIRECTORY(true, ConfigType.STRING, ""),
     IMAGE_H_SCROLL(false, ConfigType.DOUBLE),
     IMAGE_HEIGHT(false, ConfigType.DOUBLE),

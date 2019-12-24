@@ -10,6 +10,7 @@ import com.calabi.pixelator.view.editor.ImageWindow;
 public class SettingsDialog extends BasicDialog {
 
     private BasicColorField imageBackgroundColor;
+    private BasicColorField imageBorderColor;
 
     public SettingsDialog() {
         setTitle("Settings");
@@ -19,18 +20,29 @@ public class SettingsDialog extends BasicDialog {
         imageBackgroundColor = new BasicColorField("Image background", color);
         imageBackgroundColor.setValue(color);
 
+        Color borderColor = Color.valueOf(Config.IMAGE_BORDER_COLOR.getString());
+        imageBorderColor = new BasicColorField("Image border", borderColor);
+        imageBorderColor.setValue(borderColor);
+
         addContent(imageBackgroundColor, 0, 0);
+        addContent(imageBorderColor, 0, 1);
 
         setOnOk(e -> apply());
     }
 
     private void apply() {
         Color color = imageBackgroundColor.getValue();
+        Color borderColor = imageBorderColor.getValue();
+
         Config.IMAGE_BACKGROUND_COLOR.putString(color.toString());
+        Config.IMAGE_BORDER_COLOR.putString(borderColor.toString());
+
         for (ImageWindow imageWindow : IWC.get().imageWindows()) {
             imageWindow.getEditor().getImageBackground().setColor(color);
+            imageWindow.getEditor().getImageBackground().setBorderColor(borderColor);
             imageWindow.getEditor().getImageBackground().refresh();
         }
+
         close();
     }
 
