@@ -23,10 +23,18 @@ public class ImageBackground extends Pane {
         this.type = type;
         switch(type) {
             case SINGLE_COLOR:
-                setBackground(BackgroundUtil.colorBordered(color, !borderColor.isOpaque() ? color : borderColor));
+                if (borderColor.isOpaque()) {
+                    setBackground(BackgroundUtil.colorBordered(color, borderColor));
+                } else {
+                    setBackground(BackgroundUtil.color(color));
+                }
                 break;
             case CHECKERS:
-                setBackground(BackgroundUtil.repeat(Images.CHECKERS));
+                if (borderColor.isOpaque()) {
+                    setBackground(BackgroundUtil.repeatBordered(Images.CHECKERS, borderColor));
+                } else {
+                    setBackground(BackgroundUtil.repeat(Images.CHECKERS));
+                }
                 break;
         }
     }
