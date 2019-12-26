@@ -69,6 +69,10 @@ public abstract class Tool {
         }
     }
 
+    boolean isActive() {
+        return actingToolProperty().get() != None.getMe();
+    }
+
     void updateCursor(Images useImage) {
         if (useImage != null) {
             cursor.set(new ImageCursor(new Image(useImage.getUrl()), getHotspotX(), getHotspotY()));

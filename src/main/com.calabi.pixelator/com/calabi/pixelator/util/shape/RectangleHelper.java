@@ -11,10 +11,10 @@ public class RectangleHelper {
      */
     public static PointArray getRectanglePoints(Point p1, Point p2, boolean fill) {
         PointArray points = new PointArray();
-        int x1 = p1.getX() < p2.getX() ? p1.getX() : p2.getX();
-        int y1 = p1.getY() < p2.getY() ? p1.getY() : p2.getY();
-        int x2 = p1.getX() < p2.getX() ? p2.getX() : p1.getX();
-        int y2 = p1.getY() < p2.getY() ? p2.getY() : p1.getY();
+        int x1 = Math.min(p1.getX(), p2.getX());
+        int y1 = Math.min(p1.getY(), p2.getY());
+        int x2 = Math.max(p1.getX(), p2.getX());
+        int y2 = Math.max(p1.getY(), p2.getY());
 
         for (int x = x1; x <= x2; x++) {
             for (int y = y1; y <= y2; y++) {
