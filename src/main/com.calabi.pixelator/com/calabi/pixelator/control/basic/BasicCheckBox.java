@@ -18,7 +18,7 @@ public class BasicCheckBox extends BasicControl<Boolean> {
     public BasicCheckBox(String title, String tail, boolean value) {
         super(title, tail, value);
 
-        this.valueProperty().bindBidirectional(checkBox.selectedProperty());
+        checkBox.selectedProperty().bindBidirectional(this.valueProperty());
     }
 
     @Override

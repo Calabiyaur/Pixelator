@@ -23,7 +23,7 @@ public class BasicColorField extends BasicControl<Color> {
     private void init() {
         colorButton = new ImageButton(Images.CHOOSE_COLOR);
         colorButton.setOnAction(e -> ColorDialog.chooseColor(getValue(), color -> setValue(color)));
-        addControl(colorButton, 2);
+        addControl(colorButton, 1);
 
         colorField.colorProperty().bindBidirectional(this.valueProperty());
         this.valueProperty().addListener((ov, o, n) -> {

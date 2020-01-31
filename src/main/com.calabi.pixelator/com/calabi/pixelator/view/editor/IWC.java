@@ -63,6 +63,7 @@ public class IWC extends Pane {
                 dirty.bind(window.getEditor().dirtyProperty());
                 showBackground.setValue(window.getEditor().isShowBackground());
                 updateImage(window);
+                readConfig(window);
                 window.toFront();
                 window.getEditor().updateColorCount();
             }
@@ -93,7 +94,7 @@ public class IWC extends Pane {
     }
 
     public PixelFile getCurrentFile() {
-        return currentWindow.get().getFile();
+        return currentWindow.get() == null ? null : currentWindow.get().getFile();
     }
 
     public void saveCurrentFile() {
@@ -151,6 +152,12 @@ public class IWC extends Pane {
                     window.getEditor().getSelectionImage());
             ToolView.get().setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
             ToolView.get().setZoom(window.getImageView().scaleXProperty().doubleValue());
+        }
+    }
+
+    private void readConfig(ImageWindow window) {
+        if (Config.REPLACE.isUserDefinedAsLocal()) {
+            ToolView.get().setReplaceColor(Config.REPLACE.getBoolean(window.getFile()));
         }
     }
 

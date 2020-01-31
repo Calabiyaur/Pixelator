@@ -6,6 +6,6 @@ enum ConfigType {
     DOUBLE,
     BOOLEAN,
     STRING,
-    OBJECT;
+    OBJECT
 
 }

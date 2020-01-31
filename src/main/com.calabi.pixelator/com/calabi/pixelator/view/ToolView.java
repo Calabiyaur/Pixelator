@@ -35,6 +35,7 @@ import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;
+import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.tool.Select;
 import com.calabi.pixelator.view.tool.Tool;
 import com.calabi.pixelator.view.tool.Tools;
@@ -181,7 +182,7 @@ public class ToolView extends VBox {
                 break;
         }
 
-        replaceColor.bind(replaceColorField.valueProperty());
+        replaceColor.bindBidirectional(replaceColorField.valueProperty());
         fillShape.bind(fillShapeField.valueProperty());
         thickness.bind(thicknessField.valueProperty());
         List<ToggleImageButton> bulgeButtons = Arrays.asList(bulgeLeft, bulgeCenter, bulgeRight);
@@ -219,9 +220,9 @@ public class ToolView extends VBox {
     }
 
     private void initConfig() {
-        replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(n));
-        fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(n));
-        thickness.addListener((ov, o, n) -> Config.THICKNESS.putInt(n.intValue()));
+        replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(IWC.get().getCurrentFile(), n));
+        fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(IWC.get().getCurrentFile(), n));
+        thickness.addListener((ov, o, n) -> Config.THICKNESS.putInt(IWC.get().getCurrentFile(), n.intValue()));
     }
 
     public void setPreview(Image image, Image toolImage, Image selectionImage) {
@@ -291,6 +292,10 @@ public class ToolView extends VBox {
 
     public BooleanProperty replaceColorProperty() {
         return replaceColor;
+    }
+
+    public void setReplaceColor(boolean replaceColor) {
+        this.replaceColor.set(replaceColor);
     }
 
     public boolean isFillShape() {

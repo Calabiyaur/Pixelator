@@ -9,30 +9,34 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 
 public abstract class BasicControl<T> extends GridPane {
 
     private Label titleText;
+    private HBox controlWrapper;
     private Control control;
     private Label tailText;
     private ObjectProperty<T> value = new SimpleObjectProperty<>();
 
     public BasicControl(String title, String tail, T value) {
-        List<Control> children = new ArrayList<>();
+        List<Node> children = new ArrayList<>();
         if (title != null) {
             titleText = new Label(title + ": ");
             children.add(titleText);
         }
         control = createControl();
-        children.add(control);
+        controlWrapper = new HBox(control);
+        children.add(controlWrapper);
         if (tail != null) {
             tailText = new Label(" " + tail);
             children.add(tailText);
         }
-        addRow(0, children.toArray(new Control[] {}));
+        addRow(0, children.toArray(new Node[] {}));
 
         GridPane.setHalignment(control, HPos.RIGHT);
         adjustWidth();
@@ -56,6 +60,10 @@ public abstract class BasicControl<T> extends GridPane {
         return control;
     }
 
+    public final HBox getControlWrapper() {
+        return controlWrapper;
+    }
+
     public final Label getFrontLabel() {
         return titleText;
     }
@@ -64,16 +72,8 @@ public abstract class BasicControl<T> extends GridPane {
         return tailText;
     }
 
-    public final void addControl(Control control, int columnIndex) {
-        getChildren().forEach(c -> {
-            int oldIndex = getColumnIndex(c);
-            if (oldIndex >= columnIndex) {
-                setColumnIndex(c, oldIndex + 1);
-            }
-        });
-        getChildren().add(control);
-        setConstraints(control, columnIndex, 0);
-        adjustWidth();
+    public final void addControl(Control control, int position) {
+        controlWrapper.getChildren().add(position, control);
     }
 
     public final T getValue() {
