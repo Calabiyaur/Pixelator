@@ -183,7 +183,7 @@ public class ToolView extends VBox {
         }
 
         replaceColor.bindBidirectional(replaceColorField.valueProperty());
-        fillShape.bind(fillShapeField.valueProperty());
+        fillShape.bindBidirectional(fillShapeField.valueProperty());
         thickness.bind(thicknessField.valueProperty());
         List<ToggleImageButton> bulgeButtons = Arrays.asList(bulgeLeft, bulgeCenter, bulgeRight);
         thickness.addListener((ov, o, n) -> bulgeButtons.forEach(b -> b.setDisable(n.intValue() == 1)));
@@ -300,6 +300,10 @@ public class ToolView extends VBox {
 
     public boolean isFillShape() {
         return fillShape.get();
+    }
+
+    public void setFillShape(boolean fillShape) {
+        this.fillShape.set(fillShape);
     }
 
     public int getThickness() {

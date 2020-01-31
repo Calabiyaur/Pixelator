@@ -29,9 +29,12 @@ public abstract class BasicControl<T> extends GridPane {
             titleText = new Label(title + ": ");
             children.add(titleText);
         }
+
         control = createControl();
+        control.disableProperty().bind(disabledProperty());
         controlWrapper = new HBox(control);
         children.add(controlWrapper);
+
         if (tail != null) {
             tailText = new Label(" " + tail);
             children.add(tailText);

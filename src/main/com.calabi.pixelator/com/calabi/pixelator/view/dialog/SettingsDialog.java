@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import com.calabi.pixelator.control.basic.BasicCheckBox;
 import com.calabi.pixelator.control.basic.BasicColorField;
 import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.editor.ImageWindow;
 
@@ -22,6 +23,8 @@ public class SettingsDialog extends BasicDialog {
     private BasicColorField imageBorderColor;
     private BasicCheckBox replaceColorCheckbox;
     private CheckBox replaceColorLocalCheckbox;
+    private BasicCheckBox fillShapeCheckbox;
+    private CheckBox fillShapeLocalCheckbox;
 
     public SettingsDialog() {
         setTitle("Settings");
@@ -51,6 +54,15 @@ public class SettingsDialog extends BasicDialog {
         boolean replaceColorLocal = Config.REPLACE.isUserDefinedAsLocal();
         replaceColorLocalCheckbox = new CheckBox();
         replaceColorLocalCheckbox.setSelected(replaceColorLocal);
+        replaceColorCheckbox.disableProperty().bind(replaceColorLocalCheckbox.selectedProperty());
+
+        // Fill shape
+        boolean fillShape = Config.FILL_SHAPE.getBoolean();
+        fillShapeCheckbox = new BasicCheckBox("Fill shape", fillShape);
+        boolean fillShapeLocal = Config.FILL_SHAPE.isUserDefinedAsLocal();
+        fillShapeLocalCheckbox = new CheckBox();
+        fillShapeLocalCheckbox.setSelected(fillShapeLocal);
+        fillShapeCheckbox.disableProperty().bind(fillShapeLocalCheckbox.selectedProperty());
 
         // LAYOUT:
 
@@ -61,6 +73,8 @@ public class SettingsDialog extends BasicDialog {
         content.add(new Separator(), 0, 3, 3, 1);
         content.addRow(4, replaceColorCheckbox.getFrontLabel(), replaceColorCheckbox.getControlWrapper(),
                 replaceColorLocalCheckbox);
+        content.addRow(5, fillShapeCheckbox.getFrontLabel(), fillShapeCheckbox.getControlWrapper(),
+                fillShapeLocalCheckbox);
 
         // Layout for specific objects
         for (Node child : content.getChildren()) {
@@ -85,14 +99,20 @@ public class SettingsDialog extends BasicDialog {
         Color borderColor = imageBorderColor.getValue();
         boolean replaceColor = replaceColorCheckbox.getValue();
         boolean replaceColorLocal = replaceColorLocalCheckbox.isSelected();
+        boolean fillShape = fillShapeCheckbox.getValue();
+        boolean fillShapeLocal = fillShapeLocalCheckbox.isSelected();
 
         // Update global config
         Config.IMAGE_BACKGROUND_COLOR.putString(color.toString());
         Config.IMAGE_BORDER_COLOR.putString(borderColor.toString());
         if (!replaceColorLocal) {
-            Config.REPLACE.putBoolean(replaceColor);
+            ToolView.get().setReplaceColor(replaceColor);
         }
         Config.REPLACE.setUserDefinedAs(replaceColorLocal);
+        if (!fillShapeLocal) {
+            ToolView.get().setFillShape(fillShape);
+        }
+        Config.FILL_SHAPE.setUserDefinedAs(fillShapeLocal);
 
         // Update open windows
         for (ImageWindow imageWindow : IWC.get().imageWindows()) {

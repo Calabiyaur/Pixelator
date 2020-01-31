@@ -159,6 +159,9 @@ public class IWC extends Pane {
         if (Config.REPLACE.isUserDefinedAsLocal()) {
             ToolView.get().setReplaceColor(Config.REPLACE.getBoolean(window.getFile()));
         }
+        if (Config.FILL_SHAPE.isUserDefinedAsLocal()) {
+            ToolView.get().setFillShape(Config.FILL_SHAPE.getBoolean(window.getFile()));
+        }
     }
 
     public boolean closeAll() {
