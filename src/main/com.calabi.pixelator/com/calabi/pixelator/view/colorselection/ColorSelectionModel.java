@@ -232,19 +232,19 @@ final class ColorSelectionModel {
         return tabButtons;
     }
 
-    public BasicNumberField getRedField() {
+    public BasicNumberField<?> getRedField() {
         return redField;
     }
 
-    public BasicNumberField getGreenField() {
+    public BasicNumberField<?> getGreenField() {
         return greenField;
     }
 
-    public BasicNumberField getBlueField() {
+    public BasicNumberField<?> getBlueField() {
         return blueField;
     }
 
-    public BasicNumberField getAlphaField() {
+    public BasicNumberField<?> getAlphaField() {
         return alphaField;
     }
 

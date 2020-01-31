@@ -24,10 +24,10 @@ public class ColorSelection extends BorderPane {
         colorPicker.setMinSize(125, 125);
         colorPreview.setMinWidth(100);
 
-        BasicNumberField redField = model.getRedField();
-        BasicNumberField greenField = model.getGreenField();
-        BasicNumberField blueField = model.getBlueField();
-        BasicNumberField alphaField = model.getAlphaField();
+        BasicNumberField<?> redField = model.getRedField();
+        BasicNumberField<?> greenField = model.getGreenField();
+        BasicNumberField<?> blueField = model.getBlueField();
+        BasicNumberField<?> alphaField = model.getAlphaField();
         Slider redSlider = model.getRedSlider();
         Slider greenSlider = model.getGreenSlider();
         Slider blueSlider = model.getBlueSlider();
