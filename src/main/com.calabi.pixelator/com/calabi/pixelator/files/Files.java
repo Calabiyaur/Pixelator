@@ -87,7 +87,7 @@ public class Files {
         try {
             writer.write(pixelFile);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save file " + pixelFile, e);
+            throw new FileException("Failed to save file " + pixelFile, e);
         }
     }
 
@@ -96,7 +96,7 @@ public class Files {
         try {
             writer.writeConfig(pixelFile);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save config " + pixelFile, e);
+            throw new FileException("Failed to save config " + pixelFile, e);
         }
     }
 
@@ -105,7 +105,7 @@ public class Files {
         try {
             writer.writePreview(paletteFile);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save preview " + paletteFile, e);
+            throw new FileException("Failed to save preview " + paletteFile, e);
         }
     }
 
@@ -140,7 +140,7 @@ public class Files {
         try {
             return reader.read(file).category(category).build();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read file " + file, e);
+            throw new FileException("Failed to read file " + file, e);
         }
     }
 

@@ -33,10 +33,8 @@ public abstract class PixelFileReader {
         Properties properties = new Properties();
         for (File file : directory.listFiles()) {
             if (FileConfig.NAME_PROPERTIES.equals(file.getName())) {
-                try {
-                    InputStream inputStream = new FileInputStream(file);
+                try (InputStream inputStream = new FileInputStream(file)) {
                     properties.load(inputStream);
-                    inputStream.close();
                 } catch (IOException e) {
                     Logger.error(e);
                 }

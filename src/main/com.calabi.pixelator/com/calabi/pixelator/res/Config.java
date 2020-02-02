@@ -1,9 +1,16 @@
 package com.calabi.pixelator.res;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Properties;
 import java.util.prefs.Preferences;
 
+import com.calabi.pixelator.files.FileException;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.logging.Logger;
 import com.calabi.pixelator.meta.Direction;
@@ -205,6 +212,9 @@ public enum Config {
         }
         String stringValue = file.getProperties().getProperty(name());
         if (stringValue == null) {
+            stringValue = getLocalConfig(file.getName(), name());
+        }
+        if (stringValue == null) {
             return def;
         }
         switch(configType) {
@@ -246,6 +256,7 @@ public enum Config {
             return;
         }
         file.getProperties().put(name(), String.valueOf(value));
+        putLocalConfig(file.getName(), name(), String.valueOf(value));
     }
 
     public boolean isUserDefinedAsGlobal() {
@@ -273,6 +284,59 @@ public enum Config {
             configConfig.getLocalConfigs().add(this);
         } else {
             configConfig.getLocalConfigs().remove(this);
+        }
+    }
+
+    private String getLocalConfig(String hash, String key) {
+        String home = System.getProperty("user.home");
+        String s = File.separator;
+        File dir = new File(home + s + "AppData" + s + "Local" + s + "Pixelator" + s + "config");
+        if (!dir.exists()) {
+            return null;
+        }
+
+        File file = new File(dir.getPath() + s + hash);
+        if (!file.exists() || !file.isFile()) {
+            return null;
+        }
+
+        Properties properties = new Properties();
+        try (InputStream inputStream = new FileInputStream(file)) {
+            properties.load(inputStream);
+        } catch (IOException e) {
+            throw new FileException(e);
+        }
+        return properties.getProperty(key);
+    }
+
+    private void putLocalConfig(String hash, String key, String value) {
+        String home = System.getProperty("user.home");
+        String s = File.separator;
+        File dir = new File(home + s + "AppData" + s + "Local" + s + "Pixelator" + s + "config");
+        if (!dir.exists() && !dir.mkdirs()) {
+            throw new FileException("Failed to create config directory");
+        }
+
+        File file = new File(dir.getPath() + s + hash);
+        try {
+            boolean preExisting;
+            if ((preExisting = !file.exists()) && !file.createNewFile()) {
+                throw new FileException("Failed to create local config");
+            }
+
+            Properties properties = new Properties();
+            if (!preExisting) {
+                try (InputStream inputStream = new FileInputStream(file)) {
+                    properties.load(inputStream);
+                }
+            }
+            properties.put(key, value);
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                properties.store(outputStream, "");
+            }
+
+        } catch (IOException e) {
+            throw new FileException(e);
         }
     }
 

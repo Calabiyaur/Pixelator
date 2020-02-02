@@ -160,7 +160,7 @@ public class ToolView extends VBox {
         BasicCheckBox alphaOnlyField = new BasicCheckBox("Alpha only", Config.ALPHA_ONLY.getBoolean());
         BasicCheckBox fillShapeField = new BasicCheckBox("Fill shape", Config.FILL_SHAPE.getBoolean());
         BasicIntegerField thicknessField = new BasicIntegerField("Thickness", 1);
-        thicknessField.setDisable(true);
+        //thicknessField.setDisable(true);
         Arrays.asList(replaceColorField, alphaOnlyField, fillShapeField, thicknessField).forEach(field -> {
             field.getControl().setPrefWidth(36);
             field.setMinWidth(100);
@@ -190,7 +190,7 @@ public class ToolView extends VBox {
         thickness.bind(thicknessField.valueProperty());
         List<ToggleImageButton> bulgeButtons = Arrays.asList(bulgeLeft, bulgeCenter, bulgeRight);
         thickness.addListener((ov, o, n) -> bulgeButtons.forEach(b -> b.setDisable(n.intValue() == 1)));
-        bulgeButtons.forEach(b -> b.setDisable(true));
+        //bulgeButtons.forEach(b -> b.setDisable(true));
         bulgeLeft.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(-1)));
         bulgeCenter.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(0)));
         bulgeRight.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(1)));
@@ -295,12 +295,12 @@ public class ToolView extends VBox {
         return replaceColor.get();
     }
 
-    public BooleanProperty replaceColorProperty() {
-        return replaceColor;
-    }
-
     public void setReplaceColor(boolean replaceColor) {
         this.replaceColor.set(replaceColor);
+    }
+
+    public BooleanProperty replaceColorProperty() {
+        return replaceColor;
     }
 
     public boolean isAlphaOnly() {
