@@ -45,6 +45,7 @@ public class ToolView extends VBox {
     private static ToolView instance;
     private ObjectProperty<Tools> currentTool = new SimpleObjectProperty<>();
     private BooleanProperty replaceColor = new SimpleBooleanProperty();
+    private BooleanProperty alphaOnly = new SimpleBooleanProperty();
     private BooleanProperty fillShape = new SimpleBooleanProperty();
     private IntegerProperty thickness = new SimpleIntegerProperty();
     private IntegerProperty bulge = new SimpleIntegerProperty();
@@ -119,7 +120,7 @@ public class ToolView extends VBox {
     }
 
     public ToolSettings getSettings() {
-        return new ToolSettings(replaceColor.get(), fillShape.get(), thickness.get(), bulge.get());
+        return new ToolSettings(replaceColor.get(), alphaOnly.get(), fillShape.get(), thickness.get(), bulge.get());
     }
 
     private FlowPane createFirstToolLayer(ToggleGroup tg) {
@@ -156,10 +157,11 @@ public class ToolView extends VBox {
 
     private Pane createPrefLayer() {
         BasicCheckBox replaceColorField = new BasicCheckBox("Replace", Config.REPLACE.getBoolean());
+        BasicCheckBox alphaOnlyField = new BasicCheckBox("Alpha only", Config.ALPHA_ONLY.getBoolean());
         BasicCheckBox fillShapeField = new BasicCheckBox("Fill shape", Config.FILL_SHAPE.getBoolean());
         BasicIntegerField thicknessField = new BasicIntegerField("Thickness", 1);
         thicknessField.setDisable(true);
-        Arrays.asList(replaceColorField, fillShapeField, thicknessField).forEach(field -> {
+        Arrays.asList(replaceColorField, alphaOnlyField, fillShapeField, thicknessField).forEach(field -> {
             field.getControl().setPrefWidth(36);
             field.setMinWidth(100);
         });
@@ -183,6 +185,7 @@ public class ToolView extends VBox {
         }
 
         replaceColor.bindBidirectional(replaceColorField.valueProperty());
+        alphaOnly.bindBidirectional(alphaOnlyField.valueProperty());
         fillShape.bindBidirectional(fillShapeField.valueProperty());
         thickness.bind(thicknessField.valueProperty());
         List<ToggleImageButton> bulgeButtons = Arrays.asList(bulgeLeft, bulgeCenter, bulgeRight);
@@ -194,9 +197,10 @@ public class ToolView extends VBox {
 
         GridPane prefBox = new GridPane();
         prefBox.addRow(0, replaceColorField);
-        prefBox.addRow(1, fillShapeField);
-        prefBox.addRow(2, thicknessField, bulgeLeft, bulgeCenter, bulgeRight);
-        prefBox.setVgap(3);
+        prefBox.addRow(1, alphaOnlyField);
+        prefBox.addRow(2, fillShapeField);
+        prefBox.addRow(3, thicknessField, bulgeLeft, bulgeCenter, bulgeRight);
+        prefBox.setVgap(4);
         GridPane.setMargin(bulgeLeft, new Insets(0, 0, 0, 3));
         GridPane.setMargin(bulgeCenter, new Insets(0, 1, 0, 1));
 
@@ -221,6 +225,7 @@ public class ToolView extends VBox {
 
     private void initConfig() {
         replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(IWC.get().getCurrentFile(), n));
+        alphaOnly.addListener((ov, o, n) -> Config.ALPHA_ONLY.putBoolean(IWC.get().getCurrentFile(), n));
         fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(IWC.get().getCurrentFile(), n));
         thickness.addListener((ov, o, n) -> Config.THICKNESS.putInt(IWC.get().getCurrentFile(), n.intValue()));
     }
@@ -271,11 +276,11 @@ public class ToolView extends VBox {
     }
 
     public void setSize(int width, int height) {
-        sizeText.setText(Integer.toString(width) + "×" + Integer.toString(height));
+        sizeText.setText(width + "×" + height);
     }
 
     public void setZoom(double zoom) {
-        zoomText.setText(Long.toString(Math.round(zoom * 100)) + " %");
+        zoomText.setText(Math.round(zoom * 100) + " %");
     }
 
     public ObjectProperty<Tools> currentToolProperty() {
@@ -296,6 +301,10 @@ public class ToolView extends VBox {
 
     public void setReplaceColor(boolean replaceColor) {
         this.replaceColor.set(replaceColor);
+    }
+
+    public boolean isAlphaOnly() {
+        return alphaOnly.get();
     }
 
     public boolean isFillShape() {

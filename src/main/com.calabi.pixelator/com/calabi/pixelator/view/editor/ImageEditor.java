@@ -359,12 +359,15 @@ public class ImageEditor extends Editor {
         return new Point(imageX, imageY);
     }
 
+    /**
+     * Central method for painting a pixel.
+     */
     private void paintPixel(int x, int y, Color color, boolean replace) {
         if (ImageUtil.outOfBounds(getImage(), x, y)) {
             return;
         }
         Color previousColor = reader.getColor(x, y);
-        Color newColor = replace ? color : ColorUtil.addColors(previousColor, color);
+        Color newColor = ColorUtil.addColors(previousColor, color, replace, ToolView.get().isAlphaOnly());
 
         if (!newColor.equals(previousColor)) {
             writer.setColor(x, y, newColor);
@@ -448,9 +451,9 @@ public class ImageEditor extends Editor {
             int y = add.getY(i);
             if (!ImageUtil.outOfBounds(getImage(), x, y)) {
                 Color previousColor = reader.getColor(x, y);
-                Color color =
-                        ToolView.get().isReplaceColor() ? add.getColor(i) :
-                                ColorUtil.addColors(previousColor, add.getColor(i));
+                boolean replaceColor = ToolView.get().isReplaceColor();
+                boolean alphaOnly = ToolView.get().isAlphaOnly();
+                Color color = ColorUtil.addColors(previousColor, add.getColor(i), replaceColor, alphaOnly);
                 result.add(x, y, previousColor, color);
             }
         }

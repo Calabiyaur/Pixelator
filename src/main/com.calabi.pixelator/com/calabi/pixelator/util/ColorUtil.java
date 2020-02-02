@@ -13,23 +13,38 @@ public final class ColorUtil {
      *
      * @param color1: The first, already existing color
      * @param color2: The second color, which is being added to the first.
+     * @param replace: If TRUE, ignore color1.
+     * @param alphaOnly: If TRUE, ignore the red, green and blue values of color2.
      * @return a mixture of both colors.
      */
-    public static Color addColors(Color color1, Color color2) {
+    public static Color addColors(Color color1, Color color2, boolean replace, boolean alphaOnly) {
         double a1 = color1.getOpacity();
         double a2 = color2.getOpacity();
 
-        if (a2 == 0) {
+        if ((a2 == 0 && !replace)
+                || (alphaOnly && replace && a1 == a2)) {
             return color1;
         }
-
-        double v = (1 - a2) * a1;
-        return Color.color(
-                (color1.getRed() * v + color2.getRed() * a2) / (v + a2),
-                (color1.getGreen() * v + color2.getGreen() * a2) / (v + a2),
-                (color1.getBlue() * v + color2.getBlue() * a2) / (v + a2),
-                a1 + (1 - a1) * a2
-        );
+        if (replace) {
+            if (alphaOnly) {
+                return Color.color(color1.getRed(), color1.getGreen(), color1.getBlue(), a2);
+            } else {
+                return color2;
+            }
+        } else {
+            double v = (1 - a2) * a1;
+            double alpha = a1 + (1 - a1) * a2;
+            if (alphaOnly) {
+                return Color.color(color1.getRed(), color1.getGreen(), color1.getBlue(), alpha);
+            } else {
+                return Color.color(
+                        (color1.getRed() * v + color2.getRed() * a2) / (v + a2),
+                        (color1.getGreen() * v + color2.getGreen() * a2) / (v + a2),
+                        (color1.getBlue() * v + color2.getBlue() * a2) / (v + a2),
+                        alpha
+                );
+            }
+        }
     }
 
     /**

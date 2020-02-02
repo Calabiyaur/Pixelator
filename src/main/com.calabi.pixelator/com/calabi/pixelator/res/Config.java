@@ -38,6 +38,7 @@ public enum Config {
     IMAGE_ZOOM_LEVEL(ConfigMode.IMAGE, ConfigType.DOUBLE),
 
     // User defined
+    ALPHA_ONLY(ConfigMode.USER_DEFINED, ConfigType.BOOLEAN, false),
     FILL_SHAPE(ConfigMode.USER_DEFINED, ConfigType.BOOLEAN, false),
     IMAGE_BACKGROUND_COLOR(ConfigMode.USER_DEFINED, ConfigType.STRING, "#DDDDDD"),
     IMAGE_BORDER_COLOR(ConfigMode.USER_DEFINED, ConfigType.STRING, "#00000000"),

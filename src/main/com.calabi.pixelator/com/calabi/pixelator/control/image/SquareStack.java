@@ -15,6 +15,7 @@ import javafx.scene.shape.Rectangle;
 import com.calabi.pixelator.meta.PixelArray;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
+import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.util.CollectionUtil;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.view.ColorView;
@@ -70,11 +71,11 @@ public class SquareStack extends ShapeStack {
         }
 
         List<Rectangle> scalableSquares = new ArrayList<>();
+        Color transparent = Color.valueOf(Config.IMAGE_BACKGROUND_COLOR.getString());
         for (Rectangle square : squares) {
             Rectangle scalableSquare = scalableSquare(square);
-            Color color = ToolView.get().isReplaceColor()
-                    ? ColorUtil.addColors(Color.LIGHTGREY, ColorView.getColor())
-                    : ColorView.getColor();
+            boolean replaceColor = ToolView.get().isReplaceColor();
+            Color color = ColorUtil.addColors(transparent, ColorView.getColor(), replaceColor, false);
             scalableSquare.setStrokeWidth(0);
             scalableSquare.setFill(color);
 
