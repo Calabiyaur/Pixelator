@@ -75,7 +75,7 @@ public class SquareStack extends ShapeStack {
         for (Rectangle square : squares) {
             Rectangle scalableSquare = scalableSquare(square);
             boolean replaceColor = ToolView.get().isReplaceColor();
-            Color color = ColorUtil.addColors(transparent, ColorView.getColor(), replaceColor, false);
+            Color color = ColorUtil.addColors(transparent, ColorView.getColor(), !replaceColor, false);
             scalableSquare.setStrokeWidth(0);
             scalableSquare.setFill(color);
 
