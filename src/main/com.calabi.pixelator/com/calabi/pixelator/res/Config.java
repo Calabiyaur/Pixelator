@@ -255,8 +255,10 @@ public enum Config {
             put(configType, value);
             return;
         }
-        file.getProperties().put(name(), String.valueOf(value));
-        putLocalConfig(file.getName(), name(), String.valueOf(value));
+        if (file != null) {
+            file.getProperties().put(name(), String.valueOf(value));
+            putLocalConfig(file.getName(), name(), String.valueOf(value));
+        }
     }
 
     public boolean isUserDefinedAsGlobal() {

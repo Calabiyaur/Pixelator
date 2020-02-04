@@ -84,12 +84,12 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
 
     @Override
     protected void increment() {
-        setValue(Math.min(maxValue, getValue() + getStep()));
+        setValue(Math.min(maxValue == null ? Integer.MAX_VALUE : maxValue, getValue() + getStep()));
     }
 
     @Override
     protected void decrement() {
-        setValue(Math.max(minValue, getValue() - getStep()));
+        setValue(Math.max(minValue == null ? Integer.MIN_VALUE : minValue, getValue() - getStep()));
     }
 
     @Override

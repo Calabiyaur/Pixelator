@@ -162,7 +162,7 @@ public class ToolView extends VBox {
         BasicIntegerField thicknessField = new BasicIntegerField("Thickness", 1);
         //thicknessField.setDisable(true);
         Arrays.asList(replaceColorField, alphaOnlyField, fillShapeField, thicknessField).forEach(field -> {
-            field.getControl().setPrefWidth(36);
+            field.getControlWrapper().setPrefWidth(45);
             field.setMinWidth(100);
         });
 

@@ -1,5 +1,7 @@
 package com.calabi.pixelator.view.colorselection;
 
+import java.util.Arrays;
+
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
@@ -28,6 +30,9 @@ public class ColorSelection extends BorderPane {
         BasicNumberField<?> greenField = model.getGreenField();
         BasicNumberField<?> blueField = model.getBlueField();
         BasicNumberField<?> alphaField = model.getAlphaField();
+        for (BasicNumberField<? extends Number> field : Arrays.asList(redField, greenField, blueField, alphaField)) {
+            field.getControlWrapper().setMaxWidth(60);
+        }
         Slider redSlider = model.getRedSlider();
         Slider greenSlider = model.getGreenSlider();
         Slider blueSlider = model.getBlueSlider();

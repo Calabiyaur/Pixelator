@@ -91,12 +91,12 @@ public class BasicDoubleField extends BasicNumberField<Double> {
 
     @Override
     protected void increment() {
-        setValue(Math.min(maxValue / factor, getValue() + getStep()));
+        setValue(Math.min(maxValue == null ? Double.MAX_VALUE : maxValue / factor, getValue() + getStep()));
     }
 
     @Override
     protected void decrement() {
-        setValue(Math.max(minValue / factor, getValue() - getStep()));
+        setValue(Math.max(minValue == null ? Double.MIN_VALUE : minValue / factor, getValue() - getStep()));
     }
 
     @Override
