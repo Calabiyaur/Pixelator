@@ -82,6 +82,21 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
         return new TextFormatter<>(filter);
     }
 
+    @Override
+    protected void increment() {
+        setValue(Math.min(maxValue, getValue() + getStep()));
+    }
+
+    @Override
+    protected void decrement() {
+        setValue(Math.max(minValue, getValue() - getStep()));
+    }
+
+    @Override
+    protected Integer getDefaultStep() {
+        return 1;
+    }
+
     public IntPattern getPattern() {
         return pattern;
     }

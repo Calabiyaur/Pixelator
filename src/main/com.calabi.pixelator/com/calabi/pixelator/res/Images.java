@@ -56,6 +56,8 @@ public enum Images {
     SAVE,
     SELECT,
     SETTINGS,
+    SPINNER_UP,
+    SPINNER_DOWN,
     SUBMIT,
     SWAP_COLOR,
     UNDO,

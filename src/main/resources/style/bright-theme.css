@@ -333,3 +333,16 @@
 .dialog-pane > .button-bar > .container {
     -fx-padding: 0;
 }
+
+.increment-arrow-button {
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0 3 0 0, 0 2 0 0, 0 1 0 0;
+    -fx-padding: 0 0 0 0; /* 4 8 4 8 */
+}
+.decrement-arrow-button {
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: -1 0 1 0, 0 1 2 1, 0 2 3 2;
+    -fx-background-radius: 0 0 3 0, 0 0 2 0, 0 0 1 0;
+    -fx-padding: 0 0 0 0; /* 3 8 6 8 */
+}

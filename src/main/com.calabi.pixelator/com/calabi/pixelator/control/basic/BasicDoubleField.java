@@ -89,6 +89,21 @@ public class BasicDoubleField extends BasicNumberField<Double> {
         return new TextFormatter<>(filter);
     }
 
+    @Override
+    protected void increment() {
+        setValue(Math.min(maxValue / factor, getValue() + getStep()));
+    }
+
+    @Override
+    protected void decrement() {
+        setValue(Math.max(minValue / factor, getValue() - getStep()));
+    }
+
+    @Override
+    protected Double getDefaultStep() {
+        return 1e-2;
+    }
+
     public double getConversionFactor() {
         return factor;
     }

@@ -127,18 +127,21 @@ final class ColorSelectionModel {
             CustomSlider slider = sliders.get(i);
             DoubleProperty target = dimensionMap.get(dimension);
 
+            double step = (dimension.maxSliderValue - dimension.minSliderValue)
+                    / (double) (dimension.maxTextValue - dimension.minTextValue);
+
             textField.setTarget(target);
             textField.setTargetAsObject(target.asObject());
             textField.setTitle(dimension.getName());
             textField.setMinValue((double) dimension.minTextValue);
             textField.setMaxValue((double) dimension.maxTextValue);
             textField.setConversionFactor((double) dimension.maxTextValue / (double) dimension.maxSliderValue);
+            textField.setStep(step);
 
             slider.setTarget(target);
             slider.setMin(dimension.minSliderValue);
             slider.setMax(dimension.maxSliderValue);
-            slider.setBlockIncrement((dimension.maxSliderValue - dimension.minSliderValue)
-                    / (double) (dimension.maxTextValue - dimension.minTextValue));
+            slider.setBlockIncrement(step);
         }
 
         // Bind text fields

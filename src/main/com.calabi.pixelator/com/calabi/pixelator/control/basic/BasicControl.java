@@ -75,7 +75,7 @@ public abstract class BasicControl<T> extends GridPane {
         return tailText;
     }
 
-    public final void addControl(Control control, int position) {
+    public final void addControl(Node control, int position) {
         controlWrapper.getChildren().add(position, control);
     }
 
