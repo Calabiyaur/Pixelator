@@ -14,9 +14,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.control.basic.ChangeColorButton;
+import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.files.PaletteFile;
+import com.calabi.pixelator.view.colorselection.control.ChangeColorButton;
 import com.calabi.pixelator.view.palette.PaletteMaster;
 import com.calabi.pixelator.view.palette.SortMaster;
 
@@ -35,13 +36,21 @@ public class ChangePaletteDialog extends BasicDialog {
         buttons.setPadding(new Insets(2));
         buttons.setSpacing(2);
         List<Color> leftColors = SortMaster.sortByValues(PaletteMaster.extractColors(image));
+        ChangeColorButton prev = null;
         for (Color color : leftColors) {
             ChangeColorButton button = new ChangeColorButton(paletteFile, color);
             buttons.getChildren().add(button);
-            button.getValue().selectedColorProperty().addListener((ov, o, n) -> {
+            button.valueProperty().addListener((ov, o, n) -> {
                 colorMap.put(color, n);
                 Platform.runLater(() -> updateImage());
             });
+            if (prev != null) {
+                PixelatedImageView prevImageView = prev.getEditor().getImageView();
+                PixelatedImageView imageView = button.getEditor().getImageView();
+                prevImageView.scaleXProperty().bindBidirectional(imageView.scaleXProperty());
+                prevImageView.scaleYProperty().bindBidirectional(imageView.scaleYProperty());
+            }
+            prev = button;
         }
         BasicScrollPane buttonPane = new BasicScrollPane(buttons);
         buttonPane.setScrollByMouse(true);

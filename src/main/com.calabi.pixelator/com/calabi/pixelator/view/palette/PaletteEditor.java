@@ -34,8 +34,13 @@ public class PaletteEditor extends Editor {
         getFile().setImage(getImage());
 
         ScalableImageView imageView = (ScalableImageView) getImageView();
-        imageView.setZoomMinimum(4);
-        imageView.setZoomMaximum(24);
+        if (file.getExtension() == Extension.PALI) {
+            imageView.setZoomMinimum(1);
+            imageView.setZoomMaximum(4);
+        } else {
+            imageView.setZoomMinimum(4);
+            imageView.setZoomMaximum(24);
+        }
         setOnScroll(e -> {
             imageView.scroll(e);
             requestLayout();
