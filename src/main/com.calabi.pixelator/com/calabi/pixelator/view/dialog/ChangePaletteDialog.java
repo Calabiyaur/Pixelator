@@ -1,22 +1,29 @@
 package com.calabi.pixelator.view.dialog;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.files.PaletteFile;
+import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.view.colorselection.control.ChangeColorButton;
 import com.calabi.pixelator.view.palette.PaletteMaster;
 import com.calabi.pixelator.view.palette.SortMaster;
@@ -28,18 +35,18 @@ public class ChangePaletteDialog extends BasicDialog {
 
     public ChangePaletteDialog(Image image, PaletteFile paletteFile) {
         preview = new Preview(image);
-        setPrefSize(1150, 600);
+        setPrefSize(1200, 600);
         setTitle("Change Palette");
         setOkText("Apply");
 
-        VBox buttons = new VBox();
-        buttons.setPadding(new Insets(2));
-        buttons.setSpacing(2);
+        VBox colorButtons = new VBox();
+        colorButtons.setPadding(new Insets(2));
+        colorButtons.setSpacing(2);
         List<Color> leftColors = SortMaster.sortByValues(PaletteMaster.extractColors(image));
         ChangeColorButton prev = null;
         for (Color color : leftColors) {
             ChangeColorButton button = new ChangeColorButton(paletteFile, color);
-            buttons.getChildren().add(button);
+            colorButtons.getChildren().add(button);
             button.valueProperty().addListener((ov, o, n) -> {
                 colorMap.put(color, n);
                 Platform.runLater(() -> updateImage());
@@ -52,14 +59,27 @@ public class ChangePaletteDialog extends BasicDialog {
             }
             prev = button;
         }
-        BasicScrollPane buttonPane = new BasicScrollPane(buttons);
-        buttonPane.setScrollByMouse(true);
-        buttonPane.setMinWidth(80 + 4 + BasicScrollPane.BAR_BREADTH);
+        BasicScrollPane colorButtonPane = new BasicScrollPane(colorButtons);
+        colorButtonPane.setScrollByMouse(true);
+        colorButtonPane.setMinWidth(80 + 4 + BasicScrollPane.BAR_BREADTH);
 
+        ImageButton auto = new ImageButton(Images.WAND);
+        ImageButton revert = new ImageButton(Images.UNDO);
+        BorderPane buttons = new BorderPane();
+        buttons.setLeft(auto);
+        buttons.setRight(revert);
+        List<ChangeColorButton> rightColors = colorButtons.getChildren().stream()
+                .map(c -> ((ChangeColorButton) c)).collect(Collectors.toList());
+        auto.setOnAction(e -> computeOptimalMapping(rightColors, paletteFile.getImage()));
+        revert.setOnAction(e -> colorButtons.getChildren().forEach(c -> {
+            ((ChangeColorButton) c).setValue(((ChangeColorButton) c).getLeftColor());
+        }));
         Preview original = new Preview(image);
 
         SplitPane splitPane = new SplitPane();
-        splitPane.getItems().addAll(original, new HBox(buttonPane, preview));
+        VBox center = new VBox(colorButtonPane, buttons);
+        center.setAlignment(Pos.CENTER);
+        splitPane.getItems().addAll(original, new HBox(center, preview));
 
         GridPane.setHgrow(splitPane, Priority.ALWAYS);
         GridPane.setVgrow(splitPane, Priority.ALWAYS);
@@ -71,6 +91,32 @@ public class ChangePaletteDialog extends BasicDialog {
     @Override
     public void focus() {
 
+    }
+
+    private void computeOptimalMapping(List<ChangeColorButton> result, Image palette) {
+        Set<Color> availableColors = PaletteMaster.extractColors(palette);
+        if (availableColors.isEmpty()) {
+            return;
+        }
+        for (ChangeColorButton button : result) {
+            Color original = button.getLeftColor();
+            Iterator<Color> available = availableColors.iterator();
+
+            Color closest = available.next();
+            while (available.hasNext()) {
+                Color candidate = available.next();
+                if (compare(original, candidate) < compare(original, closest)) {
+                    closest = candidate;
+                }
+            }
+            button.setValue(closest);
+        }
+    }
+
+    private static double compare(Color c1, Color c2) {
+        return Math.abs(c1.getRed() - c2.getRed())
+                + Math.abs(c1.getGreen() - c2.getGreen())
+                + Math.abs(c1.getBlue() - c2.getBlue());
     }
 
     private void updateImage() {

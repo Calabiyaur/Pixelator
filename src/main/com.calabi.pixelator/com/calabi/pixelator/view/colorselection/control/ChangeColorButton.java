@@ -84,10 +84,6 @@ public class ChangeColorButton extends Button {
                 ColorUtil.toString(rightColor)));
     }
 
-    public PaletteEditor getEditor() {
-        return editor;
-    }
-
     public Color getValue() {
         return value.get();
     }
@@ -99,4 +95,13 @@ public class ChangeColorButton extends Button {
     public void setValue(Color value) {
         this.value.set(value);
     }
+
+    public Color getLeftColor() {
+        return leftColor;
+    }
+
+    public PaletteEditor getEditor() {
+        return editor;
+    }
+
 }
