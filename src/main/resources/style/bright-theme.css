@@ -8,6 +8,7 @@
     -px_bright_hover: #AAAAAA;
     -px_bright_selected: #BBBBBB;
     -px-custom-background: #000000;
+    -px-custom-background-2: #000000;
 }
 
 .draggable-pane {
@@ -328,6 +329,19 @@
 
 .color-field:disabled {
     -fx-opacity: -fx-disabled-opacity;
+}
+
+.change-color-button {
+    -fx-background-color: -px_selected, -px-custom-background, -px-custom-background-2;
+    -fx-background-insets: 0, 0, 0 0 0 40;
+    -fx-background-radius: 0, 0, 0;
+    -fx-padding: 0.25em 0.416667em 0.333333em 0.416667em;
+}
+
+.change-color-button:focused {
+    -fx-background-color: -fx-focus-color, -px-custom-background, -px-custom-background-2;
+    -fx-background-insets: -0.4, 2, 2 2 2 40;
+    -fx-background-radius: 0, 0, 0;
 }
 
 .dialog-pane > .button-bar > .container {

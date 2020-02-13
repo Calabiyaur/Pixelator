@@ -24,7 +24,11 @@ public class ChangeColorButton extends Button {
     private final PaletteEditor editor;
     private final PopupControl popup;
 
+    private boolean justHidden = false;
+
     public ChangeColorButton(PaletteFile paletteFile, Color leftColor) {
+        getStyleClass().add("change-color-button");
+
         setValue(leftColor);
 
         this.leftColor = leftColor;
@@ -35,8 +39,11 @@ public class ChangeColorButton extends Button {
         valueProperty().addListener((ov, o, n) -> updateColor(n));
 
         popup = createPopup(editor);
-        setOnMousePressed(e -> Do.when(!popup.isShowing(), () -> showPopup()));
+        setOnMousePressed(e -> Do.when(!justHidden && !popup.isShowing(), () -> showPopup()));
         editor.setOnMouseReleased(e -> popup.hide());
+        popup.setOnAutoHide(e -> justHidden = true);
+        setOnMouseReleased(e -> justHidden = false);
+        focusedProperty().addListener((ov, o, n) -> Do.when(!n, () -> justHidden = false));
 
         setMinSize(80, 30);
     }
@@ -72,14 +79,13 @@ public class ChangeColorButton extends Button {
             Bounds bounds = localToScreen(getBoundsInLocal());
             double x = bounds.getMinX();
             double y = bounds.getMaxY();
-            popup.show(getScene().getWindow(), x, y);
+            popup.show(getScene().getWindow(), x + 20, y);
         }
     }
 
     private void updateColor(Color rightColor) {
-        setStyle(String.format("-fx-background-color: %s, %s; "
-                        + "-fx-background-insets: 0, 0 0 0 40; "
-                        + "-fx-background-radius: 0, 0;",
+        setStyle(String.format("-px-custom-background: %s; "
+                        + "-px-custom-background-2: %s;",
                 ColorUtil.toString(leftColor),
                 ColorUtil.toString(rightColor)));
     }

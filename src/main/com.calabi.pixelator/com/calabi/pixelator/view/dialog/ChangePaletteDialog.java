@@ -1,5 +1,6 @@
 package com.calabi.pixelator.view.dialog;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,7 @@ import com.calabi.pixelator.view.palette.SortMaster;
 public class ChangePaletteDialog extends BasicDialog {
 
     private final Map<Color, Color> colorMap = new HashMap<>();
+    private final Map<Color, ChangeColorButton> buttonMap = new HashMap<>();
     private Preview preview;
 
     public ChangePaletteDialog(Image image, PaletteFile paletteFile) {
@@ -39,6 +41,19 @@ public class ChangePaletteDialog extends BasicDialog {
         setTitle("Change Palette");
         setOkText("Apply");
 
+        Preview original = new Preview(image);
+
+        for (Preview p : Arrays.asList(original, preview)) {
+            p.enable();
+            p.setOnAction(e -> {
+                Color color = original.getColor(e);
+                ChangeColorButton button = buttonMap.get(color);
+                if (button != null) {
+                    button.requestFocus();
+                }
+            });
+        }
+
         VBox colorButtons = new VBox();
         colorButtons.setPadding(new Insets(2));
         colorButtons.setSpacing(2);
@@ -46,10 +61,11 @@ public class ChangePaletteDialog extends BasicDialog {
         ChangeColorButton prev = null;
         for (Color color : leftColors) {
             ChangeColorButton button = new ChangeColorButton(paletteFile, color);
+            buttonMap.put(color, button);
             colorButtons.getChildren().add(button);
             button.valueProperty().addListener((ov, o, n) -> {
                 colorMap.put(color, n);
-                Platform.runLater(() -> updateImage());
+                Platform.runLater(() -> updateImage()); //TODO: Buffer updates in case of e.g. automatic color assignments
             });
             if (prev != null) {
                 PixelatedImageView prevImageView = prev.getEditor().getImageView();
@@ -74,7 +90,6 @@ public class ChangePaletteDialog extends BasicDialog {
         revert.setOnAction(e -> colorButtons.getChildren().forEach(c -> {
             ((ChangeColorButton) c).setValue(((ChangeColorButton) c).getLeftColor());
         }));
-        Preview original = new Preview(image);
 
         SplitPane splitPane = new SplitPane();
         VBox center = new VBox(colorButtonPane, buttons);
