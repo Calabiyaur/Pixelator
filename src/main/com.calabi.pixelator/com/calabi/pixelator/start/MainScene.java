@@ -99,8 +99,8 @@ public class MainScene extends Scene {
             root.setRightMargin(0.2442396313364056 * 1304);
         });
 
-        double width = Config.WIDTH.getDouble();
-        double height = Config.HEIGHT.getDouble();
+        double width = Config.SCREEN_WIDTH.getDouble();
+        double height = Config.SCREEN_HEIGHT.getDouble();
         root.setPrefSize(width, height);
 
         root.setStyle("-fx-background-color: #BBBBBB");

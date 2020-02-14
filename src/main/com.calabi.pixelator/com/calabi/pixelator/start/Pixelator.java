@@ -51,6 +51,8 @@ public class Pixelator extends Application {
         MainScene scene = new MainScene();
         primaryStage.getIcons().add(Images.ICON.getImage());
         primaryStage.setMaximized(Config.FULLSCREEN.getBoolean());
+        primaryStage.setX(Config.SCREEN_X.getDouble());
+        primaryStage.setY(Config.SCREEN_Y.getDouble());
         primaryStage.setMinWidth(755);
         primaryStage.setMinHeight(530);
 
@@ -95,12 +97,16 @@ public class Pixelator extends Application {
             double width = scene.getWidth();
             double height = scene.getHeight();
             boolean fullscreen = stage.isMaximized();
+            double x = stage.getX();
+            double y = stage.getY();
 
             if (!fullscreen) {
-                Config.WIDTH.putDouble(width);
-                Config.HEIGHT.putDouble(height);
+                Config.SCREEN_WIDTH.putDouble(width);
+                Config.SCREEN_HEIGHT.putDouble(height);
             }
             Config.FULLSCREEN.putBoolean(fullscreen);
+            Config.SCREEN_X.putDouble(x);
+            Config.SCREEN_Y.putDouble(y);
         } catch (Exception e) {
             Logger.log(e.getMessage() + "\nError while trying to close application. Closing anyway.");
         }

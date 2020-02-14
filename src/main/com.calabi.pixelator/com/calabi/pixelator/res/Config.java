@@ -24,7 +24,6 @@ public enum Config {
     CONFIG_CONFIG(ConfigMode.GLOBAL, ConfigType.OBJECT, ConfigConfig.class, ConfigConfig.getDefault()),
     FULLSCREEN(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
     GRID_CONFIG(ConfigMode.GLOBAL, ConfigType.OBJECT, GridConfig.class, GridConfig.getDefault()),
-    HEIGHT(ConfigMode.GLOBAL, ConfigType.DOUBLE, 400d),
     IMAGE_DIRECTORY(ConfigMode.GLOBAL, ConfigType.STRING, ""),
     NEW_IMAGE_HEIGHT(ConfigMode.GLOBAL, ConfigType.INT, 32),
     NEW_IMAGE_WIDTH(ConfigMode.GLOBAL, ConfigType.INT, 32),
@@ -32,8 +31,11 @@ public enum Config {
     PALETTE_MAX_COLORS(ConfigMode.GLOBAL, ConfigType.INT, 128),
     RESIZE_BIAS(ConfigMode.GLOBAL, ConfigType.STRING, Direction.NONE.name()),
     RESIZE_KEEP_RATIO(ConfigMode.GLOBAL, ConfigType.BOOLEAN, true),
+    SCREEN_HEIGHT(ConfigMode.GLOBAL, ConfigType.DOUBLE, 400d),
+    SCREEN_WIDTH(ConfigMode.GLOBAL, ConfigType.DOUBLE, 600d),
+    SCREEN_X(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
+    SCREEN_Y(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
     STRETCH_KEEP_RATIO(ConfigMode.GLOBAL, ConfigType.BOOLEAN, true),
-    WIDTH(ConfigMode.GLOBAL, ConfigType.DOUBLE, 600d),
 
     // Local config
     IMAGE_H_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),
