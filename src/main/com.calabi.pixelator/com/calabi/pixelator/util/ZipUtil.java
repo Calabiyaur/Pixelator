@@ -15,6 +15,9 @@ import com.calabi.pixelator.logging.Logger;
 public final class ZipUtil {
 
     public static File unpack(File zipFile, String outputPath) throws IOException {
+        if (!zipFile.exists()) {
+            throw new IOException("File does not exist: " + zipFile.getAbsolutePath());
+        }
         File dir = new File(outputPath);
         //create output directory if it doesn't exist
         if (!dir.exists()) {

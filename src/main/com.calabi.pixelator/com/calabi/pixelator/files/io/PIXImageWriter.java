@@ -17,6 +17,9 @@ public final class PIXImageWriter extends PixelFileWriter {
     @Override
     public void write(PixelFile pixelFile) throws IOException {
         File zipFile = pixelFile.getFile();
+        if (!zipFile.exists() && !zipFile.createNewFile()) {
+            throw new IOException("Failed to create PIX file");
+        }
         String outputPath = FileUtil.removeType(zipFile.getPath());
 
         // Create temporal folder
@@ -48,6 +51,9 @@ public final class PIXImageWriter extends PixelFileWriter {
     @Override
     public void writeConfig(PixelFile pixelFile) throws IOException {
         File zipFile = pixelFile.getFile();
+        if (!zipFile.exists() && !zipFile.createNewFile()) {
+            throw new IOException("Failed to create PIX file");
+        }
         File temp = ZipUtil.unpack(zipFile, FileUtil.removeType(zipFile.getPath()) + FileConfig.TEMP_CONFIG);
         File config = findConfig(temp);
         FileOutputStream outputStream = new FileOutputStream(config);
