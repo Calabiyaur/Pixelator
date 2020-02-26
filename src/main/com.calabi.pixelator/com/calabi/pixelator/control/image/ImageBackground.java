@@ -31,9 +31,9 @@ public class ImageBackground extends Pane {
                 break;
             case CHECKERS:
                 if (borderColor.isOpaque()) {
-                    setBackground(BackgroundUtil.repeatBordered(Images.CHECKERS, borderColor));
+                    setBackground(BackgroundUtil.repeatBordered(Images.CHECKERS.getImage(), borderColor));
                 } else {
-                    setBackground(BackgroundUtil.repeat(Images.CHECKERS));
+                    setBackground(BackgroundUtil.repeat(Images.CHECKERS.getImage()));
                 }
                 break;
         }

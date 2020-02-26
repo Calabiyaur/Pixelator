@@ -67,7 +67,7 @@ class ColorPicker extends StackPane {
         final Pane colorRectOpacityContainer = new StackPane();
 
         Pane transparentBackground = new Pane();
-        transparentBackground.setBackground(BackgroundUtil.repeat(Images.CHECKERS));
+        transparentBackground.setBackground(BackgroundUtil.repeat(Images.CHECKERS.getImage()));
 
         Pane colorRectHue = new Pane();
         colorRectHue.backgroundProperty().bind(new ObjectBinding<Background>() {

@@ -46,7 +46,7 @@ class ColorPreview extends StackPane {
         colorPane = new VBox(hexField, filler, recentColorPane);
         hexField.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
-        setBackground(BackgroundUtil.repeat(Images.CHECKERS));
+        setBackground(BackgroundUtil.repeat(Images.CHECKERS.getImage()));
 
         colorPane.backgroundProperty().addListener((ov, o, n) -> {
             Color backGround = (Color) n.getFills().get(0).getFill();

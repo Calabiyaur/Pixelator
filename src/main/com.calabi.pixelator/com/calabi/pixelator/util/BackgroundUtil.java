@@ -8,8 +8,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 
-import com.calabi.pixelator.res.Images;
-
 public class BackgroundUtil {
 
     public static Background color(Color color) {
@@ -37,8 +35,7 @@ public class BackgroundUtil {
         );
     }
 
-    public static Background repeat(Images enumImage) {
-        Image image = enumImage.getImage();
+    public static Background repeat(Image image) {
         return new Background(
                 new BackgroundFill(
                         new ImagePattern(image, 0, 0, image.getWidth(), image.getHeight(), false),
@@ -48,8 +45,7 @@ public class BackgroundUtil {
         );
     }
 
-    public static Background repeatBordered(Images enumImage, Color borderColor) {
-        Image image = enumImage.getImage();
+    public static Background repeatBordered(Image image, Color borderColor) {
         return new Background(
                 new BackgroundFill(
                         borderColor,
