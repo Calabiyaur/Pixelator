@@ -48,43 +48,7 @@ import com.calabi.pixelator.view.editor.ImageEditor;
 import com.calabi.pixelator.view.palette.PaletteMaster;
 import com.calabi.pixelator.view.palette.PaletteSelection;
 
-import static com.calabi.pixelator.res.Action.BACKGROUND;
-import static com.calabi.pixelator.res.Action.CHANGE_PALETTE;
-import static com.calabi.pixelator.res.Action.CHANGE_PALETTE_PREVIEW;
-import static com.calabi.pixelator.res.Action.CLOSE;
-import static com.calabi.pixelator.res.Action.CLOSE_ALL;
-import static com.calabi.pixelator.res.Action.CLOSE_PALETTE;
-import static com.calabi.pixelator.res.Action.COPY;
-import static com.calabi.pixelator.res.Action.CREATE_FROM_CLIPBOARD;
-import static com.calabi.pixelator.res.Action.CROP;
-import static com.calabi.pixelator.res.Action.CROSSHAIR;
-import static com.calabi.pixelator.res.Action.CUT;
-import static com.calabi.pixelator.res.Action.DELETE;
-import static com.calabi.pixelator.res.Action.EDIT_PALETTE;
-import static com.calabi.pixelator.res.Action.EXTRACT_PALETTE;
-import static com.calabi.pixelator.res.Action.FLIP_HORIZONTALLY;
-import static com.calabi.pixelator.res.Action.FLIP_VERTICALLY;
-import static com.calabi.pixelator.res.Action.GRID;
-import static com.calabi.pixelator.res.Action.INVERT;
-import static com.calabi.pixelator.res.Action.INVERT_SELECTION;
-import static com.calabi.pixelator.res.Action.INVERT_WITHIN_PALETTE;
-import static com.calabi.pixelator.res.Action.MOVE_IMAGE;
-import static com.calabi.pixelator.res.Action.NEW;
-import static com.calabi.pixelator.res.Action.NEW_PALETTE;
-import static com.calabi.pixelator.res.Action.OPEN;
-import static com.calabi.pixelator.res.Action.OPEN_PALETTE;
-import static com.calabi.pixelator.res.Action.OUTLINE;
-import static com.calabi.pixelator.res.Action.PASTE;
-import static com.calabi.pixelator.res.Action.REDO;
-import static com.calabi.pixelator.res.Action.RESIZE;
-import static com.calabi.pixelator.res.Action.ROTATE_CLOCKWISE;
-import static com.calabi.pixelator.res.Action.ROTATE_COUNTER_CLOCKWISE;
-import static com.calabi.pixelator.res.Action.SAVE;
-import static com.calabi.pixelator.res.Action.SAVE_AS;
-import static com.calabi.pixelator.res.Action.SELECT_ALL;
-import static com.calabi.pixelator.res.Action.SETTINGS;
-import static com.calabi.pixelator.res.Action.STRETCH;
-import static com.calabi.pixelator.res.Action.UNDO;
+import static com.calabi.pixelator.res.Action.*;
 
 public class MainScene extends Scene {
 
@@ -166,11 +130,12 @@ public class MainScene extends Scene {
         BasicMenu fileMenu = new BasicMenu("File");
         fileMenu.addItem(NEW, e -> newImage());
         fileMenu.addItem(OPEN, e -> openImages());
-        fileMenu.addItem(SAVE, e -> IWC.get().saveCurrentFile(), IWC.imageSelectedProperty().and(IWC.get().dirtyProperty()));
-        fileMenu.addItem(SAVE_AS, e -> Files.get().create(IWC.get().getCurrentFile()), IWC.imageSelectedProperty());
+        fileMenu.addItem(SAVE, e -> IWC.get().saveCurrentFile(), IWC.get().imageSelectedProperty().and(IWC.get().dirtyProperty()));
+        fileMenu.addItem(SAVE_AS, e -> Files.get().create(IWC.get().getCurrentFile()), IWC.get().imageSelectedProperty());
+        fileMenu.addItem(SAVE_ALL, e -> IWC.get().saveAll(), IWC.get().overallDirtyProperty());
         fileMenu.addItem(CREATE_FROM_CLIPBOARD, e -> createFromClipboard(), Pixelator.clipboardActiveProperty());
-        fileMenu.addItem(CLOSE, e -> IWC.get().closeCurrent(), IWC.imageSelectedProperty());
-        fileMenu.addItem(CLOSE_ALL, e -> IWC.get().closeAll(), IWC.imageSelectedProperty());
+        fileMenu.addItem(CLOSE, e -> IWC.get().closeCurrent(), IWC.get().imageSelectedProperty());
+        fileMenu.addItem(CLOSE_ALL, e -> IWC.get().closeAll(), IWC.get().imageSelectedProperty());
         fileMenu.addItem(SETTINGS, e -> showSettings());
 
         BasicMenu editMenu = new BasicMenu("Edit");
@@ -179,34 +144,34 @@ public class MainScene extends Scene {
         editMenu.addSeparator();
         editMenu.addItem(CUT, e -> getEditor().cut(), IWC.get().selectionActiveProperty());
         editMenu.addItem(COPY, e -> getEditor().copyImage(), IWC.get().selectionActiveProperty());
-        editMenu.addItem(PASTE, e -> getEditor().paste(), IWC.imageSelectedProperty());
+        editMenu.addItem(PASTE, e -> getEditor().paste(), IWC.get().imageSelectedProperty());
         editMenu.addItem(DELETE, e -> getEditor().removeSelectionAndRegister(), IWC.get().selectionActiveProperty());
-        editMenu.addItem(SELECT_ALL, e -> getEditor().selectAll(), IWC.imageSelectedProperty());
-        editMenu.addItem(INVERT_SELECTION, e -> getEditor().invertSelection(), IWC.imageSelectedProperty());
+        editMenu.addItem(SELECT_ALL, e -> getEditor().selectAll(), IWC.get().imageSelectedProperty());
+        editMenu.addItem(INVERT_SELECTION, e -> getEditor().invertSelection(), IWC.get().imageSelectedProperty());
 
         BasicMenu viewMenu = new BasicMenu("View");
         CheckMenuItem gridItem = viewMenu.addCheckItem(GRID,
-                e -> IWC.get().setShowGrid(!IWC.get().showGridProperty().get()), IWC.imageSelectedProperty());
+                e -> IWC.get().setShowGrid(!IWC.get().showGridProperty().get()), IWC.get().imageSelectedProperty());
         IWC.get().showGridProperty().addListener((ov, o, n) -> gridItem.setSelected(n));
         CheckMenuItem crossHairItem = viewMenu.addCheckItem(CROSSHAIR,
-                e -> IWC.get().setShowCrossHair(!IWC.get().showCrossHairProperty().get()), IWC.imageSelectedProperty());
+                e -> IWC.get().setShowCrossHair(!IWC.get().showCrossHairProperty().get()), IWC.get().imageSelectedProperty());
         IWC.get().showCrossHairProperty().addListener((ov, o, n) -> crossHairItem.setSelected(n));
         CheckMenuItem backgroundItem = viewMenu.addCheckItem(BACKGROUND,
-                e -> IWC.get().setShowBackground(!IWC.get().showBackgroundProperty().get()), IWC.imageSelectedProperty());
+                e -> IWC.get().setShowBackground(!IWC.get().showBackgroundProperty().get()), IWC.get().imageSelectedProperty());
         IWC.get().showBackgroundProperty().addListener((ov, o, n) -> backgroundItem.setSelected(n));
 
         BasicMenu imageMenu = new BasicMenu("Image"); // Center
-        imageMenu.addItem(MOVE_IMAGE, e -> moveAction(), IWC.imageSelectedProperty());
-        imageMenu.addItem(RESIZE, e -> resizeAction(), IWC.imageSelectedProperty());
-        imageMenu.addItem(STRETCH, e -> stretchAction(), IWC.imageSelectedProperty());
-        imageMenu.addItem(CROP, e -> getEditor().crop(), IWC.imageSelectedProperty());
+        imageMenu.addItem(MOVE_IMAGE, e -> moveAction(), IWC.get().imageSelectedProperty());
+        imageMenu.addItem(RESIZE, e -> resizeAction(), IWC.get().imageSelectedProperty());
+        imageMenu.addItem(STRETCH, e -> stretchAction(), IWC.get().imageSelectedProperty());
+        imageMenu.addItem(CROP, e -> getEditor().crop(), IWC.get().imageSelectedProperty());
         imageMenu.addSeparator();
-        imageMenu.addItem(FLIP_HORIZONTALLY, e -> getEditor().flipHorizontally(), IWC.imageSelectedProperty());
-        imageMenu.addItem(FLIP_VERTICALLY, e -> getEditor().flipVertically(), IWC.imageSelectedProperty());
-        imageMenu.addItem(ROTATE_CLOCKWISE, e -> getEditor().rotateClockwise(), IWC.imageSelectedProperty());
-        imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, e -> getEditor().rotateCounterClockwise(), IWC.imageSelectedProperty());
-        imageMenu.addItem(INVERT, e -> getEditor().invert(), IWC.imageSelectedProperty());
-        imageMenu.addItem(INVERT_WITHIN_PALETTE, e -> getEditor().invertWithinPalette(), IWC.imageSelectedProperty());
+        imageMenu.addItem(FLIP_HORIZONTALLY, e -> getEditor().flipHorizontally(), IWC.get().imageSelectedProperty());
+        imageMenu.addItem(FLIP_VERTICALLY, e -> getEditor().flipVertically(), IWC.get().imageSelectedProperty());
+        imageMenu.addItem(ROTATE_CLOCKWISE, e -> getEditor().rotateClockwise(), IWC.get().imageSelectedProperty());
+        imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, e -> getEditor().rotateCounterClockwise(), IWC.get().imageSelectedProperty());
+        imageMenu.addItem(INVERT, e -> getEditor().invert(), IWC.get().imageSelectedProperty());
+        imageMenu.addItem(INVERT_WITHIN_PALETTE, e -> getEditor().invertWithinPalette(), IWC.get().imageSelectedProperty());
 
         BasicMenu paletteMenu = new BasicMenu("Palette");
         paletteMenu.addItem(NEW_PALETTE, e -> paletteSelection.createPalette());
@@ -217,10 +182,10 @@ public class MainScene extends Scene {
         paletteMenu.addItem(CLOSE_PALETTE, e -> paletteSelection.closeCurrent(),
                 paletteSelection.paletteSelectedProperty().and(paletteSelection.defaultPaletteSelectedProperty().not()));
         BasicMenu toolMenu = new BasicMenu("Tools");
-        toolMenu.addItem(OUTLINE, e -> outline(), IWC.imageSelectedProperty());
+        toolMenu.addItem(OUTLINE, e -> outline(), IWC.get().imageSelectedProperty());
         toolMenu.addSeparator();
-        toolMenu.addItem(EXTRACT_PALETTE, e -> extractPalette(), IWC.imageSelectedProperty());
-        toolMenu.addItem(CHANGE_PALETTE, e -> changePalette(), IWC.imageSelectedProperty());
+        toolMenu.addItem(EXTRACT_PALETTE, e -> extractPalette(), IWC.get().imageSelectedProperty());
+        toolMenu.addItem(CHANGE_PALETTE, e -> changePalette(), IWC.get().imageSelectedProperty());
 
         menuBar.getMenus().setAll(fileMenu, editMenu, viewMenu, imageMenu, paletteMenu, toolMenu);
         return menuBar;

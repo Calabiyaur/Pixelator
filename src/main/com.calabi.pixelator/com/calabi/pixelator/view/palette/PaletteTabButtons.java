@@ -37,7 +37,7 @@ class PaletteTabButtons extends VBox {
 
         getChildren().addListener((ListChangeListener<Node>) c -> size.set(getChildren().size()));
 
-        IWC.imageSelectedProperty().addListener((ov, o, n) -> {
+        IWC.get().imageSelectedProperty().addListener((ov, o, n) -> {
             if (n) {
                 if (!getChildren().contains(defaultToggle)) {
                     getChildren().add(0, defaultToggle);
@@ -60,7 +60,7 @@ class PaletteTabButtons extends VBox {
         }
         button.setOnClose(e -> close(button));
         button.setToggleGroup(tg);
-        if (button != defaultToggle || IWC.imageSelectedProperty().get()) {
+        if (button != defaultToggle || IWC.get().imageSelectedProperty().get()) {
             getChildren().add(button);
         }
         return button;

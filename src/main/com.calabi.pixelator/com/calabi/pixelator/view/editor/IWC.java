@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.PixelFile;
+import com.calabi.pixelator.meta.CompoundBooleanProperty;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
@@ -23,7 +24,7 @@ import com.calabi.pixelator.view.tool.ToolManager;
 public class IWC extends Pane {
 
     private static IWC instance;
-    private static BooleanProperty imageSelected = new SimpleBooleanProperty(false);
+    private BooleanProperty imageSelected = new SimpleBooleanProperty(false);
     private ObjectProperty<ImageWindow> currentWindow;
     private BooleanProperty showGrid = new SimpleBooleanProperty(false);
     private BooleanProperty showCrossHair = new SimpleBooleanProperty(false);
@@ -31,6 +32,7 @@ public class IWC extends Pane {
     private BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty selectionActive = new SimpleBooleanProperty(false);
     private BooleanProperty dirty = new SimpleBooleanProperty(false);
+    private CompoundBooleanProperty overallDirty = new CompoundBooleanProperty(false);
     private BooleanProperty showBackground = new SimpleBooleanProperty(false);
 
     private IWC() {
@@ -49,6 +51,7 @@ public class IWC extends Pane {
                 showCrossHair.setValue(false);
                 dirty.unbind();
                 dirty.set(false);
+                overallDirty.remove(o.getEditor().dirtyProperty());
                 showBackground.unbind();
                 showBackground.set(false);
                 ToolView.get().setPreview(null, null, null);
@@ -61,6 +64,7 @@ public class IWC extends Pane {
                 showGrid.setValue(window.getEditor().isShowGrid());
                 showCrossHair.setValue(window.getEditor().isShowCrossHair());
                 dirty.bind(window.getEditor().dirtyProperty());
+                overallDirty.add(window.getEditor().dirtyProperty());
                 showBackground.setValue(window.getEditor().isShowBackground());
                 updateImage(window);
                 readConfig(window);
@@ -164,6 +168,14 @@ public class IWC extends Pane {
         }
     }
 
+    public void saveAll() {
+        for (ImageWindow window : imageWindows()) {
+            if (window.isDirty()) {
+                window.saveAndUndirty();
+            }
+        }
+    }
+
     public boolean closeAll() {
         boolean dirty = false;
 
@@ -181,6 +193,8 @@ public class IWC extends Pane {
                     children.forEach(window -> {
                         if (window.isDirty()) {
                             window.saveAndClose();
+                        } else {
+                            window.close();
                         }
                     });
                     return true;
@@ -188,12 +202,13 @@ public class IWC extends Pane {
                     children.forEach(window -> window.close());
                     return true;
                 case CANCEL:
+                default:
                     return false;
             }
+        } else {
+            children.forEach(window -> window.close());
+            return true;
         }
-
-        children.forEach(window -> window.close());
-        return true;
     }
 
     public List<ImageWindow> imageWindows() {
@@ -277,7 +292,7 @@ public class IWC extends Pane {
         }
     }
 
-    public static BooleanProperty imageSelectedProperty() {
+    public BooleanProperty imageSelectedProperty() {
         return imageSelected;
     }
 
@@ -308,4 +323,9 @@ public class IWC extends Pane {
     public BooleanProperty dirtyProperty() {
         return dirty;
     }
+
+    public BooleanProperty overallDirtyProperty() {
+        return overallDirty;
+    }
+
 }
