@@ -107,7 +107,9 @@ public class IWC extends Pane {
 
     public void addImage(PixelFile imageFile) {
         ImageWindow imageWindow = addImage(new ScalableImageView(imageFile.getImage()), imageFile);
-        imageWindow.initConfig();
+        if (imageFile.getFile() != null) {
+            imageWindow.initConfig();
+        }
     }
 
     private ImageWindow addImage(ScalableImageView imageView, PixelFile imageFile) {
