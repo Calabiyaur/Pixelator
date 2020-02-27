@@ -126,6 +126,10 @@ public class ImageWindow extends BasicWindow {
         getImageView().zoomOut();
     }
 
+    public void zoomZero() {
+        getImageView().zoomZero();
+    }
+
     private void mouseClick(MouseEvent e) {
         if (MouseButton.PRIMARY.equals(e.getButton()) && e.getClickCount() == 2) {
             adjustSize();

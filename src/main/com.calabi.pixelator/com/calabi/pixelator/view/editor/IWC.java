@@ -286,6 +286,12 @@ public class IWC extends Pane {
         }
     }
 
+    public void zoomZero() {
+        if (currentWindow.get() != null) {
+            currentWindow.get().zoomZero();
+        }
+    }
+
     public void fitWindow() {
         if (currentWindow.get() != null) {
             currentWindow.get().adjustSize();

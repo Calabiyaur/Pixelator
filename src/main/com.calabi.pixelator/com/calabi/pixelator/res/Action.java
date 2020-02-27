@@ -32,7 +32,6 @@ public enum Action {
     INVERT_SELECTION("Invert selection"),
     INVERT_WITHIN_PALETTE("Invert within palette"),
     LEFT("Left", false, false, false, KeyCode.LEFT),
-    MINUS("Minus", false, false, false, KeyCode.MINUS),
     MOVE_IMAGE("Move Image..."),
     NEW("New...", true, false, false, KeyCode.N),
     NEW_PALETTE("New...", true, false, true, KeyCode.N),
@@ -44,7 +43,6 @@ public enum Action {
     P_RIGHT("P right", false, false, true, KeyCode.RIGHT),
     P_UP("P up", false, false, true, KeyCode.UP),
     PASTE("Paste", true, false, false, KeyCode.V),
-    PLUS("Plus", false, false, false, KeyCode.PLUS),
     RANDOM_COLOR("Random color", false, false, false, KeyCode.R),
     REDO("Redo", true, false, false, KeyCode.Y),
     RESIZE("Resize..."),
@@ -60,7 +58,10 @@ public enum Action {
     SWITCH_TAB("Switch tab", true, false, false, KeyCode.TAB),
     SWITCH_TAB_BACK("Switch tab back", true, true, false, KeyCode.TAB),
     UNDO("Undo", true, false, false, KeyCode.Z),
-    UP("Up", false, false, false, KeyCode.UP);
+    UP("Up", false, false, false, KeyCode.UP),
+    ZOOM_IN("Zoom in", false, false, false, KeyCode.PLUS),
+    ZOOM_OUT("Zoom out", false, false, false, KeyCode.MINUS),
+    ZOOM_ZERO("Zoom to neutral", false, false, false, KeyCode.DIGIT0);
 
     static Set<Action> BETA_ACTIONS = CollectionUtil.toSet();
 
@@ -90,11 +91,57 @@ public enum Action {
             if (action.ctrl == ctrl
                     && action.shift == shift
                     && action.alt == alt
-                    && action.key == key) {
+                    && (action.key == key || secondary(action.key) == key)) {
                 return action;
             }
         }
         return null;
+    }
+
+    private static KeyCode secondary(KeyCode code) {
+        if (code == null) {
+            return null;
+        }
+        switch(code) {
+            case DIGIT0:
+                return KeyCode.NUMPAD0;
+            case DIGIT1:
+                return KeyCode.NUMPAD1;
+            case DIGIT2:
+                return KeyCode.NUMPAD2;
+            case DIGIT3:
+                return KeyCode.NUMPAD3;
+            case DIGIT4:
+                return KeyCode.NUMPAD4;
+            case DIGIT5:
+                return KeyCode.NUMPAD5;
+            case DIGIT6:
+                return KeyCode.NUMPAD6;
+            case DIGIT7:
+                return KeyCode.NUMPAD7;
+            case DIGIT8:
+                return KeyCode.NUMPAD8;
+            case DIGIT9:
+                return KeyCode.NUMPAD9;
+            case DOWN:
+                return KeyCode.KP_DOWN;
+            case LEFT:
+                return KeyCode.KP_LEFT;
+            case MINUS:
+                return KeyCode.SUBTRACT;
+            case PLUS:
+                return KeyCode.ADD;
+            case RIGHT:
+                return KeyCode.KP_RIGHT;
+            case UP:
+                return KeyCode.KP_UP;
+            default:
+                return null;
+        }
+    }
+
+    public boolean isSecondary(KeyCode code) {
+        return code == secondary(key);
     }
 
     public String getText() {

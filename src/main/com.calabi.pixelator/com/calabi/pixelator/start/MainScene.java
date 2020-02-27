@@ -159,6 +159,9 @@ public class MainScene extends Scene {
         CheckMenuItem backgroundItem = viewMenu.addCheckItem(BACKGROUND,
                 e -> IWC.get().setShowBackground(!IWC.get().showBackgroundProperty().get()), IWC.get().imageSelectedProperty());
         IWC.get().showBackgroundProperty().addListener((ov, o, n) -> backgroundItem.setSelected(n));
+        viewMenu.addItem(ZOOM_IN, e -> IWC.get().zoomIn(), IWC.get().imageSelectedProperty());
+        viewMenu.addItem(ZOOM_ZERO, e -> IWC.get().zoomZero(), IWC.get().imageSelectedProperty());
+        viewMenu.addItem(ZOOM_OUT, e -> IWC.get().zoomOut(), IWC.get().imageSelectedProperty());
 
         BasicMenu imageMenu = new BasicMenu("Image"); // Center
         imageMenu.addItem(MOVE_IMAGE, e -> moveAction(), IWC.get().imageSelectedProperty());
@@ -219,15 +222,17 @@ public class MainScene extends Scene {
         ToggleButton background = toolBar.addToggle(BACKGROUND, Images.BACKGROUND);
         IWC.get().showBackgroundProperty().addListener((ov, o, n) -> background.setSelected(n));
 
+        toolBar.addButton(ZOOM_IN);
+        toolBar.addButton(ZOOM_ZERO);
+        toolBar.addButton(ZOOM_OUT);
+
         return toolBar;
     }
 
     private void createKeyListener() {
         ActionManager.registerAction(Action.ESCAPE, e -> IWC.get().escape());
         ActionManager.registerAction(Action.FIT_WINDOW, e -> IWC.get().fitWindow());
-        ActionManager.registerAction(Action.MINUS, e -> IWC.get().zoomOut());
         ActionManager.registerAction(Action.RANDOM_COLOR, e -> ColorView.setColor(ColorUtil.getRandomPleasant()));
-        ActionManager.registerAction(Action.PLUS, e -> IWC.get().zoomIn());
         ActionManager.registerAction(Action.SWITCH_TAB, e -> IWC.get().selectNextWindow());
         ActionManager.registerAction(Action.SWITCH_TAB_BACK, e -> IWC.get().selectPreviousWindow());
     }

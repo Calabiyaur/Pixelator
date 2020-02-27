@@ -77,7 +77,10 @@ public enum Images {
     USE_WAND,
     USE_WAND_ADD,
     USE_WAND_SUBTRACT,
-    WAND;
+    WAND,
+    ZOOM_IN,
+    ZOOM_OUT,
+    ZOOM_ZERO;
 
     private final static String DIR = "/images/";
     private final static String TYPE = ".png";

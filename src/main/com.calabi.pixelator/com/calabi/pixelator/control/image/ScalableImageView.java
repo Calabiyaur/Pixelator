@@ -50,6 +50,11 @@ public class ScalableImageView extends PixelatedImageView {
         setScaleY(newZoom.doubleValue());
     }
 
+    public void zoomZero() {
+        setScaleX(1);
+        setScaleY(1);
+    }
+
     public double getZoomMinimum() {
         return zoomMinimum;
     }
