@@ -17,7 +17,8 @@ public final class PIXImageWriter extends PixelFileWriter {
     @Override
     public void write(PixelFile pixelFile) throws IOException {
         File zipFile = pixelFile.getFile();
-        if (!zipFile.exists() && !zipFile.createNewFile()) {
+        boolean isNew;
+        if ((isNew = !zipFile.exists()) && !zipFile.createNewFile()) {
             throw new IOException("Failed to create PIX file");
         }
         String outputPath = FileUtil.removeType(zipFile.getPath());
@@ -31,6 +32,11 @@ public final class PIXImageWriter extends PixelFileWriter {
             throw new IOException("Failed to create image file");
         }
         super.saveImage(pixelFile.getImage(), imageDirectory);
+
+        // Create preview file
+        if (isNew && pixelFile instanceof PaletteFile && ((PaletteFile) pixelFile).getPreview() != null) {
+            savePreviewFile((PaletteFile) pixelFile, temp);
+        }
 
         // Create config file
         Properties config = pixelFile.getProperties();
@@ -72,16 +78,20 @@ public final class PIXImageWriter extends PixelFileWriter {
         File temp = ZipUtil.unpack(zipFile, outputPath + FileConfig.TEMP_PREVIEW);
 
         if (paletteFile.getPreview() != null) {
-            // Create preview image file
-            File previewDirectory = new File(temp.getPath() + File.separator + FileConfig.NAME_PREVIEW);
-            if (!previewDirectory.exists() && !previewDirectory.createNewFile()) {
-                throw new IOException("Failed to create preview file");
-            }
-            super.saveImage(paletteFile.getPreview(), previewDirectory);
+            savePreviewFile(paletteFile, temp);
         }
 
         ZipUtil.pack(temp, zipFile.getPath());
         FileUtil.deleteRecursive(temp);
+    }
+
+    private void savePreviewFile(PaletteFile paletteFile, File temp) throws IOException {
+        // Create preview image file
+        File previewDirectory = new File(temp.getPath() + File.separator + FileConfig.NAME_PREVIEW);
+        if (!previewDirectory.exists() && !previewDirectory.createNewFile()) {
+            throw new IOException("Failed to create preview file");
+        }
+        super.saveImage(paletteFile.getPreview(), previewDirectory);
     }
 
 }

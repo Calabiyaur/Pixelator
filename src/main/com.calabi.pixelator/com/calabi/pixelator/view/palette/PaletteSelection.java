@@ -128,7 +128,9 @@ public class PaletteSelection extends BorderPane {
         } else {
             getFile().setPreview(imageFile.getImage());
             toggle.setGraphic(new ImageView(image));
-            Files.get().savePreview(getFile());
+            if (!getFile().isNew()) {
+                Files.get().savePreview(getFile());
+            }
         }
     }
 
