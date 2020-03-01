@@ -230,7 +230,7 @@ public class ImageEditor extends Editor {
         selectionLayer.scaleXProperty().bind(getImageView().scaleXProperty());
         selectionLayer.scaleYProperty().bind(getImageView().scaleYProperty());
 
-        setCleanImage(new WritableImage(image));
+        setCleanImage(image.copy());
     }
 
     private void onMousePressed(MouseEvent e) {
@@ -808,6 +808,14 @@ public class ImageEditor extends Editor {
     public void previousFrame() {
         currentTool.lockAndReset();
         getImage().previous();
+    }
+
+    public void play() {
+        getImage().play();
+    }
+
+    public void stop() {
+        getImage().stop();
     }
 
     public Image getToolImage() {

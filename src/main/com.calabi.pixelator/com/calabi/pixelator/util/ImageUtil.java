@@ -29,14 +29,6 @@ import com.calabi.pixelator.start.ExceptionHandler;
 
 public class ImageUtil {
 
-    public static WritableImage makeWritableIfNot(Image image) {
-        if (image instanceof WritableImage) {
-            return (WritableImage) image;
-        } else {
-            return new WritableImage(image);
-        }
-    }
-
     public static boolean equals(Image image1, Image image2) {
         if (image1 == image2) {
             return true;

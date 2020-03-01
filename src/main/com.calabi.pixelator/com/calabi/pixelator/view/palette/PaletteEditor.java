@@ -30,7 +30,7 @@ public class PaletteEditor extends Editor {
     private final ObjectProperty<Color> selectedColor = new SimpleObjectProperty<>();
 
     public PaletteEditor(PaletteFile file) {
-        super(file, new ScalableImageView(ImageUtil.makeWritableIfNot(file.getImage())));
+        super(file, new ScalableImageView(file.getImage()));
         getFile().setImage(getImage());
 
         ScalableImageView imageView = (ScalableImageView) getImageView();

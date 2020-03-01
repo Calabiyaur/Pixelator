@@ -152,7 +152,7 @@ public class IWC extends Pane {
     }
 
     private void updateImage(ImageWindow window) {
-        if (window.getFile().getCategory() == Category.IMAGE) {
+        if (window.getFile().getCategory() != Category.PALETTE) {
             ToolView.get().setPreview(window.getImageView().getImage(),
                     window.getEditor().getToolImage(),
                     window.getEditor().getSelectionImage());

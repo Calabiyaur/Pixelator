@@ -16,6 +16,7 @@ import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 import com.calabi.pixelator.control.basic.ImageButton;
+import com.calabi.pixelator.control.basic.ToggleImageButton;
 import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.control.parent.BasicWindow;
@@ -29,6 +30,7 @@ import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.start.ActionManager;
 import com.calabi.pixelator.start.Pixelator;
+import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.NumberUtil;
 import com.calabi.pixelator.view.ColorView;
@@ -65,11 +67,15 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         setContent(imageEditor);
         switch(imageFile.getCategory()) {
             case ANIMATION:
-                ImageButton previousFrame = new ImageButton(Images.ARROW_W);
+                ImageButton previousFrame = new ImageButton(Images.PREVIOUS_FRAME);
                 previousFrame.setOnAction(e -> imageEditor.previousFrame());
-                ImageButton nextFrame = new ImageButton(Images.ARROW_E);
+                ImageButton nextFrame = new ImageButton(Images.NEXT_FRAME);
                 nextFrame.setOnAction(e -> imageEditor.nextFrame());
-                HBox framePane = new HBox(previousFrame, nextFrame);
+                ToggleImageButton play = new ToggleImageButton(Images.PLAY, Images.PAUSE);
+                play.selectedProperty().addListener((ov, o, n)
+                        -> Do.when(n, () -> imageEditor.play(), () -> imageEditor.stop()));
+
+                HBox framePane = new HBox(previousFrame, nextFrame, play);
                 setLowerContent(framePane);
                 break;
             case IMAGE:

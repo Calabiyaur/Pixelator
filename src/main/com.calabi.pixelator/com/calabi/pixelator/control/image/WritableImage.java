@@ -23,6 +23,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     private boolean animated;
 
     private SimpleIntegerProperty index;
+    private Timeline timeline;
 
     private ObjectProperty<Image> current = new SimpleObjectProperty<>();
     private ObservableList<Frame> frames = FXCollections.observableArrayList();
@@ -38,17 +39,14 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     public WritableImage(Image image) {
         super((int) image.getWidth(), (int) image.getHeight());
 
-        PixelWriter writer = this.getPixelWriter();
         PixelReader reader = image.getPixelReader();
-        int width = (int) image.getWidth();
-        int height = (int) image.getHeight();
-
         animated = reader == null;
+
         if (animated) {
             Object animation = ReflectionUtil.getField(image, "animation");
             PlatformImage[] animFrames = ReflectionUtil.getField(image, "animFrames");
             index = ReflectionUtil.getField(animation, "frameIndex");
-            Timeline timeline = ReflectionUtil.getField(animation, "timeline");
+            timeline = ReflectionUtil.getField(animation, "timeline");
 
             ReflectionUtil.setField(this, "animation", animation);
             ReflectionUtil.setField(this, "animFrames", animFrames);
@@ -64,14 +62,27 @@ public class WritableImage extends javafx.scene.image.WritableImage {
                 frames.add(new Frame(animFrame));
             }
             current.set(frames.get(0).image);
-            reader = current.get().getPixelReader();
-        }
 
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                writer.setColor(i, j, reader.getColor(i, j));
-            }
+            ReflectionUtil.invokeMethod(index, "invalidated");
+
+        } else {
+
+            Object platformImage = ReflectionUtil.getField(image, "platformImage");
+            ReflectionUtil.setField(this, "platformImage", platformImage);
+
         }
+    }
+
+    public WritableImage copy() {
+        PixelReader r = getPixelReader();
+
+        int width = (int) getWidth();
+        int height = (int) getHeight();
+
+        WritableImage writableImage = new WritableImage(width, height);
+        PixelWriter writer = writableImage.getPixelWriter();
+        writer.setPixels(0, 0, width, height, r, 0, 0);
+        return writableImage;
     }
 
     public boolean isAnimated() {
@@ -94,6 +105,14 @@ public class WritableImage extends javafx.scene.image.WritableImage {
             throw new IllegalStateException();
         }
         index.set(Math.floorMod(index.get() - 1, frames.size()));
+    }
+
+    public void play() {
+        timeline.play();
+    }
+
+    public void stop() {
+        timeline.stop();
     }
 
     private static class Frame {

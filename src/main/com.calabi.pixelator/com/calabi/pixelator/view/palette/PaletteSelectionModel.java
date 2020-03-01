@@ -3,8 +3,8 @@ package com.calabi.pixelator.view.palette;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;
