@@ -16,7 +16,6 @@ import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyEvent;
@@ -32,6 +31,7 @@ import com.calabi.pixelator.control.image.OutlineRect;
 import com.calabi.pixelator.control.image.OutlineShape;
 import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.image.SquareStack;
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.meta.PixelArray;
@@ -213,7 +213,7 @@ public class ImageEditor extends Editor {
     }
 
     private void makeWritable() {
-        WritableImage image = ImageUtil.createWritableImage(getImage());
+        WritableImage image = getImage();
         reader = image.getPixelReader();
         writer = image.getPixelWriter();
         width.set((int) image.getWidth());
@@ -230,7 +230,7 @@ public class ImageEditor extends Editor {
         selectionLayer.scaleXProperty().bind(getImageView().scaleXProperty());
         selectionLayer.scaleYProperty().bind(getImageView().scaleYProperty());
 
-        setCleanImage(ImageUtil.createWritableImage(image));
+        setCleanImage(new WritableImage(image));
     }
 
     private void onMousePressed(MouseEvent e) {
@@ -798,6 +798,16 @@ public class ImageEditor extends Editor {
         currentTool.escape();
         super.redo();
         updateColorCount();
+    }
+
+    public void nextFrame() {
+        currentTool.lockAndReset();
+        getImage().next();
+    }
+
+    public void previousFrame() {
+        currentTool.lockAndReset();
+        getImage().previous();
     }
 
     public Image getToolImage() {

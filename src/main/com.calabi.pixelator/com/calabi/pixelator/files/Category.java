@@ -10,6 +10,14 @@ import com.calabi.pixelator.res.Config;
 
 public enum Category {
 
+    ANIMATION(
+            Config.IMAGE_DIRECTORY,
+            new Filter[] {
+                    new Filter(Extension.PIX),
+                    new Filter(Extension.GIF)
+            },
+            new Filter[] {} // Not needed
+    ),
     IMAGE(
             Config.IMAGE_DIRECTORY,
             new Filter[] {

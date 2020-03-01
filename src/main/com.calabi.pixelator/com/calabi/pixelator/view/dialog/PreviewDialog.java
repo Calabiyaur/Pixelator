@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
@@ -15,6 +14,7 @@ import javafx.scene.paint.Color;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import com.calabi.pixelator.control.basic.BasicControl;
+import com.calabi.pixelator.control.image.WritableImage;
 
 public abstract class PreviewDialog extends BasicDialog {
 

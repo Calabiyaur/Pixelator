@@ -27,7 +27,6 @@ import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Direction;
-import com.calabi.pixelator.res.Action;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.GridConfig;
 import com.calabi.pixelator.res.Images;
@@ -230,11 +229,12 @@ public class MainScene extends Scene {
     }
 
     private void createKeyListener() {
-        ActionManager.registerAction(Action.ESCAPE, e -> IWC.get().escape());
-        ActionManager.registerAction(Action.FIT_WINDOW, e -> IWC.get().fitWindow());
-        ActionManager.registerAction(Action.RANDOM_COLOR, e -> ColorView.setColor(ColorUtil.getRandomPleasant()));
-        ActionManager.registerAction(Action.SWITCH_TAB, e -> IWC.get().selectNextWindow());
-        ActionManager.registerAction(Action.SWITCH_TAB_BACK, e -> IWC.get().selectPreviousWindow());
+        ActionManager.registerAction(ESCAPE, e -> IWC.get().escape());
+        ActionManager.registerAction(FIT_WINDOW, e -> IWC.get().fitWindow());
+        ActionManager.registerAction(RANDOM_COLOR, e -> ColorView.setColor(ColorUtil.getRandomPleasant()));
+        //ActionManager.registerAction(RIGHT, e -> ...);
+        ActionManager.registerAction(SWITCH_TAB, e -> IWC.get().selectNextWindow());
+        ActionManager.registerAction(SWITCH_TAB_BACK, e -> IWC.get().selectPreviousWindow());
     }
 
     private void move(int right, int down) {

@@ -37,7 +37,7 @@ import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
 import com.calabi.pixelator.view.palette.PaletteEditor;
 
-public class ImageWindow extends BasicWindow {
+public class ImageWindow extends BasicWindow { //TODO: Extract models for image / palette / animation window
 
     public static final double MIN_WIDTH = 172;
     public static final double MIN_HEIGHT = 112;
@@ -62,21 +62,31 @@ public class ImageWindow extends BasicWindow {
             }
         }
         imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
-        if (imageFile.getCategory() == Category.IMAGE) {
-            setContent(imageEditor);
-        } else {
-            setContent(imageEditor);
-            Button preview = new Button("Preview");
-            preview.setOnAction(e -> ColorView.getPaletteSelection().changePreview(imageFile));
-            Button apply = new Button("Apply");
-            ColorView.getPaletteSelection().getEditor().updateImage(imageEditor.getImage());
-            apply.setDisable(true);
+        setContent(imageEditor);
+        switch(imageFile.getCategory()) {
+            case ANIMATION:
+                ImageButton previousFrame = new ImageButton(Images.ARROW_W);
+                previousFrame.setOnAction(e -> imageEditor.previousFrame());
+                ImageButton nextFrame = new ImageButton(Images.ARROW_E);
+                nextFrame.setOnAction(e -> imageEditor.nextFrame());
+                HBox framePane = new HBox(previousFrame, nextFrame);
+                setLowerContent(framePane);
+                break;
+            case IMAGE:
+                break;
+            case PALETTE:
+                Button preview = new Button("Preview");
+                preview.setOnAction(e -> ColorView.getPaletteSelection().changePreview(imageFile));
+                Button apply = new Button("Apply");
+                ColorView.getPaletteSelection().getEditor().updateImage(imageEditor.getImage());
+                apply.setDisable(true);
 
-            preview.setGraphic(Images.OPEN.getImageView());
-            Region space = new Region();
-            HBox.setHgrow(space, Priority.ALWAYS);
-            HBox buttons = new HBox(preview, space, apply);
-            setLowerContent(buttons);
+                preview.setGraphic(Images.OPEN.getImageView());
+                Region space = new Region();
+                HBox.setHgrow(space, Priority.ALWAYS);
+                HBox buttons = new HBox(preview, space, apply);
+                setLowerContent(buttons);
+                break;
         }
 
         setOnScroll(e -> onScroll(e));
@@ -144,7 +154,8 @@ public class ImageWindow extends BasicWindow {
         double prefHeight = Math.ceil(getImageView().getHeight() * getImageView().getScaleY()
                 + getHeaderHeight()
                 + BasicWindow.RESIZE_MARGIN * 2
-                + (Category.PALETTE.equals(getFile().getCategory()) ? 24 : 0));
+                + getLowerContentHeight())
+                - 1;
 
         double maxWidth = ((IWC) getParent()).getWidth();
         double maxHeight = ((IWC) getParent()).getHeight();

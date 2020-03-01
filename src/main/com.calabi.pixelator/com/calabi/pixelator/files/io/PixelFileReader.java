@@ -7,8 +7,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Properties;
 
-import javafx.scene.image.Image;
-
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.FileConfig;
 import com.calabi.pixelator.files.PixelFileBuilder;
@@ -19,11 +18,11 @@ public abstract class PixelFileReader {
 
     public abstract PixelFileBuilder read(File file) throws IOException;
 
-    Image findImage(File directory, String name) throws MalformedURLException {
+    WritableImage findImage(File directory, String name) throws MalformedURLException {
         for (File file : directory.listFiles()) {
             if (name.equals(file.getName())
                     && Extension.PNG.equals(FileUtil.getExtension(file))) {
-                return new Image(file.toURI().toURL().toString());
+                return new WritableImage(file.toURI().toURL().toString());
             }
         }
         return null;

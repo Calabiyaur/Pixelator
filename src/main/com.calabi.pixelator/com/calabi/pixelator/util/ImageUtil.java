@@ -16,41 +16,24 @@ import java.util.Set;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 import javax.imageio.ImageIO;
 
+import com.sun.javafx.tk.PlatformImage;
+
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.meta.PixelArray;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.start.ExceptionHandler;
 
 public class ImageUtil {
 
-    /**
-     * Return a writable copy of the given image.
-     */
-    public static WritableImage createWritableImage(Image image) {
-        PixelReader r = image.getPixelReader();
-
-        int width = (int) image.getWidth();
-        int height = (int) image.getHeight();
-
-        WritableImage writableImage = new WritableImage(width, height);
-        PixelWriter writer = writableImage.getPixelWriter();
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                writer.setColor(i, j, r.getColor(i, j));
-            }
-        }
-        return writableImage;
-    }
-
     public static WritableImage makeWritableIfNot(Image image) {
         if (image instanceof WritableImage) {
-            return ((WritableImage) image);
+            return (WritableImage) image;
         } else {
-            return createWritableImage(image);
+            return new WritableImage(image);
         }
     }
 
@@ -149,6 +132,27 @@ public class ImageUtil {
             }
         }
         return null;
+    }
+
+    public static Image fromPlatformImage(PlatformImage platformImage) {
+        com.sun.prism.Image prismImage = (com.sun.prism.Image) platformImage;
+        int width = prismImage.getWidth();
+        int height = prismImage.getHeight();
+        WritableImage image = new WritableImage(width, height);
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                int argb = prismImage.getArgb(i, j);
+                double a = (0xff & (argb >> 24)) / 255d;
+                double r = (0xff & (argb >> 16)) / 255d;
+                double g = (0xff & (argb >> 8)) / 255d;
+                double b = (0xff & (argb)) / 255d;
+                Color color = Color.color(r, g, b, a);
+                image.getPixelWriter().setColor(i, j, color);
+            }
+        }
+
+        return image;
     }
 
 }

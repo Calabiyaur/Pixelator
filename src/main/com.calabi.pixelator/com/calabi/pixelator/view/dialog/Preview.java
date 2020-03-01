@@ -5,16 +5,15 @@ import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 import org.apache.logging.log4j.util.TriConsumer;
 
 import com.calabi.pixelator.control.image.ScalableImageView;
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.meta.Point;
-import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.view.editor.ImagePreview;
 import com.calabi.pixelator.view.tool.Pick;
 
@@ -26,7 +25,7 @@ class Preview extends BasicScrollPane {
     private boolean enabled = false;
 
     Preview(Image image) {
-        WritableImage writableImage = ImageUtil.createWritableImage(image);
+        WritableImage writableImage = new WritableImage(image);
         imageView = new ScalableImageView(writableImage);
         setOnRawScroll(e -> imageView.scroll(e));
         reader = image.getPixelReader();

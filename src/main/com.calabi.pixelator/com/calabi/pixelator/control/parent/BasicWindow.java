@@ -1,6 +1,7 @@
 package com.calabi.pixelator.control.parent;
 
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -127,6 +128,16 @@ public class BasicWindow extends DraggablePane {
             innerContent.getChildren().add(region);
         } else {
             innerContent.getChildren().set(1, region);
+        }
+        innerContent.setSpacing(4);
+    }
+
+    protected double getLowerContentHeight() {
+        ObservableList<Node> innerChildren = innerContent.getChildren();
+        if (innerChildren.size() <= 1) {
+            return 0;
+        } else {
+            return ((Region) innerChildren.get(1)).getHeight() + innerContent.getSpacing();
         }
     }
 
