@@ -5,6 +5,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import com.calabi.pixelator.start.Pixelator;
+
 public class SaveRequestDialog extends BasicDialog {
 
     private static Result answer;
@@ -24,6 +26,7 @@ public class SaveRequestDialog extends BasicDialog {
         Stage exit = new Stage();
         exit.setTitle("Unsaved changes");
         exit.initModality(Modality.APPLICATION_MODAL);
+        exit.initOwner(Pixelator.getPrimaryStage());
         exit.setResizable(false);
 
         SaveRequestDialog dialog = new SaveRequestDialog();
