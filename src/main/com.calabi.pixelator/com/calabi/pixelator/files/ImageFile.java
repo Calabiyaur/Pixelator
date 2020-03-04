@@ -2,17 +2,16 @@ package com.calabi.pixelator.files;
 
 import java.io.File;
 
-import javafx.scene.image.Image;
-
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.util.FileUtil;
 
 public class ImageFile extends PixelFile {
 
-    public ImageFile(File file, Image image) {
+    public ImageFile(File file, WritableImage image) {
         super(Category.IMAGE, file, image);
     }
 
-    ImageFile(File file, Image image, Category category) {
+    ImageFile(File file, WritableImage image, Category category) {
         super(category, file, image);
     }
 

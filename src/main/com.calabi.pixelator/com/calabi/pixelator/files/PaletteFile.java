@@ -2,15 +2,14 @@ package com.calabi.pixelator.files;
 
 import java.io.File;
 
-import javafx.scene.image.Image;
-
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.util.FileUtil;
 
 public class PaletteFile extends PixelFile {
 
-    private Image preview;
+    private WritableImage preview;
 
-    public PaletteFile(File file, Image palette) {
+    public PaletteFile(File file, WritableImage palette) {
         super(Category.PALETTE, file, palette);
     }
 
@@ -19,11 +18,11 @@ public class PaletteFile extends PixelFile {
         return file == null ? "New Palette" : FileUtil.removeType(file.getName());
     }
 
-    public Image getPreview() {
+    public WritableImage getPreview() {
         return preview;
     }
 
-    public void setPreview(Image preview) {
+    public void setPreview(WritableImage preview) {
         this.preview = preview;
     }
 }

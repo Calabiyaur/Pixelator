@@ -16,11 +16,11 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import com.calabi.pixelator.control.basic.BasicMenuBar;
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.control.parent.ResizableBorderPane;
 import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.ImageFile;
@@ -277,8 +277,9 @@ public class MainScene extends Scene {
     private void createFromClipboard() {
         Image image = ImageUtil.getFromClipboard();
         if (image != null) {
-            IWC.get().addImage(new ImageFile(null, image));
-            getEditor().setCleanImage(new WritableImage((int) image.getWidth(), (int) image.getHeight()));
+            WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
+            IWC.get().addImage(new ImageFile(null, writableImage));
+            getEditor().setCleanImage(writableImage);
             getEditor().updateDirty();
         }
     }

@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.util.EnumSet;
 import java.util.Properties;
+import java.util.Set;
 
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.Extension;
@@ -16,12 +18,14 @@ import com.calabi.pixelator.util.FileUtil;
 
 public abstract class PixelFileReader {
 
+    private static final Set<Extension> validExtensions = EnumSet.of(Extension.PNG, Extension.GIF);
+
     public abstract PixelFileBuilder read(File file) throws IOException;
 
     WritableImage findImage(File directory, String name) throws MalformedURLException {
         for (File file : directory.listFiles()) {
             if (name.equals(file.getName())
-                    && Extension.PNG.equals(FileUtil.getExtension(file))) {
+                    && validExtensions.contains(FileUtil.getExtension(file))) {
                 return new WritableImage(file.toURI().toURL().toString());
             }
         }

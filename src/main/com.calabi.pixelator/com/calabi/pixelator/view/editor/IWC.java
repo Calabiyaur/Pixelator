@@ -8,10 +8,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 import com.calabi.pixelator.control.image.ScalableImageView;
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.CompoundBooleanProperty;
@@ -93,8 +93,8 @@ public class IWC extends Pane {
         }
     }
 
-    public Image getCurrentImage() {
-        return currentWindow.get().getImageView().getImage();
+    public WritableImage getCurrentImage() {
+        return ((WritableImage) currentWindow.get().getImageView().getImage());
     }
 
     public PixelFile getCurrentFile() {

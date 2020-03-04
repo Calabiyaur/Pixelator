@@ -3,18 +3,19 @@ package com.calabi.pixelator.files;
 import java.io.File;
 import java.util.Properties;
 
-import javafx.scene.image.Image;
 import javafx.util.Builder;
 
 import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.util.Check;
 
 public class PixelFileBuilder implements Builder<PixelFile> {
 
     private Category category;
     private File file;
     private WritableImage image;
-    private Image preview;
-    private Properties properties = new Properties();
+    private WritableImage preview;
+    private Properties properties;
+    private Metadata metadata;
 
     public PixelFileBuilder() {
     }
@@ -29,6 +30,7 @@ public class PixelFileBuilder implements Builder<PixelFile> {
 
     public PixelFileBuilder file(File file) {
         this.file = file;
+        this.metadata = Metadata.read(file);
         return this;
     }
 
@@ -37,7 +39,7 @@ public class PixelFileBuilder implements Builder<PixelFile> {
         return this;
     }
 
-    public PixelFileBuilder preview(Image preview) {
+    public PixelFileBuilder preview(WritableImage preview) {
         this.preview = preview;
         return this;
     }
@@ -48,6 +50,10 @@ public class PixelFileBuilder implements Builder<PixelFile> {
     }
 
     public PixelFile build() {
+        Check.notNull(category);
+        Check.notNull(file);
+        Check.notNull(image);
+
         PixelFile pixelFile;
         if (!Category.PALETTE.equals(category)) {
             pixelFile = new ImageFile(file, image, category);
@@ -55,7 +61,12 @@ public class PixelFileBuilder implements Builder<PixelFile> {
             pixelFile = new PaletteFile(file, image);
             ((PaletteFile) pixelFile).setPreview(preview);
         }
-        pixelFile.getProperties().putAll(properties);
+        if (properties != null) {
+            pixelFile.getProperties().putAll(properties);
+        }
+        if (metadata != null) {
+            pixelFile.setMetaData(metadata);
+        }
         return pixelFile;
     }
 

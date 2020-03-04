@@ -2,7 +2,6 @@ package com.calabi.pixelator.view.dialog;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
-import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseEvent;
@@ -24,8 +23,8 @@ class Preview extends BasicScrollPane {
     private PixelWriter writer;
     private boolean enabled = false;
 
-    Preview(Image image) {
-        WritableImage writableImage = new WritableImage(image);
+    Preview(WritableImage image) {
+        WritableImage writableImage = image.copy();
         imageView = new ScalableImageView(writableImage);
         setOnRawScroll(e -> imageView.scroll(e));
         reader = image.getPixelReader();

@@ -31,7 +31,7 @@ public final class PIXImageWriter extends PixelFileWriter {
         if (!imageDirectory.exists() && !imageDirectory.createNewFile()) {
             throw new IOException("Failed to create image file");
         }
-        super.saveImage(pixelFile.getImage(), imageDirectory);
+        super.saveImage(pixelFile.getImage(), imageDirectory, pixelFile.getMetaData());
 
         // Create preview file
         if (isNew && pixelFile instanceof PaletteFile && ((PaletteFile) pixelFile).getPreview() != null) {
@@ -91,7 +91,7 @@ public final class PIXImageWriter extends PixelFileWriter {
         if (!previewDirectory.exists() && !previewDirectory.createNewFile()) {
             throw new IOException("Failed to create preview file");
         }
-        super.saveImage(paletteFile.getPreview(), previewDirectory);
+        super.saveImage(paletteFile.getPreview(), previewDirectory, null);
     }
 
 }

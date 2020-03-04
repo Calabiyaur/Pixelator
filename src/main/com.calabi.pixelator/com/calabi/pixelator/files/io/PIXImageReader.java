@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
-import javafx.scene.image.Image;
-
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.FileConfig;
 import com.calabi.pixelator.files.PixelFileBuilder;
@@ -22,7 +20,7 @@ public final class PIXImageReader extends PixelFileReader {
         WritableImage image = super.findImage(unzippedFile, FileConfig.NAME_IMAGE);
         PixelFileBuilder builder = new PixelFileBuilder().file(file).image(image);
 
-        Image preview = super.findImage(unzippedFile, FileConfig.NAME_PREVIEW);
+        WritableImage preview = super.findImage(unzippedFile, FileConfig.NAME_PREVIEW);
         if (preview != null) {
             builder.preview(preview);
         }

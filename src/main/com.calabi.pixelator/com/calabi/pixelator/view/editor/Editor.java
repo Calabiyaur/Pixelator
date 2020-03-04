@@ -49,7 +49,7 @@ public abstract class Editor extends StackPane {
         updateDirty();
     }
 
-    public abstract void updateImage(Image image);
+    public abstract void updateImage(WritableImage image);
 
     public final Image getCleanImage() {
         return cleanImage;
@@ -60,7 +60,7 @@ public abstract class Editor extends StackPane {
     }
 
     public final void undirty() {
-        cleanImage = new WritableImage(getImage());
+        cleanImage = getImage().copy();
         updateDirty();
     }
 

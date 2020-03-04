@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
 import com.calabi.pixelator.control.image.ScalableImageView;
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.control.parent.BasicWindow;
 import com.calabi.pixelator.files.Category;
@@ -50,7 +51,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
     public ImageWindow(ScalableImageView imageView, PixelFile imageFile) {
         super(true);
         this.imageFile = imageFile;
-        imageView.imageProperty().addListener((ov, o, n) -> this.imageFile.setImage(n));
+        imageView.imageProperty().addListener((ov, o, n) -> this.imageFile.setImage((WritableImage) n));
         imageEditor = new ImageEditor(imageFile, imageView);
         setText(imageFile.getName());
         if (imageFile.getCategory() == Category.PALETTE) {

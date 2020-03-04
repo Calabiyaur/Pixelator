@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.image.PixelatedImageView;
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.res.Images;
@@ -35,7 +36,7 @@ public class ChangePaletteDialog extends BasicDialog {
     private final Map<Color, ChangeColorButton> buttonMap = new HashMap<>();
     private Preview preview;
 
-    public ChangePaletteDialog(Image image, PaletteFile paletteFile) {
+    public ChangePaletteDialog(WritableImage image, PaletteFile paletteFile) {
         preview = new Preview(image);
         setPrefSize(1200, 600);
         setTitle("Change Palette");
@@ -147,7 +148,7 @@ public class ChangePaletteDialog extends BasicDialog {
         });
     }
 
-    public Image getImage() {
+    public WritableImage getImage() {
         return preview.getImage();
     }
 

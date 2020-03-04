@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.control.image.ScalableImageView;
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.meta.Point;
@@ -94,7 +95,7 @@ public class PaletteEditor extends Editor {
     }
 
     @Override
-    public void updateImage(Image image) {
+    public void updateImage(WritableImage image) {
         getImageView().setImage(image);
         getFile().setImage(image);
     }

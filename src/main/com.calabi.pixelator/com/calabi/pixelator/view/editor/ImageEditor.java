@@ -754,7 +754,7 @@ public class ImageEditor extends Editor {
     }
 
     @Override
-    public void updateImage(Image image) {
+    public void updateImage(WritableImage image) {
         currentTool.lockAndReset();
         PixelReader r = image.getPixelReader();
         for (int i = 0; i < width.get(); i++) {

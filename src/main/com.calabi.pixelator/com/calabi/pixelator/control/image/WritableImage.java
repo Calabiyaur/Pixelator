@@ -3,11 +3,7 @@ package com.calabi.pixelator.control.image;
 import java.lang.ref.WeakReference;
 
 import javafx.animation.Timeline;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -15,7 +11,6 @@ import javafx.scene.image.PixelWriter;
 import com.sun.javafx.tk.PlatformImage;
 import org.apache.commons.lang3.NotImplementedException;
 
-import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.ReflectionUtil;
 
 public class WritableImage extends javafx.scene.image.WritableImage {
@@ -25,8 +20,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     private SimpleIntegerProperty index;
     private Timeline timeline;
 
-    private ObjectProperty<Image> current = new SimpleObjectProperty<>();
-    private ObservableList<Frame> frames = FXCollections.observableArrayList();
+    private PlatformImage[] frames;
 
     public WritableImage(String path) {
         this(new Image(path));
@@ -44,24 +38,20 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
         if (animated) {
             Object animation = ReflectionUtil.getField(image, "animation");
-            PlatformImage[] animFrames = ReflectionUtil.getField(image, "animFrames");
+            frames = ReflectionUtil.getField(image, "animFrames");
             index = ReflectionUtil.getField(animation, "frameIndex");
             timeline = ReflectionUtil.getField(animation, "timeline");
 
             ReflectionUtil.setField(this, "animation", animation);
-            ReflectionUtil.setField(this, "animFrames", animFrames);
+            ReflectionUtil.setField(this, "animFrames", frames);
             ReflectionUtil.setField(animation, "imageRef", new WeakReference<>(this));
 
             timeline.stop();
 
-            if (animFrames == null || animFrames.length == 0) {
+            if (frames == null || frames.length == 0) {
                 //TODO
                 throw new NotImplementedException("");
             }
-            for (PlatformImage animFrame : animFrames) {
-                frames.add(new Frame(animFrame));
-            }
-            current.set(frames.get(0).image);
 
             ReflectionUtil.invokeMethod(index, "invalidated");
 
@@ -93,18 +83,22 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         this.animated = animated;
     }
 
+    public PlatformImage[] getFrames() {
+        return frames;
+    }
+
     public void next() {
         if (!isAnimated()) {
             throw new IllegalStateException();
         }
-        index.set((index.get() + 1) % frames.size());
+        index.set((index.get() + 1) % frames.length);
     }
 
     public void previous() {
         if (!isAnimated()) {
             throw new IllegalStateException();
         }
-        index.set(Math.floorMod(index.get() - 1, frames.size()));
+        index.set(Math.floorMod(index.get() - 1, frames.length));
     }
 
     public void play() {
@@ -113,16 +107,6 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
     public void stop() {
         timeline.stop();
-    }
-
-    private static class Frame {
-        private PlatformImage platformImage;
-        private Image image;
-
-        public Frame(PlatformImage platformImage) {
-            this.platformImage = platformImage;
-            this.image = ImageUtil.fromPlatformImage(platformImage);
-        }
     }
 
 }

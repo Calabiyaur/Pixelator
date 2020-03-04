@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.GridPane;
@@ -21,7 +20,7 @@ public abstract class PreviewDialog extends BasicDialog {
     private GridPane leftContent;
     private Preview preview;
 
-    public PreviewDialog(Image image) {
+    public PreviewDialog(WritableImage image) {
         setPrefSize(480, 320);
 
         leftContent = new GridPane();
@@ -40,8 +39,8 @@ public abstract class PreviewDialog extends BasicDialog {
         preview.updateImage(action);
     }
 
-    protected final void listenToUpdate(BasicControl... controls) {
-        for (BasicControl control : controls) {
+    protected final void listenToUpdate(BasicControl<?>... controls) {
+        for (BasicControl<?> control : controls) {
             control.valueProperty().addListener(o -> Platform.runLater(() -> updateImage()));
             //TODO: Double performance of swap button (outline dialog) by buffering updates
         }
@@ -86,7 +85,7 @@ public abstract class PreviewDialog extends BasicDialog {
         return preview;
     }
 
-    public Image getImage() {
+    public WritableImage getImage() {
         return preview.getImage();
     }
 

@@ -7,9 +7,9 @@ import java.util.Properties;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.util.Check;
 import com.calabi.pixelator.util.FileUtil;
 
@@ -17,12 +17,13 @@ public abstract class PixelFile {
 
     private final Category category;
     private File file;
-    private Image image; //TODO: Delete this and leave it up to the subclass to define how the data should be stored
+    private WritableImage image; //TODO: Delete this and leave it up to the subclass to define how the data should be stored
     private StringProperty name = new SimpleStringProperty();
     private Extension extension;
     private Properties properties = new Properties();
+    private Metadata metaData;
 
-    public PixelFile(Category category, File file, Image image) {
+    public PixelFile(Category category, File file, WritableImage image) {
         Check.notNull(category);
         Check.notNull(image);
 
@@ -47,11 +48,11 @@ public abstract class PixelFile {
         return file;
     }
 
-    public final Image getImage() {
+    public final WritableImage getImage() {
         return image;
     }
 
-    public final void setImage(Image image) {
+    public final void setImage(WritableImage image) {
         this.image = image;
     }
 
@@ -71,6 +72,18 @@ public abstract class PixelFile {
         return extension;
     }
 
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public Metadata getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(Metadata metaData) {
+        this.metaData = metaData;
+    }
+
     public final FileChooser.ExtensionFilter getUsedFilter(List<FileChooser.ExtensionFilter> filters) {
         if (extension == null) {
             return null;
@@ -88,10 +101,6 @@ public abstract class PixelFile {
     @Override
     public String toString() {
         return String.format("'%s' (path: %s)", name, file.toString());
-    }
-
-    public Properties getProperties() {
-        return properties;
     }
 
 }

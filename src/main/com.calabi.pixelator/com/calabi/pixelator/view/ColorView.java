@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import com.calabi.pixelator.control.basic.ImageButton;
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.start.ActionManager;
@@ -109,7 +110,7 @@ public class ColorView extends BorderPane {
         return get().paletteSelection.getFile() == null ? "New Palette" : get().paletteSelection.getFile().getName();
     }
 
-    public static void addPalette(Image image) {
+    public static void addPalette(WritableImage image) {
         PaletteFile file = new PaletteFile(null, image);
         get().paletteSelection.addPalette(file);
     }

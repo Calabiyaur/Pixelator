@@ -8,7 +8,7 @@ public final class BasicImageWriter extends PixelFileWriter {
 
     @Override
     public void write(PixelFile pixelFile) throws IOException {
-        super.saveImage(pixelFile.getImage(), pixelFile.getFile());
+        super.saveImage(pixelFile.getImage(), pixelFile.getFile(), pixelFile.getMetaData());
     }
 
     @Override
