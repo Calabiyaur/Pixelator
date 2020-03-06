@@ -18,6 +18,8 @@ import com.calabi.pixelator.util.ReflectionUtil;
 
 public class WritableImage extends javafx.scene.image.WritableImage {
 
+    public static final int DEFAULT_FRAME_DELAY = 60;
+
     private boolean animated;
 
     private SimpleIntegerProperty index;
@@ -74,6 +76,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         index = ReflectionUtil.getField(animation, "frameIndex");
         timeline = ReflectionUtil.getField(animation, "timeline");
 
+        assert timeline != null;
         timeline.stop();
 
         if (frames == null || frames.length == 0) {
@@ -91,10 +94,23 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         int width = (int) getWidth();
         int height = (int) getHeight();
 
-        WritableImage writableImage = new WritableImage(width, height);
-        PixelWriter writer = writableImage.getPixelWriter();
-        writer.setPixels(0, 0, width, height, r, 0, 0);
-        return writableImage;
+        WritableImage copy = new WritableImage(width, height);
+        PixelWriter writer = copy.getPixelWriter();
+        if (animated) {
+            copy.initAnimation(getFrameCount(), DEFAULT_FRAME_DELAY);
+            for (int n = 0; n < frames.length; n++) {
+                PlatformImage frame = frames[n];
+                PlatformImage copyFrame = copy.frames[n];
+                for (int i = 0; i < width; i++) {
+                    for (int j = 0; j < height; j++) {
+                        copyFrame.setArgb(i, j, frame.getArgb(i, j));
+                    }
+                }
+            }
+        } else {
+            writer.setPixels(0, 0, width, height, r, 0, 0);
+        }
+        return copy;
     }
 
     public boolean isAnimated() {
@@ -147,6 +163,50 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         boolean wasRunning = Animation.Status.RUNNING.equals(timeline.getStatus());
         timeline.pause();
         return wasRunning;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        WritableImage other = (WritableImage) o;
+
+        int width = (int) this.getWidth();
+        int height = (int) this.getHeight();
+
+        if (width != other.getWidth() || height != other.getHeight()) {
+            return false;
+        }
+
+        if (animated) {
+            for (int n = 0; n < frames.length; n++) {
+                PlatformImage frame = frames[n];
+                PlatformImage otherFrame = other.frames[n];
+                for (int i = 0; i < width; i++) {
+                    for (int j = 0; j < height; j++) {
+                        if (frame.getArgb(i, j) != otherFrame.getArgb(i, j)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        } else {
+            PixelReader reader1 = this.getPixelReader();
+            PixelReader reader2 = other.getPixelReader();
+
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    if (!reader1.getColor(i, j).equals(reader2.getColor(i, j))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 }

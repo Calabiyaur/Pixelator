@@ -582,7 +582,7 @@ public class ImageEditor extends Editor {
 
             int frameCount = oldImage.getFrameCount();
             int index = oldImage.getIndex();
-            newImage.initAnimation(frameCount, 60); //TODO: User frame delay of oldImage
+            newImage.initAnimation(frameCount, WritableImage.DEFAULT_FRAME_DELAY); //TODO: User frame delay of oldImage
 
             for (int i = index; i < index + frameCount; i++) {
                 oldImage.setIndex(i % frameCount);

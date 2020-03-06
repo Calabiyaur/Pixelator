@@ -8,7 +8,6 @@ import javafx.scene.layout.StackPane;
 import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.PixelFile;
-import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.view.undo.UndoManager;
 import com.calabi.pixelator.view.undo.Undoable;
 
@@ -65,7 +64,7 @@ public abstract class Editor extends StackPane {
     }
 
     public final void updateDirty() {
-        dirty.set(!ImageUtil.equals(imageView.getImage(), cleanImage));
+        dirty.set(!imageView.getImage().equals(cleanImage));
     }
 
     public final BooleanProperty undoEnabledProperty() {

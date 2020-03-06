@@ -29,34 +29,6 @@ import com.calabi.pixelator.start.ExceptionHandler;
 
 public class ImageUtil {
 
-    public static boolean equals(Image image1, Image image2) {
-        if (image1 == image2) {
-            return true;
-        }
-        if (image1 == null || image2 == null) {
-            return false;
-        }
-
-        PixelReader reader1 = image1.getPixelReader();
-        PixelReader reader2 = image2.getPixelReader();
-
-        int width = (int) image1.getWidth();
-        int height = (int) image1.getHeight();
-
-        if (width != image2.getWidth() || height != image2.getHeight()) {
-            return false;
-        }
-
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (!reader1.getColor(i, j).equals(reader2.getColor(i, j))) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public static Image get(PixelArray pixels) {
         int x1 = Integer.MAX_VALUE;
         int y1 = Integer.MAX_VALUE;
