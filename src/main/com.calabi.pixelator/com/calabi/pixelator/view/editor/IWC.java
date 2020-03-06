@@ -36,6 +36,9 @@ public class IWC extends Pane {
     private CompoundBooleanProperty overallDirty = new CompoundBooleanProperty(false);
     private BooleanProperty showBackground = new SimpleBooleanProperty(false);
 
+    ChangeListener<? super Number> frameChangeListener = (ov, o, n)
+            -> ToolView.get().setFrameIndex(getCurrentImage().getIndex(), getCurrentImage().getFrameCount());
+
     private IWC() {
         currentWindow = new SimpleObjectProperty<>();
         ToolManager.imageWindowProperty().bind(currentWindow);
@@ -55,6 +58,7 @@ public class IWC extends Pane {
                 overallDirty.remove(o.getEditor().dirtyProperty());
                 showBackground.unbind();
                 showBackground.set(false);
+                updateImage(o.getImage(), null);
                 ToolView.get().setPreview(null, null, null);
                 InfoView.setMousePosition(null);
                 InfoView.setColorCount(null);
@@ -153,24 +157,27 @@ public class IWC extends Pane {
     }
 
     private void updateImage(WritableImage oldImage, ImageWindow window) {
-        if (window.getFile().getCategory() != Category.PALETTE) {
-            ToolView.get().setPreview(window.getImage(),
-                    window.getEditor().getToolImage(),
-                    window.getEditor().getSelectionImage());
-            ToolView.get().setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
-            ToolView.get().setZoom(window.getImageView().scaleXProperty().doubleValue());
+        if (window != null) {
+            if (window.getFile().getCategory() != Category.PALETTE) {
+                ToolView.get().setPreview(window.getImage(),
+                        window.getEditor().getToolImage(),
+                        window.getEditor().getSelectionImage());
+                ToolView.get().setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
+                ToolView.get().setZoom(window.getImageView().scaleXProperty().doubleValue());
 
-            ChangeListener<? super Number> frameChangeListener = (ov, o, n)
-                    -> ToolView.get().setFrameIndex(window.getImage().getIndex(), window.getImage().getFrameCount());
-            if (oldImage != null && oldImage.isAnimated()) {
-                oldImage.indexProperty().removeListener(frameChangeListener);
+                if (window.getImage().isAnimated()) {
+                    window.getImage().indexProperty().addListener(frameChangeListener);
+                    frameChangeListener.changed(null, null, null);
+                } else {
+                    ToolView.get().hideFrameIndex();
+                }
             }
-            if (window.getImage().isAnimated()) {
-                window.getImage().indexProperty().addListener(frameChangeListener);
-                frameChangeListener.changed(null, null, null);
-            } else {
-                ToolView.get().hideFrameIndex();
-            }
+        } else {
+            ToolView.get().hideFrameIndex();
+        }
+
+        if (oldImage != null && oldImage.isAnimated()) {
+            oldImage.indexProperty().removeListener(frameChangeListener);
         }
     }
 

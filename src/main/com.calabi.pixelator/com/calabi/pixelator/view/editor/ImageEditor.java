@@ -578,6 +578,8 @@ public class ImageEditor extends Editor {
 
         if (oldImage.isAnimated()) {
 
+            boolean running = oldImage.stop();
+
             int frameCount = oldImage.getFrameCount();
             int index = oldImage.getIndex();
             newImage.initAnimation(frameCount, 60); //TODO: User frame delay of oldImage
@@ -588,6 +590,9 @@ public class ImageEditor extends Editor {
                 consumer.accept(oldImage, newImage, oldImage.getPixelReader(), newImage.getPixelWriter());
             }
             newImage.setIndex(index);
+            if (running) {
+                newImage.play();
+            }
 
         } else {
             consumer.accept(oldImage, newImage, oldImage.getPixelReader(), newImage.getPixelWriter());

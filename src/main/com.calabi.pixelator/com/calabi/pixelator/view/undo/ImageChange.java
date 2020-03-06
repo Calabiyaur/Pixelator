@@ -4,14 +4,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 
 import com.calabi.pixelator.control.image.PixelatedImageView;
+import com.calabi.pixelator.control.image.WritableImage;
 
 public class ImageChange implements Undoable {
 
     private PixelatedImageView imageView;
-    private Image previousImage;
-    private Image image;
+    private WritableImage previousImage;
+    private WritableImage image;
 
-    public ImageChange(PixelatedImageView imageView, Image previousImage, Image image) {
+    public ImageChange(PixelatedImageView imageView, WritableImage previousImage, WritableImage image) {
         this.imageView = imageView;
         this.previousImage = previousImage;
         this.image = image;
@@ -20,11 +21,23 @@ public class ImageChange implements Undoable {
     @Override
     public void undo() {
         imageView.setImage(previousImage);
+        if (image.isAnimated()) {
+            previousImage.setIndex(image.getIndex());
+            if (image.stop()) {
+                previousImage.play();
+            }
+        }
     }
 
     @Override
     public void redo() {
         imageView.setImage(image);
+        if (previousImage.isAnimated()) {
+            image.setIndex(previousImage.getIndex());
+            if (previousImage.stop()) {
+                image.play();
+            }
+        }
     }
 
     @Override

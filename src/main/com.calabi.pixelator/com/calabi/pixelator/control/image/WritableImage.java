@@ -2,6 +2,7 @@ package com.calabi.pixelator.control.image;
 
 import java.lang.ref.WeakReference;
 
+import javafx.animation.Animation;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -142,8 +143,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         timeline.playFrom(timeline.getKeyFrames().get(getIndex()).getTime());
     }
 
-    public void stop() {
+    public boolean stop() {
+        boolean wasRunning = Animation.Status.RUNNING.equals(timeline.getStatus());
         timeline.pause();
+        return wasRunning;
     }
 
 }
