@@ -161,7 +161,7 @@ public class IWC extends Pane {
             ToolView.get().setZoom(window.getImageView().scaleXProperty().doubleValue());
 
             ChangeListener<? super Number> frameChangeListener = (ov, o, n)
-                    -> ToolView.get().setFrameIndex(window.getImage().getIndex(), window.getImage().getFrameLength());
+                    -> ToolView.get().setFrameIndex(window.getImage().getIndex(), window.getImage().getFrameCount());
             if (oldImage != null && oldImage.isAnimated()) {
                 oldImage.indexProperty().removeListener(frameChangeListener);
             }

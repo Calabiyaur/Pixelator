@@ -12,6 +12,7 @@ import javafx.scene.image.PixelWriter;
 import com.sun.javafx.tk.PlatformImage;
 import org.apache.commons.lang3.NotImplementedException;
 
+import com.calabi.pixelator.util.Check;
 import com.calabi.pixelator.util.ReflectionUtil;
 
 public class WritableImage extends javafx.scene.image.WritableImage {
@@ -22,7 +23,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     private Timeline timeline;
 
     private PlatformImage[] frames;
-    private IntegerProperty frameLength;
+    private IntegerProperty frameCount;
 
     public WritableImage(String path) {
         this(new Image(path));
@@ -39,22 +40,11 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         animated = reader == null;
 
         if (animated) {
-            Object animation = ReflectionUtil.getField(image, "animation");
-            frames = ReflectionUtil.getField(image, "animFrames");
-            index = ReflectionUtil.getField(animation, "frameIndex");
-            timeline = ReflectionUtil.getField(animation, "timeline");
+            Object animation = initAnimationInternal(image);
 
             ReflectionUtil.setField(this, "animation", animation);
             ReflectionUtil.setField(this, "animFrames", frames);
             ReflectionUtil.setField(animation, "imageRef", new WeakReference<>(this));
-
-            timeline.stop();
-
-            if (frames == null || frames.length == 0) {
-                //TODO
-                throw new NotImplementedException("");
-            }
-            frameLength = new SimpleIntegerProperty(frames.length);
 
             ReflectionUtil.invokeMethod(index, "invalidated");
 
@@ -64,6 +54,34 @@ public class WritableImage extends javafx.scene.image.WritableImage {
             ReflectionUtil.setField(this, "platformImage", platformImage);
 
         }
+    }
+
+    public void initAnimation(int frameCount, int frameDelay) {
+        Check.ensure(!animated);
+        Check.ensure(frameCount > 0);
+
+        ImageLoader loader = new ImageLoader(frameCount, frameDelay, getWidth(), getHeight());
+        ReflectionUtil.invokeMethod(this, "initializeAnimatedImage", loader);
+
+        initAnimationInternal(this);
+        animated = true;
+    }
+
+    private Object initAnimationInternal(Image image) {
+        Object animation = ReflectionUtil.getField(image, "animation");
+        frames = ReflectionUtil.getField(image, "animFrames");
+        index = ReflectionUtil.getField(animation, "frameIndex");
+        timeline = ReflectionUtil.getField(animation, "timeline");
+
+        timeline.stop();
+
+        if (frames == null || frames.length == 0) {
+            //TODO
+            throw new NotImplementedException("");
+        }
+        frameCount = new SimpleIntegerProperty(frames.length);
+
+        return animation;
     }
 
     public WritableImage copy() {
@@ -102,8 +120,8 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         return frames;
     }
 
-    public int getFrameLength() {
-        return frameLength == null ? 1 : frameLength.get();
+    public int getFrameCount() {
+        return frameCount == null ? 1 : frameCount.get();
     }
 
     public void next() {

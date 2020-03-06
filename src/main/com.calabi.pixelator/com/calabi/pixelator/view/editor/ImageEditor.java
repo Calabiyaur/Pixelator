@@ -574,8 +574,24 @@ public class ImageEditor extends Editor {
         currentTool.lockAndReset();
 
         WritableImage newImage = new WritableImage((int) width, (int) height);
-        Image oldImage = getImage();
-        consumer.accept(oldImage, newImage, oldImage.getPixelReader(), newImage.getPixelWriter());
+        WritableImage oldImage = getImage();
+
+        if (oldImage.isAnimated()) {
+
+            int frameCount = oldImage.getFrameCount();
+            int index = oldImage.getIndex();
+            newImage.initAnimation(frameCount, 60); //TODO: User frame delay of oldImage
+
+            for (int i = index; i < index + frameCount; i++) {
+                oldImage.setIndex(i % frameCount);
+                newImage.setIndex(i % frameCount);
+                consumer.accept(oldImage, newImage, oldImage.getPixelReader(), newImage.getPixelWriter());
+            }
+            newImage.setIndex(index);
+
+        } else {
+            consumer.accept(oldImage, newImage, oldImage.getPixelReader(), newImage.getPixelWriter());
+        }
 
         ImageChange imageChange = new ImageChange(getImageView(), oldImage, newImage);
         getImageView().setImage(imageChange.getImage());
