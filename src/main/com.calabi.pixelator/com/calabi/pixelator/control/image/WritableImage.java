@@ -121,11 +121,11 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     public void play() {
-        timeline.play();
+        timeline.playFrom(timeline.getKeyFrames().get(getIndex()).getTime());
     }
 
     public void stop() {
-        timeline.stop();
+        timeline.pause();
     }
 
 }

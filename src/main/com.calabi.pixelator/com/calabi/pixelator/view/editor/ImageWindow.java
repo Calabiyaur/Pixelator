@@ -1,5 +1,7 @@
 package com.calabi.pixelator.view.editor;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
@@ -73,8 +75,14 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
                 ImageButton nextFrame = new ImageButton(Images.NEXT_FRAME);
                 nextFrame.setOnAction(e -> imageEditor.nextFrame());
                 ToggleImageButton play = new ToggleImageButton(Images.PLAY, Images.PAUSE);
-                play.selectedProperty().addListener((ov, o, n)
-                        -> Do.when(n, () -> imageEditor.play(), () -> imageEditor.stop()));
+                AtomicInteger i = new AtomicInteger(0);
+                play.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> {
+                    i.set(getImage().getIndex());
+                    imageEditor.play();
+                }, () -> {
+                    imageEditor.stop();
+                    getImage().setIndex(i.get());
+                }));
 
                 HBox framePane = new HBox(previousFrame, nextFrame, play);
                 setLowerContent(framePane);
