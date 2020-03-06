@@ -38,6 +38,7 @@ public enum Config {
     STRETCH_KEEP_RATIO(ConfigMode.GLOBAL, ConfigType.BOOLEAN, true),
 
     // Local config
+    FRAME_INDEX(ConfigMode.IMAGE, ConfigType.INT, 0),
     IMAGE_H_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_HEIGHT(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_V_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),
@@ -64,9 +65,7 @@ public enum Config {
     }
 
     Config(ConfigMode configMode, ConfigType configType, Object def) {
-        this.configMode = configMode;
-        this.configType = configType;
-        this.def = def;
+        this(configMode, configType, null, def);
     }
 
     Config(ConfigMode configMode, ConfigType configType, Class<? extends ConfigObject> c, Object def) {
@@ -197,7 +196,7 @@ public enum Config {
         return (double) get(file, ConfigType.DOUBLE, def);
     }
 
-    public int getInt(PixelFile file, int def) {
+    public int getInt(PixelFile file) {
         return (int) get(file, ConfigType.INT, def);
     }
 

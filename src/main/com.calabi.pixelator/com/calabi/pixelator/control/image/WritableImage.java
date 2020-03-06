@@ -83,6 +83,14 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         this.animated = animated;
     }
 
+    public int getIndex() {
+        return index.get();
+    }
+
+    public void setIndex(int index) {
+        this.index.set(index);
+    }
+
     public PlatformImage[] getFrames() {
         return frames;
     }

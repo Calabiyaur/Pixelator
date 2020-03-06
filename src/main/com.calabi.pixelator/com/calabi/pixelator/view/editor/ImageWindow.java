@@ -119,6 +119,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         getImageView().setScaleY(Config.IMAGE_ZOOM_LEVEL.getDouble(getFile(), getImageView().getScaleY()));
         setPrefWidth(Config.IMAGE_WIDTH.getDouble(getFile(), getPrefWidth()));
         setPrefHeight(Config.IMAGE_HEIGHT.getDouble(getFile(), getPrefHeight()));
+        imageEditor.getImage().setIndex(Config.FRAME_INDEX.getInt(getFile()));
     }
 
     private void updateConfig() {
@@ -129,6 +130,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         Config.IMAGE_HEIGHT.putDouble(getFile(), getHeight());
         Config.IMAGE_H_SCROLL.putDouble(getFile(), getContent().getHvalue());
         Config.IMAGE_V_SCROLL.putDouble(getFile(), getContent().getVvalue());
+        Config.FRAME_INDEX.putInt(getFile(), imageEditor.getImage().getIndex());
     }
 
     private void onScroll(ScrollEvent e) {
