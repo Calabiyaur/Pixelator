@@ -289,6 +289,10 @@ public class ToolView extends VBox {
         frameLengthText.setText("Frame " + (frameIndex + 1) + " / " + frameLength);
     }
 
+    public void hideFrameIndex() {
+        frameLengthText.setText(null);
+    }
+
     public ObjectProperty<Tools> currentToolProperty() {
         return currentTool;
     }

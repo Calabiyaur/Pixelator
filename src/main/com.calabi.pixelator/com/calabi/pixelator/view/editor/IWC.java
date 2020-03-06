@@ -167,6 +167,9 @@ public class IWC extends Pane {
             }
             if (window.getImage().isAnimated()) {
                 window.getImage().indexProperty().addListener(frameChangeListener);
+                frameChangeListener.changed(null, null, null);
+            } else {
+                ToolView.get().hideFrameIndex();
             }
         }
     }
