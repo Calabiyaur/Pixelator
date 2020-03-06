@@ -55,6 +55,7 @@ public class ToolView extends VBox {
     private Pane clipWrapper;
     private Text sizeText = new Text();
     private Text zoomText = new Text();
+    private Text frameLengthText = new Text();
 
     private ToolView() {
         setStyle("-fx-background-color: #f4f4f4");
@@ -99,7 +100,8 @@ public class ToolView extends VBox {
         clipWrapper.maxHeightProperty().bind(previewStack.heightProperty());
 
         Region space = new Region();
-        HBox detailBox = new HBox(sizeText, space, zoomText);
+        HBox detailBoxTop = new HBox(sizeText, space, zoomText);
+        VBox detailBox = new VBox(detailBoxTop, frameLengthText);
         HBox.setHgrow(space, Priority.ALWAYS);
         VBox previewGrid = new VBox(new Label("PREVIEW"), clipWrapper, detailBox);
         VBox.setVgrow(previewGrid, Priority.ALWAYS);
@@ -281,6 +283,10 @@ public class ToolView extends VBox {
 
     public void setZoom(double zoom) {
         zoomText.setText(Math.round(zoom * 100) + " %");
+    }
+
+    public void setFrameIndex(int frameIndex, int frameLength) {
+        frameLengthText.setText("Frame " + (frameIndex + 1) + " / " + frameLength);
     }
 
     public ObjectProperty<Tools> currentToolProperty() {

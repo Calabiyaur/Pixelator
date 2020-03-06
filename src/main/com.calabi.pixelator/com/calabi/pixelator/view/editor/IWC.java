@@ -7,6 +7,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.Pane;
 
@@ -66,7 +67,7 @@ public class IWC extends Pane {
                 dirty.bind(window.getEditor().dirtyProperty());
                 overallDirty.add(window.getEditor().dirtyProperty());
                 showBackground.setValue(window.getEditor().isShowBackground());
-                updateImage(window);
+                updateImage(o == null ? null : o.getImage(), window);
                 readConfig(window);
                 window.toFront();
                 window.getEditor().updateColorCount();
@@ -143,7 +144,7 @@ public class IWC extends Pane {
 
         setCurrentWindow(window);
         window.adjustSize();
-        window.getImageView().imageProperty().addListener((ov, o, n) -> updateImage(window));
+        window.getImageView().imageProperty().addListener((ov, o, n) -> updateImage((WritableImage) o, window));
         return window;
     }
 
@@ -151,13 +152,22 @@ public class IWC extends Pane {
         currentWindow.set(window);
     }
 
-    private void updateImage(ImageWindow window) {
+    private void updateImage(WritableImage oldImage, ImageWindow window) {
         if (window.getFile().getCategory() != Category.PALETTE) {
-            ToolView.get().setPreview(window.getImageView().getImage(),
+            ToolView.get().setPreview(window.getImage(),
                     window.getEditor().getToolImage(),
                     window.getEditor().getSelectionImage());
             ToolView.get().setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
             ToolView.get().setZoom(window.getImageView().scaleXProperty().doubleValue());
+
+            ChangeListener<? super Number> frameChangeListener = (ov, o, n)
+                    -> ToolView.get().setFrameIndex(window.getImage().getIndex(), window.getImage().getFrameLength());
+            if (oldImage != null && oldImage.isAnimated()) {
+                oldImage.indexProperty().removeListener(frameChangeListener);
+            }
+            if (window.getImage().isAnimated()) {
+                window.getImage().indexProperty().addListener(frameChangeListener);
+            }
         }
     }
 

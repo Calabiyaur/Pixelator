@@ -85,7 +85,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
                 Button preview = new Button("Preview");
                 preview.setOnAction(e -> ColorView.getPaletteSelection().changePreview(imageFile));
                 Button apply = new Button("Apply");
-                ColorView.getPaletteSelection().getEditor().updateImage(imageEditor.getImage());
+                ColorView.getPaletteSelection().getEditor().updateImage(getImage());
                 apply.setDisable(true);
 
                 preview.setGraphic(Images.OPEN.getImageView());
@@ -119,7 +119,9 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         getImageView().setScaleY(Config.IMAGE_ZOOM_LEVEL.getDouble(getFile(), getImageView().getScaleY()));
         setPrefWidth(Config.IMAGE_WIDTH.getDouble(getFile(), getPrefWidth()));
         setPrefHeight(Config.IMAGE_HEIGHT.getDouble(getFile(), getPrefHeight()));
-        imageEditor.getImage().setIndex(Config.FRAME_INDEX.getInt(getFile()));
+        if (getImage().isAnimated()) {
+            getImage().setIndex(Config.FRAME_INDEX.getInt(getFile()));
+        }
     }
 
     private void updateConfig() {
@@ -130,7 +132,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         Config.IMAGE_HEIGHT.putDouble(getFile(), getHeight());
         Config.IMAGE_H_SCROLL.putDouble(getFile(), getContent().getHvalue());
         Config.IMAGE_V_SCROLL.putDouble(getFile(), getContent().getVvalue());
-        Config.FRAME_INDEX.putInt(getFile(), imageEditor.getImage().getIndex());
+        Config.FRAME_INDEX.putInt(getFile(), getImage().getIndex());
     }
 
     private void onScroll(ScrollEvent e) {
@@ -217,7 +219,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
             double posX = p.getX();
             double posY = p.getY();
             ToolView.get().setPreviewPosition(posX, posY);
-            if (ImageUtil.outOfBounds(getImageView().getImage(), (int) posX, (int) posY)) {
+            if (ImageUtil.outOfBounds(getImage(), (int) posX, (int) posY)) {
                 InfoView.setMousePosition(null);
             } else {
                 InfoView.setMousePosition(new Point((int) posX, (int) posY));
@@ -278,6 +280,10 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
 
     public ScalableImageView getImageView() {
         return (ScalableImageView) imageEditor.getImageView();
+    }
+
+    public WritableImage getImage() {
+        return (WritableImage) getImageView().getImage();
     }
 
     public boolean isDirty() {

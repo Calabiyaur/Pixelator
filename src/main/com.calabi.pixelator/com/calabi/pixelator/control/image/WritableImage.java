@@ -3,6 +3,7 @@ package com.calabi.pixelator.control.image;
 import java.lang.ref.WeakReference;
 
 import javafx.animation.Timeline;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -21,6 +22,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     private Timeline timeline;
 
     private PlatformImage[] frames;
+    private IntegerProperty frameLength;
 
     public WritableImage(String path) {
         this(new Image(path));
@@ -52,6 +54,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
                 //TODO
                 throw new NotImplementedException("");
             }
+            frameLength = new SimpleIntegerProperty(frames.length);
 
             ReflectionUtil.invokeMethod(index, "invalidated");
 
@@ -84,7 +87,11 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     public int getIndex() {
-        return index.get();
+        return index == null ? 0 : index.get();
+    }
+
+    public SimpleIntegerProperty indexProperty() {
+        return index;
     }
 
     public void setIndex(int index) {
@@ -93,6 +100,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
     public PlatformImage[] getFrames() {
         return frames;
+    }
+
+    public int getFrameLength() {
+        return frameLength == null ? 1 : frameLength.get();
     }
 
     public void next() {

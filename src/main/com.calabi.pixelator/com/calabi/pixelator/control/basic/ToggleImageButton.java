@@ -10,7 +10,6 @@ public class ToggleImageButton extends ToggleButton {
 
     public ToggleImageButton(Images image) {
         setGraphic(new ImageView(image.getImage()));
-        getStyleClass().setAll("default-button");
     }
 
     public ToggleImageButton(ToggleGroup tg, Images image) {
@@ -30,7 +29,6 @@ public class ToggleImageButton extends ToggleButton {
         });
 
         setGraphic(imageView);
-        getStyleClass().setAll("default-button");
     }
 
 }
