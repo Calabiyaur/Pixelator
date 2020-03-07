@@ -26,6 +26,7 @@ public class IWC extends Pane {
 
     private static IWC instance;
     private BooleanProperty imageSelected = new SimpleBooleanProperty(false);
+    private BooleanProperty imageAnimated = new SimpleBooleanProperty(false);
     private ObjectProperty<ImageWindow> currentWindow;
     private BooleanProperty showGrid = new SimpleBooleanProperty(false);
     private BooleanProperty showCrossHair = new SimpleBooleanProperty(false);
@@ -45,6 +46,8 @@ public class IWC extends Pane {
         currentWindow.addListener((ov, o, window) -> {
             imageSelected.setValue(window != null);
             if (window == null) {
+                imageAnimated.unbind();
+                imageAnimated.set(false);
                 undoEnabled.unbind();
                 undoEnabled.set(false);
                 redoEnabled.unbind();
@@ -63,6 +66,7 @@ public class IWC extends Pane {
                 InfoView.setMousePosition(null);
                 InfoView.setColorCount(null);
             } else {
+                imageAnimated.bind(window.getEditor().imageAnimatedProperty());
                 undoEnabled.bind(window.getEditor().undoEnabledProperty());
                 redoEnabled.bind(window.getEditor().redoEnabledProperty());
                 selectionActive.bind(window.getEditor().selectionActiveProperty());
@@ -322,6 +326,10 @@ public class IWC extends Pane {
 
     public BooleanProperty imageSelectedProperty() {
         return imageSelected;
+    }
+
+    public BooleanProperty imageAnimatedProperty() {
+        return imageAnimated;
     }
 
     public BooleanProperty undoEnabledProperty() {

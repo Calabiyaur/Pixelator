@@ -5,6 +5,7 @@ import java.lang.ref.WeakReference;
 import javafx.animation.Animation;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -20,7 +21,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
     public static final int DEFAULT_FRAME_DELAY = 60;
 
-    private boolean animated;
+    private SimpleBooleanProperty animated = new SimpleBooleanProperty(false);
 
     private SimpleIntegerProperty index;
     private Timeline timeline;
@@ -40,9 +41,9 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         super((int) image.getWidth(), (int) image.getHeight());
 
         PixelReader reader = image.getPixelReader();
-        animated = reader == null;
+        setAnimated(reader == null);
 
-        if (animated) {
+        if (isAnimated()) {
             Object animation = initAnimationInternal(image);
 
             ReflectionUtil.setField(this, "animation", animation);
@@ -60,14 +61,14 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     public void initAnimation(int frameCount, int frameDelay) {
-        Check.ensure(!animated);
+        Check.ensure(!isAnimated());
         Check.ensure(frameCount > 0);
 
         ImageLoader loader = new ImageLoader(frameCount, frameDelay, getWidth(), getHeight());
         ReflectionUtil.invokeMethod(this, "initializeAnimatedImage", loader);
 
         initAnimationInternal(this);
-        animated = true;
+        setAnimated(true);
     }
 
     private Object initAnimationInternal(Image image) {
@@ -96,7 +97,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
         WritableImage copy = new WritableImage(width, height);
         PixelWriter writer = copy.getPixelWriter();
-        if (animated) {
+        if (isAnimated()) {
             copy.initAnimation(getFrameCount(), DEFAULT_FRAME_DELAY);
             for (int n = 0; n < frames.length; n++) {
                 PlatformImage frame = frames[n];
@@ -113,12 +114,16 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         return copy;
     }
 
-    public boolean isAnimated() {
+    public SimpleBooleanProperty animatedProperty() {
         return animated;
     }
 
+    public boolean isAnimated() {
+        return animated.get();
+    }
+
     public void setAnimated(boolean animated) {
-        this.animated = animated;
+        this.animated.set(animated);
     }
 
     public int getIndex() {
@@ -182,7 +187,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
             return false;
         }
 
-        if (animated) {
+        if (isAnimated()) {
             for (int n = 0; n < frames.length; n++) {
                 PlatformImage frame = frames[n];
                 PlatformImage otherFrame = other.frames[n];

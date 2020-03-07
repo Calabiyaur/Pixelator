@@ -22,6 +22,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
+import com.sun.javafx.tk.PlatformImage;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.calabi.pixelator.control.image.Crosshair;
@@ -39,6 +40,7 @@ import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.meta.QuadConsumer;
 import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.util.Check;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.shape.RectangleHelper;
@@ -59,6 +61,7 @@ public class ImageEditor extends Editor {
     private IntegerProperty height = new SimpleIntegerProperty();
     private PixelReader reader;
     private PixelWriter writer;
+    private BooleanProperty imageAnimated = new SimpleBooleanProperty(false);
 
     private PixelChange pixels;
     private Tool currentTool;
@@ -158,6 +161,7 @@ public class ImageEditor extends Editor {
             height.set((int) n.getHeight());
             reader = image.getPixelReader();
             writer = image.getPixelWriter();
+            imageAnimated.bind(image.animatedProperty());
             pixels = new PixelChange(writer);
             toolLayer.resize(width.get(), height.get(), reader);
             selectionLayer.resize(width.get(), height.get(), reader);
@@ -218,6 +222,7 @@ public class ImageEditor extends Editor {
         writer = image.getPixelWriter();
         width.set((int) image.getWidth());
         height.set((int) image.getHeight());
+        imageAnimated.set(image.isAnimated());
 
         getImageView().setImage(image);
         pixels = new PixelChange(writer);
@@ -757,6 +762,17 @@ public class ImageEditor extends Editor {
         }
     }
 
+    public void reverse() {
+        Check.ensure(getImage().isAnimated());
+
+        PlatformImage[] frames = getImage().getFrames();
+        for (int i = 0; i < frames.length / 2; i++) {
+            PlatformImage temp = frames[i];
+            frames[i] = frames[frames.length - i - 1];
+            frames[frames.length - i - 1] = temp;
+        }
+    }
+
     public void removeSelectionAndRegister() {
         removeSelection();
         selectionLayer.clear();
@@ -802,6 +818,10 @@ public class ImageEditor extends Editor {
 
     public int getImageHeight() {
         return height.get();
+    }
+
+    public BooleanProperty imageAnimatedProperty() {
+        return imageAnimated;
     }
 
     public void undo() {

@@ -175,6 +175,9 @@ public class MainScene extends Scene {
         imageMenu.addItem(INVERT, e -> getEditor().invert(), IWC.get().imageSelectedProperty());
         imageMenu.addItem(INVERT_WITHIN_PALETTE, e -> getEditor().invertWithinPalette(), IWC.get().imageSelectedProperty());
 
+        BasicMenu animationMenu = new BasicMenu("Animation"); // Add frame, Remove frame
+        animationMenu.addItem(REVERSE, e -> getEditor().reverse(), IWC.get().imageAnimatedProperty());
+
         BasicMenu paletteMenu = new BasicMenu("Palette");
         paletteMenu.addItem(NEW_PALETTE, e -> paletteSelection.createPalette());
         paletteMenu.addItem(OPEN_PALETTE, e -> paletteSelection.openPalette());
@@ -189,7 +192,7 @@ public class MainScene extends Scene {
         toolMenu.addItem(EXTRACT_PALETTE, e -> extractPalette(), IWC.get().imageSelectedProperty());
         toolMenu.addItem(CHANGE_PALETTE, e -> changePalette(), IWC.get().imageSelectedProperty());
 
-        menuBar.getMenus().setAll(fileMenu, editMenu, viewMenu, imageMenu, paletteMenu, toolMenu);
+        menuBar.getMenus().setAll(fileMenu, editMenu, viewMenu, imageMenu, animationMenu, paletteMenu, toolMenu);
         return menuBar;
     }
 

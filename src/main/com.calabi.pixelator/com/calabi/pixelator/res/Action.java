@@ -46,6 +46,7 @@ public enum Action {
     RANDOM_COLOR("Random color", false, false, false, KeyCode.R),
     REDO("Redo", true, false, false, KeyCode.Y),
     RESIZE("Resize..."),
+    REVERSE("Reverse"),
     RIGHT("Right", false, false, false, KeyCode.RIGHT),
     ROTATE_CLOCKWISE("Rotate clockwise"),
     ROTATE_COUNTER_CLOCKWISE("Rotate counter-clockwise"),
