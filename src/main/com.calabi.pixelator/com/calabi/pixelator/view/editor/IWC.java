@@ -171,6 +171,7 @@ public class IWC extends Pane {
 
                 if (window.getImage().isAnimated()) {
                     window.getImage().indexProperty().addListener(frameChangeListener);
+                    window.getImage().frameCountProperty().addListener(frameChangeListener);
                     frameChangeListener.changed(null, null, null);
                 } else {
                     ToolView.get().hideFrameIndex();
@@ -182,6 +183,7 @@ public class IWC extends Pane {
 
         if (oldImage != null && oldImage.isAnimated()) {
             oldImage.indexProperty().removeListener(frameChangeListener);
+            oldImage.frameCountProperty().removeListener(frameChangeListener);
         }
     }
 

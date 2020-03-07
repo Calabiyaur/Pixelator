@@ -177,6 +177,8 @@ public class MainScene extends Scene {
 
         BasicMenu animationMenu = new BasicMenu("Animation"); // Add frame, Remove frame
         animationMenu.addItem(REVERSE, e -> getEditor().reverse(), IWC.get().imageAnimatedProperty());
+        animationMenu.addItem(ADD_FRAME, e -> getEditor().addFrame(), IWC.get().imageSelectedProperty());
+        animationMenu.addItem(REMOVE_FRAME, e -> getEditor().removeFrame(), IWC.get().imageAnimatedProperty());
 
         BasicMenu paletteMenu = new BasicMenu("Palette");
         paletteMenu.addItem(NEW_PALETTE, e -> paletteSelection.createPalette());

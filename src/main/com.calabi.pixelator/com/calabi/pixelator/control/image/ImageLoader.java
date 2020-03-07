@@ -3,7 +3,7 @@ package com.calabi.pixelator.control.image;
 import com.sun.javafx.tk.PlatformImage;
 import com.sun.prism.Image;
 
-public class ImageLoader implements com.sun.javafx.tk.ImageLoader {
+class ImageLoader implements com.sun.javafx.tk.ImageLoader {
 
     private final int frameCount;
     private final int frameDelay;
@@ -29,7 +29,7 @@ public class ImageLoader implements com.sun.javafx.tk.ImageLoader {
 
     @Override
     public PlatformImage getFrame(int index) {
-        return Image.fromIntArgbPreData(new int[(int) (width * height)], (int) width, (int) height);
+        return blank(width, height);
     }
 
     @Override
@@ -50,6 +50,10 @@ public class ImageLoader implements com.sun.javafx.tk.ImageLoader {
     @Override
     public double getHeight() {
         return height;
+    }
+
+    public static Image blank(double width, double height) {
+        return Image.fromIntArgbPreData(new int[(int) (width * height)], (int) width, (int) height);
     }
 
 }

@@ -762,7 +762,7 @@ public class ImageEditor extends Editor {
         }
     }
 
-    public void reverse() {
+    public void reverse() { //TODO: Make undoable
         Check.ensure(getImage().isAnimated());
 
         PlatformImage[] frames = getImage().getFrames();
@@ -771,6 +771,14 @@ public class ImageEditor extends Editor {
             frames[i] = frames[frames.length - i - 1];
             frames[frames.length - i - 1] = temp;
         }
+    }
+
+    public void addFrame() { //TODO: Make undoable
+        getImage().addFrame(getImage().getIndex() + 1);
+    }
+
+    public void removeFrame() { //TODO: Make undoable
+        getImage().removeFrame(getImage().getIndex());
     }
 
     public void removeSelectionAndRegister() {

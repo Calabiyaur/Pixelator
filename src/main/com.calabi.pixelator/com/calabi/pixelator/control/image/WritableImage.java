@@ -50,7 +50,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
             ReflectionUtil.setField(this, "animFrames", frames);
             ReflectionUtil.setField(animation, "imageRef", new WeakReference<>(this));
 
-            ReflectionUtil.invokeMethod(index, "invalidated");
+            invalidate();
 
         } else {
 
@@ -87,6 +87,14 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         frameCount = new SimpleIntegerProperty(frames.length);
 
         return animation;
+    }
+
+    /**
+     * Force a method call to {@link javafx.scene.image.Image.Animation#updateImage(int)}
+     * which refreshes the currently shown frame.
+     */
+    private void invalidate() {
+        ReflectionUtil.invokeMethod(index, "invalidated");
     }
 
     public WritableImage copy() {
@@ -142,8 +150,56 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         return frames;
     }
 
+    public void addFrame(int index) {
+        if (!isAnimated()) {
+            initAnimation(2, DEFAULT_FRAME_DELAY);
+        }
+
+        PlatformImage[] newFrames = new PlatformImage[frames.length + 1];
+        for (int i = 0; i < frames.length; i++) {
+            if (i < index) {
+                newFrames[i] = frames[i];
+            } else {
+                if (i == index) {
+                    newFrames[i] = ImageLoader.blank(getWidth(), getHeight());
+                }
+                newFrames[i + 1] = frames[i];
+            }
+        }
+        setFrames(newFrames);
+        next();
+    }
+
+    public void removeFrame(int index) {
+        PlatformImage[] newFrames = new PlatformImage[frames.length - 1];
+        for (int i = 0; i < frames.length - 1; i++) {
+            if (i < index) {
+                newFrames[i] = frames[i];
+            } else {
+                newFrames[i] = frames[i + 1];
+            }
+        }
+        previous();
+        setFrames(newFrames);
+
+        if (isAnimated() && frames.length == 1) {
+            setAnimated(false);
+        }
+    }
+
+    private void setFrames(PlatformImage[] frames) {
+        this.frames = frames;
+        ReflectionUtil.setField(this, "animFrames", frames);
+        frameCount.set(frames.length);
+        invalidate();
+    }
+
     public int getFrameCount() {
         return frameCount == null ? 1 : frameCount.get();
+    }
+
+    public IntegerProperty frameCountProperty() {
+        return frameCount;
     }
 
     public void next() {

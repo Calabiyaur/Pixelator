@@ -8,6 +8,7 @@ import com.calabi.pixelator.util.CollectionUtil;
 
 public enum Action {
 
+    ADD_FRAME("Add frame", true, false, false, KeyCode.F),
     BACKGROUND("Show background", true, true, false, KeyCode.B),
     CHANGE_PALETTE("Change palette..."),
     CHANGE_PALETTE_PREVIEW("Change preview..."),
@@ -45,6 +46,7 @@ public enum Action {
     PASTE("Paste", true, false, false, KeyCode.V),
     RANDOM_COLOR("Random color", false, false, false, KeyCode.R),
     REDO("Redo", true, false, false, KeyCode.Y),
+    REMOVE_FRAME("Remove frame", true, true, false, KeyCode.F),
     RESIZE("Resize..."),
     REVERSE("Reverse"),
     RIGHT("Right", false, false, false, KeyCode.RIGHT),
