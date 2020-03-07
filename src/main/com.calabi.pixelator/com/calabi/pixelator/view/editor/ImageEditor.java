@@ -465,32 +465,29 @@ public class ImageEditor extends Editor {
     }
 
     public void flipHorizontally() {
-        currentTool.lockAndReset();
-
-        for (int i = 0; i < width.get(); i++) {
-            int ni = width.get() - i - 1;
-            for (int j = 0; j < height.get(); j++) {
-                pixels.add(i, j, reader.getColor(i, j), reader.getColor(ni, j));
+        changeImage(width.get(), height.get(), (o, n, reader, writer) -> {
+            for (int i = 0; i < width.get(); i++) {
+                int ni = width.get() - i - 1;
+                for (int j = 0; j < height.get(); j++) {
+                    writer.setColor(i, j, reader.getColor(ni, j));
+                }
             }
-        }
-        writeAndRegister(pixels);
+        });
     }
 
     public void flipVertically() {
-        currentTool.lockAndReset();
-
-        for (int j = 0; j < height.get(); j++) {
-            int nj = height.get() - j - 1;
-            for (int i = 0; i < width.get(); i++) {
-                pixels.add(i, j, reader.getColor(i, j), reader.getColor(i, nj));
+        changeImage(width.get(), height.get(), (o, n, reader, writer) -> {
+            for (int j = 0; j < height.get(); j++) {
+                int nj = height.get() - j - 1;
+                for (int i = 0; i < width.get(); i++) {
+                    writer.setColor(i, j, reader.getColor(i, nj));
+                }
             }
-        }
-        writeAndRegister(pixels);
+        });
     }
 
-    @SuppressWarnings("Duplicates")
     public void rotateClockwise() {
-        changeImage(getImageView().getHeight(), getImage().getWidth(), (o, n, reader, writer) -> {
+        changeImage(height.get(), width.get(), (o, n, reader, writer) -> {
             for (int j = 0; j < height.get(); j++) {
                 int nj = height.get() - j - 1;
                 for (int i = 0; i < width.get(); i++) {
@@ -500,9 +497,8 @@ public class ImageEditor extends Editor {
         });
     }
 
-    @SuppressWarnings("Duplicates")
     public void rotateCounterClockwise() {
-        changeImage(getImageView().getHeight(), getImage().getWidth(), (o, n, reader, writer) -> {
+        changeImage(height.get(), width.get(), (o, n, reader, writer) -> {
             for (int i = 0; i < width.get(); i++) {
                 int ni = width.get() - i - 1;
                 for (int j = 0; j < height.get(); j++) {
@@ -513,19 +509,19 @@ public class ImageEditor extends Editor {
     }
 
     public void moveImage(int h, int v) {
-        currentTool.lockAndReset();
 
-        h = Math.floorMod(h, width.get());
-        v = Math.floorMod(v, height.get());
+        int posH = Math.floorMod(h, width.get());
+        int posV = Math.floorMod(v, height.get());
 
-        for (int i = 0; i < width.get(); i++) {
-            int di = (i + h) % width.get();
-            for (int j = 0; j < height.get(); j++) {
-                int dj = (j + v) % height.get();
-                pixels.add(di, dj, reader.getColor(di, dj), reader.getColor(i, j));
+        changeImage(width.get(), height.get(), (o, n, reader, writer) -> {
+            for (int i = 0; i < width.get(); i++) {
+                int di = (i + posH) % width.get();
+                for (int j = 0; j < height.get(); j++) {
+                    int dj = (j + posV) % height.get();
+                    pixels.add(di, dj, reader.getColor(di, dj), reader.getColor(i, j));
+                }
             }
-        }
-        writeAndRegister(pixels);
+        });
     }
 
     public void stretchImage(int w, int h) {
@@ -569,8 +565,7 @@ public class ImageEditor extends Editor {
         });
     }
 
-    private void changeImage(double width, double height,
-            QuadConsumer<Image, Image, PixelReader, PixelWriter> consumer) {
+    private void changeImage(double width, double height, QuadConsumer<Image, Image, PixelReader, PixelWriter> consumer) {
         currentTool.lockAndReset();
 
         WritableImage newImage = new WritableImage((int) width, (int) height);
