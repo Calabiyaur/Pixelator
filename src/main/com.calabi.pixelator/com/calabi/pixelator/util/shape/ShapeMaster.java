@@ -273,7 +273,7 @@ public class ShapeMaster {
                     activeMap[x][y] = false;
                 }
             }
-            activeSet = newActiveSet.clone();
+            activeSet = newActiveSet.copy();
         }
         return result;
     }

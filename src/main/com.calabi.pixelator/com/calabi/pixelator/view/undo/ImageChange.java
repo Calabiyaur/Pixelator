@@ -58,7 +58,7 @@ public class ImageChange implements Undoable {
     }
 
     @Override
-    public Undoable clone() {
+    public Undoable copy() {
         return this;
     }
 

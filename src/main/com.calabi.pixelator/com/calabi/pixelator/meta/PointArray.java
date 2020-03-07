@@ -164,7 +164,7 @@ public class PointArray { //TODO: Make 'Array' interface and let this and 'Pixel
         return result;
     }
 
-    public PointArray clone() {
+    public PointArray copy() {
         PointArray pointArray = new PointArray();
         pointArray.x = new ArrayList<>(x);
         pointArray.y = new ArrayList<>(y);

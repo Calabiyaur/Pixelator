@@ -45,7 +45,7 @@ public class PixelArray extends PointArray {
     }
 
     @Override
-    public PixelArray clone() {
+    public PixelArray copy() {
         PixelArray pointArray = new PixelArray();
         pointArray.x = new ArrayList<>(x);
         pointArray.y = new ArrayList<>(y);

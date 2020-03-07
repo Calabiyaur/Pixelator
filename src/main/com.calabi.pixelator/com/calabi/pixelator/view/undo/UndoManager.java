@@ -31,7 +31,7 @@ public class UndoManager {
         changeList.remove(position.get() + 1, changeList.getSize());
 
         // add new future progress
-        changeList.add(undoable.clone());
+        changeList.add(undoable.copy());
         position.set(position.get() + 1);
     }
 

@@ -8,5 +8,5 @@ public interface Undoable {
 
     boolean isEmpty();
 
-    Undoable clone();
+    Undoable copy();
 }

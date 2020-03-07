@@ -61,7 +61,7 @@ public class PixelChange extends PixelArray implements Undoable {
     }
 
     @Override
-    public PixelChange clone() {
+    public PixelChange copy() {
         PixelChange pixelChange = new PixelChange(writer);
         pixelChange.addForcefully(this);
         return pixelChange;

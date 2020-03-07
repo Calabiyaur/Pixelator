@@ -28,7 +28,7 @@ public class ToolLayer extends EditorLayer {
      * Return the tool layer's pixels AND clear.
      */
     public PixelArray retrievePixels() {
-        PixelArray result = squareStack.getPixels().clone();
+        PixelArray result = squareStack.getPixels().copy();
         clear();
         return result;
     }

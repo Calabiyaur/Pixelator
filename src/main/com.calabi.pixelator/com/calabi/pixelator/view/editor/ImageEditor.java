@@ -693,7 +693,7 @@ public class ImageEditor extends Editor {
 
     public void invert() {
         if (selectionActiveProperty().get()) {
-            PixelChange selectedPixels = selectionLayer.getPixels().clone();
+            PixelChange selectedPixels = selectionLayer.getPixels().copy();
             currentTool.lockAndReset();
 
             selectedPixels.forEach((x, y, prev, color) -> {
@@ -717,7 +717,7 @@ public class ImageEditor extends Editor {
         List<Color> colors = SortMaster.sortByValues(colorSet);
 
         if (selectionActiveProperty().get()) {
-            PixelChange selectedPixels = selectionLayer.getPixels().clone();
+            PixelChange selectedPixels = selectionLayer.getPixels().copy();
             currentTool.lockAndReset();
 
             selectedPixels.forEach((x, y, prev, color) -> {

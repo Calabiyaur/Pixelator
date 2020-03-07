@@ -44,7 +44,7 @@ public class Select extends SelectionTool {
     @Override public void releasePrimary() {
         Point start = getSelectionLayer().getStart();
         if (start != null) {
-            PointArray pixels = getSelectionLayer().getPixels().clone(); //TODO: This line is normally not necessary
+            PointArray pixels = getSelectionLayer().getPixels().copy(); //TODO: This line is normally not necessary
             PointArray rectanglePoints = RectangleHelper.getRectanglePoints(start, getMouse(), true);
             if (rectanglePoints == null) {
                 return;
