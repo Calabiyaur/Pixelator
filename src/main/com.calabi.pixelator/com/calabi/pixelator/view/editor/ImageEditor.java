@@ -720,30 +720,26 @@ public class ImageEditor extends Editor {
             PixelChange selectedPixels = selectionLayer.getPixels().copy();
             currentTool.lockAndReset();
 
-            selectedPixels.forEach((x, y, prev, color) -> {
-                int index = colors.indexOf(color);
-                if (index != -1) {
-                    Color temp = colors.get(colors.size() - index - 1);
-                    Color inverted = Color.color(temp.getRed(), temp.getGreen(), temp.getBlue(), color.getOpacity());
-                    pixels.add(x, y, color, inverted);
-                }
-            });
+            selectedPixels.forEach((x, y, prev, color) -> invertPixel(colors, x, y, color));
         } else {
             currentTool.lockAndReset();
 
             for (int i = 0; i < width.get(); i++) {
                 for (int j = 0; j < height.get(); j++) {
-                    Color color = reader.getColor(i, j);
-                    int index = colors.indexOf(color);
-                    if (index != -1) {
-                        Color temp = colors.get(colors.size() - index - 1);
-                        Color inverted = Color.color(temp.getRed(), temp.getGreen(), temp.getBlue(), color.getOpacity());
-                        pixels.add(i, j, color, inverted);
-                    }
+                    invertPixel(colors, i, j, reader.getColor(i, j));
                 }
             }
         }
         writeAndRegister(pixels);
+    }
+
+    private void invertPixel(List<Color> palette, int x, int y, Color color) {
+        int index = palette.indexOf(color);
+        if (index != -1) {
+            Color temp = palette.get(palette.size() - index - 1);
+            Color inverted = Color.color(temp.getRed(), temp.getGreen(), temp.getBlue(), color.getOpacity());
+            pixels.add(x, y, color, inverted);
+        }
     }
 
     public void copyImage() {
