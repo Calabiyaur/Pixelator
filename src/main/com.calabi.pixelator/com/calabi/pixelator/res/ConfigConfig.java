@@ -20,7 +20,9 @@ public class ConfigConfig extends ConfigObject {
     @Override
     public void build(String input) {
         for (String s : input.split(SEPARATOR)) {
-            localConfigs.add(Config.valueOf(s));
+            if (!s.isEmpty()) {
+                localConfigs.add(Config.valueOf(s));
+            }
         }
     }
 
