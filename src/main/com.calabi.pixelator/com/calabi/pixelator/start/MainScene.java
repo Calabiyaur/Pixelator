@@ -179,6 +179,8 @@ public class MainScene extends Scene {
         animationMenu.addItem(REVERSE, e -> getEditor().reverse(), IWC.get().imageAnimatedProperty());
         animationMenu.addItem(ADD_FRAME, e -> getEditor().addFrame(), IWC.get().imageSelectedProperty());
         animationMenu.addItem(REMOVE_FRAME, e -> getEditor().removeFrame(), IWC.get().imageAnimatedProperty());
+        animationMenu.addItem(MOVE_FRAME_FORWARD, e -> getEditor().moveFrameForward(), IWC.get().imageAnimatedProperty());
+        animationMenu.addItem(MOVE_FRAME_BACKWARD, e -> getEditor().moveFrameBackward(), IWC.get().imageAnimatedProperty());
 
         BasicMenu paletteMenu = new BasicMenu("Palette");
         paletteMenu.addItem(NEW_PALETTE, e -> paletteSelection.createPalette());

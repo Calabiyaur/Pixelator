@@ -9,6 +9,7 @@ import com.calabi.pixelator.logging.Logger;
 
 public enum Images {
 
+    ADD_FRAME,
     ARROW_C,
     ARROW_E,
     ARROW_NE,
@@ -32,6 +33,8 @@ public enum Images {
     COPY,
     CROSSHAIR,
     CUT,
+    DROP_ARROW_DOWN,
+    DROP_ARROW_UP,
     ELLIPSE,
     EDIT,
     ERROR_20,
@@ -57,6 +60,7 @@ public enum Images {
     PREVIOUS_FRAME,
     RECTANGLE,
     REDO,
+    REMOVE_FRAME,
     SAVE,
     SELECT,
     SETTINGS,

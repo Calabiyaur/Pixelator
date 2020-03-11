@@ -13,8 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 import com.calabi.pixelator.control.basic.ImageButton;
@@ -23,6 +21,7 @@ import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.control.parent.BasicWindow;
+import com.calabi.pixelator.control.region.BalloonRegion;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.Files;
@@ -70,6 +69,11 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         setContent(imageEditor);
         switch(imageFile.getCategory()) {
             case ANIMATION:
+                ImageButton addFrame = new ImageButton(Images.ADD_FRAME);
+                addFrame.setOnAction(e -> imageEditor.addFrame());
+                ImageButton deleteFrame = new ImageButton(Images.REMOVE_FRAME);
+                deleteFrame.setOnAction(e -> imageEditor.removeFrame());
+
                 ImageButton previousFrame = new ImageButton(Images.PREVIOUS_FRAME);
                 previousFrame.setOnAction(e -> imageEditor.previousFrame());
                 ImageButton nextFrame = new ImageButton(Images.NEXT_FRAME);
@@ -84,7 +88,11 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
                     getImage().setIndex(i.get());
                 }));
 
-                HBox framePane = new HBox(previousFrame, nextFrame, play);
+                ToggleImageButton expand = new ToggleImageButton(Images.DROP_ARROW_DOWN, Images.DROP_ARROW_UP);
+
+                HBox framePane = new HBox(addFrame, deleteFrame,
+                        new BalloonRegion(), previousFrame, nextFrame, play,
+                        new BalloonRegion(), expand);
                 setLowerContent(framePane);
                 break;
             case IMAGE:
@@ -97,9 +105,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
                 apply.setDisable(true);
 
                 preview.setGraphic(Images.OPEN.getImageView());
-                Region space = new Region();
-                HBox.setHgrow(space, Priority.ALWAYS);
-                HBox buttons = new HBox(preview, space, apply);
+                HBox buttons = new HBox(preview, new BalloonRegion(), apply);
                 setLowerContent(buttons);
                 break;
         }

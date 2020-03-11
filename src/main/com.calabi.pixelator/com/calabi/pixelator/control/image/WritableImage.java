@@ -187,6 +187,16 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         }
     }
 
+    public void moveFrame(int index, int newIndex) {
+        newIndex = Math.floorMod(newIndex, frames.length);
+
+        PlatformImage temp = frames[index];
+        frames[index] = frames[newIndex];
+        frames[newIndex] = temp;
+
+        invalidate();
+    }
+
     private void setFrames(PlatformImage[] frames) {
         this.frames = frames;
         ReflectionUtil.setField(this, "animFrames", frames);

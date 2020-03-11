@@ -777,6 +777,16 @@ public class ImageEditor extends Editor {
         getImage().removeFrame(getImage().getIndex());
     }
 
+    public void moveFrameForward() { //TODO: Make undoable
+        getImage().moveFrame(getImage().getIndex(), getImage().getIndex() + 1);
+        getImage().next();
+    }
+
+    public void moveFrameBackward() { //TODO: Make undoable
+        getImage().moveFrame(getImage().getIndex(), getImage().getIndex() - 1);
+        getImage().previous();
+    }
+
     public void removeSelectionAndRegister() {
         removeSelection();
         selectionLayer.clear();

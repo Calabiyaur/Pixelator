@@ -21,7 +21,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -32,6 +31,7 @@ import com.calabi.pixelator.control.basic.BasicIntegerField;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
 import com.calabi.pixelator.control.basic.UndeselectableToggleGroup;
 import com.calabi.pixelator.control.image.PixelatedImageView;
+import com.calabi.pixelator.control.region.BalloonRegion;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;
@@ -99,10 +99,8 @@ public class ToolView extends VBox {
         clipWrapper.maxWidthProperty().bind(previewStack.widthProperty());
         clipWrapper.maxHeightProperty().bind(previewStack.heightProperty());
 
-        Region space = new Region();
-        HBox detailBoxTop = new HBox(sizeText, space, zoomText);
+        HBox detailBoxTop = new HBox(sizeText, new BalloonRegion(), zoomText);
         VBox detailBox = new VBox(detailBoxTop, frameIndexText);
-        HBox.setHgrow(space, Priority.ALWAYS);
         VBox previewGrid = new VBox(new Label("PREVIEW"), clipWrapper, detailBox);
         VBox.setVgrow(previewGrid, Priority.ALWAYS);
 
