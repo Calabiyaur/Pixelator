@@ -9,18 +9,21 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
-import com.calabi.pixelator.control.image.PixelatedImageView;
 import com.calabi.pixelator.control.image.PlatformImageList;
 import com.calabi.pixelator.control.region.BalloonRegion;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;
 
 public class AnimationLayout extends Layout {
+
+    private static final int MAX_FRAME_WIDTH = 100;
+    private static final int MAX_FRAME_HEIGHT = 100;
 
     private ImageButton addFrame;
     private ImageButton deleteFrame;
@@ -108,7 +111,7 @@ public class AnimationLayout extends Layout {
 
     private void addFrames(List<? extends Image> frameList) {
         for (Image platformImage : frameList) {
-            PixelatedImageView frameView = new PixelatedImageView(platformImage);
+            FrameCell frameView = new FrameCell(platformImage);
             frameView.setOnMousePressed(e -> image.setIndex(frames.getChildren().indexOf(frameView)));
             frames.getChildren().add(frameView);
         }
@@ -116,8 +119,32 @@ public class AnimationLayout extends Layout {
 
     private void removeFrames(List<? extends Image> frameList) {
         for (Image platformImage : frameList) {
-            frames.getChildren().removeIf(iv -> iv instanceof ImageView && ((ImageView) iv).getImage() == platformImage);
+            frames.getChildren().removeIf(iv -> iv instanceof FrameCell && ((FrameCell) iv).image == platformImage);
         }
+    }
+
+    private static class FrameCell extends Pane {
+
+        final ImageView imageView;
+        final Image image;
+
+        public FrameCell(Image image) {
+            this.imageView = new ImageView(image);
+            this.image = image;
+
+            getChildren().add(imageView);
+
+            style();
+        }
+
+        private void style() {
+            if (image.getWidth() > MAX_FRAME_WIDTH || image.getHeight() > MAX_FRAME_HEIGHT) {
+                double factor = Math.min(MAX_FRAME_WIDTH / image.getWidth(), MAX_FRAME_HEIGHT / image.getHeight());
+                imageView.setFitWidth(factor * image.getWidth());
+                imageView.setFitHeight(factor * image.getHeight());
+            }
+        }
+
     }
 
 }
