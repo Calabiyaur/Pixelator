@@ -3,13 +3,19 @@ package com.calabi.pixelator.control.image;
 import java.lang.ref.WeakReference;
 
 import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
+import javafx.util.Duration;
 
 import com.sun.javafx.tk.PlatformImage;
 import org.apache.commons.lang3.NotImplementedException;
@@ -24,9 +30,11 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     private SimpleBooleanProperty animated = new SimpleBooleanProperty(false);
 
     private SimpleIntegerProperty index;
+    private Object anim;
     private Timeline timeline;
 
     private PlatformImage[] frames;
+    private ObservableList<PlatformImage> frameList = FXCollections.observableArrayList();
     private IntegerProperty frameCount;
 
     public WritableImage(String path) {
@@ -72,10 +80,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     private Object initAnimationInternal(Image image) {
-        Object animation = ReflectionUtil.getField(image, "animation");
+        anim = ReflectionUtil.getField(image, "animation");
         frames = ReflectionUtil.getField(image, "animFrames");
-        index = ReflectionUtil.getField(animation, "frameIndex");
-        timeline = ReflectionUtil.getField(animation, "timeline");
+        index = ReflectionUtil.getField(anim, "frameIndex");
+        timeline = ReflectionUtil.getField(anim, "timeline");
 
         assert timeline != null;
         timeline.stop();
@@ -84,9 +92,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
             //TODO
             throw new NotImplementedException("");
         }
+        frameList.setAll(frames);
         frameCount = new SimpleIntegerProperty(frames.length);
 
-        return animation;
+        return anim;
     }
 
     /**
@@ -132,6 +141,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
     public void setAnimated(boolean animated) {
         this.animated.set(animated);
+        //TODO: Clear unused fields (animation, frames, ...)
     }
 
     public int getIndex() {
@@ -148,6 +158,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
     public PlatformImage[] getFrames() {
         return frames;
+    }
+
+    public ObservableList<PlatformImage> getFrameList() {
+        return frameList;
     }
 
     public void addFrame(int index) {
@@ -198,10 +212,31 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     private void setFrames(PlatformImage[] frames) {
+        boolean frameLengthChanged = frames.length != this.frames.length;
+
         this.frames = frames;
+        frameList.setAll(frames);
         ReflectionUtil.setField(this, "animFrames", frames);
         frameCount.set(frames.length);
+
+        if (frameLengthChanged) {
+            resetTimeline();
+        }
+
         invalidate();
+    }
+
+    private void resetTimeline() {
+        timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        ObservableList<KeyFrame> keyFrames = timeline.getKeyFrames();
+        int duration = 0;
+        for (int i = 0; i < frames.length; ++i) {
+            keyFrames.add(new KeyFrame(Duration.millis(duration), new KeyValue(index, i, Interpolator.DISCRETE)));
+            duration = duration + DEFAULT_FRAME_DELAY;
+        }
+        keyFrames.add(new KeyFrame(Duration.millis(duration)));
+        ReflectionUtil.setField(anim, "timeline", timeline);
     }
 
     public int getFrameCount() {

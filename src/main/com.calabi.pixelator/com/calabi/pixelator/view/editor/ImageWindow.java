@@ -3,6 +3,7 @@ package com.calabi.pixelator.view.editor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,12 +12,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
+import com.calabi.pixelator.control.image.PixelatedImageView;
+import com.calabi.pixelator.control.image.PlatformImageList;
 import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
@@ -89,10 +94,37 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
                 }));
 
                 ToggleImageButton expand = new ToggleImageButton(Images.DROP_ARROW_DOWN, Images.DROP_ARROW_UP);
+                FlowPane frames = new FlowPane();
+                PlatformImageList frameList = new PlatformImageList(getImage());
+                for (Image platformImage : frameList) {
+                    PixelatedImageView frameView = new PixelatedImageView(platformImage); //TODO Extract method
+                    frameView.setOnMousePressed(e -> getImage().setIndex(frames.getChildren().indexOf(frameView)));
+                    frames.getChildren().add(frameView);
+                }
+                frameList.addListener((ListChangeListener<Image>) c -> {
+                    while (c.next()) {
+                        for (Image platformImage : c.getRemoved()) {
+                            frames.getChildren().removeIf(iv ->
+                                    iv instanceof ImageView && ((ImageView) iv).getImage() == platformImage);
+                        }
+                        for (Image platformImage : c.getAddedSubList()) {
+                            PixelatedImageView frameView = new PixelatedImageView(platformImage); //TODO Extract method
+                            frameView.setOnMousePressed(e -> getImage().setIndex(frames.getChildren().indexOf(frameView)));
+                            frames.getChildren().add(frameView);
+                        }
+                    }
+                });
 
-                HBox framePane = new HBox(addFrame, deleteFrame,
+                HBox frameButtonsPane = new HBox(addFrame, deleteFrame,
                         new BalloonRegion(), previousFrame, nextFrame, play,
                         new BalloonRegion(), expand);
+                VBox framePane = new VBox(frameButtonsPane);
+
+                expand.selectedProperty().addListener((ov, o, n) -> Do.when(n,
+                        () -> framePane.getChildren().add(frames),
+                        () -> framePane.getChildren().remove(frames)
+                ));
+
                 setLowerContent(framePane);
                 break;
             case IMAGE:

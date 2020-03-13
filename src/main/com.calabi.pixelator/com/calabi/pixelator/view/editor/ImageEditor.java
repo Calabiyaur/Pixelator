@@ -758,7 +758,7 @@ public class ImageEditor extends Editor {
         }
     }
 
-    public void reverse() { //TODO: Make undoable
+    public void reverse() { //TODO: Make undoable, use WritableImage API so that WritableImage.frameList gets updated
         Check.ensure(getImage().isAnimated());
 
         PlatformImage[] frames = getImage().getFrames();
