@@ -520,8 +520,6 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         });
 
         viewRect.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
-            //lastMouseX = e.getX() - viewContent.getLayoutX(); //TODO: Is this needed?
-            //lastMouseY = e.getY() - viewContent.getLayoutY();
             if (dragging && MouseButton.MIDDLE.equals(e.getButton())) {
                 if (hsb.isVisible() || vsb.isVisible()) {
                     double dX = (dragStartX - e.getX()) / (nodeWidth * (1 - hsb.getVisibleAmount()));
@@ -631,8 +629,10 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         final ScrollPane sp = getSkinnable();
         double minY = Math.min((-posY / (vsb.getMax() - vsb.getMin()) * (nodeHeight - contentHeight)), 0);
 
+        // CUSTOM PART:
         double extraY = 0;
-        if (viewRect.getHeight() > nodeHeight) {
+        if (getSkinnable().isCenterContent() && viewRect.getHeight() > nodeHeight) {
+            // Here, we add half of the remaining space to the position in order to center the viewContent.
             extraY = (viewRect.getHeight() - nodeHeight) / 2;
         }
         viewContent.setLayoutY(snapPositionY(minY + extraY));
@@ -647,8 +647,10 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         double x = isReverseNodeOrientation() ? (hsb.getMax() - (posX - hsb.getMin())) : posX;
         double minX = Math.min((-x / (hsb.getMax() - hsb.getMin()) * (nodeWidth - contentWidth)), 0);
 
+        // CUSTOM PART:
         double extraX = 0;
-        if (viewRect.getWidth() > nodeWidth) {
+        if (getSkinnable().isCenterContent() && viewRect.getWidth() > nodeWidth) {
+            // Here, we add half of the remaining space to the position in order to center the viewContent.
             extraX = (viewRect.getWidth() - nodeWidth) / 2;
         }
         viewContent.setLayoutX(snapPositionX(minX + extraX));

@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -16,6 +17,7 @@ import javafx.scene.layout.VBox;
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
 import com.calabi.pixelator.control.image.PlatformImageList;
+import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.control.region.BalloonRegion;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;
@@ -33,7 +35,8 @@ public class AnimationLayout extends Layout {
     private ToggleImageButton play;
     private ToggleImageButton expand;
 
-    private FlowPane frames;
+    private FlowPane flowPane;
+    private BasicScrollPane flowWrapper;
 
     public AnimationLayout(ImageWindow view) {
         super(view);
@@ -54,12 +57,13 @@ public class AnimationLayout extends Layout {
         HBox frameButtonsPane = new HBox(addFrame, deleteFrame,
                 new BalloonRegion(), previousFrame, nextFrame, play,
                 new BalloonRegion(), expand);
+        frameButtonsPane.setMinWidth(0);
         VBox framePane = new VBox(frameButtonsPane);
 
         // Handle collapsing / expanding
         expand.selectedProperty().addListener((ov, o, n) -> Do.when(n,
-                () -> framePane.getChildren().add(frames),
-                () -> framePane.getChildren().remove(frames)
+                () -> framePane.getChildren().add(flowWrapper),
+                () -> framePane.getChildren().remove(flowWrapper)
         ));
 
         return framePane;
@@ -78,7 +82,12 @@ public class AnimationLayout extends Layout {
         expand = new ToggleImageButton(Images.DROP_ARROW_DOWN, Images.DROP_ARROW_UP);
 
         // Frame pane nodes
-        frames = new FlowPane();
+        flowPane = new FlowPane();
+        flowWrapper = new BasicScrollPane(flowPane);
+        flowWrapper.setScrollByMouse(true);
+        flowWrapper.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        flowWrapper.setFitToWidth(true);
+        flowWrapper.setCenterContent(false);
     }
 
     private void initBehavior() {
@@ -112,14 +121,14 @@ public class AnimationLayout extends Layout {
     private void addFrames(List<? extends Image> frameList) {
         for (Image platformImage : frameList) {
             FrameCell frameView = new FrameCell(platformImage);
-            frameView.setOnMousePressed(e -> image.setIndex(frames.getChildren().indexOf(frameView)));
-            frames.getChildren().add(frameView);
+            frameView.setOnMousePressed(e -> image.setIndex(flowPane.getChildren().indexOf(frameView)));
+            flowPane.getChildren().add(frameView);
         }
     }
 
     private void removeFrames(List<? extends Image> frameList) {
         for (Image platformImage : frameList) {
-            frames.getChildren().removeIf(iv -> iv instanceof FrameCell && ((FrameCell) iv).image == platformImage);
+            flowPane.getChildren().removeIf(iv -> iv instanceof FrameCell && ((FrameCell) iv).image == platformImage);
         }
     }
 

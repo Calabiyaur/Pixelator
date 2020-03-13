@@ -13,6 +13,8 @@ public class BasicScrollPane extends ScrollPane {
     private boolean scrollByMouse = false;
     private EventHandler<ScrollEvent> onRawScroll;
 
+    private boolean centerContent = true;
+
     public BasicScrollPane() {
         this(null);
     }
@@ -32,6 +34,14 @@ public class BasicScrollPane extends ScrollPane {
 
     public void setScrollByMouse(boolean value) {
         this.scrollByMouse = value;
+    }
+
+    public boolean isCenterContent() {
+        return centerContent;
+    }
+
+    public void setCenterContent(boolean centerContent) {
+        this.centerContent = centerContent;
     }
 
     public EventHandler<ScrollEvent> getOnRawScroll() {
