@@ -82,7 +82,7 @@ public class AnimationLayout extends Layout {
         expand = new ToggleImageButton(Images.DROP_ARROW_DOWN, Images.DROP_ARROW_UP);
 
         // Frame pane nodes
-        flowPane = new FlowPane();
+        flowPane = new FlowPane(); //TODO: Make frame preview a popup to solve the resize dilemma (= "image or frame preview?")
         flowWrapper = new BasicScrollPane(flowPane);
         flowWrapper.setScrollByMouse(true);
         flowWrapper.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
