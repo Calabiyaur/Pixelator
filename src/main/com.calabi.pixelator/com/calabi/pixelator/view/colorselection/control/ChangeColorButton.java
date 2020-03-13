@@ -2,16 +2,12 @@ package com.calabi.pixelator.view.colorselection.control;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.geometry.Bounds;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.PopupControl;
-import javafx.scene.control.Skin;
-import javafx.scene.control.Skinnable;
 import javafx.scene.paint.Color;
-import javafx.stage.PopupWindow;
 
+import com.calabi.pixelator.control.window.Popup;
 import com.calabi.pixelator.files.PaletteFile;
+import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.view.palette.PaletteEditor;
@@ -22,7 +18,7 @@ public class ChangeColorButton extends Button {
     private final Color leftColor;
 
     private final PaletteEditor editor;
-    private final PopupControl popup;
+    private final Popup popup;
 
     private boolean justHidden = false;
 
@@ -38,49 +34,14 @@ public class ChangeColorButton extends Button {
         updateColor(leftColor);
         valueProperty().addListener((ov, o, n) -> updateColor(n));
 
-        popup = createPopup(editor);
-        setOnMousePressed(e -> Do.when(!justHidden && !popup.isShowing(), () -> showPopup()));
+        popup = new Popup(this, editor, Direction.SOUTH_WEST, Direction.NORTH_WEST, true);
+        setOnMousePressed(e -> Do.when(!justHidden && !popup.isShowing(), () -> popup.show(20, 0)));
         editor.setOnMouseReleased(e -> popup.hide());
         popup.setOnAutoHide(e -> justHidden = true);
         setOnMouseReleased(e -> justHidden = false);
         focusedProperty().addListener((ov, o, n) -> Do.when(!n, () -> justHidden = false));
 
         setMinSize(80, 30);
-    }
-
-    private PopupControl createPopup(Node content) {
-        PopupControl popup = new PopupControl() {
-            {
-                setSkin(new Skin<>() {
-                    @Override
-                    public Skinnable getSkinnable() {
-                        return ChangeColorButton.this;
-                    }
-
-                    @Override
-                    public Node getNode() {
-                        return content;
-                    }
-
-                    @Override
-                    public void dispose() {
-                    }
-                });
-            }
-        };
-        popup.setConsumeAutoHidingEvents(false);
-        popup.setAutoHide(true);
-        popup.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_TOP_LEFT);
-        return popup;
-    }
-
-    private void showPopup() {
-        if (!popup.isShowing()) {
-            Bounds bounds = localToScreen(getBoundsInLocal());
-            double x = bounds.getMinX();
-            double y = bounds.getMaxY();
-            popup.show(getScene().getWindow(), x + 20, y);
-        }
     }
 
     private void updateColor(Color rightColor) {

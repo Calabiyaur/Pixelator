@@ -3,10 +3,6 @@ package com.calabi.pixelator.view.palette;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.PopupControl;
-import javafx.scene.control.Skin;
-import javafx.scene.control.Skinnable;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,9 +12,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
-import javafx.stage.PopupWindow;
 
 import com.calabi.pixelator.control.basic.ImageButton;
+import com.calabi.pixelator.control.window.Popup;
+import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;
 
@@ -26,7 +23,7 @@ public class PaletteToggleButton extends ToggleButton {
 
     private final PaletteEditor editor;
     private final Text textPane;
-    private final PopupControl popup;
+    private final Popup popup;
     private EventHandler<? super MouseEvent> onClose;
 
     public PaletteToggleButton(Image image, PaletteEditor editor, String text, boolean closable) {
@@ -68,9 +65,9 @@ public class PaletteToggleButton extends ToggleButton {
             close.setOnMouseClicked(e -> close(e));
         }
 
-        popup = createPopup(content);
+        popup = new Popup(this, content, Direction.NORTH_WEST, Direction.NORTH_EAST, false);
 
-        setOnMouseEntered(e -> showPopup());
+        setOnMouseEntered(e -> popup.show(0, 0));
         setOnMouseExited(e -> maybeHidePopup(e));
         content.setOnMouseExited(e -> maybeHidePopup(e));
 
@@ -99,40 +96,6 @@ public class PaletteToggleButton extends ToggleButton {
     private void close(MouseEvent e) {
         onClose.handle(e);
         popup.hide();
-    }
-
-    private PopupControl createPopup(Node content) {
-        PopupControl popup = new PopupControl() {
-            {
-                setSkin(new Skin<>() {
-                    @Override
-                    public Skinnable getSkinnable() {
-                        return PaletteToggleButton.this;
-                    }
-
-                    @Override
-                    public Node getNode() {
-                        return content;
-                    }
-
-                    @Override
-                    public void dispose() {
-                    }
-                });
-            }
-        };
-        popup.setConsumeAutoHidingEvents(false);
-        popup.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_TOP_RIGHT);
-        return popup;
-    }
-
-    private void showPopup() {
-        if (!popup.isShowing()) {
-            Bounds bounds = localToScreen(getBoundsInLocal());
-            double x = bounds.getMinX();
-            double y = bounds.getMinY();
-            popup.show(getScene().getWindow(), x, y);
-        }
     }
 
     private void maybeHidePopup(MouseEvent e) { //FIXME: Coordinates are sometimes a tad wrong
