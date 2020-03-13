@@ -3,6 +3,7 @@ package com.calabi.pixelator.view.editor.window;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -22,6 +23,11 @@ public class AnimationLayout extends Layout {
 
     public AnimationLayout(ImageWindow view) {
         super(view);
+    }
+
+    @Override
+    public Node createGraphic() {
+        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.calabi.pixelator.view.editor.window;
 
+import javafx.scene.Node;
 import javafx.scene.layout.Region;
 
 import com.calabi.pixelator.control.image.WritableImage;
@@ -31,6 +32,8 @@ public abstract class Layout {
         }
         throw new IllegalStateException();
     }
+
+    public abstract Node createGraphic();
 
     public abstract Region createLowerContent();
 

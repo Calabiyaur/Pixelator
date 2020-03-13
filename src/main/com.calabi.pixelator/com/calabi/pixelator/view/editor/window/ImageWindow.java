@@ -3,8 +3,6 @@ package com.calabi.pixelator.view.editor.window;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -19,7 +17,6 @@ import com.calabi.pixelator.control.parent.BasicWindow;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.Files;
-import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.res.Config;
@@ -54,15 +51,11 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         setText(imageFile.getName());
         imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
 
-        if (imageFile.getCategory() == Category.PALETTE) {
-            Image previewImage = ((PaletteFile) imageFile).getPreview();
-            setGraphic(previewImage != null ? new ImageView(previewImage) : Images.PALETTE.getImageView());
-            if (imageFile.getExtension() != Extension.PALI) {
-                imageView.setZoomMinimum(4);
-                imageView.setZoomMaximum(24);
-                imageView.setScaleX(PaletteEditor.ZOOM_FACTOR);
-                imageView.setScaleY(PaletteEditor.ZOOM_FACTOR);
-            }
+        if (imageFile.getCategory() == Category.PALETTE && imageFile.getExtension() != Extension.PALI) {
+            imageView.setZoomMinimum(4);
+            imageView.setZoomMaximum(48);
+            imageView.setScaleX(PaletteEditor.ZOOM_FACTOR);
+            imageView.setScaleY(PaletteEditor.ZOOM_FACTOR);
         }
 
         setContent(imageEditor);
@@ -90,6 +83,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
 
     private void initLayout() {
         layout = Layout.get(this);
+        setGraphic(layout.createGraphic());
         setLowerContent(layout.createLowerContent());
     }
 
