@@ -1,5 +1,6 @@
 package com.calabi.pixelator.view.editor.window;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.collections.ListChangeListener;
@@ -21,6 +22,16 @@ import com.calabi.pixelator.util.Do;
 
 public class AnimationLayout extends Layout {
 
+    private ImageButton addFrame;
+    private ImageButton deleteFrame;
+
+    private ImageButton previousFrame;
+    private ImageButton nextFrame;
+    private ToggleImageButton play;
+    private ToggleImageButton expand;
+
+    private FlowPane frames;
+
     public AnimationLayout(ImageWindow view) {
         super(view);
     }
@@ -33,16 +44,48 @@ public class AnimationLayout extends Layout {
     @Override
     public Region createLowerContent() {
 
-        ImageButton addFrame = new ImageButton(Images.ADD_FRAME);
+        createNodes();
+        initBehavior();
+
+        // Create content
+        HBox frameButtonsPane = new HBox(addFrame, deleteFrame,
+                new BalloonRegion(), previousFrame, nextFrame, play,
+                new BalloonRegion(), expand);
+        VBox framePane = new VBox(frameButtonsPane);
+
+        // Handle collapsing / expanding
+        expand.selectedProperty().addListener((ov, o, n) -> Do.when(n,
+                () -> framePane.getChildren().add(frames),
+                () -> framePane.getChildren().remove(frames)
+        ));
+
+        return framePane;
+    }
+
+    private void createNodes() {
+        // Button pane nodes that are always visible:
+        addFrame = new ImageButton(Images.ADD_FRAME);
+        deleteFrame = new ImageButton(Images.REMOVE_FRAME);
+
+        previousFrame = new ImageButton(Images.PREVIOUS_FRAME);
+        nextFrame = new ImageButton(Images.NEXT_FRAME);
+
+        play = new ToggleImageButton(Images.PLAY, Images.PAUSE);
+
+        expand = new ToggleImageButton(Images.DROP_ARROW_DOWN, Images.DROP_ARROW_UP);
+
+        // Frame pane nodes
+        frames = new FlowPane();
+    }
+
+    private void initBehavior() {
         addFrame.setOnAction(e -> editor.addFrame());
-        ImageButton deleteFrame = new ImageButton(Images.REMOVE_FRAME);
         deleteFrame.setOnAction(e -> editor.removeFrame());
 
-        ImageButton previousFrame = new ImageButton(Images.PREVIOUS_FRAME);
         previousFrame.setOnAction(e -> editor.previousFrame());
-        ImageButton nextFrame = new ImageButton(Images.NEXT_FRAME);
         nextFrame.setOnAction(e -> editor.nextFrame());
-        ToggleImageButton play = new ToggleImageButton(Images.PLAY, Images.PAUSE);
+
+        // Store index because we want to continue with the frame we left off with
         AtomicInteger i = new AtomicInteger(0);
         play.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> {
             i.set(image.getIndex());
@@ -52,39 +95,29 @@ public class AnimationLayout extends Layout {
             image.setIndex(i.get());
         }));
 
-        ToggleImageButton expand = new ToggleImageButton(Images.DROP_ARROW_DOWN, Images.DROP_ARROW_UP);
-        FlowPane frames = new FlowPane();
+        // Synchronize images with the underlying image's frames
         PlatformImageList frameList = new PlatformImageList(image);
+        addFrames(frameList);
+        frameList.addListener((ListChangeListener<Image>) c -> {
+            while (c.next()) {
+                removeFrames(c.getRemoved());
+                addFrames(c.getAddedSubList());
+            }
+        });
+    }
+
+    private void addFrames(List<? extends Image> frameList) {
         for (Image platformImage : frameList) {
-            PixelatedImageView frameView = new PixelatedImageView(platformImage); //TODO Extract method
+            PixelatedImageView frameView = new PixelatedImageView(platformImage);
             frameView.setOnMousePressed(e -> image.setIndex(frames.getChildren().indexOf(frameView)));
             frames.getChildren().add(frameView);
         }
-        frameList.addListener((ListChangeListener<Image>) c -> {
-            while (c.next()) {
-                for (Image platformImage : c.getRemoved()) {
-                    frames.getChildren().removeIf(iv ->
-                            iv instanceof ImageView && ((ImageView) iv).getImage() == platformImage);
-                }
-                for (Image platformImage : c.getAddedSubList()) {
-                    PixelatedImageView frameView = new PixelatedImageView(platformImage); //TODO Extract method
-                    frameView.setOnMousePressed(e -> image.setIndex(frames.getChildren().indexOf(frameView)));
-                    frames.getChildren().add(frameView);
-                }
-            }
-        });
+    }
 
-        HBox frameButtonsPane = new HBox(addFrame, deleteFrame,
-                new BalloonRegion(), previousFrame, nextFrame, play,
-                new BalloonRegion(), expand);
-        VBox framePane = new VBox(frameButtonsPane);
-
-        expand.selectedProperty().addListener((ov, o, n) -> Do.when(n,
-                () -> framePane.getChildren().add(frames),
-                () -> framePane.getChildren().remove(frames)
-        ));
-
-        return framePane;
+    private void removeFrames(List<? extends Image> frameList) {
+        for (Image platformImage : frameList) {
+            frames.getChildren().removeIf(iv -> iv instanceof ImageView && ((ImageView) iv).getImage() == platformImage);
+        }
     }
 
 }
