@@ -20,6 +20,7 @@ import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
+import com.calabi.pixelator.view.editor.window.ImageWindow;
 import com.calabi.pixelator.view.tool.ToolManager;
 
 public class IWC extends Pane {

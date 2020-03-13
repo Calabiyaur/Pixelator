@@ -125,9 +125,15 @@ public class BasicWindow extends DraggablePane {
 
     public void setLowerContent(Region region) {
         if (innerContent.getChildren().size() <= 1) {
-            innerContent.getChildren().add(region);
+            if (region != null) {
+                innerContent.getChildren().add(region);
+            }
         } else {
-            innerContent.getChildren().set(1, region);
+            if (region != null) {
+                innerContent.getChildren().set(1, region);
+            } else {
+                innerContent.getChildren().remove(1);
+            }
         }
         innerContent.setSpacing(4);
     }

@@ -48,6 +48,7 @@ import com.calabi.pixelator.util.shape.ShapeMaster;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
+import com.calabi.pixelator.view.editor.window.ImageWindow;
 import com.calabi.pixelator.view.palette.PaletteMaster;
 import com.calabi.pixelator.view.palette.SortMaster;
 import com.calabi.pixelator.view.tool.Tool;

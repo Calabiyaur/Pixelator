@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import com.calabi.pixelator.util.StringUtil;
 import com.calabi.pixelator.view.editor.ImageEditor;
-import com.calabi.pixelator.view.editor.ImageWindow;
+import com.calabi.pixelator.view.editor.window.ImageWindow;
 
 public class ToolManager {
 

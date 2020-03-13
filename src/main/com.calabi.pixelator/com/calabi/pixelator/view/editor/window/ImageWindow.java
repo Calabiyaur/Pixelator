@@ -1,32 +1,21 @@
-package com.calabi.pixelator.view.editor;
-
-import java.util.concurrent.atomic.AtomicInteger;
+package com.calabi.pixelator.view.editor.window;
 
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import com.calabi.pixelator.control.basic.ImageButton;
-import com.calabi.pixelator.control.basic.ToggleImageButton;
-import com.calabi.pixelator.control.image.PixelatedImageView;
-import com.calabi.pixelator.control.image.PlatformImageList;
 import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.control.parent.BasicWindow;
-import com.calabi.pixelator.control.region.BalloonRegion;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.Files;
@@ -37,19 +26,21 @@ import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.start.ActionManager;
 import com.calabi.pixelator.start.Pixelator;
-import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.NumberUtil;
-import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
+import com.calabi.pixelator.view.editor.IWC;
+import com.calabi.pixelator.view.editor.ImageEditor;
 import com.calabi.pixelator.view.palette.PaletteEditor;
 
 public class ImageWindow extends BasicWindow { //TODO: Extract models for image / palette / animation window
 
     public static final double MIN_WIDTH = 172;
     public static final double MIN_HEIGHT = 112;
+
+    private Layout layout;
 
     private ImageEditor imageEditor;
     private PixelFile imageFile;
@@ -59,7 +50,10 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         this.imageFile = imageFile;
         imageView.imageProperty().addListener((ov, o, n) -> this.imageFile.setImage((WritableImage) n));
         imageEditor = new ImageEditor(imageFile, imageView);
+
         setText(imageFile.getName());
+        imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
+
         if (imageFile.getCategory() == Category.PALETTE) {
             Image previewImage = ((PaletteFile) imageFile).getPreview();
             setGraphic(previewImage != null ? new ImageView(previewImage) : Images.PALETTE.getImageView());
@@ -70,77 +64,11 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
                 imageView.setScaleY(PaletteEditor.ZOOM_FACTOR);
             }
         }
-        imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
+
         setContent(imageEditor);
-        switch(imageFile.getCategory()) {
-            case ANIMATION:
-                ImageButton addFrame = new ImageButton(Images.ADD_FRAME);
-                addFrame.setOnAction(e -> imageEditor.addFrame());
-                ImageButton deleteFrame = new ImageButton(Images.REMOVE_FRAME);
-                deleteFrame.setOnAction(e -> imageEditor.removeFrame());
 
-                ImageButton previousFrame = new ImageButton(Images.PREVIOUS_FRAME);
-                previousFrame.setOnAction(e -> imageEditor.previousFrame());
-                ImageButton nextFrame = new ImageButton(Images.NEXT_FRAME);
-                nextFrame.setOnAction(e -> imageEditor.nextFrame());
-                ToggleImageButton play = new ToggleImageButton(Images.PLAY, Images.PAUSE);
-                AtomicInteger i = new AtomicInteger(0);
-                play.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> {
-                    i.set(getImage().getIndex());
-                    imageEditor.play();
-                }, () -> {
-                    imageEditor.stop();
-                    getImage().setIndex(i.get());
-                }));
-
-                ToggleImageButton expand = new ToggleImageButton(Images.DROP_ARROW_DOWN, Images.DROP_ARROW_UP);
-                FlowPane frames = new FlowPane();
-                PlatformImageList frameList = new PlatformImageList(getImage());
-                for (Image platformImage : frameList) {
-                    PixelatedImageView frameView = new PixelatedImageView(platformImage); //TODO Extract method
-                    frameView.setOnMousePressed(e -> getImage().setIndex(frames.getChildren().indexOf(frameView)));
-                    frames.getChildren().add(frameView);
-                }
-                frameList.addListener((ListChangeListener<Image>) c -> {
-                    while (c.next()) {
-                        for (Image platformImage : c.getRemoved()) {
-                            frames.getChildren().removeIf(iv ->
-                                    iv instanceof ImageView && ((ImageView) iv).getImage() == platformImage);
-                        }
-                        for (Image platformImage : c.getAddedSubList()) {
-                            PixelatedImageView frameView = new PixelatedImageView(platformImage); //TODO Extract method
-                            frameView.setOnMousePressed(e -> getImage().setIndex(frames.getChildren().indexOf(frameView)));
-                            frames.getChildren().add(frameView);
-                        }
-                    }
-                });
-
-                HBox frameButtonsPane = new HBox(addFrame, deleteFrame,
-                        new BalloonRegion(), previousFrame, nextFrame, play,
-                        new BalloonRegion(), expand);
-                VBox framePane = new VBox(frameButtonsPane);
-
-                expand.selectedProperty().addListener((ov, o, n) -> Do.when(n,
-                        () -> framePane.getChildren().add(frames),
-                        () -> framePane.getChildren().remove(frames)
-                ));
-
-                setLowerContent(framePane);
-                break;
-            case IMAGE:
-                break;
-            case PALETTE:
-                Button preview = new Button("Preview");
-                preview.setOnAction(e -> ColorView.getPaletteSelection().changePreview(imageFile));
-                Button apply = new Button("Apply");
-                ColorView.getPaletteSelection().getEditor().updateImage(getImage());
-                apply.setDisable(true);
-
-                preview.setGraphic(Images.OPEN.getImageView());
-                HBox buttons = new HBox(preview, new BalloonRegion(), apply);
-                setLowerContent(buttons);
-                break;
-        }
+        initLayout();
+        imageEditor.imageAnimatedProperty().addListener((ov, o, n) -> initLayout());
 
         setOnScroll(e -> onScroll(e));
         setOnMouseClicked(e -> mouseClick(e));
@@ -158,6 +86,11 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         popup.setOnAction(e -> popupAction());
 
         popup.setDisable(true);
+    }
+
+    private void initLayout() {
+        layout = Layout.get(this);
+        setLowerContent(layout.createLowerContent());
     }
 
     public void initConfig() {

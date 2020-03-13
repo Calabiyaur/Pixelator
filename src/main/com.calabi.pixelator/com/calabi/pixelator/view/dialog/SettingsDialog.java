@@ -15,7 +15,7 @@ import com.calabi.pixelator.control.basic.BasicColorField;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.editor.IWC;
-import com.calabi.pixelator.view.editor.ImageWindow;
+import com.calabi.pixelator.view.editor.window.ImageWindow;
 
 public class SettingsDialog extends BasicDialog {
 
