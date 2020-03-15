@@ -60,7 +60,6 @@ public class ToolView extends VBox {
     private ToolView() {
         setStyle("-fx-background-color: #f4f4f4");
         setSpacing(6);
-        setPrefWidth(210);
         setPadding(new Insets(6, 0, 6, 6));
 
         getChildren().add(new Label("TOOLS"));

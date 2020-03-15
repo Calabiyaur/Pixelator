@@ -13,15 +13,16 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import com.calabi.pixelator.control.basic.BasicMenuBar;
 import com.calabi.pixelator.control.image.WritableImage;
-import com.calabi.pixelator.control.parent.ResizableBorderPane;
 import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PaletteFile;
@@ -55,12 +56,10 @@ public class MainScene extends Scene {
     private PaletteSelection paletteSelection;
 
     public MainScene() {
-        super(new ResizableBorderPane());
-        ResizableBorderPane root = ((ResizableBorderPane) getRoot());
-        Platform.runLater(() -> {
-            root.setLeftMargin(0.16359447004608296 * 1304);
-            root.setRightMargin(0.2442396313364056 * 1304);
-        });
+        super(new VBox());
+        VBox root = (VBox) getRoot();
+        SplitPane splitPane = new SplitPane();
+        VBox.setVgrow(splitPane, Priority.ALWAYS);
 
         double width = Config.SCREEN_WIDTH.getDouble();
         double height = Config.SCREEN_HEIGHT.getDouble();
@@ -74,19 +73,18 @@ public class MainScene extends Scene {
         createKeyListener();
         IWC.get().setOnKeyPressed(this.getOnKeyPressed());
 
-        BorderPane center = new BorderPane(IWC.get());
-        center.setStyle("-fx-background-color: #BBBBBB");
-        root.setCenter(center);
-
         VBox barBox = new VBox();
-        root.setTop(barBox);
+        root.getChildren().add(barBox);
 
         ToolView toolView = ToolView.get();
-        root.setLeft(toolView);
+        splitPane.getItems().add(toolView);
+
+        BorderPane center = new BorderPane(IWC.get());
+        center.setStyle("-fx-background-color: #BBBBBB");
+        splitPane.getItems().add(center);
 
         ColorView colorView = ColorView.get();
-        colorView.setPrefWidth(291);
-        root.setRight(colorView);
+        splitPane.getItems().add(colorView);
         paletteSelection = ColorView.getPaletteSelection();
 
         InfoView infoView = InfoView.get();
@@ -95,6 +93,14 @@ public class MainScene extends Scene {
         MenuBar menuBar = createMenuBar();
         ToolBar toolBar = createToolBar();
         barBox.getChildren().addAll(menuBar, toolBar);
+
+        root.getChildren().add(splitPane);
+        toolView.setMaxWidth(208);
+        colorView.setMaxWidth(292);
+        Platform.runLater(() -> {
+            toolView.setMaxWidth(-1);
+            colorView.setMaxWidth(-1);
+        });
 
         paletteSelection.init();
 
