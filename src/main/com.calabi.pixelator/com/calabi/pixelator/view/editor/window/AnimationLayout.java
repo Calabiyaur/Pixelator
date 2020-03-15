@@ -115,6 +115,8 @@ public class AnimationLayout extends Layout {
         // Frame pane nodes
         flowPane = new FlowPane();
         flowWrapper = new BasicScrollPane(flowPane);
+        flowWrapper.setStyle("-fx-background-color: #DDDDDDFF");
+        flowWrapper.setMinHeight(Math.min(image.getHeight(), MAX_FRAME_HEIGHT));
         flowWrapper.setScrollByMouse(true);
         flowWrapper.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         flowWrapper.setFitToWidth(true);
