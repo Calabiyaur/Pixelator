@@ -138,7 +138,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         double prefHeight = Math.ceil(getImageView().getHeight() * getImageView().getScaleY()
                 + getHeaderHeight()
                 + BasicWindow.RESIZE_MARGIN * 2
-                + getLowerContentHeight())
+                + layout.getExtraHeight())
                 - 1;
 
         double maxWidth = ((IWC) getParent()).getWidth();

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.collections.ListChangeListener;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -12,15 +13,17 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
 import com.calabi.pixelator.control.image.PlatformImageList;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
+import com.calabi.pixelator.control.parent.DraggablePane.BorderRegion;
 import com.calabi.pixelator.control.region.BalloonRegion;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;
+
+import static com.calabi.pixelator.control.parent.DraggablePane.RESIZE_MARGIN;
 
 public class AnimationLayout extends Layout {
 
@@ -58,15 +61,43 @@ public class AnimationLayout extends Layout {
                 new BalloonRegion(), previousFrame, nextFrame, play,
                 new BalloonRegion(), expand);
         frameButtonsPane.setMinWidth(0);
-        VBox framePane = new VBox(frameButtonsPane);
 
         // Handle collapsing / expanding
+        BorderRegion borderW = new BorderRegion(view, Cursor.W_RESIZE, RESIZE_MARGIN, view, flowWrapper);
+        BorderRegion borderSW = new BorderRegion(view, Cursor.SW_RESIZE, RESIZE_MARGIN, view, flowWrapper);
+        BorderRegion borderS = new BorderRegion(view, Cursor.S_RESIZE, RESIZE_MARGIN, view, flowWrapper);
+        BorderRegion borderSE = new BorderRegion(view, Cursor.SE_RESIZE, RESIZE_MARGIN, view, flowWrapper);
+        BorderRegion borderE = new BorderRegion(view, Cursor.E_RESIZE, RESIZE_MARGIN, view, flowWrapper);
         expand.selectedProperty().addListener((ov, o, n) -> Do.when(n,
-                () -> framePane.getChildren().add(flowWrapper),
-                () -> framePane.getChildren().remove(flowWrapper)
+                () -> {
+                    view.add(flowWrapper, 1, 5, 2, 1);
+                    view.add(borderW, 0, 5);
+                    view.add(borderSW, 0, 6);
+                    view.add(borderS, 1, 6, 2, 1);
+                    view.add(borderSE, 3, 6);
+                    view.add(borderE, 3, 5);
+                    double flowWrapperHeight = flowWrapper.getHeight() > 0 ? flowWrapper.getHeight() : image.getHeight();
+                    view.setPrefHeight(view.getPrefHeight() + flowWrapperHeight + RESIZE_MARGIN);
+                },
+                () -> {
+                    view.remove(flowWrapper);
+                    view.remove(borderW);
+                    view.remove(borderSW);
+                    view.remove(borderS);
+                    view.remove(borderSE);
+                    view.remove(borderE);
+                    view.setPrefHeight(view.getPrefHeight() - flowWrapper.getHeight() - RESIZE_MARGIN);
+                }
         ));
 
-        return framePane;
+        return frameButtonsPane;
+    }
+
+    @Override
+    public double getExtraHeight() {
+        return expand.getHeight()
+                + 4
+                + (expand.isSelected() ? flowWrapper.getHeight() + RESIZE_MARGIN : 0);
     }
 
     private void createNodes() {
@@ -82,7 +113,7 @@ public class AnimationLayout extends Layout {
         expand = new ToggleImageButton(Images.DROP_ARROW_DOWN, Images.DROP_ARROW_UP);
 
         // Frame pane nodes
-        flowPane = new FlowPane(); //TODO: Make frame preview a popup to solve the resize dilemma (= "image or frame preview?")
+        flowPane = new FlowPane();
         flowWrapper = new BasicScrollPane(flowPane);
         flowWrapper.setScrollByMouse(true);
         flowWrapper.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);

@@ -1,7 +1,6 @@
 package com.calabi.pixelator.control.parent;
 
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -61,16 +60,16 @@ public class BasicWindow extends DraggablePane {
         int small = 1;
         int reduced = normal - small;
 
-        add(this.createBorderRegion(Cursor.NW_RESIZE, reduced), 0, 0, 1, 2);
-        add(this.createBorderRegion(Cursor.N_RESIZE, reduced), 1, 0, 1, 2);
-        add(this.createBorderRegion(Cursor.N_RESIZE, small), 2, 0, 2, 1);
-        add(this.createBorderRegion(Cursor.NE_RESIZE, small), 4, 0);
-        add(this.createBorderRegion(Cursor.E_RESIZE, small), 4, 1, 1, 2);
-        add(this.createBorderRegion(Cursor.E_RESIZE, reduced), 3, 3, 2, 1);
-        add(this.createBorderRegion(Cursor.SE_RESIZE, reduced), 3, 4, 2, 1);
-        add(this.createBorderRegion(Cursor.S_RESIZE, normal), 1, 4, 2, 1);
-        add(this.createBorderRegion(Cursor.SW_RESIZE, normal), 0, 4);
-        add(this.createBorderRegion(Cursor.W_RESIZE, normal), 0, 2, 1, 2);
+        add(new BorderRegion(this, Cursor.NW_RESIZE, reduced), 0, 0, 1, 2);
+        add(new BorderRegion(this, Cursor.N_RESIZE, reduced), 1, 0, 1, 2);
+        add(new BorderRegion(this, Cursor.N_RESIZE, small), 2, 0, 2, 1);
+        add(new BorderRegion(this, Cursor.NE_RESIZE, small), 4, 0);
+        add(new BorderRegion(this, Cursor.E_RESIZE, small), 4, 1, 1, 2);
+        add(new BorderRegion(this, Cursor.E_RESIZE, reduced), 3, 3, 2, 1);
+        add(new BorderRegion(this, Cursor.SE_RESIZE, reduced), 3, 4, 2, 1);
+        add(new BorderRegion(this, Cursor.S_RESIZE, normal), 1, 4, 2, 1);
+        add(new BorderRegion(this, Cursor.SW_RESIZE, normal), 0, 4);
+        add(new BorderRegion(this, Cursor.W_RESIZE, normal), 0, 2, 1, 2);
 
         ColumnConstraints column3 = new ColumnConstraints();
         column3.setMinWidth(reduced);
@@ -136,15 +135,6 @@ public class BasicWindow extends DraggablePane {
             }
         }
         innerContent.setSpacing(4);
-    }
-
-    protected double getLowerContentHeight() {
-        ObservableList<Node> innerChildren = innerContent.getChildren();
-        if (innerChildren.size() <= 1) {
-            return 0;
-        } else {
-            return ((Region) innerChildren.get(1)).getHeight() + innerContent.getSpacing();
-        }
     }
 
     public double getHeaderHeight() {

@@ -32,4 +32,9 @@ public class PaletteLayout extends Layout {
         return null;
     }
 
+    @Override
+    public double getExtraHeight() {
+        return 0;
+    }
+
 }

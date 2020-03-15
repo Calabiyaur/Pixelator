@@ -37,4 +37,6 @@ public abstract class Layout {
 
     public abstract Region createLowerContent();
 
+    public abstract double getExtraHeight();
+
 }

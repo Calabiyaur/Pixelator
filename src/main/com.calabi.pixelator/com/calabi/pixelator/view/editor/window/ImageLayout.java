@@ -19,4 +19,9 @@ public class ImageLayout extends Layout {
         return null;
     }
 
+    @Override
+    public double getExtraHeight() {
+        return 0;
+    }
+
 }

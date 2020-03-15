@@ -2,9 +2,6 @@ package com.calabi.pixelator.control.parent;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
@@ -22,11 +19,9 @@ public abstract class DraggablePane extends GridPane {
 
     GridPane content;
 
-    private double previousX = 0;
-    private double previousY = 0;
+    private double previousX;
+    private double previousY;
     private boolean dragging;
-    private Direction resizing;
-    private boolean exiting;
 
     private DoubleProperty minX = new SimpleDoubleProperty(Double.MIN_VALUE); //FIXME: Min / Max values work only half
     private DoubleProperty minY = new SimpleDoubleProperty(Double.MIN_VALUE);
@@ -35,10 +30,6 @@ public abstract class DraggablePane extends GridPane {
 
     private boolean dragHorizontal = true;
     private boolean dragVertical = true;
-    private boolean resizable = true;
-
-    ObservableList<EventHandler<? super MouseEvent>> onMouseMoved = FXCollections.observableArrayList();
-    ObservableList<EventHandler<? super MouseEvent>> onMouseDragged = FXCollections.observableArrayList();
 
     public DraggablePane() {
         getStyleClass().setAll("draggable-pane");
@@ -52,46 +43,25 @@ public abstract class DraggablePane extends GridPane {
 
         setOnMousePressed(event -> mousePressed(event));
         setOnMouseDragged(event -> mouseDragged(event));
-        setOnMouseMoved(event -> mouseOver(event));
         setOnMouseReleased(event -> mouseReleased(event));
     }
 
     void createBorder() {
-        super.add(this.createBorderRegion(Cursor.NW_RESIZE, RESIZE_MARGIN), 0, 0);
-        super.add(this.createBorderRegion(Cursor.N_RESIZE, RESIZE_MARGIN), 1, 0);
-        super.add(this.createBorderRegion(Cursor.NE_RESIZE, RESIZE_MARGIN), 2, 0);
-        super.add(this.createBorderRegion(Cursor.E_RESIZE, RESIZE_MARGIN), 2, 1);
-        super.add(this.createBorderRegion(Cursor.SE_RESIZE, RESIZE_MARGIN), 2, 2);
-        super.add(this.createBorderRegion(Cursor.S_RESIZE, RESIZE_MARGIN), 1, 2);
-        super.add(this.createBorderRegion(Cursor.SW_RESIZE, RESIZE_MARGIN), 0, 2);
-        super.add(this.createBorderRegion(Cursor.W_RESIZE, RESIZE_MARGIN), 0, 1);
-    }
-
-    final Region createBorderRegion(Cursor cursor, int size) {
-        Region region = new Region();
-        region.setMinSize(size, size);
-        region.setOnMouseEntered(event -> {
-            setCursor(cursor);
-            exiting = false;
-        });
-        region.setOnMouseExited(event -> {
-            if (resizing == null) {
-                setCursor(Cursor.DEFAULT);
-            } else {
-                exiting = true;
-            }
-        });
-        return region;
+        super.add(new BorderRegion(this, Cursor.NW_RESIZE, RESIZE_MARGIN), 0, 0);
+        super.add(new BorderRegion(this, Cursor.N_RESIZE, RESIZE_MARGIN), 1, 0);
+        super.add(new BorderRegion(this, Cursor.NE_RESIZE, RESIZE_MARGIN), 2, 0);
+        super.add(new BorderRegion(this, Cursor.E_RESIZE, RESIZE_MARGIN), 2, 1);
+        super.add(new BorderRegion(this, Cursor.SE_RESIZE, RESIZE_MARGIN), 2, 2);
+        super.add(new BorderRegion(this, Cursor.S_RESIZE, RESIZE_MARGIN), 1, 2);
+        super.add(new BorderRegion(this, Cursor.SW_RESIZE, RESIZE_MARGIN), 0, 2);
+        super.add(new BorderRegion(this, Cursor.W_RESIZE, RESIZE_MARGIN), 0, 1);
     }
 
     protected void mousePressed(MouseEvent event) {
         requestFocus();
 
         if (MouseButton.PRIMARY.equals(event.getButton())) {
-            resizing = Direction.getDirection(getCursor());
-            if (resizing == Direction.NONE) {
-                dragging = true;
-            }
+            dragging = true;
 
             previousX = event.getX();
             previousY = event.getY();
@@ -99,48 +69,19 @@ public abstract class DraggablePane extends GridPane {
     }
 
     protected void mouseDragged(MouseEvent event) {
-        if (MouseButton.PRIMARY.equals(event.getButton()) && dragging || resizing != null) {
+        if (MouseButton.PRIMARY.equals(event.getButton()) && dragging) {
             double x = event.getX();
             double y = event.getY();
 
-            // Make sure the pref size is up to date
-            if (getPrefWidth() < 1.0) {
-                setPrefWidth(getWidth());
-                setPrefHeight(getHeight());
+            if (dragHorizontal) {
+                double xDiff = x - previousX;
+                setTranslateX(getTranslateX() + xDiff);
             }
-
-            if (dragging) {
-                if (dragHorizontal) {
-                    double xDiff = x - previousX;
-                    setTranslateX(getTranslateX() + xDiff);
-                }
-                if (dragVertical) {
-                    double yDiff = y - previousY;
-                    setTranslateY(Math.max(minY.doubleValue(), getTranslateY() + yDiff));
-                }
-            } else if (resizable) {
-                double xDiff = resizing.isEast() || resizing.isWest() ? x - previousX : 0;
-                double yDiff = resizing.isNorth() || resizing.isSouth() ? y - previousY : 0;
-
-                if (resizing.isEast()) {
-                    setPrefWidth(getPrefWidth() + xDiff);
-                    previousX = x;
-                } else if (resizing.isWest()) {
-                    setTranslateX(getTranslateX() + xDiff);
-                    setPrefWidth(getPrefWidth() - xDiff);
-                }
-
-                if (resizing.isSouth()) {
-                    setPrefHeight(getPrefHeight() + yDiff);
-                    previousY = y;
-                } else if (resizing.isNorth()) {
-                    setTranslateY(getTranslateY() + yDiff);
-                    setPrefHeight(getPrefHeight() - yDiff);
-                }
+            if (dragVertical) {
+                double yDiff = y - previousY;
+                setTranslateY(Math.max(minY.doubleValue(), getTranslateY() + yDiff));
             }
         }
-
-        onMouseDragged.forEach(c -> c.handle(event));
     }
 
     protected void resetPosition(double width, double height) {
@@ -148,18 +89,9 @@ public abstract class DraggablePane extends GridPane {
         setTranslateY(NumberUtil.minMax(minY.get(), getTranslateY(), maxY.get() - height));
     }
 
-    protected void mouseOver(MouseEvent event) {
-        onMouseMoved.forEach(c -> c.handle(event));
-    }
-
     protected void mouseReleased(MouseEvent event) {
         if (MouseButton.PRIMARY.equals(event.getButton())) {
             dragging = false;
-            resizing = null;
-            if (exiting) {
-                exiting = false;
-                setCursor(Cursor.DEFAULT);
-            }
         }
     }
 
@@ -183,12 +115,8 @@ public abstract class DraggablePane extends GridPane {
         content.addColumn(columnIndex, children);
     }
 
-    public void addOnMouseMoved(EventHandler<? super MouseEvent> value) {
-        onMouseMoved.add(value);
-    }
-
-    public void addOnMouseDragged(EventHandler<? super MouseEvent> value) {
-        onMouseDragged.add(value);
+    public void remove(Node child) {
+        content.getChildren().remove(child);
     }
 
     public double getMinX() {
@@ -255,11 +183,95 @@ public abstract class DraggablePane extends GridPane {
         this.dragVertical = dragVertical;
     }
 
-    @Override public boolean isResizable() {
-        return resizable;
+    /**
+     * Border region of the draggable pane that allows for resizing.
+     */
+    public static class BorderRegion extends Region {
+
+        private final Direction resizeDir;
+        private boolean resizing;
+
+        private double prevX;
+        private double prevY;
+
+        public BorderRegion(DraggablePane origin, Cursor cursor, int size) {
+            this(origin, cursor, size, origin, origin);
+        }
+
+        public BorderRegion(DraggablePane origin, Cursor cursor, int size, Region hSubject, Region vSubject) {
+
+            resizeDir = Direction.getDirection(cursor);
+
+            setCursor(cursor);
+            setMinSize(size, size);
+
+            setOnMousePressed(event -> {
+                if (MouseButton.PRIMARY.equals(event.getButton())) {
+                    startResize(event);
+                }
+            });
+            setOnMouseDragged(event -> {
+                if (resizing) {
+                    resize(origin, event, hSubject, vSubject);
+                }
+            });
+            setOnMouseReleased(event -> resizing = false);
+        }
+
+        private void startResize(MouseEvent event) {
+            resizing = true;
+            prevX = event.getSceneX();
+            prevY = event.getSceneY();
+            event.consume();
+        }
+
+        private void resize(DraggablePane origin, MouseEvent event, Region hSubject, Region vSubject) {
+            double x = event.getSceneX();
+            double y = event.getSceneY();
+
+            // Make sure the pref size is up to date
+            if (hSubject.getPrefWidth() < 1.0) {
+                hSubject.setPrefWidth(hSubject.getWidth());
+            }
+            if (vSubject.getPrefHeight() < 1.0) {
+                vSubject.setPrefHeight(vSubject.getHeight());
+            }
+
+            double xDiff = resizeDir.isEast() || resizeDir.isWest() ? x - prevX : 0;
+            double yDiff = resizeDir.isNorth() || resizeDir.isSouth() ? y - prevY : 0;
+
+            if (resizeDir.isEast()) {
+                origin.setPrefWidth(origin.getPrefWidth() + xDiff);
+                if (hSubject != origin) {
+                    hSubject.setPrefWidth(hSubject.getPrefWidth() + xDiff);
+                }
+            } else if (resizeDir.isWest()) {
+                hSubject.setTranslateX(hSubject.getTranslateX() + xDiff);
+                hSubject.setPrefWidth(hSubject.getPrefWidth() - xDiff);
+                if (hSubject != origin) {
+                    hSubject.setPrefWidth(hSubject.getPrefWidth() - xDiff);
+                }
+            }
+
+            if (resizeDir.isSouth()) {
+                origin.setPrefHeight(origin.getPrefHeight() + yDiff);
+                if (vSubject != origin) {
+                    vSubject.setPrefHeight(vSubject.getPrefHeight() + yDiff);
+                }
+            } else if (resizeDir.isNorth()) {
+                vSubject.setTranslateY(vSubject.getTranslateY() + yDiff);
+                origin.setPrefHeight(origin.getPrefHeight() - yDiff);
+                if (vSubject != origin) {
+                    vSubject.setPrefHeight(vSubject.getPrefHeight() - yDiff);
+                }
+            }
+
+            prevX = x;
+            prevY = y;
+
+            event.consume();
+        }
+
     }
 
-    public void setResizable(boolean resizable) {
-        this.resizable = resizable;
-    }
 }
