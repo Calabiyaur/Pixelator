@@ -183,7 +183,7 @@ public class MainScene extends Scene {
         imageMenu.addItem(INVERT_WITHIN_PALETTE, e -> getEditor().invertWithinPalette(), IWC.get().imageSelectedProperty());
 
         BasicMenu animationMenu = new BasicMenu("Animation");
-        animationMenu.addItem(SET_DELAY, e -> setDelay(), IWC.get().imageAnimatedProperty());
+        animationMenu.addItem(SET_FPS, e -> setDelay(), IWC.get().imageAnimatedProperty());
         animationMenu.addItem(REVERSE, e -> getEditor().reverse(), IWC.get().imageAnimatedProperty());
         animationMenu.addItem(ADD_FRAME, e -> getEditor().addFrame(), IWC.get().imageSelectedProperty());
         animationMenu.addItem(REMOVE_FRAME, e -> getEditor().removeFrame(), IWC.get().imageAnimatedProperty());
