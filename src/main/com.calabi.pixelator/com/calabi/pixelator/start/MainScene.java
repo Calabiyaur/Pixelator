@@ -37,6 +37,7 @@ import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.ChangePaletteDialog;
+import com.calabi.pixelator.view.dialog.FpsDialog;
 import com.calabi.pixelator.view.dialog.MoveImageDialog;
 import com.calabi.pixelator.view.dialog.NewImageDialog;
 import com.calabi.pixelator.view.dialog.OutlineDialog;
@@ -181,7 +182,8 @@ public class MainScene extends Scene {
         imageMenu.addItem(INVERT, e -> getEditor().invert(), IWC.get().imageSelectedProperty());
         imageMenu.addItem(INVERT_WITHIN_PALETTE, e -> getEditor().invertWithinPalette(), IWC.get().imageSelectedProperty());
 
-        BasicMenu animationMenu = new BasicMenu("Animation"); // Add frame, Remove frame
+        BasicMenu animationMenu = new BasicMenu("Animation");
+        animationMenu.addItem(SET_DELAY, e -> setDelay(), IWC.get().imageAnimatedProperty());
         animationMenu.addItem(REVERSE, e -> getEditor().reverse(), IWC.get().imageAnimatedProperty());
         animationMenu.addItem(ADD_FRAME, e -> getEditor().addFrame(), IWC.get().imageSelectedProperty());
         animationMenu.addItem(REMOVE_FRAME, e -> getEditor().removeFrame(), IWC.get().imageAnimatedProperty());
@@ -352,6 +354,15 @@ public class MainScene extends Scene {
             getEditor().stretchImage(w, h);
             dialog.close();
             Config.STRETCH_KEEP_RATIO.putBoolean(dialog.isKeepRatio());
+        });
+        dialog.showAndFocus();
+    }
+
+    private void setDelay() {
+        FpsDialog dialog = new FpsDialog(IWC.get().getCurrentImage());
+        dialog.setOnOk(e -> {
+            getEditor().changeDelay(dialog.getImage().getDelay());
+            dialog.close();
         });
         dialog.showAndFocus();
     }

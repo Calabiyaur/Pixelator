@@ -126,4 +126,20 @@ public final class Metadata {
         return node;
     }
 
+    /**
+     * Return delay time in milliseconds.
+     * (Conversion from String representing delay time in centiseconds)
+     */
+    public int getDelayTime() {
+        return Integer.parseInt(delayTime) * 10;
+    }
+
+    /**
+     * Set delay time in milliseconds.
+     * (Conversion to String representing delay time in centiseconds)
+     */
+    public void setDelayTime(int delayTime) {
+        this.delayTime = Integer.toString(delayTime / 10);
+    }
+
 }

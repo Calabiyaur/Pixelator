@@ -32,6 +32,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     private SimpleIntegerProperty index;
     private Object anim;
     private Timeline timeline;
+    private int delay = DEFAULT_FRAME_DELAY;
 
     private PlatformImage[] frames;
     private ObservableList<PlatformImage> frameList = FXCollections.observableArrayList();
@@ -88,6 +89,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         assert timeline != null;
         timeline.stop();
 
+        if (timeline.getKeyFrames().size() >= 2) {
+            delay = (int) timeline.getKeyFrames().get(1).getTime().toMillis();
+        }
+
         if (frames == null || frames.length == 0) {
             //TODO
             throw new NotImplementedException("");
@@ -115,7 +120,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         WritableImage copy = new WritableImage(width, height);
         PixelWriter writer = copy.getPixelWriter();
         if (isAnimated()) {
-            copy.initAnimation(getFrameCount(), DEFAULT_FRAME_DELAY);
+            copy.initAnimation(getFrameCount(), delay);
             for (int n = 0; n < frames.length; n++) {
                 PlatformImage frame = frames[n];
                 PlatformImage copyFrame = copy.frames[n];
@@ -156,6 +161,17 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         this.index.set(index);
     }
 
+    public int getDelay() {
+        return delay;
+    }
+
+    public void setDelay(int delay) {
+        if (delay != this.delay) {
+            this.delay = delay;
+            resetTimeline();
+        }
+    }
+
     public PlatformImage[] getFrames() {
         return frames;
     }
@@ -166,7 +182,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
     public void addFrame(int index) {
         if (!isAnimated()) {
-            initAnimation(2, DEFAULT_FRAME_DELAY);
+            initAnimation(2, delay);
         }
 
         PlatformImage[] newFrames = new PlatformImage[frames.length + 1];
@@ -233,7 +249,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         int duration = 0;
         for (int i = 0; i < frames.length; ++i) {
             keyFrames.add(new KeyFrame(Duration.millis(duration), new KeyValue(index, i, Interpolator.DISCRETE)));
-            duration = duration + DEFAULT_FRAME_DELAY;
+            duration = duration + delay;
         }
         keyFrames.add(new KeyFrame(Duration.millis(duration)));
         ReflectionUtil.setField(anim, "timeline", timeline);

@@ -58,6 +58,7 @@ public enum Action {
     SAVE_ALL("Save all", true, true, false, KeyCode.S),
     SAVE_AS("Save as...", true, true, true, KeyCode.S),
     SELECT_ALL("Select all", true, false, false, KeyCode.A),
+    SET_DELAY("Set delay..."),
     SETTINGS("Settings...", true, false, true, KeyCode.S),
     STRETCH("Stretch..."),
     SWITCH_TAB("Switch tab", true, false, false, KeyCode.TAB),

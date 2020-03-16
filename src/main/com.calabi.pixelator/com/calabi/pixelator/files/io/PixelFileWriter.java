@@ -63,6 +63,7 @@ public abstract class PixelFileWriter {
         ImageWriter writer = ImageIO.getImageWritersBySuffix("gif").next();
         ImageWriteParam imageWriteParam = writer.getDefaultWriteParam();
 
+        metadata.setDelayTime(image.getDelay());
         IIOMetadata iioMetadata = Metadata.write(writer, metadata);
 
         writer.setOutput(output);

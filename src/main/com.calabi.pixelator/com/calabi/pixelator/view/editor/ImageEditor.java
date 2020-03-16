@@ -583,7 +583,7 @@ public class ImageEditor extends Editor {
 
             int frameCount = oldImage.getFrameCount();
             int index = oldImage.getIndex();
-            newImage.initAnimation(frameCount, WritableImage.DEFAULT_FRAME_DELAY); //TODO: User frame delay of oldImage
+            newImage.initAnimation(frameCount, oldImage.getDelay());
 
             for (int i = index; i < index + frameCount; i++) {
                 oldImage.setIndex(i % frameCount);
@@ -786,6 +786,10 @@ public class ImageEditor extends Editor {
     public void moveFrameBackward() { //TODO: Make undoable
         getImage().moveFrame(getImage().getIndex(), getImage().getIndex() - 1);
         getImage().previous();
+    }
+
+    public void changeDelay(int delay) { //TODO: Make undoable
+        getImage().setDelay(delay);
     }
 
     public void removeSelectionAndRegister() {
