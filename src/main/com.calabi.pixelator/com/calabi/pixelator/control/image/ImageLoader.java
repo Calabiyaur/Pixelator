@@ -5,12 +5,14 @@ import com.sun.prism.Image;
 
 class ImageLoader implements com.sun.javafx.tk.ImageLoader {
 
+    private final PlatformImage frameOne;
     private final int frameCount;
     private final int frameDelay;
     private final double width;
     private final double height;
 
-    public ImageLoader(int frameCount, int frameDelay, double width, double height) {
+    public ImageLoader(PlatformImage frameOne, int frameCount, int frameDelay, double width, double height) {
+        this.frameOne = frameOne;
         this.frameCount = frameCount;
         this.frameDelay = frameDelay;
         this.width = width;
@@ -29,7 +31,7 @@ class ImageLoader implements com.sun.javafx.tk.ImageLoader {
 
     @Override
     public PlatformImage getFrame(int index) {
-        return blank(width, height);
+        return index == 0 ? frameOne : blank(width, height);
     }
 
     @Override

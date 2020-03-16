@@ -223,7 +223,7 @@ public class ImageEditor extends Editor {
         writer = image.getPixelWriter();
         width.set((int) image.getWidth());
         height.set((int) image.getHeight());
-        imageAnimated.set(image.isAnimated());
+        imageAnimated.bind(image.animatedProperty());
 
         getImageView().setImage(image);
         pixels = new PixelChange(writer);

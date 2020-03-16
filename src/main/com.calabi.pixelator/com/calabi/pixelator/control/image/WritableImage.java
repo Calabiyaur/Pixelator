@@ -10,6 +10,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
@@ -20,6 +21,8 @@ import javafx.util.Duration;
 import com.sun.javafx.tk.PlatformImage;
 import org.apache.commons.lang3.NotImplementedException;
 
+import com.calabi.pixelator.files.Category;
+import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.util.Check;
 import com.calabi.pixelator.util.ReflectionUtil;
 
@@ -27,6 +30,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
     public static final int DEFAULT_FRAME_DELAY = 60;
 
+    private PixelFile file;
     private SimpleBooleanProperty animated = new SimpleBooleanProperty(false);
 
     private SimpleIntegerProperty index;
@@ -73,7 +77,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         Check.ensure(!isAnimated());
         Check.ensure(frameCount > 0);
 
-        ImageLoader loader = new ImageLoader(frameCount, frameDelay, getWidth(), getHeight());
+        ObservableValue<PlatformImage> platformImage = ReflectionUtil.getField(this, "platformImage");
+        Check.notNull(platformImage.getValue());
+
+        ImageLoader loader = new ImageLoader(platformImage.getValue(), frameCount, frameDelay, getWidth(), getHeight());
         ReflectionUtil.invokeMethod(this, "initializeAnimatedImage", loader);
 
         initAnimationInternal(this);
@@ -86,7 +93,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         index = ReflectionUtil.getField(anim, "frameIndex");
         timeline = ReflectionUtil.getField(anim, "timeline");
 
-        assert timeline != null;
+        Check.notNull(timeline);
         timeline.stop();
 
         if (timeline.getKeyFrames().size() >= 2) {
@@ -136,6 +143,14 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         return copy;
     }
 
+    public void setFile(PixelFile file) {
+        if (this.file == null) {
+            this.file = file;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
     public SimpleBooleanProperty animatedProperty() {
         return animated;
     }
@@ -145,6 +160,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     public void setAnimated(boolean animated) {
+        if (file != null) {
+            file.setCategory(animated ? Category.ANIMATION : Category.IMAGE);
+        }
+
         this.animated.set(animated);
         //TODO: Clear unused fields (animation, frames, ...)
     }
@@ -182,18 +201,19 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
     public void addFrame(int index) {
         if (!isAnimated()) {
-            initAnimation(2, delay);
+            initAnimation(1, delay);
         }
 
         PlatformImage[] newFrames = new PlatformImage[frames.length + 1];
-        for (int i = 0; i < frames.length; i++) {
+        for (int i = 0; i < frames.length + 1; i++) {
             if (i < index) {
                 newFrames[i] = frames[i];
             } else {
                 if (i == index) {
                     newFrames[i] = ImageLoader.blank(getWidth(), getHeight());
+                } else {
+                    newFrames[i] = frames[i - 1];
                 }
-                newFrames[i + 1] = frames[i];
             }
         }
         setFrames(newFrames);
@@ -301,6 +321,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         int height = (int) this.getHeight();
 
         if (width != other.getWidth() || height != other.getHeight()) {
+            return false;
+        }
+
+        if (isAnimated() != other.isAnimated()) {
             return false;
         }
 

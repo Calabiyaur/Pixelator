@@ -15,9 +15,9 @@ import com.calabi.pixelator.util.FileUtil;
 
 public abstract class PixelFile {
 
-    private final Category category;
+    private Category category;
     private File file;
-    private WritableImage image; //TODO: Delete this and leave it up to the subclass to define how the data should be stored
+    private WritableImage image;
     private StringProperty name = new SimpleStringProperty();
     private Extension extension;
     private Properties properties = new Properties();
@@ -42,6 +42,10 @@ public abstract class PixelFile {
 
     public final Category getCategory() {
         return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public final File getFile() {

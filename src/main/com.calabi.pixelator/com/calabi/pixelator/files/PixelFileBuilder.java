@@ -67,6 +67,9 @@ public class PixelFileBuilder implements Builder<PixelFile> {
         if (metadata != null) {
             pixelFile.setMetaData(metadata);
         }
+
+        image.setFile(pixelFile);
+
         return pixelFile;
     }
 
