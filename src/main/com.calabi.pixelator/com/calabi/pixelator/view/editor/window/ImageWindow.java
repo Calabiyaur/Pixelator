@@ -125,6 +125,14 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
     }
 
     private void mouseClick(MouseEvent e) {
+
+        double x = e.getX();
+        double y = e.getY();
+
+        if (x < 0 || x > getWidth() || y < 0 || y > getHeight()) {
+            return;
+        }
+
         if (MouseButton.PRIMARY.equals(e.getButton()) && e.getClickCount() == 2) {
             adjustSize();
         } else if (MouseButton.MIDDLE.equals(e.getButton()) && e.isStillSincePress()) {

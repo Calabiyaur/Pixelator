@@ -57,19 +57,25 @@ public abstract class DraggablePane extends GridPane {
         super.add(new BorderRegion(this, Cursor.W_RESIZE, RESIZE_MARGIN), 0, 1);
     }
 
-    protected void mousePressed(MouseEvent event) {
+    private void mousePressed(MouseEvent event) {
         requestFocus();
 
-        if (MouseButton.PRIMARY.equals(event.getButton())) {
+        double x = event.getX();
+        double y = event.getY();
+
+        if (MouseButton.PRIMARY.equals(event.getButton())
+                && x >= 0 && x < getWidth()
+                && y >= 0 && y < getHeight()) {
+
             dragging = true;
 
-            previousX = event.getX();
-            previousY = event.getY();
+            previousX = x;
+            previousY = y;
         }
     }
 
-    protected void mouseDragged(MouseEvent event) {
-        if (MouseButton.PRIMARY.equals(event.getButton()) && dragging) {
+    private void mouseDragged(MouseEvent event) {
+        if (dragging && MouseButton.PRIMARY.equals(event.getButton())) {
             double x = event.getX();
             double y = event.getY();
 
@@ -84,15 +90,15 @@ public abstract class DraggablePane extends GridPane {
         }
     }
 
-    protected void resetPosition(double width, double height) {
-        setTranslateX(NumberUtil.minMax(minX.get(), getTranslateX(), maxX.get() - width));
-        setTranslateY(NumberUtil.minMax(minY.get(), getTranslateY(), maxY.get() - height));
-    }
-
-    protected void mouseReleased(MouseEvent event) {
+    private void mouseReleased(MouseEvent event) {
         if (MouseButton.PRIMARY.equals(event.getButton())) {
             dragging = false;
         }
+    }
+
+    protected void resetPosition(double width, double height) {
+        setTranslateX(NumberUtil.minMax(minX.get(), getTranslateX(), maxX.get() - width));
+        setTranslateY(NumberUtil.minMax(minY.get(), getTranslateY(), maxY.get() - height));
     }
 
     @Override
