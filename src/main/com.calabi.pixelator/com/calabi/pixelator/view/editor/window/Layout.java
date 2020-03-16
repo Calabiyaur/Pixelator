@@ -3,6 +3,7 @@ package com.calabi.pixelator.view.editor.window;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
 
+import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.view.editor.ImageEditor;
@@ -11,12 +12,14 @@ public abstract class Layout {
 
     protected final ImageWindow view;
     protected final ImageEditor editor;
+    protected final ScalableImageView imageView;
     protected final WritableImage image;
     protected final PixelFile file;
 
     public Layout(ImageWindow view) {
         this.view = view;
         this.editor = view.getEditor();
+        this.imageView = view.getImageView();
         this.image = view.getImage();
         this.file = view.getFile();
     }

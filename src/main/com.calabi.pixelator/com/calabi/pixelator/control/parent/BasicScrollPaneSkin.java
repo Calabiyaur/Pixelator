@@ -469,8 +469,9 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
             }
 
             /*
-             ** if we're completely visible then do nothing....
-             ** we only consume an event that we've used.
+             * if we're completely visible then do nothing....
+             * CUSTOM PART:
+             * but if a scroll bar is visible, consume the event even if it is not used.
              */
             if (vsb.getVisibleAmount() < vsb.getMax()) {
                 double vRange = getSkinnable().getVmax() - getSkinnable().getVmin();
@@ -484,9 +485,9 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
                 if ((event.getDeltaY() > 0.0 && vsb.getValue() > vsb.getMin()) ||
                         (event.getDeltaY() < 0.0 && vsb.getValue() < vsb.getMax())) {
                     vsb.setValue(newValue);
-                    event.consume();
                 }
 
+                event.consume();
             }
 
             if (hsb.getVisibleAmount() < hsb.getMax()) {
@@ -502,9 +503,9 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
                 if ((event.getDeltaX() > 0.0 && hsb.getValue() > hsb.getMin()) ||
                         (event.getDeltaX() < 0.0 && hsb.getValue() < hsb.getMax())) {
                     hsb.setValue(newValue);
-                    event.consume();
                 }
 
+                event.consume();
             }
         });
 

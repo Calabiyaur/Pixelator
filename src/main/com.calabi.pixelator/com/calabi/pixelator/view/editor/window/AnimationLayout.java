@@ -76,7 +76,9 @@ public class AnimationLayout extends Layout {
                     view.add(borderS, 1, 6, 2, 1);
                     view.add(borderSE, 3, 6);
                     view.add(borderE, 3, 5);
-                    double flowWrapperHeight = flowWrapper.getHeight() > 0 ? flowWrapper.getHeight() : image.getHeight();
+                    double fitHeight = Math.min(MAX_FRAME_HEIGHT, image.getHeight());
+                    double flowWrapperHeight = flowWrapper.getHeight() > 0 ? flowWrapper.getHeight() : fitHeight;
+                    flowWrapper.setPrefHeight(flowWrapperHeight);
                     view.setPrefHeight(view.getPrefHeight() + flowWrapperHeight + RESIZE_MARGIN);
                 },
                 () -> {
@@ -121,6 +123,7 @@ public class AnimationLayout extends Layout {
         flowWrapper.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         flowWrapper.setFitToWidth(true);
         flowWrapper.setCenterContent(false);
+        flowWrapper.setOnScrollFinished(e -> e.consume());
     }
 
     private void initBehavior() {
