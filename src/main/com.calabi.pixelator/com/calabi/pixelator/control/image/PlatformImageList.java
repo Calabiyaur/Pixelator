@@ -23,22 +23,14 @@ public class PlatformImageList extends ObservableListWrapper<Image> {
         addPlatformImages(image.getFrameList());
 
         image.getFrameList().addListener((ListChangeListener<PlatformImage>) c -> {
-            while (c.next()) {
-                removePlatformImages(c.getRemoved());
-                addPlatformImages(c.getAddedSubList());
-            }
+            this.clear();
+            this.addPlatformImages(c.getList());
         });
     }
 
     private void addPlatformImages(Collection<? extends PlatformImage> images) {
         for (PlatformImage platformImage : images) {
             this.add(createSingleImage(platformImage));
-        }
-    }
-
-    private void removePlatformImages(Collection<? extends PlatformImage> images) {
-        for (PlatformImage platformImage : images) {
-            this.removeIf(i -> ReflectionUtil.invokeMethod(i, "getPlatformImage") == platformImage);
         }
     }
 

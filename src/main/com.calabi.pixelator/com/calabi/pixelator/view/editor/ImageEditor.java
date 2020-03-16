@@ -307,7 +307,14 @@ public class ImageEditor extends Editor {
     public void register() {
         register(pixels);
         pixels.reset();
+        refreshFrameList();
         updateColorCount();
+    }
+
+    private void refreshFrameList() {
+        if (getImage().isAnimated()) {
+            getImage().getFrameList().set(getImage().getIndex(), getImage().getFrameList().get(getImage().getIndex()));
+        }
     }
 
     private void writeAndRegister(PixelChange change) {
@@ -846,12 +853,14 @@ public class ImageEditor extends Editor {
     public void undo() {
         currentTool.lockAndReset();
         super.undo();
+        refreshFrameList();
         updateColorCount();
     }
 
     public void redo() {
         currentTool.escape();
         super.redo();
+        refreshFrameList();
         updateColorCount();
     }
 
