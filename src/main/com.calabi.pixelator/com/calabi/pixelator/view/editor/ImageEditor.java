@@ -53,6 +53,7 @@ import com.calabi.pixelator.view.palette.PaletteMaster;
 import com.calabi.pixelator.view.palette.SortMaster;
 import com.calabi.pixelator.view.tool.Tool;
 import com.calabi.pixelator.view.tool.ToolManager;
+import com.calabi.pixelator.view.undo.FrameChange;
 import com.calabi.pixelator.view.undo.ImageChange;
 import com.calabi.pixelator.view.undo.PixelChange;
 
@@ -777,22 +778,24 @@ public class ImageEditor extends Editor {
         }
     }
 
-    public void addFrame() { //TODO: Make undoable
-        getImage().addFrame(getImage().getIndex() + 1);
+    public void addFrame() {
+        FrameChange change = FrameChange.add(getImage(), getImage().getIndex() + 1);
+        register(change);
     }
 
-    public void removeFrame() { //TODO: Make undoable
-        getImage().removeFrame(getImage().getIndex());
+    public void removeFrame() {
+        FrameChange change = FrameChange.remove(getImage(), getImage().getIndex());
+        register(change);
     }
 
-    public void moveFrameForward() { //TODO: Make undoable
-        getImage().moveFrame(getImage().getIndex(), getImage().getIndex() + 1);
-        getImage().next();
+    public void moveFrameForward() {
+        FrameChange change = FrameChange.permute(getImage(), getImage().getIndex(), getImage().getIndex() + 1);
+        register(change);
     }
 
-    public void moveFrameBackward() { //TODO: Make undoable
-        getImage().moveFrame(getImage().getIndex(), getImage().getIndex() - 1);
-        getImage().previous();
+    public void moveFrameBackward() {
+        FrameChange change = FrameChange.permute(getImage(), getImage().getIndex(), getImage().getIndex() - 1);
+        register(change);
     }
 
     public void changeDelay(int delay) { //TODO: Make undoable

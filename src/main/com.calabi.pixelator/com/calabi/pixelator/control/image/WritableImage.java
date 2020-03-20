@@ -1,6 +1,7 @@
 package com.calabi.pixelator.control.image;
 
 import java.lang.ref.WeakReference;
+import java.util.Collections;
 
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
@@ -204,44 +205,50 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     public void addFrame(int index) {
+        addFrame(index, ImageLoader.blank(getWidth(), getHeight()));
+    }
+
+    public void addFrame(int index, PlatformImage frame) {
         if (!isAnimated()) {
             initAnimation(1, delay);
         }
 
-        frameList.add(index, ImageLoader.blank(getWidth(), getHeight()));
+        frameList.add(index, frame);
 
         next();
     }
 
-    public void removeFrame(int index) {
+    public PlatformImage removeFrame(int index) {
         previous(frames.length - 1);
 
-        frameList.remove(index);
+        PlatformImage removed = frameList.remove(index);
 
         if (isAnimated() && frames.length == 1) {
             setAnimated(false);
         }
+
+        return removed;
     }
 
     public void moveFrame(int index, int newIndex) {
         newIndex = Math.floorMod(newIndex, frames.length);
 
-        PlatformImage temp = frames[index];
-        frames[index] = frames[newIndex];
-        frames[newIndex] = temp;
+        Collections.swap(frameList, index, newIndex);
 
-        invalidate();
+        setIndex(newIndex);
     }
 
     private void setFrames(PlatformImage[] frames) {
         boolean frameLengthChanged = frames.length != this.frames.length;
 
-        this.frames = frames;
-        ReflectionUtil.setField(this, "animFrames", frames);
-        frameCount.set(frames.length);
+        if (frames != this.frames) {
+            this.frames = frames;
+            ReflectionUtil.setField(this, "animFrames", frames);
+        }
 
         if (frameLengthChanged) {
             resetTimeline();
+            frameCount.set(frames.length);
         }
 
         invalidate();
