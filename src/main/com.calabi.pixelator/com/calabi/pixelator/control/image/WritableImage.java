@@ -229,7 +229,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
                 newFrames[i] = frames[i + 1];
             }
         }
-        previous();
+        previous(newFrames);
         setFrames(newFrames);
 
         if (isAnimated() && frames.length == 1) {
@@ -291,10 +291,14 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     public void previous() {
+        previous(frames);
+    }
+
+    private void previous(PlatformImage[] f) {
         if (!isAnimated()) {
             throw new IllegalStateException();
         }
-        index.set(Math.floorMod(index.get() - 1, frames.length));
+        index.set(Math.floorMod(index.get() - 1, f.length));
     }
 
     public void play() {

@@ -42,4 +42,8 @@ public abstract class Layout {
 
     public abstract double getExtraHeight();
 
+    public void dispose() {
+        // By default, there is nothing to dispose
+    }
+
 }

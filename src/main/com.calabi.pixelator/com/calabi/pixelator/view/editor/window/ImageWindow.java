@@ -82,9 +82,13 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
     }
 
     private void initLayout() {
-        layout = Layout.get(this);
-        setGraphic(layout.createGraphic());
-        setLowerContent(layout.createLowerContent());
+        Layout newLayout = Layout.get(this);
+        if (this.layout != null) {
+            this.layout.dispose();
+        }
+        this.layout = newLayout;
+        setGraphic(this.layout.createGraphic());
+        setLowerContent(this.layout.createLowerContent());
     }
 
     public void initConfig() {
@@ -102,7 +106,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         Config.IMAGE_X.putDouble(getFile(), getTranslateX());
         Config.IMAGE_Y.putDouble(getFile(), getTranslateY());
         Config.IMAGE_WIDTH.putDouble(getFile(), getWidth());
-        Config.IMAGE_HEIGHT.putDouble(getFile(), getHeight());
+        Config.IMAGE_HEIGHT.putDouble(getFile(), getHeight() - layout.getExtraHeight() + 4);
         Config.IMAGE_H_SCROLL.putDouble(getFile(), getContent().getHvalue());
         Config.IMAGE_V_SCROLL.putDouble(getFile(), getContent().getVvalue());
         Config.FRAME_INDEX.putInt(getFile(), getImage().getIndex());
