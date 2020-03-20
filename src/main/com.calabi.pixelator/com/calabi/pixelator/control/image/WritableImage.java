@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -104,8 +105,11 @@ public class WritableImage extends javafx.scene.image.WritableImage {
             //TODO
             throw new NotImplementedException("");
         }
-        frameList.setAll(frames);
         frameCount = new SimpleIntegerProperty(frames.length);
+        frameList.setAll(frames);
+        frameList.addListener((ListChangeListener<PlatformImage>) c -> {
+            setFrames(c.getList().toArray(new PlatformImage[0]));
+        });
 
         return anim;
     }
@@ -204,33 +208,15 @@ public class WritableImage extends javafx.scene.image.WritableImage {
             initAnimation(1, delay);
         }
 
-        PlatformImage[] newFrames = new PlatformImage[frames.length + 1];
-        for (int i = 0; i < frames.length + 1; i++) {
-            if (i < index) {
-                newFrames[i] = frames[i];
-            } else {
-                if (i == index) {
-                    newFrames[i] = ImageLoader.blank(getWidth(), getHeight());
-                } else {
-                    newFrames[i] = frames[i - 1];
-                }
-            }
-        }
-        setFrames(newFrames);
+        frameList.add(index, ImageLoader.blank(getWidth(), getHeight()));
+
         next();
     }
 
     public void removeFrame(int index) {
-        PlatformImage[] newFrames = new PlatformImage[frames.length - 1];
-        for (int i = 0; i < frames.length - 1; i++) {
-            if (i < index) {
-                newFrames[i] = frames[i];
-            } else {
-                newFrames[i] = frames[i + 1];
-            }
-        }
-        previous(newFrames);
-        setFrames(newFrames);
+        previous(frames.length - 1);
+
+        frameList.remove(index);
 
         if (isAnimated() && frames.length == 1) {
             setAnimated(false);
@@ -251,7 +237,6 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         boolean frameLengthChanged = frames.length != this.frames.length;
 
         this.frames = frames;
-        frameList.setAll(frames);
         ReflectionUtil.setField(this, "animFrames", frames);
         frameCount.set(frames.length);
 
@@ -291,14 +276,14 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     public void previous() {
-        previous(frames);
+        previous(frames.length);
     }
 
-    private void previous(PlatformImage[] f) {
+    private void previous(int length) {
         if (!isAnimated()) {
             throw new IllegalStateException();
         }
-        index.set(Math.floorMod(index.get() - 1, f.length));
+        index.set(Math.floorMod(index.get() - 1, length));
     }
 
     public void play() {
