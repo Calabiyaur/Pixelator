@@ -1,15 +1,10 @@
 package com.calabi.pixelator.view.undo;
 
 import com.sun.javafx.tk.PlatformImage;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 
 import com.calabi.pixelator.control.image.WritableImage;
 
 public abstract class FrameChange implements Undoable {
-
-    private Pair<Integer, PlatformImage> added;
-    private Triple<Integer, Integer, PlatformImage> permuted;
 
     public static FrameChange add(WritableImage image, int index) {
         return new FrameAdd(image, index);
