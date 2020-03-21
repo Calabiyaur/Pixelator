@@ -18,6 +18,7 @@ import javafx.scene.layout.Region;
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
 import com.calabi.pixelator.control.image.PlatformImageList;
+import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.control.parent.DraggablePane.BorderRegion;
 import com.calabi.pixelator.control.region.BalloonRegion;
@@ -165,26 +166,19 @@ public class AnimationLayout extends Layout {
 
         // Synchronize images with the underlying image's frames
         PlatformImageList frameList = new PlatformImageList(image);
-        addFrames(frameList);
+        refreshFrames(frameList);
         frameList.addListener((ListChangeListener<Image>) c -> {
-            while (c.next()) {
-                removeFrames(c.getRemoved());
-                addFrames(c.getAddedSubList());
-            }
+            refreshFrames(c.getList());
         });
+        imageView.imageProperty().addListener((ov, o, n) -> frameList.reload(((WritableImage) n).getFrameList()));
     }
 
-    private void addFrames(List<? extends Image> frameList) {
+    private void refreshFrames(List<? extends Image> frameList) {
+        flowPane.getChildren().clear();
         for (Image platformImage : frameList) {
             FrameCell frameView = new FrameCell(platformImage);
             frameView.setOnMousePressed(e -> image.setIndex(flowPane.getChildren().indexOf(frameView)));
             flowPane.getChildren().add(frameView);
-        }
-    }
-
-    private void removeFrames(List<? extends Image> frameList) {
-        for (Image platformImage : frameList) {
-            flowPane.getChildren().removeIf(iv -> iv instanceof FrameCell && ((FrameCell) iv).image == platformImage);
         }
     }
 

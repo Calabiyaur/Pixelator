@@ -13,13 +13,14 @@ public abstract class Layout {
     protected final ImageWindow view;
     protected final ImageEditor editor;
     protected final ScalableImageView imageView;
-    protected final WritableImage image;
+    protected WritableImage image;
     protected final PixelFile file;
 
     public Layout(ImageWindow view) {
         this.view = view;
         this.editor = view.getEditor();
         this.imageView = view.getImageView();
+        imageView.imageProperty().addListener((ov, o, n) -> this.image = (WritableImage) n);
         this.image = view.getImage();
         this.file = view.getFile();
     }
