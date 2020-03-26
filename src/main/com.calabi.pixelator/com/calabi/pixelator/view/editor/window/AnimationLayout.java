@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -14,6 +17,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
@@ -22,7 +26,9 @@ import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
 import com.calabi.pixelator.control.parent.DraggablePane.BorderRegion;
 import com.calabi.pixelator.control.region.BalloonRegion;
+import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.util.BackgroundBuilder;
 import com.calabi.pixelator.util.Do;
 
 import static com.calabi.pixelator.control.parent.DraggablePane.RESIZE_MARGIN;
@@ -47,6 +53,8 @@ public class AnimationLayout extends Layout {
     private BorderRegion borderS;
     private BorderRegion borderSE;
     private BorderRegion borderE;
+
+    private ObjectProperty<FrameCell> selectedFrame = new SimpleObjectProperty<>();
 
     public AnimationLayout(ImageWindow view) {
         super(view);
@@ -92,7 +100,7 @@ public class AnimationLayout extends Layout {
         view.add(borderS, 1, 6, 2, 1);
         view.add(borderSE, 3, 6);
         view.add(borderE, 3, 5);
-        double fitHeight = Math.min(MAX_FRAME_HEIGHT, image.getHeight());
+        double fitHeight = Math.min(MAX_FRAME_HEIGHT, image.getHeight() + 2 * FrameCell.BORDER_WIDTH);
         double flowWrapperHeight = flowWrapper.getHeight() > 0 ? flowWrapper.getHeight() : fitHeight;
         flowWrapper.setPrefHeight(flowWrapperHeight);
         view.setPrefHeight(view.getPrefHeight() + flowWrapperHeight + RESIZE_MARGIN);
@@ -138,7 +146,7 @@ public class AnimationLayout extends Layout {
         // Frame pane nodes
         flowPane = new FlowPane();
         flowWrapper = new BasicScrollPane(flowPane);
-        flowWrapper.setStyle("-fx-background-color: #DDDDDDFF");
+        flowWrapper.setStyle("-fx-background-color: " + Config.IMAGE_BACKGROUND_COLOR.getString().replace("0x", "#"));
         flowWrapper.setMinHeight(Math.min(image.getHeight(), MAX_FRAME_HEIGHT));
         flowWrapper.setScrollByMouse(true);
         flowWrapper.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -164,30 +172,49 @@ public class AnimationLayout extends Layout {
             image.setIndex(i.get());
         }));
 
+        // Show border around selected frame
+        selectedFrame.addListener((ov, o, n) -> {
+            image.setIndex(flowPane.getChildren().indexOf(n));
+            if (o != null) {
+                o.setBordered(false);
+            }
+            if (n != null) {
+                n.setBordered(true);
+            }
+        });
+
         // Synchronize images with the underlying image's frames
         PlatformImageList frameList = new PlatformImageList(image);
         refreshFrames(frameList);
-        frameList.addListener((ListChangeListener<Image>) c -> {
-            refreshFrames(c.getList());
-        });
+        frameList.addListener((ListChangeListener<Image>) c -> refreshFrames(c.getList()));
         imageView.imageProperty().addListener((ov, o, n) -> frameList.reload(((WritableImage) n).getFrameList()));
+        image.indexProperty().addListener((ov, o, n) -> selectedFrame.set(((FrameCell) flowPane.getChildren().get(n.intValue()))));
     }
 
     private void refreshFrames(List<? extends Image> frameList) {
+
         flowPane.getChildren().clear();
-        for (Image platformImage : frameList) {
+
+        for (int i = 0; i < frameList.size(); i++) {
+            Image platformImage = frameList.get(i);
             FrameCell frameView = new FrameCell(platformImage);
-            frameView.setOnMousePressed(e -> image.setIndex(flowPane.getChildren().indexOf(frameView)));
+            frameView.setOnMousePressed(e -> selectedFrame.set(frameView));
             flowPane.getChildren().add(frameView);
+
+            if (i == image.getIndex()) {
+                selectedFrame.set(frameView);
+            }
         }
     }
 
     private static class FrameCell extends Pane {
 
+        final static int BORDER_WIDTH = 2;
+
         final ImageView imageView;
         final Image image;
 
-        public FrameCell(Image image) {
+        FrameCell(Image image) {
             this.imageView = new ImageView(image);
             this.image = image;
 
@@ -197,10 +224,24 @@ public class AnimationLayout extends Layout {
         }
 
         private void style() {
+
+            setPadding(new Insets(BORDER_WIDTH));
+            imageView.setTranslateX(BORDER_WIDTH);
+            imageView.setTranslateY(BORDER_WIDTH);
+
             if (image.getWidth() > MAX_FRAME_WIDTH || image.getHeight() > MAX_FRAME_HEIGHT) {
                 double factor = Math.min(MAX_FRAME_WIDTH / image.getWidth(), MAX_FRAME_HEIGHT / image.getHeight());
                 imageView.setFitWidth(factor * image.getWidth());
                 imageView.setFitHeight(factor * image.getHeight());
+            }
+        }
+
+        void setBordered(boolean bordered) {
+            Color background = Color.valueOf(Config.IMAGE_BACKGROUND_COLOR.getString());
+            if (bordered) {
+                setBackground(BackgroundBuilder.color(background).border(Color.BLACK).borderWidth(BORDER_WIDTH).build());
+            } else {
+                setBackground(BackgroundBuilder.color(background).build());
             }
         }
 

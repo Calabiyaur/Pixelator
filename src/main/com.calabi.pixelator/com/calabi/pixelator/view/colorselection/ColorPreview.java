@@ -23,7 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.util.BackgroundUtil;
+import com.calabi.pixelator.util.BackgroundBuilder;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.tool.Pick;
@@ -46,7 +46,7 @@ class ColorPreview extends StackPane {
         colorPane = new VBox(hexField, filler, recentColorPane);
         hexField.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
-        setBackground(BackgroundUtil.repeat(Images.CHECKERS.getImage()));
+        setBackground(BackgroundBuilder.repeat(Images.CHECKERS.getImage()).build());
 
         colorPane.backgroundProperty().addListener((ov, o, n) -> {
             Color backGround = (Color) n.getFills().get(0).getFill();

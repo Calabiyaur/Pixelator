@@ -25,7 +25,7 @@ import javafx.scene.shape.Circle;
 
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.util.BackgroundUtil;
+import com.calabi.pixelator.util.BackgroundBuilder;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.NumberUtil;
 
@@ -67,7 +67,7 @@ class ColorPicker extends StackPane {
         final Pane colorRectOpacityContainer = new StackPane();
 
         Pane transparentBackground = new Pane();
-        transparentBackground.setBackground(BackgroundUtil.repeat(Images.CHECKERS.getImage()));
+        transparentBackground.setBackground(BackgroundBuilder.repeat(Images.CHECKERS.getImage()).build());
 
         Pane colorRectHue = new Pane();
         colorRectHue.backgroundProperty().bind(new ObjectBinding<Background>() {
