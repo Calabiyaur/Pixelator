@@ -7,18 +7,16 @@ import java.util.List;
 import javafx.collections.ListChangeListener;
 import javafx.scene.image.Image;
 
-import com.sun.javafx.collections.ObservableListWrapper;
 import com.sun.javafx.tk.PlatformImage;
 
 import com.calabi.pixelator.util.ReflectionUtil;
 
-public class PlatformImageList extends ObservableListWrapper<Image> {
+public class PlatformImageList extends ArrayList<Image> {
 
     private Image image;
+    private List<Runnable> listeners = new ArrayList<>();
 
     public PlatformImageList(WritableImage image) {
-        super(new ArrayList<>());
-
         this.image = image;
 
         reload(image.getFrameList());
@@ -26,9 +24,15 @@ public class PlatformImageList extends ObservableListWrapper<Image> {
         image.getFrameList().addListener((ListChangeListener<PlatformImage>) c -> reload(c.getList()));
     }
 
+    public void addListener(Runnable listener) {
+        listeners.add(listener);
+    }
+
     public void reload(List<? extends PlatformImage> c) {
         this.clear();
         this.addPlatformImages(c);
+
+        fireChange();
     }
 
     private void addPlatformImages(Collection<? extends PlatformImage> images) {
@@ -39,6 +43,12 @@ public class PlatformImageList extends ObservableListWrapper<Image> {
 
     private Image createSingleImage(PlatformImage platformImage) {
         return ReflectionUtil.invokeMethod(this.image, "fromPlatformImage", platformImage);
+    }
+
+    private void fireChange() {
+        for (Runnable listener : listeners) {
+            listener.run();
+        }
     }
 
 }

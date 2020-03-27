@@ -20,8 +20,6 @@ import javafx.scene.paint.Color;
 
 import javax.imageio.ImageIO;
 
-import com.sun.javafx.tk.PlatformImage;
-
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.meta.PixelArray;
 import com.calabi.pixelator.meta.Point;
@@ -96,27 +94,6 @@ public class ImageUtil {
             }
         }
         return null;
-    }
-
-    public static Image fromPlatformImage(PlatformImage platformImage) {
-        com.sun.prism.Image prismImage = (com.sun.prism.Image) platformImage;
-        int width = prismImage.getWidth();
-        int height = prismImage.getHeight();
-        WritableImage image = new WritableImage(width, height);
-
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                int argb = prismImage.getArgb(i, j);
-                double a = (0xff & (argb >> 24)) / 255d;
-                double r = (0xff & (argb >> 16)) / 255d;
-                double g = (0xff & (argb >> 8)) / 255d;
-                double b = (0xff & (argb)) / 255d;
-                Color color = Color.color(r, g, b, a);
-                image.getPixelWriter().setColor(i, j, color);
-            }
-        }
-
-        return image;
     }
 
 }

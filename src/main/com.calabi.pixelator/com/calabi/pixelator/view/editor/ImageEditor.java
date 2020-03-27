@@ -55,6 +55,7 @@ import com.calabi.pixelator.view.tool.Tool;
 import com.calabi.pixelator.view.tool.ToolManager;
 import com.calabi.pixelator.view.undo.FrameChange;
 import com.calabi.pixelator.view.undo.ImageChange;
+import com.calabi.pixelator.view.undo.IndexChange;
 import com.calabi.pixelator.view.undo.PixelChange;
 
 public class ImageEditor extends Editor {
@@ -170,6 +171,7 @@ public class ImageEditor extends Editor {
             grid.resize(width.get(), height.get());
             crosshair.resize(width.get(), height.get());
             crosshair2.resize(width.get(), height.get());
+
             updateColorCount();
         });
 
@@ -308,13 +310,13 @@ public class ImageEditor extends Editor {
     public void register() {
         register(pixels);
         pixels.reset();
-        refreshFrameList();
+        refreshFrame();
         updateColorCount();
     }
 
-    private void refreshFrameList() {
+    private void refreshFrame() {
         if (getImage().isAnimated()) {
-            getImage().getFrameList().set(getImage().getIndex(), getImage().getFrameList().get(getImage().getIndex()));
+            //TODO
         }
     }
 
@@ -856,25 +858,35 @@ public class ImageEditor extends Editor {
     public void undo() {
         currentTool.lockAndReset();
         super.undo();
-        refreshFrameList();
+        refreshFrame();
         updateColorCount();
     }
 
     public void redo() {
         currentTool.escape();
         super.redo();
-        refreshFrameList();
+        refreshFrame();
         updateColorCount();
     }
 
     public void nextFrame() {
         currentTool.lockAndReset();
+        int currentIndex = getImage().getIndex();
+        register(new IndexChange(getImage(), currentIndex, (currentIndex + 1) % getImage().getFrameCount()));
         getImage().next();
     }
 
     public void previousFrame() {
         currentTool.lockAndReset();
+        int currentIndex = getImage().getIndex();
+        register(new IndexChange(getImage(), currentIndex, Math.floorMod(currentIndex - 1, getImage().getFrameCount())));
         getImage().previous();
+    }
+
+    public void setFrameIndex(int index) {
+        currentTool.lockAndReset();
+        register(new IndexChange(getImage(), getImage().getIndex(), index));
+        getImage().setIndex(index);
     }
 
     public void play() {

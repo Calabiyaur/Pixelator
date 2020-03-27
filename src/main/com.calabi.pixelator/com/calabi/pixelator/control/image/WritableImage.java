@@ -328,12 +328,8 @@ public class WritableImage extends javafx.scene.image.WritableImage {
             for (int n = 0; n < frames.length; n++) {
                 PlatformImage frame = frames[n];
                 PlatformImage otherFrame = other.frames[n];
-                for (int i = 0; i < width; i++) {
-                    for (int j = 0; j < height; j++) {
-                        if (frame.getArgb(i, j) != otherFrame.getArgb(i, j)) {
-                            return false;
-                        }
-                    }
+                if (!frameEquals(frame, otherFrame)) {
+                    return false;
                 }
             }
         } else {
@@ -345,6 +341,21 @@ public class WritableImage extends javafx.scene.image.WritableImage {
                     if (!reader1.getColor(i, j).equals(reader2.getColor(i, j))) {
                         return false;
                     }
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean frameEquals(PlatformImage frame, PlatformImage otherFrame) {
+
+        int width = (int) this.getWidth();
+        int height = (int) this.getHeight();
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (frame.getArgb(i, j) != otherFrame.getArgb(i, j)) {
+                    return false;
                 }
             }
         }

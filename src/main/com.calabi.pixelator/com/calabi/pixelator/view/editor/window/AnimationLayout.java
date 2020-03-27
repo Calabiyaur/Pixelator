@@ -6,7 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -174,7 +173,7 @@ public class AnimationLayout extends Layout {
 
         // Show border around selected frame
         selectedFrame.addListener((ov, o, n) -> {
-            image.setIndex(flowPane.getChildren().indexOf(n));
+            editor.setFrameIndex(flowPane.getChildren().indexOf(n));
             if (o != null) {
                 o.setBordered(false);
             }
@@ -186,7 +185,7 @@ public class AnimationLayout extends Layout {
         // Synchronize images with the underlying image's frames
         PlatformImageList frameList = new PlatformImageList(image);
         refreshFrames(frameList);
-        frameList.addListener((ListChangeListener<Image>) c -> refreshFrames(c.getList()));
+        frameList.addListener(() -> refreshFrames(frameList));
         imageView.imageProperty().addListener((ov, o, n) -> frameList.reload(((WritableImage) n).getFrameList()));
         image.indexProperty().addListener((ov, o, n) -> selectedFrame.set(((FrameCell) flowPane.getChildren().get(n.intValue()))));
     }
