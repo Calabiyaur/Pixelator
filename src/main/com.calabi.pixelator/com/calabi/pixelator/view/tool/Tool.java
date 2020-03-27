@@ -92,6 +92,8 @@ public abstract class Tool {
     }
 
     public final void press(MouseEvent e) {
+        getEditor().stop();
+
         updateMouse(e);
         mouseButton = e.getButton();
         stillSincePress = true;

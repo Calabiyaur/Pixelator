@@ -1,7 +1,6 @@
 package com.calabi.pixelator.view.editor.window;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -162,14 +161,7 @@ public class AnimationLayout extends Layout {
         nextFrame.setOnAction(e -> editor.nextFrame());
 
         // Store index because we want to continue with the frame we left off with
-        AtomicInteger i = new AtomicInteger(0);
-        play.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> {
-            i.set(image.getIndex());
-            editor.play();
-        }, () -> {
-            editor.stop();
-            image.setIndex(i.get());
-        }));
+        play.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> editor.play(), () -> editor.stop()));
 
         // Show border around selected frame
         selectedFrame.addListener((ov, o, n) -> {
@@ -186,7 +178,11 @@ public class AnimationLayout extends Layout {
         PlatformImageList frameList = new PlatformImageList(image);
         refreshFrames(frameList);
         frameList.addListener(() -> refreshFrames(frameList));
-        imageView.imageProperty().addListener((ov, o, n) -> frameList.reload(((WritableImage) n).getFrameList()));
+        imageView.imageProperty().addListener((ov, o, n) -> {
+            frameList.reload(((WritableImage) n).getFrameList());
+            ((WritableImage) n).playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> play.setSelected(false)));
+        });
+        image.playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> play.setSelected(false)));
         image.indexProperty().addListener((ov, o, n) -> selectedFrame.set(((FrameCell) flowPane.getChildren().get(n.intValue()))));
     }
 

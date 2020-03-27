@@ -8,6 +8,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -38,6 +39,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     private SimpleIntegerProperty index;
     private Object anim;
     private Timeline timeline;
+    private BooleanProperty playing = new SimpleBooleanProperty(false);
     private int delay = DEFAULT_FRAME_DELAY;
 
     private PlatformImage[] frames;
@@ -185,6 +187,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         this.index.set(index);
     }
 
+    public BooleanProperty playingProperty() {
+        return playing;
+    }
+
     public int getDelay() {
         return delay;
     }
@@ -279,6 +285,9 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         if (!isAnimated()) {
             throw new IllegalStateException();
         }
+        if (playing.get()) {
+            stop();
+        }
         index.set((index.get() + 1) % frames.length);
     }
 
@@ -290,16 +299,23 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         if (!isAnimated()) {
             throw new IllegalStateException();
         }
+        if (playing.get()) {
+            stop();
+        }
         index.set(Math.floorMod(index.get() - 1, length));
     }
 
     public void play() {
         timeline.playFrom(timeline.getKeyFrames().get(getIndex()).getTime());
+        playing.set(true);
     }
 
     public boolean stop() {
         boolean wasRunning = Animation.Status.RUNNING.equals(timeline.getStatus());
         timeline.pause();
+        if (wasRunning) {
+            playing.set(false);
+        }
         return wasRunning;
     }
 

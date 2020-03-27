@@ -42,6 +42,7 @@ import com.calabi.pixelator.meta.QuadConsumer;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.util.Check;
 import com.calabi.pixelator.util.ColorUtil;
+import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.shape.RectangleHelper;
 import com.calabi.pixelator.util.shape.ShapeMaster;
@@ -65,6 +66,7 @@ public class ImageEditor extends Editor {
     private PixelReader reader;
     private PixelWriter writer;
     private BooleanProperty imageAnimated = new SimpleBooleanProperty(false);
+    private int animationStart;
 
     private PixelChange pixels;
     private Tool currentTool;
@@ -172,6 +174,7 @@ public class ImageEditor extends Editor {
             crosshair.resize(width.get(), height.get());
             crosshair2.resize(width.get(), height.get());
 
+            image.playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> stop()));
             updateColorCount();
         });
 
@@ -182,6 +185,7 @@ public class ImageEditor extends Editor {
             currentTool.cursorProperty().addListener(cursorChangeListener);
         });
 
+        getImage().playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> stop()));
         updateColorCount();
     }
 
@@ -890,11 +894,13 @@ public class ImageEditor extends Editor {
     }
 
     public void play() {
+        animationStart = getImage().getIndex();
         getImage().play();
     }
 
     public void stop() {
         getImage().stop();
+        getImage().setIndex(animationStart);
     }
 
     public Image getToolImage() {
