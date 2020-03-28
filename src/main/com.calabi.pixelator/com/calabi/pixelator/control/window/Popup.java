@@ -19,25 +19,12 @@ public class Popup extends PopupControl {
 
         this.control = control;
         this.originAnchor = originAnchor;
-        switch(popupAnchor) {
-            case NORTH_WEST:
-            case NORTH:
-            case WEST:
-            case NONE:
-                this.popupAnchor = AnchorLocation.CONTENT_TOP_LEFT;
-                break;
-            case NORTH_EAST:
-            case EAST:
-                this.popupAnchor = AnchorLocation.CONTENT_TOP_RIGHT;
-                break;
-            case SOUTH_WEST:
-            case SOUTH:
-                this.popupAnchor = AnchorLocation.CONTENT_BOTTOM_LEFT;
-                break;
-            case SOUTH_EAST:
-                this.popupAnchor = AnchorLocation.CONTENT_BOTTOM_RIGHT;
-                break;
-        }
+        this.popupAnchor = switch(popupAnchor) {
+            case NORTH_WEST, NORTH, WEST, NONE -> AnchorLocation.CONTENT_TOP_LEFT;
+            case NORTH_EAST, EAST -> AnchorLocation.CONTENT_TOP_RIGHT;
+            case SOUTH_WEST, SOUTH -> AnchorLocation.CONTENT_BOTTOM_LEFT;
+            case SOUTH_EAST -> AnchorLocation.CONTENT_BOTTOM_RIGHT;
+        };
 
         setSkin(new Skin<>() {
             @Override

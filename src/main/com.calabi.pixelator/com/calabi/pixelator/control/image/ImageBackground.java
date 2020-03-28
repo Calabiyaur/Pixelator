@@ -3,8 +3,6 @@ package com.calabi.pixelator.control.image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.BackgroundBuilder;
@@ -24,17 +22,10 @@ public class ImageBackground extends Pane {
     public void setType(FillType type) {
         this.type = type;
 
-        BackgroundBuilder builder;
-        switch(type) {
-            case SINGLE_COLOR:
-                builder = BackgroundBuilder.color(color);
-                break;
-            case CHECKERS:
-                builder = BackgroundBuilder.repeat(Images.CHECKERS.getImage());
-                break;
-            default:
-                throw new NotImplementedException("Unknown FillType: " + type);
-        }
+        BackgroundBuilder builder = switch(type) {
+            case SINGLE_COLOR -> BackgroundBuilder.color(color);
+            case CHECKERS -> BackgroundBuilder.repeat(Images.CHECKERS.getImage());
+        };
         if (borderColor.isOpaque()) {
             builder.border(borderColor);
         }

@@ -172,15 +172,9 @@ public class ToolView extends VBox {
         ToggleImageButton bulgeCenter = new ToggleImageButton(tg, Images.BULGE_CENTER);
         ToggleImageButton bulgeRight = new ToggleImageButton(tg, Images.BULGE_RIGHT);
         switch(Config.BULGE.getInt()) {
-            case -1:
-                bulgeLeft.fire();
-                break;
-            case 1:
-                bulgeRight.fire();
-                break;
-            default:
-                bulgeCenter.fire();
-                break;
+            case -1 -> bulgeLeft.fire();
+            case 1 -> bulgeRight.fire();
+            default -> bulgeCenter.fire();
         }
 
         replaceColor.bindBidirectional(replaceColorField.valueProperty());

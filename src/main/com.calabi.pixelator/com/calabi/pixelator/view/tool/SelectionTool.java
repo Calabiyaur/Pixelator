@@ -26,25 +26,19 @@ public abstract class SelectionTool extends Tool {
         if (released || !getSelectionLayer().isActive() || getSelectionLayer().isDragging()) {
             return SelectType.SELECT;
         }
-        switch(code) {
-            case SHIFT:
-                return SelectType.ADD;
-            case CONTROL:
-                return SelectType.SUBTRACT;
-            default:
-                return SelectType.SELECT;
-        }
+        return switch(code) {
+            case SHIFT -> SelectType.ADD;
+            case CONTROL -> SelectType.SUBTRACT;
+            default -> SelectType.SELECT;
+        };
     }
 
     private Images getUseImage(SelectType type) {
-        switch(type) {
-            case ADD:
-                return useImageAdd;
-            case SUBTRACT:
-                return useImageSubtract;
-            default:
-                return useImageSelect;
-        }
+        return switch(type) {
+            case ADD -> useImageAdd;
+            case SUBTRACT -> useImageSubtract;
+            default -> useImageSelect;
+        };
     }
 
     @Override public final void keyPressPrimary(KeyCode code) {

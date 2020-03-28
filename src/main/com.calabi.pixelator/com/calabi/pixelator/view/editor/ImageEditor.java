@@ -876,14 +876,16 @@ public class ImageEditor extends Editor {
     public void nextFrame() {
         currentTool.lockAndReset();
         int currentIndex = getImage().getIndex();
-        register(new IndexChange(getImage(), currentIndex, (currentIndex + 1) % getImage().getFrameCount()));
+        int after = (currentIndex + 1) % getImage().getFrameCount();
+        register(new IndexChange(getImage(), currentIndex, after));
         getImage().next();
     }
 
     public void previousFrame() {
         currentTool.lockAndReset();
         int currentIndex = getImage().getIndex();
-        register(new IndexChange(getImage(), currentIndex, Math.floorMod(currentIndex - 1, getImage().getFrameCount())));
+        int after = Math.floorMod(currentIndex - 1, getImage().getFrameCount());
+        register(new IndexChange(getImage(), currentIndex, after));
         getImage().previous();
     }
 
@@ -899,8 +901,9 @@ public class ImageEditor extends Editor {
     }
 
     public void stop() {
-        getImage().stop();
-        getImage().setIndex(animationStart);
+        if (getImage().stop()) {
+            getImage().setIndex(animationStart);
+        }
     }
 
     public Image getToolImage() {

@@ -26,15 +26,9 @@ public class SelectColor extends SelectionTool {
             return;
         }
         switch(type.get()) {
-            case ADD:
-                pixels.addExclusive(selectColorPoints);
-                break;
-            case SUBTRACT:
-                pixels.subtract(selectColorPoints);
-                break;
-            default:
-                pixels = selectColorPoints;
-                break;
+            case ADD -> pixels.addExclusive(selectColorPoints);
+            case SUBTRACT -> pixels.subtract(selectColorPoints);
+            default -> pixels = selectColorPoints;
         }
         getSelectionLayer().definePixels(pixels);
     }

@@ -52,43 +52,24 @@ public enum Direction {
         if (cursor == null) {
             return NONE;
         }
-        switch(cursor.toString()) {
-            case "NW_RESIZE":
-                return NORTH_WEST;
-            case "N_RESIZE":
-                return NORTH;
-            case "NE_RESIZE":
-                return NORTH_EAST;
-            case "E_RESIZE":
-                return EAST;
-            case "SE_RESIZE":
-                return SOUTH_EAST;
-            case "S_RESIZE":
-                return SOUTH;
-            case "SW_RESIZE":
-                return SOUTH_WEST;
-            case "W_RESIZE":
-                return WEST;
-            default:
-                return NONE;
-        }
+        return switch(cursor.toString()) {
+            case "NW_RESIZE" -> NORTH_WEST;
+            case "N_RESIZE" -> NORTH;
+            case "NE_RESIZE" -> NORTH_EAST;
+            case "E_RESIZE" -> EAST;
+            case "SE_RESIZE" -> SOUTH_EAST;
+            case "S_RESIZE" -> SOUTH;
+            case "SW_RESIZE" -> SOUTH_WEST;
+            case "W_RESIZE" -> WEST;
+            default -> NONE;
+        };
     }
 
     public boolean isSimple() {
-        switch(this) {
-            case EAST:
-            case NORTH:
-            case WEST:
-            case SOUTH:
-                return true;
-            case NONE:
-            case NORTH_EAST:
-            case NORTH_WEST:
-            case SOUTH_WEST:
-            case SOUTH_EAST:
-            default:
-                return false;
-        }
+        return switch(this) {
+            case EAST, NORTH, WEST, SOUTH -> true;
+            default -> false;
+        };
     }
 
     public boolean isEast() {
@@ -108,35 +89,24 @@ public enum Direction {
     }
 
     public boolean isVertical() {
-        switch(this) {
-            case NORTH:
-            case SOUTH:
-                return true;
-            default:
-                return false;
-        }
+        return switch(this) {
+            case NORTH, SOUTH -> true;
+            default -> false;
+        };
     }
 
     public boolean isHorizontal() {
-        switch(this) {
-            case EAST:
-            case WEST:
-                return true;
-            default:
-                return false;
-        }
+        return switch(this) {
+            case EAST, WEST -> true;
+            default -> false;
+        };
     }
 
     public boolean isDiagonal() {
-        switch(this) {
-            case NORTH_EAST:
-            case NORTH_WEST:
-            case SOUTH_EAST:
-            case SOUTH_WEST:
-                return true;
-            default:
-                return false;
-        }
+        return switch(this) {
+            case NORTH_EAST, NORTH_WEST, SOUTH_EAST, SOUTH_WEST -> true;
+            default -> false;
+        };
     }
 
     public Double getRotate() {

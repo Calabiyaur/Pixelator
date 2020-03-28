@@ -164,30 +164,18 @@ public class HilbertPartition implements Partition {
             }
 
             switch(orientation) {
-                case NORTH:
-                    splitHs(hMarginF, sMarginF,
-                            Arrays.asList(Direction.EAST, Direction.NORTH, Direction.NORTH, Direction.WEST),
-                            Arrays.asList(
-                                    Direction.SOUTH_WEST, Direction.NORTH_WEST, Direction.NORTH_EAST, Direction.SOUTH_EAST));
-                    break;
-                case EAST:
-                    splitHs(hMarginF, sMarginF,
-                            Arrays.asList(Direction.NORTH, Direction.EAST, Direction.EAST, Direction.SOUTH),
-                            Arrays.asList(
-                                    Direction.SOUTH_WEST, Direction.SOUTH_EAST, Direction.NORTH_EAST, Direction.NORTH_WEST));
-                    break;
-                case SOUTH:
-                    splitHs(hMarginF, sMarginF,
-                            Arrays.asList(Direction.WEST, Direction.SOUTH, Direction.SOUTH, Direction.EAST),
-                            Arrays.asList(
-                                    Direction.NORTH_EAST, Direction.SOUTH_EAST, Direction.SOUTH_WEST, Direction.NORTH_WEST));
-                    break;
-                case WEST:
-                    splitHs(hMarginF, sMarginF,
-                            Arrays.asList(Direction.SOUTH, Direction.WEST, Direction.WEST, Direction.NORTH),
-                            Arrays.asList(
-                                    Direction.NORTH_EAST, Direction.NORTH_WEST, Direction.SOUTH_WEST, Direction.SOUTH_EAST));
-                    break;
+                case NORTH -> splitHs(hMarginF, sMarginF,
+                        Arrays.asList(Direction.EAST, Direction.NORTH, Direction.NORTH, Direction.WEST),
+                        Arrays.asList(Direction.SOUTH_WEST, Direction.NORTH_WEST, Direction.NORTH_EAST, Direction.SOUTH_EAST));
+                case EAST -> splitHs(hMarginF, sMarginF,
+                        Arrays.asList(Direction.NORTH, Direction.EAST, Direction.EAST, Direction.SOUTH),
+                        Arrays.asList(Direction.SOUTH_WEST, Direction.SOUTH_EAST, Direction.NORTH_EAST, Direction.NORTH_WEST));
+                case SOUTH -> splitHs(hMarginF, sMarginF,
+                        Arrays.asList(Direction.WEST, Direction.SOUTH, Direction.SOUTH, Direction.EAST),
+                        Arrays.asList(Direction.NORTH_EAST, Direction.SOUTH_EAST, Direction.SOUTH_WEST, Direction.NORTH_WEST));
+                case WEST -> splitHs(hMarginF, sMarginF,
+                        Arrays.asList(Direction.SOUTH, Direction.WEST, Direction.WEST, Direction.NORTH),
+                        Arrays.asList(Direction.NORTH_EAST, Direction.NORTH_WEST, Direction.SOUTH_WEST, Direction.SOUTH_EAST));
             }
             Color color = getColors().iterator().next();
             getPartContaining(color).addColor(color);

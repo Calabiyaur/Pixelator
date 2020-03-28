@@ -26,15 +26,9 @@ public class Wand extends SelectionTool {
             return;
         }
         switch(type.get()) {
-            case ADD:
-                pixels.addExclusive(selectFillPoints);
-                break;
-            case SUBTRACT:
-                pixels.subtract(selectFillPoints);
-                break;
-            default:
-                pixels = selectFillPoints;
-                break;
+            case ADD -> pixels.addExclusive(selectFillPoints);
+            case SUBTRACT -> pixels.subtract(selectFillPoints);
+            default -> pixels = selectFillPoints;
         }
         getSelectionLayer().definePixels(pixels);
     }

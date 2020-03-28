@@ -120,20 +120,13 @@ public enum Config {
         } else if (isUserDefinedAsLocal()) {
             return def;
         }
-        switch(configType) {
-            case BOOLEAN:
-                return Preferences.userRoot().getBoolean(name(), (boolean) def);
-            case DOUBLE:
-                return Preferences.userRoot().getDouble(name(), (double) def);
-            case INT:
-                return Preferences.userRoot().getInt(name(), (int) def);
-            case STRING:
-                return Preferences.userRoot().get(name(), (String) def);
-            case OBJECT:
-                return Preferences.userRoot().get(name(), null);
-            default:
-                throw new UnsupportedOperationException();
-        }
+        return switch(configType) {
+            case BOOLEAN -> Preferences.userRoot().getBoolean(name(), (boolean) def);
+            case DOUBLE -> Preferences.userRoot().getDouble(name(), (double) def);
+            case INT -> Preferences.userRoot().getInt(name(), (int) def);
+            case STRING -> Preferences.userRoot().get(name(), (String) def);
+            case OBJECT -> Preferences.userRoot().get(name(), null);
+        };
     }
 
     public void putBoolean(boolean value) {
@@ -164,23 +157,11 @@ public enum Config {
             return;
         }
         switch(configType) {
-            case BOOLEAN:
-                Preferences.userRoot().putBoolean(name(), (boolean) value);
-                break;
-            case DOUBLE:
-                Preferences.userRoot().putDouble(name(), (double) value);
-                break;
-            case INT:
-                Preferences.userRoot().putInt(name(), (int) value);
-                break;
-            case STRING:
-                Preferences.userRoot().put(name(), (String) value);
-                break;
-            case OBJECT:
-                Preferences.userRoot().put(name(), ((ConfigObject) value).toConfig());
-                break;
-            default:
-                throw new UnsupportedOperationException();
+            case BOOLEAN -> Preferences.userRoot().putBoolean(name(), (boolean) value);
+            case DOUBLE -> Preferences.userRoot().putDouble(name(), (double) value);
+            case INT -> Preferences.userRoot().putInt(name(), (int) value);
+            case STRING -> Preferences.userRoot().put(name(), (String) value);
+            case OBJECT -> Preferences.userRoot().put(name(), ((ConfigObject) value).toConfig());
         }
     }
 
@@ -218,19 +199,12 @@ public enum Config {
         if (stringValue == null) {
             return def;
         }
-        switch(configType) {
-            case BOOLEAN:
-                return Boolean.valueOf(stringValue);
-            case DOUBLE:
-                return Double.valueOf(stringValue);
-            case INT:
-                return Integer.valueOf(stringValue);
-            case STRING:
-            case OBJECT:
-                return stringValue;
-            default:
-                throw new UnsupportedOperationException();
-        }
+        return switch(configType) {
+            case BOOLEAN -> Boolean.valueOf(stringValue);
+            case DOUBLE -> Double.valueOf(stringValue);
+            case INT -> Integer.valueOf(stringValue);
+            case STRING, OBJECT -> stringValue;
+        };
     }
 
     public void putBoolean(PixelFile file, boolean value) {

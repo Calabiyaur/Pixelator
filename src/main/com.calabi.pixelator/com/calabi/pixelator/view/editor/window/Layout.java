@@ -26,15 +26,11 @@ public abstract class Layout {
     }
 
     public static Layout get(ImageWindow imageWindow) {
-        switch(imageWindow.getFile().getCategory()) {
-            case ANIMATION:
-                return new AnimationLayout(imageWindow);
-            case IMAGE:
-                return new ImageLayout(imageWindow);
-            case PALETTE:
-                return new PaletteLayout(imageWindow);
-        }
-        throw new IllegalStateException();
+        return switch(imageWindow.getFile().getCategory()) {
+            case ANIMATION -> new AnimationLayout(imageWindow);
+            case IMAGE -> new ImageLayout(imageWindow);
+            case PALETTE -> new PaletteLayout(imageWindow);
+        };
     }
 
     public abstract Node createGraphic();

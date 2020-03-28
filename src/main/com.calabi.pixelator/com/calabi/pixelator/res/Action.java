@@ -71,7 +71,7 @@ public enum Action {
 
     static Set<Action> BETA_ACTIONS = CollectionUtil.toSet();
 
-    private String text;
+    private final String text;
     private boolean ctrl;
     private boolean shift;
     private boolean alt;
@@ -108,42 +108,25 @@ public enum Action {
         if (code == null) {
             return null;
         }
-        switch(code) {
-            case DIGIT0:
-                return KeyCode.NUMPAD0;
-            case DIGIT1:
-                return KeyCode.NUMPAD1;
-            case DIGIT2:
-                return KeyCode.NUMPAD2;
-            case DIGIT3:
-                return KeyCode.NUMPAD3;
-            case DIGIT4:
-                return KeyCode.NUMPAD4;
-            case DIGIT5:
-                return KeyCode.NUMPAD5;
-            case DIGIT6:
-                return KeyCode.NUMPAD6;
-            case DIGIT7:
-                return KeyCode.NUMPAD7;
-            case DIGIT8:
-                return KeyCode.NUMPAD8;
-            case DIGIT9:
-                return KeyCode.NUMPAD9;
-            case DOWN:
-                return KeyCode.KP_DOWN;
-            case LEFT:
-                return KeyCode.KP_LEFT;
-            case MINUS:
-                return KeyCode.SUBTRACT;
-            case PLUS:
-                return KeyCode.ADD;
-            case RIGHT:
-                return KeyCode.KP_RIGHT;
-            case UP:
-                return KeyCode.KP_UP;
-            default:
-                return null;
-        }
+        return switch(code) {
+            case DIGIT0 -> KeyCode.NUMPAD0;
+            case DIGIT1 -> KeyCode.NUMPAD1;
+            case DIGIT2 -> KeyCode.NUMPAD2;
+            case DIGIT3 -> KeyCode.NUMPAD3;
+            case DIGIT4 -> KeyCode.NUMPAD4;
+            case DIGIT5 -> KeyCode.NUMPAD5;
+            case DIGIT6 -> KeyCode.NUMPAD6;
+            case DIGIT7 -> KeyCode.NUMPAD7;
+            case DIGIT8 -> KeyCode.NUMPAD8;
+            case DIGIT9 -> KeyCode.NUMPAD9;
+            case DOWN -> KeyCode.KP_DOWN;
+            case LEFT -> KeyCode.KP_LEFT;
+            case MINUS -> KeyCode.SUBTRACT;
+            case PLUS -> KeyCode.ADD;
+            case RIGHT -> KeyCode.KP_RIGHT;
+            case UP -> KeyCode.KP_UP;
+            default -> null;
+        };
     }
 
     public boolean isSecondary(KeyCode code) {
