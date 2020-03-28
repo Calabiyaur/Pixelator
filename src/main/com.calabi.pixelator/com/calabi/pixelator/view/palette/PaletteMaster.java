@@ -2,13 +2,10 @@ package com.calabi.pixelator.view.palette;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 
@@ -17,6 +14,7 @@ import com.calabi.pixelator.meta.HashMatrix;
 import com.calabi.pixelator.meta.Matrix;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.util.CollectionUtil;
+import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.MapUtil;
 import com.calabi.pixelator.view.palette.partition.HilbertPartition;
 import com.calabi.pixelator.view.palette.partition.Mapping;
@@ -27,8 +25,8 @@ public final class PaletteMaster {
     public static final int MAX_COLORS = Integer.MAX_VALUE;
     public static final int HUE_VARIETY = 8;
 
-    public static WritableImage extractPalette(Image image, int maxColors) {
-        Mapping mapping = hilbertSort3d(extractColors(image, maxColors));
+    public static WritableImage extractPalette(WritableImage image, int maxColors) {
+        Mapping mapping = hilbertSort3d(ImageUtil.extractColors(image, maxColors));
 
         int width = Math.max(1, mapping.width());
         int height = Math.max(1, mapping.height());
@@ -43,24 +41,8 @@ public final class PaletteMaster {
         return palette;
     }
 
-    public static Set<Color> extractColors(Image image) {
-        return extractColors(image, MAX_COLORS);
-    }
-
-    public static Set<Color> extractColors(Image image, Integer maxColors) {
-        Set<Color> colors = new HashSet<>();
-        PixelReader reader = image.getPixelReader();
-        for (int i = 0; i < image.getWidth(); i++) {
-            for (int j = 0; j < image.getHeight(); j++) {
-                colors.add(reader.getColor(i, j));
-            }
-        }
-        colors.remove(Color.TRANSPARENT);
-        if (maxColors == null || colors.size() <= maxColors) {
-            return colors;
-        } else {
-            return new HashSet<>(CollectionUtil.reduceEvenly(SortMaster.sortByValues(colors), maxColors));
-        }
+    public static Set<Color> extractColors(WritableImage image) {
+        return ImageUtil.extractColors(image, MAX_COLORS);
     }
 
     /**

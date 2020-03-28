@@ -20,10 +20,13 @@ import javafx.scene.paint.Color;
 
 import javax.imageio.ImageIO;
 
+import com.sun.javafx.tk.PlatformImage;
+
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.meta.PixelArray;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.start.ExceptionHandler;
+import com.calabi.pixelator.view.palette.SortMaster;
 
 public class ImageUtil {
 
@@ -57,15 +60,37 @@ public class ImageUtil {
         return outOfBounds(image, point.getX(), point.getY());
     }
 
-    public static int countColors(Image image) {
+    public static int countColors(WritableImage image) {
+        Set<Color> colors = extractColors(image, Integer.MAX_VALUE);
+        return colors.size();
+    }
+
+    public static Set<Color> extractColors(WritableImage image, Integer maxColors) {
         Set<Color> colors = new HashSet<>();
-        PixelReader reader = image.getPixelReader();
-        for (int i = 0; i < image.getWidth(); i++) {
-            for (int j = 0; j < image.getHeight(); j++) {
-                colors.add(reader.getColor(i, j));
+
+        if (image.isAnimated()) {
+            for (PlatformImage frame : image.getFrames()) {
+                for (int i = 0; i < image.getWidth(); i++) {
+                    for (int j = 0; j < image.getHeight(); j++) {
+                        colors.add(getColor(frame, i, j));
+                    }
+                }
+            }
+        } else {
+            PixelReader reader = image.getPixelReader();
+            for (int i = 0; i < image.getWidth(); i++) {
+                for (int j = 0; j < image.getHeight(); j++) {
+                    colors.add(reader.getColor(i, j));
+                }
             }
         }
-        return colors.size();
+        colors.remove(Color.TRANSPARENT);
+
+        if (colors.size() <= maxColors) {
+            return colors;
+        } else {
+            return new HashSet<>(CollectionUtil.reduceEvenly(SortMaster.sortByValues(colors), maxColors));
+        }
     }
 
     public static Image getFromClipboard() {
@@ -94,6 +119,18 @@ public class ImageUtil {
             }
         }
         return null;
+    }
+
+    public static Color getColor(PlatformImage platformImage, int x, int y) {
+        com.sun.prism.Image prismImage = (com.sun.prism.Image) platformImage;
+
+        int argb = prismImage.getArgb(x, y);
+        double a = (0xff & (argb >> 24)) / 255d;
+        double r = (0xff & (argb >> 16)) / 255d;
+        double g = (0xff & (argb >> 8)) / 255d;
+        double b = (0xff & (argb)) / 255d;
+
+        return Color.color(r, g, b, a);
     }
 
 }
