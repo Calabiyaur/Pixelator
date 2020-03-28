@@ -826,6 +826,10 @@ public class ImageEditor extends Editor {
     public void updateImage(WritableImage image) {
         currentTool.lockAndReset();
 
+        if (getImage().isAnimated()) {
+            image.setIndex(getImage().getIndex());
+        }
+
         ImageChange change = new ImageChange(getImageView(), getImage(), image);
         getImageView().setImage(image);
         register(change);
