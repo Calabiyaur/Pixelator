@@ -83,17 +83,17 @@ public abstract class FrameChange implements Undoable {
             this.image = image;
             this.index = index;
             this.newIndex = newIndex;
-            image.moveFrame(index, newIndex);
+            image.moveFrame(index, newIndex, true);
         }
 
         @Override
         public void undo() {
-            image.moveFrame(newIndex, index);
+            image.moveFrame(newIndex, index, false);
         }
 
         @Override
         public void redo() {
-            image.moveFrame(index, newIndex);
+            image.moveFrame(index, newIndex, false);
         }
 
         @Override

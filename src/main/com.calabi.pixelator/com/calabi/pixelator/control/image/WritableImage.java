@@ -264,12 +264,14 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         return removed;
     }
 
-    public void moveFrame(int index, int newIndex) {
+    public void moveFrame(int index, int newIndex, boolean setIndex) {
         newIndex = Math.floorMod(newIndex, frames.length);
 
         Collections.swap(frameList, index, newIndex);
 
-        setIndex(newIndex);
+        if (setIndex) {
+            setIndex(newIndex);
+        }
     }
 
     private void setFrames(PlatformImage[] frames) {

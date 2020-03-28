@@ -53,6 +53,7 @@ public class UndoManager {
 
         int newPosition = position.get() - 1;
 
+        // Remove single-use index changes
         if (undoable instanceof IndexChange) {
             Undoable redoPendant = null;
             boolean singleUse = position.get() == changeList.size() - 1
@@ -79,6 +80,7 @@ public class UndoManager {
 
         int newPosition = position.get() + 1;
 
+        // Remove single-use index changes
         if (undoable instanceof IndexChange) {
             Undoable undoPendant = null;
             boolean singleUse = position.get() == -1
