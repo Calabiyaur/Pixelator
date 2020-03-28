@@ -191,6 +191,7 @@ public class AnimationLayout extends Layout {
         imageView.imageProperty().addListener((ov, o, n) -> {
             frameList.reload(((WritableImage) n).getFrameList());
             ((WritableImage) n).playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> play.setSelected(false)));
+            ((WritableImage) n).indexProperty().addListener((pov, po, pn) -> selectedFrame.set(((FrameCell) flowPane.getChildren().get(pn.intValue()))));
         });
         image.playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> play.setSelected(false)));
         image.indexProperty().addListener((ov, o, n) -> selectedFrame.set(((FrameCell) flowPane.getChildren().get(n.intValue()))));
