@@ -17,6 +17,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
+import com.sun.javafx.scene.DirtyBits;
+import com.sun.javafx.scene.NodeHelper;
+
 import com.calabi.pixelator.control.basic.ImageButton;
 import com.calabi.pixelator.control.basic.ToggleImageButton;
 import com.calabi.pixelator.control.image.PlatformImageList;
@@ -119,6 +122,13 @@ public class AnimationLayout extends Layout {
         return expand.getHeight()
                 + 4
                 + (expand.isSelected() ? flowWrapper.getHeight() + RESIZE_MARGIN : 0);
+    }
+
+    @Override
+    public void refresh() {
+        for (Node child : flowPane.getChildren()) {
+            NodeHelper.markDirty(((FrameCell) child).imageView, DirtyBits.NODE_CONTENTS);
+        }
     }
 
     @Override

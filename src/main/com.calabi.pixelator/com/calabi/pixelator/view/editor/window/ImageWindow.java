@@ -91,6 +91,10 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         setLowerContent(this.layout.createLowerContent());
     }
 
+    public void refreshLayout() {
+        this.layout.refresh();
+    }
+
     public void initConfig() {
         getImageView().setScaleX(Config.IMAGE_ZOOM_LEVEL.getDouble(getFile(), getImageView().getScaleX()));
         getImageView().setScaleY(Config.IMAGE_ZOOM_LEVEL.getDouble(getFile(), getImageView().getScaleY()));

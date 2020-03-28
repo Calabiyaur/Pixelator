@@ -248,13 +248,8 @@ public class ImageEditor extends Editor {
 
     private void onMousePressed(MouseEvent e) {
         requestFocus();
-        for (Parent parent = getParent(); parent != null; parent = parent.getParent()) {
-            if (parent instanceof ImageWindow) {
-                ImageWindow imageWindow = (ImageWindow) parent;
-                ((IWC) imageWindow.getParent()).setCurrentWindow(imageWindow);
-                break;
-            }
-        }
+        ImageWindow imageWindow = getParentWindow();
+        ((IWC) imageWindow.getParent()).setCurrentWindow(imageWindow);
         currentTool.press(e);
     }
 
@@ -281,6 +276,15 @@ public class ImageEditor extends Editor {
 
     public void onKeyReleased(KeyEvent e) {
         currentTool.keyRelease(e);
+    }
+
+    private ImageWindow getParentWindow() {
+        for (Parent parent = getParent(); parent != null; parent = parent.getParent()) {
+            if (parent instanceof ImageWindow) {
+                return  (ImageWindow) parent;
+            }
+        }
+        throw new IllegalStateException();
     }
 
     private void updateCrossHair() {
@@ -320,7 +324,7 @@ public class ImageEditor extends Editor {
 
     private void refreshFrame() {
         if (getImage().isAnimated()) {
-            //TODO
+            getParentWindow().refreshLayout();
         }
     }
 

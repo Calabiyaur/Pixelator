@@ -39,6 +39,10 @@ public abstract class Layout {
 
     public abstract double getExtraHeight();
 
+    public void refresh() {
+        // By default, this is not necessary
+    }
+
     public void dispose() {
         // By default, there is nothing to dispose
     }
