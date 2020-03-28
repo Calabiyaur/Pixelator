@@ -5,41 +5,76 @@ import javafx.scene.Cursor;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import org.apache.logging.log4j.util.TriConsumer;
 
+import com.calabi.pixelator.control.basic.ImageButton;
+import com.calabi.pixelator.control.basic.ToggleImageButton;
 import com.calabi.pixelator.control.image.ScalableImageView;
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.control.parent.BasicScrollPane;
+import com.calabi.pixelator.control.region.BalloonRegion;
 import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.view.editor.ImagePreview;
 import com.calabi.pixelator.view.tool.Pick;
 
-class Preview extends BasicScrollPane {
+class Preview extends VBox {
 
-    private ScalableImageView imageView;
-    private PixelReader reader;
-    private PixelWriter writer;
+    private final BasicScrollPane scrollPane;
+    private final ScalableImageView imageView;
+    private final PixelReader reader;
+    private final PixelWriter writer;
+    private int animationStart = 0;
     private boolean enabled = false;
+    private ToggleImageButton play;
 
     Preview(WritableImage image) {
         WritableImage writableImage = image.copy();
         imageView = new ScalableImageView(writableImage);
-        setOnRawScroll(e -> imageView.scroll(e));
+        scrollPane = new BasicScrollPane();
+        scrollPane.setOnRawScroll(e -> imageView.scroll(e));
         reader = image.getPixelReader();
         writer = writableImage.getPixelWriter();
 
-        ImagePreview content = new ImagePreview(imageView);
-        content.setStyle("-fx-background-color: #DDDDDD");
-        setContent(content);
+        ImagePreview imagePreview = new ImagePreview(imageView);
+        imagePreview.setStyle("-fx-background-color: #DDDDDD");
+        scrollPane.setContent(imagePreview);
+        getChildren().add(scrollPane);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-        content.setOnMouseEntered(e -> {
+        if (image.isAnimated()) {
+            ImageButton previousFrame = new ImageButton(Images.PREVIOUS_FRAME);
+            previousFrame.setOnAction(e -> {
+                stopAnimation();
+                writableImage.previous();
+            });
+            ImageButton nextFrame = new ImageButton(Images.NEXT_FRAME);
+            nextFrame.setOnAction(e -> {
+                stopAnimation();
+                writableImage.next();
+            });
+            play = new ToggleImageButton(Images.PLAY, Images.PAUSE);
+            play.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> startAnimation(), () -> stopAnimation()));
+
+            HBox buttons = new HBox(new BalloonRegion(), previousFrame, nextFrame, play, new BalloonRegion());
+            buttons.setMinWidth(0);
+
+            setSpacing(4);
+            getChildren().add(buttons);
+        }
+
+        imagePreview.setOnMouseEntered(e -> {
             if (enabled) {
                 setCursor(Pick.getMe().getCursor());
             }
         });
-        content.setOnMouseExited(e -> setCursor(Cursor.DEFAULT));
+        imagePreview.setOnMouseExited(e -> setCursor(Cursor.DEFAULT));
     }
 
     void updateImage(TriConsumer<WritableImage, PixelReader, PixelWriter> action) {
@@ -55,12 +90,12 @@ class Preview extends BasicScrollPane {
     }
 
     public void setOnAction(EventHandler<? super MouseEvent> event) {
-        getContent().setOnMousePressed(e -> {
+        scrollPane.getContent().setOnMousePressed(e -> {
             if (enabled) {
                 event.handle(e);
             }
         });
-        getContent().setOnMouseDragged(e -> {
+        scrollPane.getContent().setOnMouseDragged(e -> {
             if (enabled) {
                 event.handle(e);
             }
@@ -95,4 +130,17 @@ class Preview extends BasicScrollPane {
             disable();
         }
     }
+
+    private void startAnimation() {
+        animationStart = getImage().getIndex();
+        getImage().play();
+    }
+
+    private void stopAnimation() {
+        if (getImage().stop()) {
+            getImage().setIndex(animationStart);
+            play.setSelected(false);
+        }
+    }
+
 }
