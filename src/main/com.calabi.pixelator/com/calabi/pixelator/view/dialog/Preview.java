@@ -26,6 +26,7 @@ import com.calabi.pixelator.view.tool.Pick;
 
 class Preview extends VBox {
 
+    private final WritableImage original;
     private final BasicScrollPane scrollPane;
     private final ScalableImageView imageView;
     private final PixelReader reader;
@@ -35,6 +36,7 @@ class Preview extends VBox {
     private ToggleImageButton play;
 
     Preview(WritableImage image) {
+        original = image;
         WritableImage writableImage = image.copy();
         imageView = new ScalableImageView(writableImage);
         scrollPane = new BasicScrollPane();
@@ -78,7 +80,16 @@ class Preview extends VBox {
     }
 
     void updateImage(TriConsumer<WritableImage, PixelReader, PixelWriter> action) {
-        action.accept((WritableImage) imageView.getImage(), reader, writer);
+        WritableImage image = (WritableImage) imageView.getImage();
+        if (image.isAnimated()) {
+            for (int i = 0; i < image.getFrameCount(); i++) {
+                PixelReader frameReader = original.getPixelReader(i);
+                PixelWriter frameWriter = image.getPixelWriter(i);
+                action.accept(image, frameReader, frameWriter);
+            }
+        } else {
+            action.accept(image, reader, writer);
+        }
     }
 
     WritableImage getImage() {
@@ -105,7 +116,13 @@ class Preview extends VBox {
     public Color getColor(MouseEvent event) {
         Point mp = getMousePosition(event.getX(), event.getY());
         try {
-            return reader.getColor(mp.getX(), mp.getY());
+            PixelReader r;
+            if (getImage().isAnimated()) {
+                r = original.getPixelReader(getImage().getIndex());
+            } else {
+                r = reader;
+            }
+            return r.getColor(mp.getX(), mp.getY());
         } catch (IndexOutOfBoundsException e) {
             return null;
         }

@@ -64,12 +64,14 @@ public class OutlineDialog extends PreviewDialog {
         listenToUpdate(widthField, colorField, outsideField, inside, solidEdges);
     }
 
-    @Override public void focus() {
+    @Override
+    public void focus() {
         widthField.focus();
         updateImage();
     }
 
-    @Override protected void updateImage() {
+    @Override
+    protected void updateImage() {
         try {
             int width = widthField.getValue();
             Color color = colorField.getValue();

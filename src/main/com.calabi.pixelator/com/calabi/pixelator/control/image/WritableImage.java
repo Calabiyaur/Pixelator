@@ -46,6 +46,9 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     private ObservableList<PlatformImage> frameList = FXCollections.observableArrayList();
     private IntegerProperty frameCount;
 
+    private FrameReader frameReader = null;
+    private FrameWriter frameWriter = null;
+
     public WritableImage(String path) {
         this(new Image(path));
     }
@@ -172,6 +175,9 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         }
 
         this.animated.set(animated);
+
+        frameReader = null;
+        frameWriter = null;
         //TODO: Clear unused fields (animation, frames, ...)
     }
 
@@ -208,6 +214,28 @@ public class WritableImage extends javafx.scene.image.WritableImage {
 
     public ObservableList<PlatformImage> getFrameList() {
         return frameList;
+    }
+
+    public PixelReader getPixelReader(int index) {
+        if (!isAnimated()) {
+            throw new IllegalStateException();
+        }
+        if (frameReader == null) {
+            frameReader = new FrameReader(this);
+        }
+        frameReader.setIndex(index);
+        return frameReader;
+    }
+
+    public PixelWriter getPixelWriter(int index) {
+        if (!isAnimated()) {
+            throw new IllegalStateException();
+        }
+        if (frameWriter == null) {
+            frameWriter = new FrameWriter(this);
+        }
+        frameWriter.setIndex(index);
+        return frameWriter;
     }
 
     public void addFrame(int index) {

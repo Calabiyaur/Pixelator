@@ -603,10 +603,8 @@ public class ImageEditor extends Editor {
             int index = oldImage.getIndex();
             newImage.initAnimation(frameCount, oldImage.getDelay());
 
-            for (int i = index; i < index + frameCount; i++) {
-                oldImage.setIndex(i % frameCount);
-                newImage.setIndex(i % frameCount);
-                consumer.accept(oldImage, newImage, oldImage.getPixelReader(), newImage.getPixelWriter());
+            for (int i = 0; i < frameCount; i++) {
+                consumer.accept(oldImage, newImage, oldImage.getPixelReader(i), newImage.getPixelWriter(i));
             }
             newImage.setIndex(index);
             if (running) {
@@ -827,13 +825,10 @@ public class ImageEditor extends Editor {
     @Override
     public void updateImage(WritableImage image) {
         currentTool.lockAndReset();
-        PixelReader r = image.getPixelReader();
-        for (int i = 0; i < width.get(); i++) {
-            for (int j = 0; j < height.get(); j++) {
-                paintPixel(i, j, r.getColor(i, j), true);
-            }
-        }
-        register();
+
+        ImageChange change = new ImageChange(getImageView(), getImage(), image);
+        getImageView().setImage(image);
+        register(change);
     }
 
     public void updateColorCount() {
