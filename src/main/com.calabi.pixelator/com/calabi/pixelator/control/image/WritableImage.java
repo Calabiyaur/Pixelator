@@ -336,11 +336,16 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     public void play() {
-        timeline.playFrom(timeline.getKeyFrames().get(getIndex()).getTime());
-        playing.set(true);
+        if (isAnimated()) {
+            timeline.playFrom(timeline.getKeyFrames().get(getIndex()).getTime());
+            playing.set(true);
+        }
     }
 
     public boolean stop() {
+        if (!isAnimated()) {
+            return false;
+        }
         boolean wasRunning = Animation.Status.RUNNING.equals(timeline.getStatus());
         timeline.pause();
         if (wasRunning) {
