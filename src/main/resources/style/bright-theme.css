@@ -5,6 +5,7 @@
     -px_window: #FFFFFF;
     -px_empty_area: #F4F4F4;
     -px_bright_default: #AAAAAA;
+    -px_dark_default: #606060;
     -px_bright_hover: #AAAAAA;
     -px_bright_selected: #BBBBBB;
     -px-custom-background: #000000;
@@ -151,6 +152,38 @@
 
 .toggle-button:show-mnemonics > .mnemonic-underline {
     -fx-stroke: -fx-text-fill;
+}
+
+.slider > .track {
+    -fx-background-color: -px_hover;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 1 0 1 0;
+}
+
+.slider > .bar {
+    -fx-background-color: -px_dark_default;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 1 0 1 0;
+}
+
+.slider > .thumb-aura {
+    -fx-background-color: transparent;
+    -fx-background-radius: 1em; /* makes sure this remains circular */
+    -fx-padding: 10;
+}
+
+.slider:hover > .thumb-aura {
+    -fx-background-color: #60606040;
+}
+
+.slider > .thumb {
+    -fx-background-color: -px_dark_default;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0.5em; /* makes sure this remains circular */
+    -fx-padding: 5;
+    -fx-effect: null;
 }
 
 .palette-toggle-button:armed {

@@ -8,11 +8,13 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.control.Skin;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.control.basic.BasicDoubleField;
 import com.calabi.pixelator.control.basic.BasicNumberField;
+import com.calabi.pixelator.control.basic.CustomSliderSkin;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.MapUtil;
@@ -298,6 +300,11 @@ final class ColorSelectionModel {
 
         private DoubleProperty target;
 
+        @Override
+        protected Skin<?> createDefaultSkin() {
+            return new CustomSliderSkin(this);
+        }
+
         public DoubleProperty getTarget() {
             return target;
         }
@@ -306,4 +313,5 @@ final class ColorSelectionModel {
             this.target = target;
         }
     }
+
 }
