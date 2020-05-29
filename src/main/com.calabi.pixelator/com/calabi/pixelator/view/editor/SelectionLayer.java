@@ -101,20 +101,12 @@ public class SelectionLayer extends EditorLayer {
         clear();
         PointArray points = new PointArray();
 
-        int x1 = Integer.MAX_VALUE;
-        int y1 = Integer.MAX_VALUE;
-        int x2 = 0;
-        int y2 = 0;
         PixelReader reader = image.getPixelReader();
         for (int i = 0; i < image.getWidth(); i++) {
             for (int j = 0; j < image.getHeight(); j++) {
                 if (ImageUtil.outOfBounds(getImage(), i, j)) {
                     continue;
                 }
-                x1 = Math.min(i, x1);
-                y1 = Math.min(j, y1);
-                x2 = Math.max(i, x2);
-                y2 = Math.max(j, y2);
                 Color color = reader.getColor(i, j);
                 getWriter().setColor(i, j, color);
                 getPixels().add(i, j, Color.TRANSPARENT, color);

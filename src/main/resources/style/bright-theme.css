@@ -28,6 +28,59 @@
     -fx-content-display: LEFT;
 }
 
+.text-field {
+    -fx-background-color: -px_bright_default, -px_default;
+    -fx-background-insets: 0 0 1 0, 1 1 2 1;
+    -fx-background-radius: 0, 0;
+    -fx-padding: 0.25em 0.416667em  0.333333em 0.416667em; /* 3 5 4 5 */
+    -fx-text-fill: #000000;
+    -fx-prompt-text-fill: -px_bright_default;
+    -fx-cursor: text;
+}
+
+.text-field:focused {
+    -fx-background-color: -px_bright_default, -px_default;
+    -fx-background-insets: 0 0 1 0, 1 1 2 1;
+    -fx-background-radius: 0, 0;
+    -fx-prompt-text-fill: transparent;
+}
+
+.no-background-text-field {
+    -fx-background-color: transparent;
+    -fx-border: -px_bright_default;
+}
+
+.no-background-text-field:focused {
+    -fx-background-color: transparent;
+    -fx-border: -px_bright_default;
+}
+
+.check-box > .box {
+    -fx-background-color: -px_bright_default, -px_default;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0, 0;
+    -fx-padding: 0.25em; /* 3 -- padding from the outside edge to the mark */
+}
+
+.check-box:hover > .box {
+    -fx-background-color: -px_bright_default, -px_hover;
+}
+
+.check-box:armed > .box {
+    -fx-background-color: -px_bright_default, -px_selected;
+}
+
+.check-box > .box > .mark {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0.4em;
+    -fx-shape: "M-0.25,6.083c0.843-0.758,4.583,4.833,5.75,4.833S14.5-1.5,15.917-0.917c1.292,0.532-8.75,17.083-10.5,17.083C3,16.167-1.083,6.833-0.25,6.083z"; /* see modena.css */
+}
+
+.check-box:selected > .box > .mark {
+    -fx-background-color: #000000;
+}
+
 .close-button {
     -fx-background-color: transparent;
     -fx-background-insets: 0 0 0 0;
@@ -349,14 +402,37 @@
 }
 
 .increment-arrow-button {
-    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
-    -fx-background-insets: 0, 1, 2;
-    -fx-background-radius: 0 3 0 0, 0 2 0 0, 0 1 0 0;
-    -fx-padding: 0 0 0 0; /* 4 8 4 8 */
+    -fx-background-color: -px_bright_default, -px_default;
+    -fx-background-insets: 0, 1 1 0 0;
+    -fx-background-radius: 0, 0;
+    -fx-padding: 0; /* 2 10 3 10 */
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
 }
+
+.increment-arrow-button:hover {
+    -fx-background-color: -px_bright_default, -px_hover
+}
+
+.increment-arrow-button:armed {
+    -fx-background-color: -px_bright_default, -px_selected
+}
+
 .decrement-arrow-button {
-    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
-    -fx-background-insets: -1 0 1 0, 0 1 2 1, 0 2 3 2;
-    -fx-background-radius: 0 0 3 0, 0 0 2 0, 0 0 1 0;
-    -fx-padding: 0 0 0 0; /* 3 8 6 8 */
+    -fx-background-color: -px_bright_default, -px_default;
+    -fx-background-insets: 0 0 1 0, 0 1 2 0;
+    -fx-background-radius: 0, 0;
+    -fx-padding: -1 0 1 0; /* 2 10 3 10 */
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.decrement-arrow-button:hover {
+    -fx-background-color: -px_bright_default, -px_hover
+}
+
+.decrement-arrow-button:armed {
+    -fx-background-color: -px_bright_default, -px_selected
 }

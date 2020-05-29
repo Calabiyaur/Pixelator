@@ -25,6 +25,7 @@ public enum Images {
     BULGE_CENTER,
     BULGE_LEFT,
     BULGE_RIGHT,
+    CHECK,
     CHECKERS,
     CHOOSE_COLOR,
     CLOSE,

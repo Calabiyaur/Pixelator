@@ -58,7 +58,6 @@ public class ToolView extends VBox {
     private Text frameIndexText = new Text();
 
     private ToolView() {
-        setStyle("-fx-background-color: #f4f4f4");
         setSpacing(6);
         setPadding(new Insets(6, 0, 6, 6));
 

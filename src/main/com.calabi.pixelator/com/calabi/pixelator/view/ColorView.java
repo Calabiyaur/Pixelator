@@ -30,7 +30,6 @@ public class ColorView extends BorderPane {
 
     private ColorView() {
         VBox box = new VBox();
-        setStyle("-fx-background-color: #f4f4f4");
         box.setSpacing(6);
         box.setPadding(new Insets(6, 6, 6, 1));
         box.setAlignment(Pos.TOP_RIGHT);

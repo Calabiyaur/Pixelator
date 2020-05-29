@@ -16,7 +16,6 @@ public class InfoView extends GridPane {
     private Label colorCount;
 
     private InfoView() {
-        setStyle("-fx-background-color: #f4f4f4");
         setHgap(6);
         setPadding(new Insets(2));
         setAlignment(Pos.TOP_LEFT);

@@ -27,9 +27,9 @@ public abstract class BasicNumberField<T extends Number> extends BasicControl<T>
     ObjectProperty<StringConverter<T>> converter = new SimpleObjectProperty<>();
     T minValue;
     T maxValue;
-    private BooleanProperty showButtons = new SimpleBooleanProperty(true);
-    private SpinnerButton up;
-    private SpinnerButton down;
+    private final BooleanProperty showButtons = new SimpleBooleanProperty(true);
+    private final SpinnerButton up;
+    private final SpinnerButton down;
     private T step;
 
     public BasicNumberField(String title, String tail, T value) {
@@ -140,6 +140,7 @@ public abstract class BasicNumberField<T extends Number> extends BasicControl<T>
 
         public SpinnerButton(boolean increment) {
             super("", increment ? Images.SPINNER_UP.getImageView() : Images.SPINNER_DOWN.getImageView());
+            setFocusTraversable(false);
             this.increment = increment;
             if (increment) {
                 getStyleClass().add("increment-arrow-button");
