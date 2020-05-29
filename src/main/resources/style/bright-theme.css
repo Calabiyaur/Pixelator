@@ -1,15 +1,39 @@
 .root {
     -px_default: #FFFFFF;
-    -px_hover: #DDDDDD;
-    -px_selected: #CCCCCC;
     -px_window: #FFFFFF;
     -px_empty_area: #F4F4F4;
+    -px_hover: #DDDDDD;
+    -px_selected: #CCCCCC;
+    -px_armed: #BBBBBB;
     -px_bright_default: #AAAAAA;
     -px_dark_default: #606060;
-    -px_bright_hover: #AAAAAA;
-    -px_bright_selected: #BBBBBB;
     -px-custom-background: #000000;
     -px-custom-background-2: #000000;
+}
+
+.menu-bar {
+    -fx-background-color: -px_default, -px_empty_area;
+    -fx-background-insets: 0, 0 0 1 0;
+}
+
+.tool-bar {
+    -fx-background-color: -px_armed, -px_empty_area;
+    -fx-background-insets: 0, 0 0 1 0;
+}
+
+.button {
+    -fx-background-color: -px_bright_default, -px_hover;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0, 0;
+    -fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+}
+
+.button:hover {
+    -fx-background-color: -px_bright_default, -px_selected;
+}
+
+.button:armed {
+    -fx-background-color: -px_bright_default, -px_armed;
 }
 
 .draggable-pane {
@@ -279,7 +303,7 @@
 }
 
 .scroll-bar:horizontal:armed {
-    -fx-background-color: -px_bright_selected;
+    -fx-background-color: -px_armed;
     -fx-background-insets: 0;
 }
 
@@ -289,7 +313,7 @@
 }
 
 .scroll-bar:vertical:focused {
-    -fx-background-color: -px_bright_selected;
+    -fx-background-color: -px_armed;
     -fx-background-insets: 0;
 }
 
@@ -306,7 +330,7 @@
 }
 
 .scroll-bar:focused > .thumb {
-    -fx-color: -px_bright_selected;
+    -fx-color: -px_armed;
 }
 
 .scroll-bar > .thumb:hover {

@@ -53,8 +53,8 @@ import static com.calabi.pixelator.res.Action.*;
 
 public class MainScene extends Scene {
 
-    private static List<String> styleSheets = new ArrayList<>();
-    private PaletteSelection paletteSelection;
+    private static final List<String> styleSheets = new ArrayList<>();
+    private final PaletteSelection paletteSelection;
 
     public MainScene() {
         super(new VBox());
@@ -65,8 +65,6 @@ public class MainScene extends Scene {
         double width = Config.SCREEN_WIDTH.getDouble();
         double height = Config.SCREEN_HEIGHT.getDouble();
         root.setPrefSize(width, height);
-
-        root.setStyle("-fx-background-color: #BBBBBB");
 
         styleSheets.add(getClass().getResource("/style/bright-theme.css").toExternalForm());
         getStylesheets().addAll(getStyle());
@@ -81,7 +79,7 @@ public class MainScene extends Scene {
         splitPane.getItems().add(toolView);
 
         BorderPane center = new BorderPane(IWC.get());
-        center.setStyle("-fx-background-color: #BBBBBB");
+        center.setStyle("-fx-background-color: -px_armed");
         splitPane.getItems().add(center);
 
         ColorView colorView = ColorView.get();
