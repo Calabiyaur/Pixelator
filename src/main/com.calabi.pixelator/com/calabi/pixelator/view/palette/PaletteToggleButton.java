@@ -33,7 +33,7 @@ public class PaletteToggleButton extends ToggleButton {
         this.editor = editor;
 
         GridPane content = new GridPane();
-        content.setStyle("-fx-background-color: #f4f4f4");
+        content.setStyle("-fx-background-color: -px_empty_area");
         content.prefHeightProperty().bind(heightProperty());
 
         textPane = new Text(text);

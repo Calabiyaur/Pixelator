@@ -44,7 +44,7 @@ public abstract class BasicDialog extends Dialog<Button> {
 
         setButtons(ok, cancel);
         getDialogPane().setContent(borderPane);
-        borderPane.setStyle("-fx-background-color: #F4F4F4");
+        borderPane.setStyle("-fx-background-color: -px_empty_area");
 
         grid.setPrefSize(244, 113);
         grid.setHgap(6);
