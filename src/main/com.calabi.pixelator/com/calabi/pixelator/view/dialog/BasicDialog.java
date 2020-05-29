@@ -7,31 +7,32 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.stage.Window;
+import javafx.stage.Stage;
 
 import com.calabi.pixelator.start.MainScene;
 import com.calabi.pixelator.start.Pixelator;
 
 public abstract class BasicDialog extends Dialog<Button> {
 
-    private BorderPane borderPane = new BorderPane();
+    private final BorderPane borderPane = new BorderPane();
+    private final GridPane grid = new GridPane();
     protected Button ok = new Button("OK");
     protected Button no = new Button("No");
     protected Button cancel = new Button("Cancel");
-    private GridPane grid = new GridPane();
 
     public BasicDialog() {
         Pixelator.getStages().forEach(s -> s.setAlwaysOnTop(false));
 
         initOwner(Pixelator.getPrimaryStage());
-        setDialogPane(new DialogPane());
-        Window window = getDialogPane().getScene().getWindow();
+
+        Stage window = (Stage) getDialogPane().getScene().getWindow();
+        window.setMinWidth(280);
+        window.setMinHeight(200);
         window.setOnCloseRequest(event -> window.hide());
 
         getDialogPane().getStylesheets().addAll(MainScene.getStyle());
@@ -45,6 +46,7 @@ public abstract class BasicDialog extends Dialog<Button> {
         getDialogPane().setContent(borderPane);
         borderPane.setStyle("-fx-background-color: #F4F4F4");
 
+        grid.setPrefSize(244, 113);
         grid.setHgap(6);
         grid.setVgap(6);
         setDialogContent(grid);
