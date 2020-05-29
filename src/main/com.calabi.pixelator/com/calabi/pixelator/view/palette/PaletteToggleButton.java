@@ -45,15 +45,15 @@ public class PaletteToggleButton extends ToggleButton {
         filler.setPrefWidth(7);
         hoverProperty().addListener((ov, o, n) -> {
             if (n && !isSelected()) {
-                filler.setStyle("-fx-background-color: #cccccc");
+                filler.setStyle("-fx-background-color: -px_hover");
             } else if (!n && !isSelected()) {
                 filler.setStyle("-fx-background-color: transparent");
             } else if (isSelected()) {
-                filler.setStyle("-fx-background-color: #aaaaaa");
+                filler.setStyle("-fx-background-color: -px_selected");
             }
         });
-        armedProperty().addListener((ov, o, n) -> Do.when(n, () -> filler.setStyle("-fx-background-color: #aaaaaa")));
-        selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> filler.setStyle("-fx-background-color: #aaaaaa")));
+        armedProperty().addListener((ov, o, n) -> Do.when(n, () -> filler.setStyle("-fx-background-color: -px_selected")));
+        selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> filler.setStyle("-fx-background-color: -px_selected")));
         content.add(filler, 2, 0);
 
         if (closable) {

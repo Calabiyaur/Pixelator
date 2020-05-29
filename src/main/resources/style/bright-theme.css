@@ -179,7 +179,7 @@
 }
 
 .slider > .thumb {
-    -fx-background-color: -px_dark_default;
+    -fx-background-color: black;
     -fx-background-insets: 0;
     -fx-background-radius: 0.5em; /* makes sure this remains circular */
     -fx-padding: 5;

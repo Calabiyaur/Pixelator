@@ -8,7 +8,7 @@ public class PalettePane extends GridPane {
     private PaletteEditor content;
 
     public PalettePane() {
-        setStyle("-fx-background-color: #AAAAAAFF");
+        setStyle("-fx-background-color: -px_selected");
     }
 
     public void setContent(PaletteEditor content) {
