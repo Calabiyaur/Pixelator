@@ -40,6 +40,7 @@ import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.meta.QuadConsumer;
 import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.res.GridSelectionConfig;
 import com.calabi.pixelator.util.Check;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.Do;
@@ -106,7 +107,10 @@ public class ImageEditor extends Editor {
         selectionLayer.setOutlineRect(outlineRect);
         selectionLayer.setOutlineShape(outlineShape);
 
+        GridSelectionConfig gridSelectionConfig = Config.GRID_SELECTION.getObject();
         grid = new Grid(width.get(), height.get());
+        grid.setXInterval(gridSelectionConfig.getXInterval());
+        grid.setYInterval(gridSelectionConfig.getYInterval());
         grid.draw();
         grid.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         grid.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
@@ -143,7 +147,7 @@ public class ImageEditor extends Editor {
                 outlineRect
         );
 
-        setShowGrid(false); //TODO: use parameters from preferences
+        setShowGrid(gridSelectionConfig.isSelected());
         setShowCrossHair(false);
         setShowBackground(false);
 

@@ -13,6 +13,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
@@ -30,6 +31,7 @@ import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.GridConfig;
+import com.calabi.pixelator.res.GridSelectionConfig;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.ImageUtil;
@@ -223,9 +225,31 @@ public class MainScene extends Scene {
 
         GridConfig gridConfig = Config.GRID_CONFIG.getObject();
         grid.setContextMenu(gridConfig.getContextMenu());
-        gridConfig.setOnSelection((xInterval, yInterval) -> {
+        gridConfig.setOnSelection((selected, xInterval, yInterval) -> {
             if (getEditor() != null) {
-                getEditor().setGridInterval(xInterval, yInterval);
+                if (selected) {
+                    getEditor().setGridInterval(xInterval, yInterval);
+                    Config.GRID_SELECTION.putObject(getEditor().getPixelFile(),
+                            GridSelectionConfig.selected(xInterval, yInterval));
+                } else {
+                    Config.GRID_SELECTION.putObject(getEditor().getPixelFile(),
+                            GridSelectionConfig.unselected(xInterval, yInterval));
+                    IWC.get().setShowGrid(false);
+                }
+            }
+        });
+        IWC.get().showGridProperty().addListener((ov, o, n) -> {
+            if (getEditor() != null) {
+                GridSelectionConfig config = Config.GRID_SELECTION.getObject(getEditor().getPixelFile());
+                for (MenuItem item : gridConfig.getContextMenu().getItems()) {
+                    if (item instanceof GridConfig.GridMenuItem) {
+                        GridConfig.GridMenuItem gridMenuItem = (GridConfig.GridMenuItem) item;
+                        if (config.getXInterval() == gridMenuItem.getXInterval()
+                                && config.getYInterval() == gridMenuItem.getYInterval()) {
+                            gridMenuItem.setSelected(n);
+                        }
+                    }
+                }
             }
         });
 

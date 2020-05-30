@@ -19,7 +19,6 @@ import com.calabi.pixelator.start.ExceptionHandler;
 public enum Config {
 
     // Global config
-    BULGE(ConfigMode.GLOBAL, ConfigType.INT, 0),
     COLOR(ConfigMode.GLOBAL, ConfigType.STRING),
     CONFIG_CONFIG(ConfigMode.GLOBAL, ConfigType.OBJECT, ConfigConfig.class, ConfigConfig.getDefault()),
     FULLSCREEN(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
@@ -49,7 +48,9 @@ public enum Config {
 
     // User defined
     ALPHA_ONLY(ConfigMode.USER_DEFINED, ConfigType.BOOLEAN, false),
+    BULGE(ConfigMode.USER_DEFINED, ConfigType.INT, 0),
     FILL_SHAPE(ConfigMode.USER_DEFINED, ConfigType.BOOLEAN, false),
+    GRID_SELECTION(ConfigMode.USER_DEFINED, ConfigType.OBJECT, GridSelectionConfig.class, ""),
     IMAGE_BACKGROUND_COLOR(ConfigMode.USER_DEFINED, ConfigType.STRING, "#DDDDDD"),
     IMAGE_BORDER_COLOR(ConfigMode.USER_DEFINED, ConfigType.STRING, "#00000000"),
     REPLACE(ConfigMode.USER_DEFINED, ConfigType.BOOLEAN, false),
@@ -185,6 +186,21 @@ public enum Config {
         return (String) get(file, ConfigType.STRING, def);
     }
 
+    public <T extends ConfigObject> T getObject(PixelFile file) {
+        String string = (String) get(file, ConfigType.OBJECT, def);
+        if (string != null) {
+            try {
+                Constructor<T> constructor = (Constructor<T>) c.getConstructor();
+                T instance = constructor.newInstance();
+                instance.build(string);
+                return instance;
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                ExceptionHandler.handle(e);
+            }
+        }
+        return (T) def;
+    }
+
     private Object get(PixelFile file, ConfigType configType, Object def) {
         if (ConfigMode.GLOBAL.equals(configMode) || !configType.equals(this.configType)) {
             Logger.log(name() + "(" + configType.name() + ")");
@@ -223,14 +239,16 @@ public enum Config {
         put(file, ConfigType.STRING, value);
     }
 
+    public void putObject(PixelFile file, ConfigObject value) {
+        put(file, ConfigType.OBJECT, value);
+    }
+
     private void put(PixelFile file, ConfigType configType, Object value) {
         if (ConfigMode.GLOBAL.equals(configMode) || !configType.equals(this.configType)) {
             throw new UnsupportedOperationException();
         } else if (isUserDefinedAsGlobal()) {
             put(configType, value);
-            return;
-        }
-        if (file != null) {
+        } else if (file != null) {
             file.getProperties().put(name(), String.valueOf(value));
             putLocalConfig(file.getName(), name(), String.valueOf(value));
         }

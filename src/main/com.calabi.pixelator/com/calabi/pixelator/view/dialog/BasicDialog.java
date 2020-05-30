@@ -26,13 +26,17 @@ public abstract class BasicDialog extends Dialog<Button> {
     protected Button cancel = new Button("Cancel");
 
     public BasicDialog() {
+        this(280, 200);
+    }
+
+    public BasicDialog(int minWidth, int minHeight) {
         Pixelator.getStages().forEach(s -> s.setAlwaysOnTop(false));
 
         initOwner(Pixelator.getPrimaryStage());
 
         Stage window = (Stage) getDialogPane().getScene().getWindow();
-        window.setMinWidth(280);
-        window.setMinHeight(200);
+        window.setMinWidth(minWidth);
+        window.setMinHeight(minHeight);
         window.setOnCloseRequest(event -> window.hide());
 
         getDialogPane().getStylesheets().addAll(MainScene.getStyle());
@@ -46,7 +50,7 @@ public abstract class BasicDialog extends Dialog<Button> {
         getDialogPane().setContent(borderPane);
         borderPane.setStyle("-fx-background-color: -px_empty_area");
 
-        grid.setPrefSize(244, 113);
+        grid.setPrefSize(minWidth - 36, minHeight - 87);
         grid.setHgap(6);
         grid.setVgap(6);
         setDialogContent(grid);
