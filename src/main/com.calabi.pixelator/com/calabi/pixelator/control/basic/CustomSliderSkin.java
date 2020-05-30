@@ -340,24 +340,24 @@ public class CustomSliderSkin extends SkinBase<Slider> {
         getChildren().clear();
         getChildren().addAll(track, progress, thumb);
         setShowTickMarks(getSkinnable().isShowTickMarks(), getSkinnable().isShowTickLabels());
-        track.setOnMousePressed(me -> {
+        getSkinnable().setOnMousePressed(me -> {
             if (!thumb.isPressed()) {
                 trackClicked = true;
                 if (getSkinnable().getOrientation() == Orientation.HORIZONTAL) {
-                    behavior.trackPress(me, (me.getX() / trackLength));
+                    behavior.trackPress(me, (me.getX() - thumbWidth * 0.5) / trackLength);
                 } else {
-                    behavior.trackPress(me, (me.getY() / trackLength));
+                    behavior.trackPress(me, (me.getY() - thumbHeight * 0.5) / trackLength);
                 }
                 trackClicked = false;
             }
         });
 
-        track.setOnMouseDragged(me -> {
+        getSkinnable().setOnMouseDragged(me -> {
             if (!thumb.isPressed()) {
                 if (getSkinnable().getOrientation() == Orientation.HORIZONTAL) {
-                    behavior.trackPress(me, (me.getX() / trackLength));
+                    behavior.trackPress(me, (me.getX() - thumbWidth * 0.5) / trackLength);
                 } else {
-                    behavior.trackPress(me, (me.getY() / trackLength));
+                    behavior.trackPress(me, (me.getY() - thumbHeight * 0.5) / trackLength);
                 }
             }
         });

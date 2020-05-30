@@ -87,11 +87,11 @@
     -fx-padding: 0.25em; /* 3 -- padding from the outside edge to the mark */
 }
 
-.check-box:hover > .box {
+.check-box > .box:hover {
     -fx-background-color: -px_bright_default, -px_hover;
 }
 
-.check-box:armed > .box {
+.check-box > .box:armed {
     -fx-background-color: -px_bright_default, -px_selected;
 }
 
