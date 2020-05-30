@@ -1,5 +1,7 @@
 package com.calabi.pixelator.control.basic;
 
+import java.util.Iterator;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.DoubleBinding;
@@ -7,16 +9,25 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
+import com.sun.javafx.scene.control.behavior.TextFieldBehavior;
+import com.sun.javafx.scene.control.inputmap.InputMap;
+import com.sun.javafx.scene.control.inputmap.InputMap.Mapping;
+import com.sun.javafx.scene.control.inputmap.KeyBinding;
+
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.util.ReflectionUtil;
 
 public abstract class BasicNumberField<T extends Number> extends BasicControl<T> {
 
@@ -60,6 +71,40 @@ public abstract class BasicNumberField<T extends Number> extends BasicControl<T>
                 spinner.getChildren().clear();
             }
         });
+
+        textField.skinProperty().addListener((ov, o, n) -> {
+            TextFieldBehavior behavior = ReflectionUtil.getField(n, "behavior");
+            ObservableList<Mapping<?>> mappings = behavior.getInputMap().getMappings();
+            overrideKeyMapping(mappings, keyMapping(KeyCode.UP, e -> increment()));
+            overrideKeyMapping(mappings, keyMapping(KeyCode.DOWN, e -> decrement()));
+        });
+    }
+
+    private void overrideKeyMapping(ObservableList<Mapping<?>> mappings, InputMap.KeyMapping keyMapping) {
+        for (Iterator<Mapping<?>> iterator = mappings.iterator(); iterator.hasNext(); ) {
+            Mapping<?> existingMapping = iterator.next();
+            if (existingMapping instanceof InputMap.KeyMapping) {
+                if (keyMapping.getMappingKey().equals(existingMapping.getMappingKey())) {
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
+        mappings.add(keyMapping);
+    }
+
+    private InputMap.KeyMapping keyMapping(KeyCode keyCode, final EventHandler<KeyEvent> eventHandler) {
+        return keyMapping(new KeyBinding(keyCode), eventHandler);
+    }
+
+    private InputMap.KeyMapping keyMapping(KeyBinding keyBinding, final EventHandler<KeyEvent> eventHandler) {
+        TextFieldBehavior behavior = ReflectionUtil.getField(textField.getSkin(), "behavior");
+        return new InputMap.KeyMapping(keyBinding,
+                e -> {
+                    ReflectionUtil.invokeMethod(behavior, "setCaretAnimating", false);
+                    eventHandler.handle(e);
+                    ReflectionUtil.invokeMethod(behavior, "setCaretAnimating", true);
+                });
     }
 
     @Override
