@@ -48,7 +48,7 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
                 try {
                     return Integer.parseInt(string);
                 } catch (NumberFormatException e) {
-                    return 0;
+                    return null;
                 }
             }
         });
@@ -63,14 +63,19 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
                 return null;
             }
 
-            if (minValue != null && getConverter().fromString(fullText) < minValue) {
+            Integer newValue = getConverter().fromString(fullText);
+            if (newValue == null) {
+                return change;
+            }
+
+            if (minValue != null && newValue < minValue) {
                 int caretPosition = change.getCaretPosition();
                 textField.setText(getConverter().toString(minValue));
                 textField.positionCaret(caretPosition);
                 return null;
             }
 
-            if (maxValue != null && getConverter().fromString(fullText) > maxValue) {
+            if (maxValue != null && newValue > maxValue) {
                 int caretPosition = change.getCaretPosition();
                 textField.setText(getConverter().toString(maxValue));
                 textField.positionCaret(caretPosition);
@@ -84,12 +89,14 @@ public class BasicIntegerField extends BasicNumberField<Integer> {
 
     @Override
     protected void increment() {
-        setValue(Math.min(maxValue == null ? Integer.MAX_VALUE : maxValue, getValue() + getStep()));
+        Integer value = getValue() == null ? 0 : getValue();
+        setValue(Math.min(maxValue == null ? Integer.MAX_VALUE : maxValue, value + getStep()));
     }
 
     @Override
     protected void decrement() {
-        setValue(Math.max(minValue == null ? Integer.MIN_VALUE : minValue, getValue() - getStep()));
+        Integer value = getValue() == null ? 0 : getValue();
+        setValue(Math.max(minValue == null ? Integer.MIN_VALUE : minValue, value - getStep()));
     }
 
     @Override

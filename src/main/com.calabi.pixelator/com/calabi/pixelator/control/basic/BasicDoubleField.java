@@ -53,7 +53,7 @@ public class BasicDoubleField extends BasicNumberField<Double> {
                 try {
                     return Double.parseDouble(string) / factor;
                 } catch (NumberFormatException e) {
-                    return 0.;
+                    return null;
                 }
             }
         });
@@ -69,6 +69,9 @@ public class BasicDoubleField extends BasicNumberField<Double> {
             }
 
             Double newValue = getConverter().fromString(fullText);
+            if (newValue == null) {
+                return change;
+            }
 
             if (minValue != null && newValue < minValue / factor) {
                 int caretPosition = change.getCaretPosition();
@@ -91,12 +94,14 @@ public class BasicDoubleField extends BasicNumberField<Double> {
 
     @Override
     protected void increment() {
-        setValue(Math.min(maxValue == null ? Double.MAX_VALUE : maxValue / factor, getValue() + getStep()));
+        Double value = getValue() == null ? 0. : getValue();
+        setValue(Math.min(maxValue == null ? Double.MAX_VALUE : maxValue / factor, value + getStep()));
     }
 
     @Override
     protected void decrement() {
-        setValue(Math.max(minValue == null ? Double.MIN_VALUE : minValue / factor, getValue() - getStep()));
+        Double value = getValue() == null ? 0. : getValue();
+        setValue(Math.max(minValue == null ? Double.MIN_VALUE : minValue / factor, value - getStep()));
     }
 
     @Override
