@@ -36,6 +36,16 @@
     -fx-background-color: -px_bright_default, -px_armed;
 }
 
+.list-view:focused {
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:focused {
+    -fx-background-color: -fx-selection-bar;
+    -fx-background-insets: 0;
+}
+
 .draggable-pane {
     -fx-background-color: -px_window;
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;

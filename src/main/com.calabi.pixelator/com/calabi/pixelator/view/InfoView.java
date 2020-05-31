@@ -18,6 +18,7 @@ public class InfoView extends GridPane {
     private InfoView() {
         setHgap(6);
         setPadding(new Insets(2));
+        setStyle("-fx-background-color: -px_empty_area");
         setAlignment(Pos.TOP_LEFT);
 
         mousePosition = new Label();
