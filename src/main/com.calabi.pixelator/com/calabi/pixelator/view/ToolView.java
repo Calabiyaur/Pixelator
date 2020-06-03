@@ -169,11 +169,6 @@ public class ToolView extends VBox {
         ToggleImageButton bulgeLeft = new ToggleImageButton(tg, Images.BULGE_LEFT);
         ToggleImageButton bulgeCenter = new ToggleImageButton(tg, Images.BULGE_CENTER);
         ToggleImageButton bulgeRight = new ToggleImageButton(tg, Images.BULGE_RIGHT);
-        switch(Config.BULGE.getInt()) {
-            case -1 -> bulgeLeft.fire();
-            case 1 -> bulgeRight.fire();
-            default -> bulgeCenter.fire();
-        }
 
         replaceColor.bindBidirectional(replaceColorField.valueProperty());
         alphaOnly.bindBidirectional(alphaOnlyField.valueProperty());
@@ -185,6 +180,11 @@ public class ToolView extends VBox {
         bulgeLeft.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(-1)));
         bulgeCenter.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(0)));
         bulgeRight.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(1)));
+        switch(Config.BULGE.getInt()) {
+            case -1 -> bulgeLeft.fire();
+            case 1 -> bulgeRight.fire();
+            default -> bulgeCenter.fire();
+        }
 
         GridPane prefBox = new GridPane();
         prefBox.addRow(0, replaceColorField);
