@@ -176,7 +176,6 @@ public class ToolView extends VBox {
         thickness.bind(thicknessField.valueProperty());
         List<ToggleImageButton> bulgeButtons = Arrays.asList(bulgeLeft, bulgeCenter, bulgeRight);
         thickness.addListener((ov, o, n) -> bulgeButtons.forEach(b -> b.setDisable(n.intValue() == 1)));
-        bulgeButtons.forEach(b -> b.setDisable(getThickness() == 1));
         bulgeLeft.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(-1)));
         bulgeCenter.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(0)));
         bulgeRight.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(1)));
@@ -185,6 +184,7 @@ public class ToolView extends VBox {
             case 1 -> bulgeRight.fire();
             default -> bulgeCenter.fire();
         }
+        bulgeButtons.forEach(b -> b.setDisable(getThickness() == 1));
 
         GridPane prefBox = new GridPane();
         prefBox.addRow(0, replaceColorField);
