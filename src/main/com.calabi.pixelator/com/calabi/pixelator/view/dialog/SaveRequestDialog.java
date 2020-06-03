@@ -11,7 +11,8 @@ public class SaveRequestDialog extends BasicDialog {
 
     private static Result answer;
 
-    private SaveRequestDialog() {
+    private SaveRequestDialog(int minWidth, int minHeight) {
+        super(minWidth, minHeight);
         addContent(new Text("There are unsaved changes. \nDo you wish to save before closing?"), 0, 0);
         setOkText("Yes");
     }
@@ -29,7 +30,7 @@ public class SaveRequestDialog extends BasicDialog {
         exit.initOwner(Pixelator.getPrimaryStage());
         exit.setResizable(false);
 
-        SaveRequestDialog dialog = new SaveRequestDialog();
+        SaveRequestDialog dialog = new SaveRequestDialog(200, 140);
         dialog.setMinSize(200, 140);
 
         dialog.setOnOk(e -> {
