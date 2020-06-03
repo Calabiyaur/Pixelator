@@ -14,4 +14,8 @@ public class NumberUtil {
         return value < 0 ? 0 : value > 1 ? 1 : value;
     }
 
+    public static double distance(double x, double y) {
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+
 }

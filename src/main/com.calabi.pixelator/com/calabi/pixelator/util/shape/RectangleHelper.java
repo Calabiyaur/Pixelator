@@ -2,6 +2,7 @@ package com.calabi.pixelator.util.shape;
 
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
+import com.calabi.pixelator.util.NumberUtil;
 
 public class RectangleHelper {
 
@@ -55,7 +56,7 @@ public class RectangleHelper {
         int radius = width / 2;
         for (int i = x - radius; i <= x + radius; i++) {
             for (int j = y - radius; j <= y + radius; j++) {
-                if (Math.sqrt(Math.pow(i - x, 2) + Math.pow(j - y, 2)) <= radius) {
+                if (NumberUtil.distance(i - x, j - y) <= radius) {
                     points.add(i, j);
                 }
             }

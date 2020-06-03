@@ -2,6 +2,7 @@ package com.calabi.pixelator.util.shape;
 
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
+import com.calabi.pixelator.util.NumberUtil;
 
 public class LineHelper {
 
@@ -43,6 +44,36 @@ public class LineHelper {
         }
 
         return points;
+    }
+
+    public static PointArray getStraightPath(Point p1, Point p2, int distance) {
+        int dX = p2.getX() - p1.getX();
+        int dY = p2.getY() - p1.getY();
+
+        PointArray path = new PointArray();
+        int x = p1.getX();
+        int y = p1.getY();
+        path.add(x, y);
+
+        if (Math.abs(dX) >= Math.abs(dY)) {
+            x += dX > 0 ? 1 : -1;
+        } else {
+            y += dY > 0 ? 1 : -1;
+        }
+        path.add(x, y);
+
+        while (NumberUtil.distance(x - p1.getX(), y - p1.getY()) < distance - 1) {
+            int totalX = x - p1.getX();
+            int totalY = y - p1.getY();
+            if (dY == 0 || ((double) totalX / dX) < ((double) totalY / dY)) {
+                x += dX > 0 ? 1 : -1;
+            } else {
+                y += dY > 0 ? 1 : -1;
+            }
+            path.add(x, y);
+        }
+
+        return path;
     }
 
 }

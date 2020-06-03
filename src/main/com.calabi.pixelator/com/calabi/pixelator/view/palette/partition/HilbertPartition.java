@@ -18,6 +18,7 @@ import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.meta.Frac;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.util.ColorUtil;
+import com.calabi.pixelator.util.NumberUtil;
 
 public class HilbertPartition implements Partition {
 
@@ -47,7 +48,7 @@ public class HilbertPartition implements Partition {
                 double dHue = Math.abs(other.getHue() - color.getHue()) / 360.;
                 double dSaturation = Math.abs(other.getSaturation() - color.getSaturation());
                 double dBrightness = Math.abs(other.getBrightness() - color.getBrightness());
-                double dHs = Math.sqrt(Math.pow(dHue, 2) + Math.pow(dSaturation, 2));
+                double dHs = NumberUtil.distance(dHue, dSaturation);
                 if (dHs > dBrightness) {
                     part.splitHs((other.getHue() + color.getHue()) / 720.,
                             (other.getSaturation() + color.getSaturation()) / 2.);

@@ -19,36 +19,34 @@ public class ShapeMaster {
         Check.notNull(settings.thick);
         Check.notNull(settings.bulge);
 
-        PointArray points = LineHelper.getLinePoints(p1, p2);
+        PointArray line = LineHelper.getLinePoints(p1, p2);
         if (settings.thick == 1) {
-            return points;
+            return line;
         }
 
-        if (settings.thick > points.size()) {
-            //TODO
-        } else {
-            if (settings.bulge == 0) {
-                for (int i = 1; i < (settings.thick + 1) / 2; i++) {
-                    Point left = Rotate.rotateLeft(p1, points.getX(i), points.getY(i));
-                    points.add(LineHelper.getLinePoints(
-                            left.getX(),
-                            left.getY(),
-                            p2.getX() + (left.getX() - p1.getX()),
-                            p2.getY() + (left.getY() - p1.getY())
-                    ));
+        // Create mast to lay over each point in the line to create a thick line
+        Point rotatedP2 = Rotate.rotateRight(p1, p2);
+        PointArray mask = LineHelper.getStraightPath(p1, rotatedP2, settings.thick);
 
-                    Point right = Rotate.rotateRight(p1, points.getX(i), points.getY(i));
-                    points.add(LineHelper.getLinePoints(
-                            right.getX(),
-                            right.getY(),
-                            p2.getX() + (right.getX() - p1.getX()),
-                            p2.getY() + (right.getY() - p1.getY())
-                    ));
-                }
+        // Move mask according to bulge
+        int iOrigin = switch(settings.bulge) {
+            case -1 -> 0;
+            case 1 -> mask.size() - 1;
+            default -> mask.size() / 2;
+        };
+        int xOrigin = mask.getX(iOrigin);
+        int yOrigin = mask.getY(iOrigin);
+        PointArray translatedMask = new PointArray();
+        mask.forEach((x, y) -> translatedMask.add(x - xOrigin, y - yOrigin));
+
+        // Combine line and mask
+        PointArray thickLine = new PointArray();
+        for (int i = 0; i < line.size(); i++) {
+            for (int j = 0; j < translatedMask.size(); j++) {
+                thickLine.add(line.getX(i) + translatedMask.getX(j), line.getY(i) + translatedMask.getY(j));
             }
         }
-
-        return points;
+        return thickLine;
     }
 
     public static PointArray getEllipsePoints(Point p1, Point p2, ToolSettings settings) {
