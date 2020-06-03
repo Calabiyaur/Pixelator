@@ -627,10 +627,10 @@ public class ImageEditor extends Editor {
 
     public void selectAll() {
         currentTool.lockAndReset();
-        selectionLayer.definePixels(RectangleHelper.getRectanglePoints(
+        selectionLayer.definePixels(ShapeMaster.getRectanglePoints(
                 new Point(0, 0),
                 new Point(width.get() - 1, height.get() - 1),
-                true));
+                ToolView.get().getSettings()));
     }
 
     public void invertSelection() {

@@ -4,7 +4,7 @@ import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.util.NumberUtil;
 
-public class LineHelper {
+public final class LineHelper {
 
     /**
      * Return all points which lie between (x1, y1) and (x2, y2),

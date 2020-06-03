@@ -4,22 +4,30 @@ import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.util.NumberUtil;
 
-public class RectangleHelper {
+public final class RectangleHelper {
 
     /**
      * Return all points that lie between (x1, y1) and (x2, y2),
      * in a rectangular shape.
      */
     public static PointArray getRectanglePoints(Point p1, Point p2, boolean fill) {
-        PointArray points = new PointArray();
-        int x1 = Math.min(p1.getX(), p2.getX());
-        int y1 = Math.min(p1.getY(), p2.getY());
-        int x2 = Math.max(p1.getX(), p2.getX());
-        int y2 = Math.max(p1.getY(), p2.getY());
+        return getRectanglePoints(p1.getX(), p1.getY(), p2.getX(), p2.getY(), fill);
+    }
 
-        for (int x = x1; x <= x2; x++) {
-            for (int y = y1; y <= y2; y++) {
-                if (fill || x == x1 || x == x2 || y == y1 || y == y2) {
+    /**
+     * Return all points that lie between (x1, y1) and (x2, y2),
+     * in a rectangular shape.
+     */
+    public static PointArray getRectanglePoints(int x1, int y1, int x2, int y2, boolean fill) {
+        PointArray points = new PointArray();
+        int p1x = Math.min(x1, x2);
+        int p1y = Math.min(y1, y2);
+        int p2x = Math.max(x1, x2);
+        int p2y = Math.max(y1, y2);
+
+        for (int x = p1x; x <= p2x; x++) {
+            for (int y = p1y; y <= p2y; y++) {
+                if (fill || x == p1x || x == p2x || y == p1y || y == p2y) {
                     points.add(x, y);
                 }
             }

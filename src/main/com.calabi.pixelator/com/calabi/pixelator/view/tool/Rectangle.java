@@ -1,7 +1,7 @@
 package com.calabi.pixelator.view.tool;
 
 import com.calabi.pixelator.meta.Point;
-import com.calabi.pixelator.util.shape.RectangleHelper;
+import com.calabi.pixelator.util.shape.ShapeMaster;
 import com.calabi.pixelator.view.ToolView;
 
 public class Rectangle extends ShapeTool {
@@ -17,10 +17,10 @@ public class Rectangle extends ShapeTool {
 
     @Override
     protected void update(Point start, Point end) {
-        getToolLayer().setPixels(RectangleHelper.getRectanglePoints(
+        getToolLayer().setPixels(ShapeMaster.getRectanglePoints(
                 start,
                 end,
-                ToolView.get().isFillShape()));
+                ToolView.get().getSettings()));
     }
 
 }
