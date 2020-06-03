@@ -157,8 +157,7 @@ public class ToolView extends VBox {
         BasicCheckBox replaceColorField = new BasicCheckBox("Replace", Config.REPLACE.getBoolean());
         BasicCheckBox alphaOnlyField = new BasicCheckBox("Alpha only", Config.ALPHA_ONLY.getBoolean());
         BasicCheckBox fillShapeField = new BasicCheckBox("Fill shape", Config.FILL_SHAPE.getBoolean());
-        BasicIntegerField thicknessField = new BasicIntegerField("Thickness", 1);
-        //thicknessField.setDisable(true);
+        BasicIntegerField thicknessField = new BasicIntegerField("Thickness", Config.THICKNESS.getInt());
         Arrays.asList(replaceColorField, alphaOnlyField, fillShapeField, thicknessField).forEach(field -> {
             field.getControlWrapper().setPrefWidth(45);
             field.setMinWidth(100);
@@ -182,7 +181,7 @@ public class ToolView extends VBox {
         thickness.bind(thicknessField.valueProperty());
         List<ToggleImageButton> bulgeButtons = Arrays.asList(bulgeLeft, bulgeCenter, bulgeRight);
         thickness.addListener((ov, o, n) -> bulgeButtons.forEach(b -> b.setDisable(n.intValue() == 1)));
-        //bulgeButtons.forEach(b -> b.setDisable(true));
+        bulgeButtons.forEach(b -> b.setDisable(getThickness() == 1));
         bulgeLeft.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(-1)));
         bulgeCenter.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(0)));
         bulgeRight.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> bulge.set(1)));
@@ -220,6 +219,7 @@ public class ToolView extends VBox {
         alphaOnly.addListener((ov, o, n) -> Config.ALPHA_ONLY.putBoolean(IWC.get().getCurrentFile(), n));
         fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(IWC.get().getCurrentFile(), n));
         thickness.addListener((ov, o, n) -> Config.THICKNESS.putInt(IWC.get().getCurrentFile(), n.intValue()));
+        bulge.addListener((ov, o, n) -> Config.BULGE.putInt(IWC.get().getCurrentFile(), n.intValue()));
     }
 
     public void setPreview(Image image, Image toolImage, Image selectionImage) {
