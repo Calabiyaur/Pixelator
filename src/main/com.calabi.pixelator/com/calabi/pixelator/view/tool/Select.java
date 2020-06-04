@@ -48,7 +48,7 @@ public class Select extends SelectionTool {
             PointArray rectanglePoints = RectangleHelper.getRectanglePoints(start, getMouse(), true);
             switch(type.get()) {
                 case ADD -> pixels.addExclusive(rectanglePoints);
-                case SUBTRACT -> pixels.subtract(rectanglePoints);
+                case SUBTRACT -> pixels = pixels.subtract(rectanglePoints);
                 default -> pixels = rectanglePoints;
             }
             getSelectionLayer().definePixels(pixels);

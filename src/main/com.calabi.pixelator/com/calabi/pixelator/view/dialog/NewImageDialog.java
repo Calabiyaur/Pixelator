@@ -9,10 +9,18 @@ public class NewImageDialog extends NewDialog {
         setOkText("Create");
 
         widthField.setValue(Config.NEW_IMAGE_WIDTH.getInt());
-        widthField.valueProperty().addListener((ov, o, n) -> Config.NEW_IMAGE_WIDTH.putInt(n));
+        widthField.valueProperty().addListener((ov, o, n) -> {
+            if (n != null) {
+                Config.NEW_IMAGE_WIDTH.putInt(n);
+            }
+        });
 
         heightField.setValue(Config.NEW_IMAGE_HEIGHT.getInt());
-        heightField.valueProperty().addListener((ov, o, n) -> Config.NEW_IMAGE_HEIGHT.putInt(n));
+        heightField.valueProperty().addListener((ov, o, n) -> {
+            if (n != null) {
+                Config.NEW_IMAGE_HEIGHT.putInt(n);
+            }
+        });
     }
 
 }

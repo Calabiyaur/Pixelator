@@ -2,7 +2,6 @@ package com.calabi.pixelator.util.shape;
 
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
-import com.calabi.pixelator.view.ToolSettings;
 
 public final class EllipseHelper {
 
@@ -10,8 +9,7 @@ public final class EllipseHelper {
     /**
      * Return all points that form an ellipse around (cx|cy) with radii rx and ry.
      */
-    public static PointArray getEllipsePointsStretched(int cx, int cy, int rx, int ry, int sH, int sV,
-            ToolSettings settings) {
+    public static PointArray getEllipsePointsStretched(int cx, int cy, int rx, int ry, boolean fill) {
 
         PointArray points = new PointArray();
 
@@ -30,7 +28,7 @@ public final class EllipseHelper {
         int ly1 = 0;
 
         while (sx > sy) {
-            addPointsToEllipse(points, cx, cy, x, y, settings.fill, 0);
+            addPointsToEllipse(points, cx, cy, x, y, fill, 0);
             lx1 = x;
             ly1 = y;
 
@@ -61,7 +59,7 @@ public final class EllipseHelper {
         int ly2 = 0;
 
         while (sx < sy) {
-            addPointsToEllipse(points, cx, cy, x, y, settings.fill, yOff);
+            addPointsToEllipse(points, cx, cy, x, y, fill, yOff);
             lx2 = x;
             ly2 = y;
 

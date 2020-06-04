@@ -85,13 +85,39 @@ public final class ShapeMaster {
         int rx = Math.abs(p1.getX() - p2.getX()) / (2 / stretchH);
         int ry = Math.abs(p1.getY() - p2.getY()) / (2 / stretchV);
 
-        if (rx == 0 || ry == 0) {
-            return getLinePoints(p1, p2, settings);
+        if (settings.thick == 1 || settings.bulge == -1) {
+            if (rx == 0 || ry == 0) {
+                return LineHelper.getLinePoints(p1, p2);
+            } else if (Math.abs(p1.getX() - p2.getX()) == 1 || Math.abs(p1.getY() - p2.getY()) == 1) {
+                return RectangleHelper.getRectanglePoints(p1, p2, false);
+            }
         }
-        if (Math.abs(p1.getX() - p2.getX()) == 1 || Math.abs(p1.getY() - p2.getY()) == 1) {
-            return RectangleHelper.getRectanglePoints(p1, p2, settings.fill);
+        if (settings.thick == 1 && settings.bulge == -1) {
+            return getEllipse(cx, cy, rx, ry, stretchH, stretchV, settings.fill);
         }
-        PointArray stretchedPoints = EllipseHelper.getEllipsePointsStretched(cx, cy, rx, ry, stretchH, stretchV, settings);
+
+        int factorOuter = switch(settings.bulge) {
+            case -1 -> 0;
+            case 1 -> settings.thick - 1;
+            default -> (settings.thick - 1) / 2;
+        };
+        int factorInner = settings.thick - factorOuter;
+
+        int rxOuter = rx + factorOuter * stretchH;
+        int ryOuter = ry + factorOuter * stretchV;
+        int rxInner = rx - factorInner * stretchH;
+        int ryInner = ry - factorInner * stretchV;
+
+        PointArray outer = getEllipse(cx, cy, rxOuter, ryOuter, stretchH, stretchV, true);
+        if (settings.fill || rxInner < 0 || ryInner < 0) {
+            return outer;
+        }
+        PointArray inner = getEllipse(cx, cy, rxInner, ryInner, stretchH, stretchV, true);
+        return outer.subtract(inner);
+    }
+
+    private static PointArray getEllipse(int cx, int cy, int rx, int ry, int stretchH, int stretchV, boolean fill) {
+        PointArray stretchedPoints = EllipseHelper.getEllipsePointsStretched(cx, cy, rx, ry, fill);
         PointArray points = new PointArray();
         stretchedPoints.forEach((x, y) -> {
             if (x % stretchH == 0 && y % stretchV == 0) {

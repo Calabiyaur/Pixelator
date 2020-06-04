@@ -1,7 +1,6 @@
 package com.calabi.pixelator.meta;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -69,22 +68,21 @@ public class PointArray { //TODO: Make 'Array' interface and let this and 'Pixel
         }
     }
 
-    public void subtract(PointArray other) {
-        other.forEach((px, py) -> subtract(px, py));
-    }
+    public PointArray subtract(PointArray other) {
+        List<List<Boolean>> lines = to2d();
+        List<List<Boolean>> otherLines = other.to2d();
 
-    public void subtract(int px, int py) {
-        Iterator<Integer> xIter = x.iterator();
-        Iterator<Integer> yIter = y.iterator();
-        while (xIter.hasNext()) {
-            Integer tx = xIter.next();
-            Integer ty = yIter.next();
-            if (tx.equals(px) && ty.equals(py)) {
-                xIter.remove();
-                yIter.remove();
-                break;
+        for (int j = 0; j < Math.min(lines.size(), otherLines.size()); j++) {
+            List<Boolean> line = lines.get(j);
+            List<Boolean> otherLine = otherLines.get(j);
+            for (int i = 0; i < Math.min(line.size(), otherLine.size()); i++) {
+                if (line.get(i) && otherLine.get(i)) {
+                    line.set(i, false);
+                }
             }
         }
+
+        return from2d(lines);
     }
 
     public PointArray invert(int maxX, int maxY) {
@@ -112,6 +110,9 @@ public class PointArray { //TODO: Make 'Array' interface and let this and 'Pixel
         List<List<Boolean>> lines = new ArrayList<>();
         forEach((px, py) -> {
             List<Boolean> line;
+            if (px < 0 || py < 0) { //TODO: This should be avoided in the first place!
+                return;
+            }
             if (py >= lines.size()) {
                 line = new ArrayList<>();
                 lines.add(line);
