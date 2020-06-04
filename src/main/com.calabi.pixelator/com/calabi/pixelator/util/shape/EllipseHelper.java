@@ -78,7 +78,7 @@ public final class EllipseHelper {
             }
         }
 
-        PointArray linePoints = ShapeMaster.getLinePoints(new Point(lx1, ly1), new Point(lx2, ly2), settings);
+        PointArray linePoints = LineHelper.getLinePoints(new Point(lx1, ly1), new Point(lx2, ly2));
         for (int i = 1; i < linePoints.size() - 1; i++) {
             addPointsToEllipse(points, cx, cy, linePoints.getX(i), linePoints.getY(i), false, 0);
         }

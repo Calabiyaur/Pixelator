@@ -74,11 +74,11 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         ImageButton adjustSize = new ImageButton(Images.FULL_SCREEN);
         addButton(adjustSize);
         adjustSize.setOnAction(e -> adjustSize());
-        ImageButton popup = new ImageButton(Images.POPUP);
-        addButton(popup);
-        popup.setOnAction(e -> popupAction());
+        //ImageButton popup = new ImageButton(Images.POPUP);
+        //addButton(popup);
+        //popup.setOnAction(e -> popupAction());
 
-        popup.setDisable(true);
+        //popup.setDisable(true);
     }
 
     private void initLayout() {
