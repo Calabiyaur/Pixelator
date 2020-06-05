@@ -5,11 +5,27 @@ import com.calabi.pixelator.meta.PointArray;
 
 public final class EllipseHelper {
 
-
     /**
      * Return all points that form an ellipse around (cx|cy) with radii rx and ry.
      */
-    public static PointArray getEllipsePointsStretched(int cx, int cy, int rx, int ry, boolean fill) {
+    public static PointArray getEllipse(int cx, int cy, int rx, int ry, int stretchH, int stretchV, boolean fill) {
+        PointArray stretchedPoints = getEllipsePointsStretched(cx, cy, rx, ry, fill);
+        PointArray points = new PointArray();
+        stretchedPoints.forEach((x, y) -> {
+            if (x % stretchH == 0 && y % stretchV == 0) {
+                points.add(x / stretchH, y / stretchV);
+            } else if (x % stretchH == 0 || y % stretchV == 0) {
+                double x1 = ((double) x / (double) stretchH);
+                double y1 = ((double) y / (double) stretchV);
+                double x2 = x > cx ? Math.floor(x1) : Math.ceil(x1);
+                double y2 = y > cy ? Math.floor(y1) : Math.ceil(y1);
+                points.add((int) x2, (int) y2);
+            }
+        });
+        return points;
+    }
+
+    private static PointArray getEllipsePointsStretched(int cx, int cy, int rx, int ry, boolean fill) {
 
         PointArray points = new PointArray();
 
@@ -28,7 +44,7 @@ public final class EllipseHelper {
         int ly1 = 0;
 
         while (sx > sy) {
-            addPointsToEllipse(points, cx, cy, x, y, fill, 0);
+            addPointsToEllipse(points, cx, cy, x, y, fill, 0, false);
             lx1 = x;
             ly1 = y;
 
@@ -59,7 +75,7 @@ public final class EllipseHelper {
         int ly2 = 0;
 
         while (sx < sy) {
-            addPointsToEllipse(points, cx, cy, x, y, fill, yOff);
+            addPointsToEllipse(points, cx, cy, x, y, fill, yOff, true);
             lx2 = x;
             ly2 = y;
 
@@ -78,17 +94,17 @@ public final class EllipseHelper {
 
         PointArray linePoints = LineHelper.getLinePoints(new Point(lx1, ly1), new Point(lx2, ly2));
         for (int i = 1; i < linePoints.size() - 1; i++) {
-            addPointsToEllipse(points, cx, cy, linePoints.getX(i), linePoints.getY(i), false, 0);
+            addPointsToEllipse(points, cx, cy, linePoints.getX(i), linePoints.getY(i), false, 0, false);
         }
 
         return points;
     }
 
-    private static void addPointsToEllipse(PointArray points, int cx, int cy, int x, int y, boolean fill, int yOffset) {
+    private static void addPointsToEllipse(PointArray points, int cx, int cy, int x, int y, boolean fill, int yOffset, boolean useYOffset) {
         if (!fill) {
             points.add(cx + x, cy + y);
         } else {
-            if (yOffset == 0) {
+            if (!useYOffset) {
                 for (int i = cx; i < cx + x + 1; i++) {
                     points.add(i, cy + y);
                 }
@@ -103,7 +119,7 @@ public final class EllipseHelper {
             if (!fill) {
                 points.add(cx - x, cy + y);
             } else {
-                if (yOffset == 0) {
+                if (!useYOffset) {
                     for (int i = cx - x; i < cx; i++) {
                         points.add(i, cy + y);
                     }
@@ -119,7 +135,7 @@ public final class EllipseHelper {
             if (!fill) {
                 points.add(cx - x, cy - y);
             } else {
-                if (yOffset == 0) {
+                if (!useYOffset) {
                     for (int i = cx - x; i < cx; i++) {
                         points.add(i, cy - y);
                     }
@@ -135,7 +151,7 @@ public final class EllipseHelper {
             if (!fill) {
                 points.add(cx + x, cy - y);
             } else {
-                if (yOffset == 0) {
+                if (!useYOffset) {
                     for (int i = cx; i < cx + x + 1; i++) {
                         points.add(i, cy - y);
                     }

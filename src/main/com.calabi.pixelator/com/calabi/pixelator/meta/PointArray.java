@@ -148,6 +148,13 @@ public class PointArray { //TODO: Make 'Array' interface and let this and 'Pixel
         return result;
     }
 
+    public boolean equalsIgnoreOrder(PointArray other) {
+        if (other == null) {
+            return false;
+        }
+        return to2d().equals(other.to2d());
+    }
+
     @Override public boolean equals(Object o) {
         if (this == o) {
             return true;

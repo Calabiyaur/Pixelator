@@ -93,7 +93,7 @@ public final class ShapeMaster {
             }
         }
         if (settings.thick == 1 && settings.bulge == -1) {
-            return getEllipse(cx, cy, rx, ry, stretchH, stretchV, settings.fill);
+            return EllipseHelper.getEllipse(cx, cy, rx, ry, stretchH, stretchV, settings.fill);
         }
 
         int factorOuter = switch(settings.bulge) {
@@ -108,29 +108,12 @@ public final class ShapeMaster {
         int rxInner = rx - factorInner * stretchH;
         int ryInner = ry - factorInner * stretchV;
 
-        PointArray outer = getEllipse(cx, cy, rxOuter, ryOuter, stretchH, stretchV, true);
+        PointArray outer = EllipseHelper.getEllipse(cx, cy, rxOuter, ryOuter, stretchH, stretchV, true);
         if (settings.fill || rxInner < 0 || ryInner < 0) {
             return outer;
         }
-        PointArray inner = getEllipse(cx, cy, rxInner, ryInner, stretchH, stretchV, true);
+        PointArray inner = EllipseHelper.getEllipse(cx, cy, rxInner, ryInner, stretchH, stretchV, true);
         return outer.subtract(inner);
-    }
-
-    private static PointArray getEllipse(int cx, int cy, int rx, int ry, int stretchH, int stretchV, boolean fill) {
-        PointArray stretchedPoints = EllipseHelper.getEllipsePointsStretched(cx, cy, rx, ry, fill);
-        PointArray points = new PointArray();
-        stretchedPoints.forEach((x, y) -> {
-            if (x % stretchH == 0 && y % stretchV == 0) {
-                points.add(x / stretchH, y / stretchV);
-            } else if (x % stretchH == 0 || y % stretchV == 0) {
-                double x1 = ((double) x / (double) stretchH);
-                double y1 = ((double) y / (double) stretchV);
-                double x2 = x > cx ? Math.floor(x1) : Math.ceil(x1);
-                double y2 = y > cy ? Math.floor(y1) : Math.ceil(y1);
-                points.add((int) x2, (int) y2);
-            }
-        });
-        return points;
     }
 
     /**
