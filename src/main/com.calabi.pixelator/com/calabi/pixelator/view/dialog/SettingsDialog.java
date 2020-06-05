@@ -27,6 +27,7 @@ public class SettingsDialog extends BasicDialog {
     private CheckBox fillShapeLocalCheckbox;
 
     public SettingsDialog() {
+        super(330, 240);
         setTitle("Settings");
         setOkText("Apply");
 
