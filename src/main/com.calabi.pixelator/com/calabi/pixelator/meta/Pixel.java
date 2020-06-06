@@ -4,8 +4,8 @@ import javafx.scene.paint.Color;
 
 public class Pixel extends Point {
 
-    private Color previousColor;
-    private Color color;
+    private final Color previousColor;
+    private final Color color;
 
     public Pixel(int x, int y, Color previousColor, Color color) {
         super(x, y);
@@ -21,7 +21,4 @@ public class Pixel extends Point {
         return color;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
 }

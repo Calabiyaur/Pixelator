@@ -18,10 +18,7 @@ class EllipseHelperTest {
 
         PointArray ellipse = EllipseHelper.getEllipse(1, 1, 1, 1, 1, 1, true);
 
-        Assert.assertTrue(
-                String.format("expected = %s, ellipse = %s", expected, ellipse),
-                ellipse.equalsIgnoreOrder(expected)
-        );
+        Assert.assertEquals(String.format("expected = %s, ellipse = %s", expected, ellipse), ellipse, expected);
     }
 
     @Test
@@ -34,10 +31,7 @@ class EllipseHelperTest {
 
         PointArray ellipse = EllipseHelper.getEllipse(1, 1, 1, 1, 2, 2, true);
 
-        Assert.assertTrue(
-                String.format("expected = %s, ellipse = %s", expected, ellipse),
-                ellipse.equalsIgnoreOrder(expected)
-        );
+        Assert.assertEquals(String.format("expected = %s, ellipse = %s", expected, ellipse), ellipse, expected);
     }
 
 }

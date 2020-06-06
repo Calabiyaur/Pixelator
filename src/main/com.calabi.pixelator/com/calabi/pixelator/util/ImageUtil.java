@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 import com.sun.javafx.tk.PlatformImage;
 
 import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.meta.Pixel;
 import com.calabi.pixelator.meta.PixelArray;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.start.ExceptionHandler;
@@ -35,19 +36,19 @@ public class ImageUtil {
         int y1 = Integer.MAX_VALUE;
         int x2 = 0;
         int y2 = 0;
-        for (int i = 0; i < pixels.size(); i++) {
-            x1 = Math.min(pixels.getX(i), x1);
-            y1 = Math.min(pixels.getY(i), y1);
-            x2 = Math.max(pixels.getX(i), x2);
-            y2 = Math.max(pixels.getY(i), y2);
+        for (Pixel pixel : pixels.getPoints()) {
+            x1 = Math.min(pixel.getX(), x1);
+            y1 = Math.min(pixel.getY(), y1);
+            x2 = Math.max(pixel.getX(), x2);
+            y2 = Math.max(pixel.getY(), y2);
         }
         if (x1 >= x2 || y1 >= y2) {
             throw new IllegalStateException("Failed converting pixels to Image");
         }
         WritableImage image = new WritableImage(x2 - x1 + 1, y2 - y1 + 1);
         PixelWriter writer = image.getPixelWriter();
-        for (int i = 0; i < pixels.size(); i++) {
-            writer.setColor(pixels.getX(i) - x1, pixels.getY(i) - y1, pixels.getColor(i));
+        for (Pixel pixel : pixels.getPoints()) {
+            writer.setColor(pixel.getX() - x1, pixel.getY() - y1, pixel.getColor());
         }
         return image;
     }

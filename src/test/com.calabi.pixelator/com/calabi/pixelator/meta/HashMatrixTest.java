@@ -5,6 +5,8 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
+import com.calabi.pixelator.view.palette.HashMatrix;
+
 class HashMatrixTest {
 
     @Test

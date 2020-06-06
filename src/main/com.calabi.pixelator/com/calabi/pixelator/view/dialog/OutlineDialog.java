@@ -113,9 +113,9 @@ public class OutlineDialog extends PreviewDialog {
         } else {
             points = RectangleHelper.getDiamondPoints(x, y, width);
         }
-        for (int i = 0; i < points.size(); i++) {
+        for (Point point : points.getPoints()) {
             try {
-                if (inside == reader.getColor(points.getX(i), points.getY(i)).equals(outside)) {
+                if (inside == reader.getColor(point.getX(), point.getY()).equals(outside)) {
                     return true;
                 }
             } catch (IndexOutOfBoundsException e) {

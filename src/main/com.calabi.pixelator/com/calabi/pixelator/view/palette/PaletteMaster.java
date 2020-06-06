@@ -10,8 +10,6 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.control.image.WritableImage;
-import com.calabi.pixelator.meta.HashMatrix;
-import com.calabi.pixelator.meta.Matrix;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.util.CollectionUtil;
 import com.calabi.pixelator.util.ImageUtil;

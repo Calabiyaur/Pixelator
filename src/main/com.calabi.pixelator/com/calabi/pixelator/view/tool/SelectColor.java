@@ -20,14 +20,14 @@ public class SelectColor extends SelectionTool {
     }
 
     @Override public void pressPrimary() {
-        PointArray pixels = getSelectionLayer().getPixels().copy(); //TODO: This line is normally not necessary
+        PointArray pixels = getSelectionLayer().getPixels().toPointArray(); //TODO: This line is normally not necessary
         PointArray selectColorPoints = getEditor().getSelectColor(getMouse());
         if (selectColorPoints == null) {
             return;
         }
         switch(type.get()) {
-            case ADD -> pixels.addExclusive(selectColorPoints);
-            case SUBTRACT -> pixels = pixels.subtract(selectColorPoints);
+            case ADD -> pixels.add(selectColorPoints);
+            case SUBTRACT -> pixels.subtract(selectColorPoints);
             default -> pixels = selectColorPoints;
         }
         getSelectionLayer().definePixels(pixels);

@@ -20,14 +20,14 @@ public class Wand extends SelectionTool {
     }
 
     @Override public void pressPrimary() {
-        PointArray pixels = getSelectionLayer().getPixels().copy(); //TODO: This line is normally not necessary
+        PointArray pixels = getSelectionLayer().getPixels().toPointArray(); //TODO: This line is normally not necessary
         PointArray selectFillPoints = getEditor().getSelectFill(getMouse());
         if (selectFillPoints == null) {
             return;
         }
         switch(type.get()) {
-            case ADD -> pixels.addExclusive(selectFillPoints);
-            case SUBTRACT -> pixels = pixels.subtract(selectFillPoints);
+            case ADD -> pixels.add(selectFillPoints);
+            case SUBTRACT -> pixels.subtract(selectFillPoints);
             default -> pixels = selectFillPoints;
         }
         getSelectionLayer().definePixels(pixels);

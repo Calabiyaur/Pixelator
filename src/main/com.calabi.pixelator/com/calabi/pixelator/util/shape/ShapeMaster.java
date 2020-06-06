@@ -34,16 +34,15 @@ public final class ShapeMaster {
             case 1 -> mask.size() - 1;
             default -> mask.size() / 2;
         };
-        int xOrigin = mask.getX(iOrigin);
-        int yOrigin = mask.getY(iOrigin);
+        Point origin = mask.getPoints().get(iOrigin);
         PointArray translatedMask = new PointArray();
-        mask.forEach((x, y) -> translatedMask.add(x - xOrigin, y - yOrigin));
+        mask.forEach((x, y) -> translatedMask.add(x - origin.getX(), y - origin.getY()));
 
         // Combine line and mask
         PointArray thickLine = new PointArray();
-        for (int i = 0; i < line.size(); i++) {
-            for (int j = 0; j < translatedMask.size(); j++) {
-                thickLine.add(line.getX(i) + translatedMask.getX(j), line.getY(i) + translatedMask.getY(j));
+        for (Point linePoint : line.getPoints()) {
+            for (Point maskPoint : translatedMask.getPoints()) {
+                thickLine.add(linePoint.getX() + maskPoint.getX(), linePoint.getY() + maskPoint.getY());
             }
         }
         return thickLine;
@@ -113,7 +112,8 @@ public final class ShapeMaster {
             return outer;
         }
         PointArray inner = EllipseHelper.getEllipse(cx, cy, rxInner, ryInner, stretchH, stretchV, true);
-        return outer.subtract(inner);
+        outer.subtract(inner);
+        return outer;
     }
 
     /**
@@ -137,9 +137,9 @@ public final class ShapeMaster {
         while (!done) {
             done = true;
             newActiveSet.reset();
-            for (int i = 0; i < activeSet.size(); i++) {
-                int x = activeSet.getX(i);
-                int y = activeSet.getY(i);
+            for (Point activePoint : activeSet.getPoints()) {
+                int x = activePoint.getX();
+                int y = activePoint.getY();
                 if (activeMap[x][y]) {
 
                     result.add(x, y);

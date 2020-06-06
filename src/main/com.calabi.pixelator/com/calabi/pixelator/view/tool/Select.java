@@ -27,7 +27,7 @@ public class Select extends SelectionTool {
             getSelectionLayer().setStart(getMouse());
         } else {
             Check.ensure(getSelectionLayer().isActive());
-            getSelectionLayer().defineShape(getSelectionLayer().getPixels());
+            getSelectionLayer().defineShape(getSelectionLayer().getPixels().toPointArray());
             getSelectionLayer().setStart(getMouse());
         }
         //getSelectionLayer().playBorder(false);
@@ -44,11 +44,11 @@ public class Select extends SelectionTool {
     @Override public void releasePrimary() {
         Point start = getSelectionLayer().getStart();
         if (start != null) {
-            PointArray pixels = getSelectionLayer().getPixels().copy(); //TODO: This line is normally not necessary
+            PointArray pixels = getSelectionLayer().getPixels().toPointArray(); //TODO: This line is normally not necessary
             PointArray rectanglePoints = RectangleHelper.getRectanglePoints(start, getMouse(), true);
             switch(type.get()) {
-                case ADD -> pixels.addExclusive(rectanglePoints);
-                case SUBTRACT -> pixels = pixels.subtract(rectanglePoints);
+                case ADD -> pixels.add(rectanglePoints);
+                case SUBTRACT -> pixels.subtract(rectanglePoints);
                 default -> pixels = rectanglePoints;
             }
             getSelectionLayer().definePixels(pixels);

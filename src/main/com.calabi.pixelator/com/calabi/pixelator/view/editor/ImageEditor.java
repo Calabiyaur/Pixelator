@@ -35,6 +35,7 @@ import com.calabi.pixelator.control.image.SquareStack;
 import com.calabi.pixelator.control.image.WritableImage;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Direction;
+import com.calabi.pixelator.meta.Pixel;
 import com.calabi.pixelator.meta.PixelArray;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
@@ -333,16 +334,16 @@ public class ImageEditor extends Editor {
     }
 
     private void writeAndRegister(PixelChange change) {
-        for (int i = 0; i < change.size(); i++) {
-            writer.setColor(change.getX(i), change.getY(i), change.getColor(i));
+        for (Pixel pixel : change.getPoints()) {
+            writer.setColor(pixel.getX(), pixel.getY(), pixel.getColor());
         }
         this.pixels = change;
         register();
     }
 
     public void restore() {
-        for (int i = 0; i < pixels.size(); i++) {
-            writer.setColor(pixels.getX(i), pixels.getY(i), pixels.getPreviousColor(i));
+        for (Pixel pixel : pixels.getPoints()) {
+            writer.setColor(pixel.getX(), pixel.getY(), pixel.getPreviousColor());
         }
         pixels.reset();
     }
@@ -404,9 +405,9 @@ public class ImageEditor extends Editor {
         }
     }
 
-    private void paintPoints(PointArray points, Color color, boolean replace) {
-        for (int i = 0; i < points.size(); i++) {
-            paintPixel(points.getX(i), points.getY(i), color, replace);
+    private void paintPoints(PixelArray pixels, Color color, boolean replace) {
+        for (Pixel pixel : pixels.getPoints()) {
+            paintPixel(pixel.getX(), pixel.getY(), color, replace);
         }
     }
 
@@ -419,14 +420,14 @@ public class ImageEditor extends Editor {
     }
 
     public void paintPoints(PointArray points) {
-        for (int i = 0; i < points.size(); i++) {
-            paintPixel(points.getX(i), points.getY(i));
+        for (Point point : points.getPoints()) {
+            paintPixel(point.getX(), point.getY());
         }
     }
 
     public void paintPixels(PixelArray pixels) {
-        for (int i = 0; i < pixels.size(); i++) {
-            paintPixel(pixels.getX(i), pixels.getY(i), pixels.getColor(i), ToolView.get().isReplaceColor());
+        for (Pixel pixel : pixels.getPoints()) {
+            paintPixel(pixel.getX(), pixel.getY(), pixel.getColor(), ToolView.get().isReplaceColor());
         }
     }
 
@@ -474,22 +475,18 @@ public class ImageEditor extends Editor {
 
     private PixelChange addToImage(PixelArray add) {
         PixelChange result = new PixelChange(writer);
-        for (int i = 0; i < add.size(); i++) {
-            int x = add.getX(i);
-            int y = add.getY(i);
+        for (Pixel pixel : add.getPoints()) {
+            int x = pixel.getX();
+            int y = pixel.getY();
             if (!ImageUtil.outOfBounds(getImage(), x, y)) {
                 Color previousColor = reader.getColor(x, y);
                 boolean replaceColor = ToolView.get().isReplaceColor();
                 boolean alphaOnly = ToolView.get().isAlphaOnly();
-                Color color = ColorUtil.addColors(previousColor, add.getColor(i), replaceColor, alphaOnly);
+                Color color = ColorUtil.addColors(previousColor, pixel.getColor(), replaceColor, alphaOnly);
                 result.add(x, y, previousColor, color);
             }
         }
         return result;
-    }
-
-    public void removePixels(PointArray toRemove) {
-        paintPoints(toRemove, Color.rgb(1, 1, 1, 0), true);
     }
 
     public void flipHorizontally() {
@@ -634,10 +631,10 @@ public class ImageEditor extends Editor {
     }
 
     public void invertSelection() {
-        PixelChange current = selectionLayer.getPixels();
-        PointArray inverted = current.invert(getImageWidth(), getImageHeight());
+        PointArray copy = selectionLayer.getPixels().toPointArray();
+        copy.invert(getImageWidth(), getImageHeight());
         currentTool.lockAndReset();
-        selectionLayer.definePixels(inverted);
+        selectionLayer.definePixels(copy);
     }
 
     public void crop() {
@@ -822,7 +819,7 @@ public class ImageEditor extends Editor {
 
     public void removeSelection() {
         if (!selectionLayer.isDragging() && !selectionLayer.isPasted()) {
-            removePixels(getSelectionLayer().getPixels());
+            paintPoints(getSelectionLayer().getPixels(), Color.TRANSPARENT, true);
         }
     }
 

@@ -7,7 +7,7 @@ import com.calabi.pixelator.meta.PixelArray;
 
 public class PixelChange extends PixelArray implements Undoable {
 
-    private PixelWriter writer;
+    private final PixelWriter writer;
 
     public PixelChange(PixelWriter writer) {
         super();
@@ -16,20 +16,16 @@ public class PixelChange extends PixelArray implements Undoable {
 
     @Override
     public void undo() {
-        for (int i = size() - 1; i >= 0; i--) {
-            writer.setColor(getX(i), getY(i), getPreviousColor(i));
-        }
+        forEach((x, y, previousColor, color) -> {
+            writer.setColor(x, y, previousColor);
+        });
     }
 
     @Override
     public void redo() {
-        for (int i = 0; i < size(); i++) {
-            writer.setColor(getX(i), getY(i), getColor(i));
-        }
-    }
-
-    public void setWriter(PixelWriter writer) {
-        this.writer = writer;
+        forEach((x, y, previousColor, color) -> {
+            writer.setColor(x, y, color);
+        });
     }
 
     /**
@@ -45,19 +41,19 @@ public class PixelChange extends PixelArray implements Undoable {
     /**
      * Add a new pixel without checking for color change
      */
-    public void addForcefully(int x, int y, Color previousColor, Color color) {
+    public void addForcefully(int x, int y, Color previousColor, Color color) { //TODO: Shouldn't this generally be avoided?
         super.add(x, y, previousColor, color);
     }
 
     public void addForcefully(PixelArray other) {
-        for (int i = 0; i < other.size(); i++) {
-            addForcefully(other.getX(i), other.getY(i), other.getPreviousColor(i), other.getColor(i));
-        }
+        other.forEach((x, y, previousColor, color) -> {
+            addForcefully(x, y, previousColor, color);
+        });
     }
 
     @Override
     public boolean isEmpty() {
-        return size() == 0;
+        return height() == 0;
     }
 
     @Override
@@ -66,4 +62,5 @@ public class PixelChange extends PixelArray implements Undoable {
         pixelChange.addForcefully(this);
         return pixelChange;
     }
+
 }

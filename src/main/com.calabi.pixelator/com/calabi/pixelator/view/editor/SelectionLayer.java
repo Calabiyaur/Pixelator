@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.calabi.pixelator.control.image.OutlineRect;
 import com.calabi.pixelator.control.image.OutlineShape;
+import com.calabi.pixelator.meta.Pixel;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.util.ImageUtil;
@@ -18,8 +19,9 @@ import com.calabi.pixelator.view.undo.PixelChange;
 
 public class SelectionLayer extends EditorLayer {
 
+    private final BooleanProperty active = new SimpleBooleanProperty(false);
+
     private Point drag;
-    private BooleanProperty active = new SimpleBooleanProperty(false);
     private boolean pasted = false;
     private OutlineRect outlineRect;
     private OutlineShape outlineShape;
@@ -77,9 +79,9 @@ public class SelectionLayer extends EditorLayer {
         getPixels().reset();
 
         PointArray effectivePoints = new PointArray();
-        for (int i = 0; i < points.size(); i++) {
-            int x = points.getX(i);
-            int y = points.getY(i);
+        for (Point point : points.getPoints()) {
+            int x = point.getX();
+            int y = point.getY();
             if (ImageUtil.outOfBounds(getImage(), x, y)) {
                 continue;
             }
@@ -139,13 +141,20 @@ public class SelectionLayer extends EditorLayer {
      */
     public PixelChange getPixelsTransformed() {
         PixelChange result = new PixelChange(getWriter());
+
         int dX = (int) (getTranslateX() / getScaleX());
         int dY = (int) (getTranslateY() / getScaleY());
-        for (int i = 0; i < getPixels().size(); i++) {
-            int newX = getPixels().getX(i) + dX;
-            int newY = getPixels().getY(i) + dY;
-            result.add(newX, newY, getPixels().getPreviousColor(i), getPixels().getColor(i));
+
+        for (Pixel pixel : getPixels().getPoints()) {
+
+            int newX = pixel.getX() + dX;
+            int newY = pixel.getY() + dY;
+
+            if (newX >= 0 && newX < getImageWidth() && newY >= 0 && newY < getImageHeight()) {
+                result.add(newX, newY, pixel.getPreviousColor(), pixel.getColor());
+            }
         }
+
         return result;
     }
 
@@ -224,11 +233,11 @@ public class SelectionLayer extends EditorLayer {
         int maxX = 0;
         int maxY = 0;
 
-        for (int i = 0; i < getPixels().size(); i++) {
-            minX = Math.min(getPixels().getX(i), minX);
-            minY = Math.min(getPixels().getY(i), minY);
-            maxX = Math.max(getPixels().getX(i), maxX);
-            maxY = Math.max(getPixels().getY(i), maxY);
+        for (Pixel pixel : getPixels().getPoints()) {
+            minX = Math.min(pixel.getX(), minX);
+            minY = Math.min(pixel.getY(), minY);
+            maxX = Math.max(pixel.getX(), maxX);
+            maxY = Math.max(pixel.getY(), maxY);
         }
 
         return Pair.of(new Point(minX, minY), new Point(maxX, maxY));
