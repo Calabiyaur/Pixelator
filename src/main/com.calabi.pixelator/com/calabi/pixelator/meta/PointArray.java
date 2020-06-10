@@ -18,8 +18,10 @@ public class PointArray extends Matrix<Boolean, Point> {
                 List<Boolean> otherLine = other.getLine(y);
                 List<Boolean> line = getOrMakeLine(y);
                 for (int x = 0; x < otherLine.size(); x++) {
-                    boolean newValue = Boolean.TRUE.equals(line.get(x))|| Boolean.TRUE.equals(otherLine.get(x));
-                    addToLine(line, x, newValue);
+                    boolean newValue = Boolean.TRUE.equals(line.get(x)) || Boolean.TRUE.equals(otherLine.get(x));
+                    if (newValue) {
+                        addToLine(line, x, newValue);
+                    }
                 }
             }
         }

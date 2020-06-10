@@ -479,11 +479,12 @@ public class ImageEditor extends Editor {
             int x = pixel.getX();
             int y = pixel.getY();
             if (!ImageUtil.outOfBounds(getImage(), x, y)) {
-                Color previousColor = reader.getColor(x, y);
+                Color previousColor = pixels.getPreviousColor(x, y);
+                previousColor = previousColor == null ? Color.TRANSPARENT : previousColor;
                 boolean replaceColor = ToolView.get().isReplaceColor();
                 boolean alphaOnly = ToolView.get().isAlphaOnly();
                 Color color = ColorUtil.addColors(previousColor, pixel.getColor(), replaceColor, alphaOnly);
-                result.add(x, y, previousColor, color);
+                result.addForcefully(x, y, previousColor, color);
             }
         }
         return result;

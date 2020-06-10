@@ -35,6 +35,16 @@ public class PixelArray extends Matrix<Colors, Pixel> {
         return pointArray;
     }
 
+    public final Color getColor(int x, int y) {
+        Colors colors = getValue(x, y);
+        return colors == null ? null : colors.color;
+    }
+
+    public final Color getPreviousColor(int x, int y) {
+        Colors colors = getValue(x, y);
+        return colors == null ? null : colors.previousColor;
+    }
+
     @Override
     protected void toPoints() {
         forEach((x, y, previousColor, color) -> points.add(new Pixel(x, y, previousColor, color)));
