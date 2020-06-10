@@ -28,7 +28,7 @@ public final class RectangleHelper {
         for (int x = p1x; x <= p2x; x++) {
             for (int y = p1y; y <= p2y; y++) {
                 if (fill || x == p1x || x == p2x || y == p1y || y == p2y) {
-                    points.add(x, y);
+                    addPoint(points, x, y);
                 }
             }
         }
@@ -44,7 +44,7 @@ public final class RectangleHelper {
         for (int i = x - radius; i <= x + radius; i++) {
             for (int j = y - radius; j <= y + radius; j++) {
                 if (Math.abs(i - x) + Math.abs(j - y) <= radius) {
-                    points.add(i, j);
+                    addPoint(points, i, j);
                 }
             }
         }
@@ -58,18 +58,24 @@ public final class RectangleHelper {
     public static PointArray getCirclePoints(int x, int y, int width) {
         PointArray points = new PointArray();
         if (width == 1) {
-            points.add(x, y);
+            addPoint(points, x, y);
             return points;
         }
         int radius = width / 2;
         for (int i = x - radius; i <= x + radius; i++) {
             for (int j = y - radius; j <= y + radius; j++) {
                 if (NumberUtil.distance(i - x, j - y) <= radius) {
-                    points.add(i, j);
+                    addPoint(points, i, j);
                 }
             }
         }
         return points;
+    }
+
+    private static void addPoint(PointArray points, int x, int y) {
+        if (x >= 0 && y >= 0) {
+            points.add(x, y);
+        }
     }
 
 }

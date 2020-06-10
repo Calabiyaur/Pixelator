@@ -102,30 +102,30 @@ public final class EllipseHelper {
 
     private static void addPointsToEllipse(PointArray points, int cx, int cy, int x, int y, boolean fill, int yOffset, boolean useYOffset) {
         if (!fill) {
-            points.add(cx + x, cy + y);
+            addPoint(points, cx + x, cy + y);
         } else {
             if (!useYOffset) {
                 for (int i = cx; i < cx + x + 1; i++) {
-                    points.add(i, cy + y);
+                    addPoint(points, i, cy + y);
                 }
             } else {
                 for (int i = cy + yOffset; i < cy + y + 1; i++) {
-                    points.add(cx + x, i);
+                    addPoint(points, cx + x, i);
                 }
             }
         }
 
         if (x != 0) {
             if (!fill) {
-                points.add(cx - x, cy + y);
+                addPoint(points, cx - x, cy + y);
             } else {
                 if (!useYOffset) {
                     for (int i = cx - x; i < cx; i++) {
-                        points.add(i, cy + y);
+                        addPoint(points, i, cy + y);
                     }
                 } else {
                     for (int i = cy + yOffset; i < cy + y + 1; i++) {
-                        points.add(cx - x, i);
+                        addPoint(points, cx - x, i);
                     }
                 }
             }
@@ -133,15 +133,15 @@ public final class EllipseHelper {
 
         if ((x != 0 || y != 0) && (x == 0 || y != 0)) {
             if (!fill) {
-                points.add(cx - x, cy - y);
+                addPoint(points, cx - x, cy - y);
             } else {
                 if (!useYOffset) {
                     for (int i = cx - x; i < cx; i++) {
-                        points.add(i, cy - y);
+                        addPoint(points, i, cy - y);
                     }
                 } else {
                     for (int i = cy - y; i < cy - yOffset; i++) {
-                        points.add(cx - x, i);
+                        addPoint(points, cx - x, i);
                     }
                 }
             }
@@ -149,18 +149,24 @@ public final class EllipseHelper {
 
         if (x != 0 && y != 0) {
             if (!fill) {
-                points.add(cx + x, cy - y);
+                addPoint(points, cx + x, cy - y);
             } else {
                 if (!useYOffset) {
                     for (int i = cx; i < cx + x + 1; i++) {
-                        points.add(i, cy - y);
+                        addPoint(points, i, cy - y);
                     }
                 } else {
                     for (int i = cy - y; i < cy - yOffset; i++) {
-                        points.add(cx + x, i);
+                        addPoint(points, cx + x, i);
                     }
                 }
             }
+        }
+    }
+
+    private static void addPoint(PointArray points, int x, int y) {
+        if (x >= 0 && y >= 0) {
+            points.add(x, y);
         }
     }
 

@@ -22,7 +22,7 @@ public final class LineHelper {
         int xDiff = x1 - x2;
         int xSign = xDiff < 0 ? 1 : -1;
         if (yDiff == 0 && xDiff == 0) {
-            points.add(x1, y1);
+            addPoint(points, x1, y1);
             return points;
         }
         double slope = (double) yDiff / (double) xDiff;
@@ -32,14 +32,14 @@ public final class LineHelper {
             for (int i = 0; i <= Math.abs(xDiff); i++) {
                 x = x1 + xSign * i;
                 y = y1 + (int) Math.round(ySign * i * Math.abs(slope));
-                points.add(x, y);
+                addPoint(points, x, y);
             }
         } else {
             int x, y;
             for (int i = 0; i <= Math.abs(yDiff); i++) {
                 x = x1 + (int) Math.round(xSign * i / Math.abs(slope));
                 y = y1 + ySign * i;
-                points.add(x, y);
+                addPoint(points, x, y);
             }
         }
 
@@ -53,14 +53,14 @@ public final class LineHelper {
         PointArray path = new PointArray();
         int x = p1.getX();
         int y = p1.getY();
-        path.add(x, y);
+        addPoint(path, x, y);
 
         if (Math.abs(dX) >= Math.abs(dY)) {
             x += dX > 0 ? 1 : -1;
         } else {
             y += dY > 0 ? 1 : -1;
         }
-        path.add(x, y);
+        addPoint(path, x, y);
 
         while (NumberUtil.distance(x - p1.getX(), y - p1.getY()) < distance - 1) {
             int totalX = x - p1.getX();
@@ -70,10 +70,16 @@ public final class LineHelper {
             } else {
                 y += dY > 0 ? 1 : -1;
             }
-            path.add(x, y);
+            addPoint(path, x, y);
         }
 
         return path;
+    }
+
+    private static void addPoint(PointArray points, int x, int y) {
+        if (x >= 0 && y >= 0) {
+            points.add(x, y);
+        }
     }
 
 }

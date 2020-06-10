@@ -480,7 +480,7 @@ public class ImageEditor extends Editor {
             int y = pixel.getY();
             if (!ImageUtil.outOfBounds(getImage(), x, y)) {
                 Color previousColor = pixels.getPreviousColor(x, y);
-                previousColor = previousColor == null ? Color.TRANSPARENT : previousColor;
+                previousColor = previousColor == null ? reader.getColor(x, y) : previousColor;
                 boolean replaceColor = ToolView.get().isReplaceColor();
                 boolean alphaOnly = ToolView.get().isAlphaOnly();
                 Color color = ColorUtil.addColors(previousColor, pixel.getColor(), replaceColor, alphaOnly);
