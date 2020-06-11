@@ -1,5 +1,6 @@
 package com.calabi.pixelator.view;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,6 +43,7 @@ import com.calabi.pixelator.view.tool.Tools;
 public class ToolView extends VBox {
 
     private static ToolView instance;
+    private List<Tools> tools = new ArrayList<>();
     private ObjectProperty<Tools> currentTool = new SimpleObjectProperty<>();
     private BooleanProperty replaceColor = new SimpleBooleanProperty();
     private BooleanProperty alphaOnly = new SimpleBooleanProperty();
@@ -121,35 +123,47 @@ public class ToolView extends VBox {
     }
 
     private FlowPane createFirstToolLayer(ToggleGroup tg) {
-        ToggleButton pen = new ToggleImageButton(tg, Images.PEN);
-        pen.setOnAction(e -> currentTool.set(Tools.PEN));
-        ToggleButton line = new ToggleImageButton(tg, Images.LINE);
-        line.setOnAction(e -> currentTool.set(Tools.LINE));
-        ToggleButton fill = new ToggleImageButton(tg, Images.FILL);
-        fill.setOnAction(e -> currentTool.set(Tools.FILL));
-        ToggleButton pick = new ToggleImageButton(tg, Images.PICK);
-        pick.setOnAction(e -> currentTool.set(Tools.PICK));
-        ToggleButton rectangle = new ToggleImageButton(tg, Images.RECTANGLE);
-        rectangle.setOnAction(e -> currentTool.set(Tools.RECTANGLE));
-        ToggleButton ellipse = new ToggleImageButton(tg, Images.ELLIPSE);
-        ellipse.setOnAction(e -> currentTool.set(Tools.ELLIPSE));
-        ToggleButton fillColor = new ToggleImageButton(tg, Images.FILL_COLOR);
-        fillColor.setOnAction(e -> currentTool.set(Tools.FILL_COLOR));
+        tools.addAll(List.of(
+                Tools.PEN,
+                Tools.LINE,
+                Tools.FILL,
+                Tools.PICK,
+                Tools.RECTANGLE,
+                Tools.ELLIPSE,
+                Tools.FILL_COLOR
+        ));
 
-        FlowPane tools1 = new FlowPane(pen, line, pick, fill, fillColor, rectangle, ellipse);
-        pen.fire();
-        return tools1;
+        FlowPane flowPane = new FlowPane();
+        for (Tools tool : tools) {
+            ToggleImageButton button = new ToggleImageButton(tg, Images.valueOf(tool.name()));
+            button.setOnAction(e -> currentTool.set(tool));
+            flowPane.getChildren().add(button);
+        }
+
+        return flowPane;
     }
 
     private FlowPane createSecondToolLayer(ToggleGroup tg) {
-        ToggleButton select = new ToggleImageButton(tg, Images.SELECT);
-        select.setOnAction(e -> currentTool.set(Tools.SELECT));
-        ToggleButton wand = new ToggleImageButton(tg, Images.WAND);
-        wand.setOnAction(e -> currentTool.set(Tools.WAND));
-        ToggleButton fillSelect = new ToggleImageButton(tg, Images.SELECT_COLOR);
-        fillSelect.setOnAction(e -> currentTool.set(Tools.SELECT_COLOR));
+        List<Tools> tools2 = List.of(
+                Tools.SELECT,
+                Tools.WAND,
+                Tools.SELECT_COLOR
+        );
+        tools.addAll(tools2);
 
-        return new FlowPane(select, wand, fillSelect);
+        FlowPane flowPane = new FlowPane();
+        for (Tools tool : tools2) {
+            ToggleImageButton button = new ToggleImageButton(tg, Images.valueOf(tool.name()));
+            button.setOnAction(e -> currentTool.set(tool));
+            flowPane.getChildren().add(button);
+        }
+
+        int index = Config.TOOL.getInt();
+        if (0 <= index && index < tg.getToggles().size()) {
+            ((ToggleButton) tg.getToggles().get(index)).fire();
+        }
+
+        return flowPane;
     }
 
     private Pane createPrefLayer() {
@@ -214,6 +228,7 @@ public class ToolView extends VBox {
     }
 
     private void initConfig() {
+        currentTool.addListener((ov, o, n) -> Config.TOOL.putInt(tools.indexOf(n)));
         replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(n));
         alphaOnly.addListener((ov, o, n) -> Config.ALPHA_ONLY.putBoolean(n));
         fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(n));
