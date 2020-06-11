@@ -11,9 +11,11 @@ public class Crosshair extends ShapeStack {
 
     private IntegerProperty pixelX = new SimpleIntegerProperty(0);
     private IntegerProperty pixelY = new SimpleIntegerProperty(0);
+    private Color color;
 
-    public Crosshair(int pixelWidth, int pixelHeight) {
+    public Crosshair(int pixelWidth, int pixelHeight, Color color) {
         super(pixelWidth, pixelHeight);
+        this.color = color;
     }
 
     public void draw() {
@@ -24,7 +26,6 @@ public class Crosshair extends ShapeStack {
         Rectangle left = new Rectangle();
         Rectangle bottom = new Rectangle();
 
-        Color color = Color.color(0, 0, 0, 0.5);
         right.setFill(color);
         top.setFill(color);
         left.setFill(color);

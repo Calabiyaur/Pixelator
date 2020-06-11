@@ -19,15 +19,22 @@ import com.calabi.pixelator.start.ExceptionHandler;
 public enum Config {
 
     // Global config
+    ALPHA_ONLY(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
+    BULGE(ConfigMode.GLOBAL, ConfigType.INT, 0),
     COLOR(ConfigMode.GLOBAL, ConfigType.STRING),
-    CONFIG_CONFIG(ConfigMode.GLOBAL, ConfigType.OBJECT, ConfigConfig.class, ConfigConfig.getDefault()),
+    CROSSHAIR_COLOR(ConfigMode.GLOBAL, ConfigType.STRING, "#00000080"),
+    FILL_SHAPE(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
     FULLSCREEN(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
+    GRID_COLOR(ConfigMode.GLOBAL, ConfigType.STRING, "#00000080"),
     GRID_CONFIG(ConfigMode.GLOBAL, ConfigType.OBJECT, GridConfig.class, GridConfig.getDefault()),
+    IMAGE_BACKGROUND_COLOR(ConfigMode.GLOBAL, ConfigType.STRING, "#DDDDDD"),
+    IMAGE_BORDER_COLOR(ConfigMode.GLOBAL, ConfigType.STRING, "#00000000"),
     IMAGE_DIRECTORY(ConfigMode.GLOBAL, ConfigType.STRING, ""),
     NEW_IMAGE_HEIGHT(ConfigMode.GLOBAL, ConfigType.INT, 32),
     NEW_IMAGE_WIDTH(ConfigMode.GLOBAL, ConfigType.INT, 32),
     PALETTE_DIRECTORY(ConfigMode.GLOBAL, ConfigType.STRING, ""),
     PALETTE_MAX_COLORS(ConfigMode.GLOBAL, ConfigType.INT, 128),
+    REPLACE(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
     RESIZE_BIAS(ConfigMode.GLOBAL, ConfigType.STRING, Direction.NONE.name()),
     RESIZE_KEEP_RATIO(ConfigMode.GLOBAL, ConfigType.BOOLEAN, true),
     SCREEN_HEIGHT(ConfigMode.GLOBAL, ConfigType.DOUBLE, 400d),
@@ -35,30 +42,23 @@ public enum Config {
     SCREEN_X(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
     SCREEN_Y(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
     STRETCH_KEEP_RATIO(ConfigMode.GLOBAL, ConfigType.BOOLEAN, true),
+    THICKNESS(ConfigMode.GLOBAL, ConfigType.INT, 1),
+    TOOL(ConfigMode.GLOBAL, ConfigType.INT, 0),
 
     // Local config
     FRAME_INDEX(ConfigMode.IMAGE, ConfigType.INT, 0),
+    GRID_SELECTION(ConfigMode.IMAGE, ConfigType.OBJECT, GridSelectionConfig.class, ""),
     IMAGE_H_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_HEIGHT(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_V_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_WIDTH(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_X(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_Y(ConfigMode.IMAGE, ConfigType.DOUBLE),
-    IMAGE_ZOOM_LEVEL(ConfigMode.IMAGE, ConfigType.DOUBLE),
-
-    // User defined
-    ALPHA_ONLY(ConfigMode.USER_DEFINED, ConfigType.BOOLEAN, false),
-    BULGE(ConfigMode.USER_DEFINED, ConfigType.INT, 0),
-    FILL_SHAPE(ConfigMode.USER_DEFINED, ConfigType.BOOLEAN, false),
-    GRID_SELECTION(ConfigMode.USER_DEFINED, ConfigType.OBJECT, GridSelectionConfig.class, ""),
-    IMAGE_BACKGROUND_COLOR(ConfigMode.USER_DEFINED, ConfigType.STRING, "#DDDDDD"),
-    IMAGE_BORDER_COLOR(ConfigMode.USER_DEFINED, ConfigType.STRING, "#00000000"),
-    REPLACE(ConfigMode.USER_DEFINED, ConfigType.BOOLEAN, false),
-    THICKNESS(ConfigMode.USER_DEFINED, ConfigType.INT, 1);
+    IMAGE_ZOOM_LEVEL(ConfigMode.IMAGE, ConfigType.DOUBLE);
 
     private final ConfigMode configMode;
     private final ConfigType configType;
-    private Class<? extends ConfigObject> c;
+    private final Class<? extends ConfigObject> c;
     private Object def;
 
     Config(ConfigMode configMode, ConfigType configType) {
@@ -118,8 +118,6 @@ public enum Config {
     private Object get(ConfigType configType, Object def) {
         if (ConfigMode.IMAGE.equals(configMode) || !configType.equals(this.configType)) {
             throw new UnsupportedOperationException();
-        } else if (isUserDefinedAsLocal()) {
-            return def;
         }
         return switch(configType) {
             case BOOLEAN -> Preferences.userRoot().getBoolean(name(), (boolean) def);
@@ -154,8 +152,6 @@ public enum Config {
     private void put(ConfigType configType, Object value) {
         if (ConfigMode.IMAGE.equals(configMode) || !configType.equals(this.configType)) {
             throw new UnsupportedOperationException();
-        } else if (isUserDefinedAsLocal()) {
-            return;
         }
         switch(configType) {
             case BOOLEAN -> Preferences.userRoot().putBoolean(name(), (boolean) value);
@@ -205,8 +201,6 @@ public enum Config {
         if (ConfigMode.GLOBAL.equals(configMode) || !configType.equals(this.configType)) {
             Logger.log(name() + "(" + configType.name() + ")");
             throw new UnsupportedOperationException();
-        } else if (ConfigMode.USER_DEFINED.equals(configMode) && isUserDefinedAsGlobal()) {
-            return get(configType, def);
         }
         String stringValue = file.getProperties().getProperty(name());
         if (stringValue == null) {
@@ -246,39 +240,9 @@ public enum Config {
     private void put(PixelFile file, ConfigType configType, Object value) {
         if (ConfigMode.GLOBAL.equals(configMode) || !configType.equals(this.configType)) {
             throw new UnsupportedOperationException();
-        } else if (isUserDefinedAsGlobal()) {
-            put(configType, value);
         } else if (file != null) {
             file.getProperties().put(name(), String.valueOf(value));
             putLocalConfig(file.getName(), name(), String.valueOf(value));
-        }
-    }
-
-    public boolean isUserDefinedAsGlobal() {
-        if (!ConfigMode.USER_DEFINED.equals(configMode)) {
-            return false;
-        }
-        ConfigConfig configConfig = Config.CONFIG_CONFIG.getObject();
-        return !configConfig.getLocalConfigs().contains(this);
-    }
-
-    public boolean isUserDefinedAsLocal() {
-        if (!ConfigMode.USER_DEFINED.equals(configMode)) {
-            return false;
-        }
-        ConfigConfig configConfig = Config.CONFIG_CONFIG.getObject();
-        return configConfig.getLocalConfigs().contains(this);
-    }
-
-    public void setUserDefinedAs(boolean local) {
-        if (!ConfigMode.USER_DEFINED.equals(configMode)) {
-            throw new IllegalStateException();
-        }
-        ConfigConfig configConfig = Config.CONFIG_CONFIG.getObject();
-        if (local) {
-            configConfig.getLocalConfigs().add(this);
-        } else {
-            configConfig.getLocalConfigs().remove(this);
         }
     }
 

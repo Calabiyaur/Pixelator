@@ -1,30 +1,22 @@
 package com.calabi.pixelator.view.dialog;
 
-import javafx.application.Platform;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.control.basic.BasicCheckBox;
 import com.calabi.pixelator.control.basic.BasicColorField;
 import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.editor.window.ImageWindow;
 
 public class SettingsDialog extends BasicDialog {
 
-    private BasicColorField imageBackgroundColor;
-    private BasicColorField imageBorderColor;
-    private BasicCheckBox replaceColorCheckbox;
-    private CheckBox replaceColorLocalCheckbox;
-    private BasicCheckBox fillShapeCheckbox;
-    private CheckBox fillShapeLocalCheckbox;
+    private BasicColorField backgroundColorField;
+    private BasicColorField borderColorField;
+    private BasicColorField gridColorField;
+    private BasicColorField crosshairColorField;
 
     public SettingsDialog() {
         super(330, 240);
@@ -34,59 +26,44 @@ public class SettingsDialog extends BasicDialog {
         GridPane content = new GridPane();
         addContent(content, 0, 0);
 
-        Label storeLocalText = new Label("Store per image?");
-        GridPane.setMargin(storeLocalText, new Insets(0, 0, 0, 10));
-
         // CONFIGURABLE SETTINGS:
 
         // Image background color
-        Color color = Color.valueOf(Config.IMAGE_BACKGROUND_COLOR.getString());
-        imageBackgroundColor = new BasicColorField("Image background", color);
-        imageBackgroundColor.setValue(color);
+        Color backgroundColor = Color.valueOf(Config.IMAGE_BACKGROUND_COLOR.getString());
+        backgroundColorField = new BasicColorField("Image background", backgroundColor);
+        backgroundColorField.setValue(backgroundColor);
 
         // Image border color
         Color borderColor = Color.valueOf(Config.IMAGE_BORDER_COLOR.getString());
-        imageBorderColor = new BasicColorField("Image border", borderColor);
-        imageBorderColor.setValue(borderColor);
+        borderColorField = new BasicColorField("Image border", borderColor);
+        borderColorField.setValue(borderColor);
 
-        // Replace color
-        boolean replaceColor = Config.REPLACE.getBoolean();
-        replaceColorCheckbox = new BasicCheckBox("Replace color", replaceColor);
-        boolean replaceColorLocal = Config.REPLACE.isUserDefinedAsLocal();
-        replaceColorLocalCheckbox = new CheckBox();
-        replaceColorLocalCheckbox.setSelected(replaceColorLocal);
-        replaceColorCheckbox.disableProperty().bind(replaceColorLocalCheckbox.selectedProperty());
+        // Grid color
+        Color gridColor = Color.valueOf(Config.GRID_COLOR.getString());
+        gridColorField = new BasicColorField("Grid color", gridColor);
+        gridColorField.setValue(gridColor);
 
-        // Fill shape
-        boolean fillShape = Config.FILL_SHAPE.getBoolean();
-        fillShapeCheckbox = new BasicCheckBox("Fill shape", fillShape);
-        boolean fillShapeLocal = Config.FILL_SHAPE.isUserDefinedAsLocal();
-        fillShapeLocalCheckbox = new CheckBox();
-        fillShapeLocalCheckbox.setSelected(fillShapeLocal);
-        fillShapeCheckbox.disableProperty().bind(fillShapeLocalCheckbox.selectedProperty());
+        // Grid color
+        Color crosshairColor = Color.valueOf(Config.CROSSHAIR_COLOR.getString());
+        crosshairColorField = new BasicColorField("Crosshair color", crosshairColor);
+        crosshairColorField.setValue(crosshairColor);
 
         // LAYOUT:
 
         // Add input fields to content
-        content.add(storeLocalText, 2, 0);
-        content.addRow(1, imageBackgroundColor.getFrontLabel(), imageBackgroundColor.getControlWrapper());
-        content.addRow(2, imageBorderColor.getFrontLabel(), imageBorderColor.getControlWrapper());
-        content.add(new Separator(), 0, 3, 3, 1);
-        content.addRow(4, replaceColorCheckbox.getFrontLabel(), replaceColorCheckbox.getControlWrapper(),
-                replaceColorLocalCheckbox);
-        content.addRow(5, fillShapeCheckbox.getFrontLabel(), fillShapeCheckbox.getControlWrapper(),
-                fillShapeLocalCheckbox);
+        content.addRow(0, backgroundColorField.getFrontLabel(), backgroundColorField.getControlWrapper());
+        content.addRow(1, borderColorField.getFrontLabel(), borderColorField.getControlWrapper());
+        content.add(new Separator(), 0, 2, 3, 1);
+        content.addRow(3, gridColorField.getFrontLabel(), gridColorField.getControlWrapper());
+        content.addRow(4, crosshairColorField.getFrontLabel(), crosshairColorField.getControlWrapper());
 
-        // Layout for specific objects
+        // Layout separators
         for (Node child : content.getChildren()) {
-            if (child instanceof CheckBox) {
-                GridPane.setHalignment(child, HPos.CENTER);
-            } else if (child instanceof Separator) {
+            if (child instanceof Separator) {
                 GridPane.setMargin(child, new Insets(6, 0, 6, 0));
+                ((Separator) child).setPrefWidth(Integer.MAX_VALUE);
             }
         }
-
-        Platform.runLater(() -> content.setMinWidth(content.getWidth()));
 
         setOnOk(e -> {
             apply();
@@ -96,35 +73,30 @@ public class SettingsDialog extends BasicDialog {
 
     private void apply() {
         // Get values from input fields
-        Color color = imageBackgroundColor.getValue();
-        Color borderColor = imageBorderColor.getValue();
-        boolean replaceColor = replaceColorCheckbox.getValue();
-        boolean replaceColorLocal = replaceColorLocalCheckbox.isSelected();
-        boolean fillShape = fillShapeCheckbox.getValue();
-        boolean fillShapeLocal = fillShapeLocalCheckbox.isSelected();
+        Color color = backgroundColorField.getValue();
+        Color borderColor = borderColorField.getValue();
+        Color gridColor = gridColorField.getValue();
+        Color crosshairColor = crosshairColorField.getValue();
 
         // Update global config
         Config.IMAGE_BACKGROUND_COLOR.putString(color.toString());
         Config.IMAGE_BORDER_COLOR.putString(borderColor.toString());
-        if (!replaceColorLocal) {
-            ToolView.get().setReplaceColor(replaceColor);
-        }
-        Config.REPLACE.setUserDefinedAs(replaceColorLocal);
-        if (!fillShapeLocal) {
-            ToolView.get().setFillShape(fillShape);
-        }
-        Config.FILL_SHAPE.setUserDefinedAs(fillShapeLocal);
+        Config.GRID_COLOR.putString(gridColor.toString());
+        Config.CROSSHAIR_COLOR.putString(crosshairColor.toString());
 
         // Update open windows
         for (ImageWindow imageWindow : IWC.get().imageWindows()) {
             imageWindow.getEditor().getImageBackground().setColor(color);
             imageWindow.getEditor().getImageBackground().setBorderColor(borderColor);
+            imageWindow.getEditor().setGridColor(gridColor);
+            imageWindow.getEditor().setCrosshairColor(crosshairColor);
+
             imageWindow.getEditor().getImageBackground().refresh();
         }
     }
 
     @Override
     public void focus() {
-        imageBackgroundColor.requestFocus();
+        backgroundColorField.requestFocus();
     }
 }

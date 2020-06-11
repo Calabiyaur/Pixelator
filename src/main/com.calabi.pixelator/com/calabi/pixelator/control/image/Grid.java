@@ -1,22 +1,26 @@
 package com.calabi.pixelator.control.image;
 
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 
 public class Grid extends ShapeStack {
 
     private int xInterval = 1;
     private int yInterval = 1;
+    private Color color;
 
-    public Grid(int pixelWidth, int pixelHeight) {
+    public Grid(int pixelWidth, int pixelHeight, Color color) {
         super(pixelWidth, pixelHeight);
+        this.color = color;
     }
 
     public void draw() {
         getChildren().clear();
         for (int i = xInterval; i < getPixelWidth(); i += xInterval) {
             Line line = new Line();
-            line.setStroke(Color.color(0, 0, 0, 0.5));
+            line.setStroke(color);
 
             line.startXProperty().bind(x(i));
             line.setStartY(0);
@@ -29,7 +33,7 @@ public class Grid extends ShapeStack {
         }
         for (int j = yInterval; j < getPixelHeight(); j += yInterval) {
             Line line = new Line();
-            line.setStroke(Color.color(0, 0, 0, 0.5));
+            line.setStroke(color);
 
             line.setStartX(0);
             line.startYProperty().bind(y(j));
@@ -48,6 +52,14 @@ public class Grid extends ShapeStack {
 
     public void setYInterval(int yInterval) {
         this.yInterval = yInterval;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        this.color = color;
+        for (Node child : getChildren()) {
+            ((Shape) child).setStroke(color);
+        }
     }
 
 }

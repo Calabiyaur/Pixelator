@@ -85,7 +85,7 @@ public class ImageEditor extends Editor {
     private ImageBackground background;
 
     private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>();
-    private BooleanProperty showCrossHair = new SimpleBooleanProperty();
+    private BooleanProperty showCrosshair = new SimpleBooleanProperty();
 
     public ImageEditor(PixelFile file, ScalableImageView imageView) {
         super(file, imageView);
@@ -108,21 +108,24 @@ public class ImageEditor extends Editor {
         selectionLayer.setOutlineRect(outlineRect);
         selectionLayer.setOutlineShape(outlineShape);
 
-        GridSelectionConfig gridSelectionConfig = Config.GRID_SELECTION.getObject();
-        grid = new Grid(width.get(), height.get());
+        GridSelectionConfig gridSelectionConfig = Config.GRID_SELECTION.getObject(file);
+        Color gridColor = Color.valueOf(Config.GRID_COLOR.getString());
+        grid = new Grid(width.get(), height.get(), gridColor);
         grid.setXInterval(gridSelectionConfig.getXInterval());
         grid.setYInterval(gridSelectionConfig.getYInterval());
         grid.draw();
         grid.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         grid.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
+        setShowGrid(gridSelectionConfig.isSelected());
 
-        crosshair = new Crosshair(width.get(), height.get());
+        Color crosshairColor = Color.valueOf(Config.CROSSHAIR_COLOR.getString());
+        crosshair = new Crosshair(width.get(), height.get(), crosshairColor);
         crosshair.draw();
         crosshair.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         crosshair.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
-        crosshair.visibleProperty().bind(showCrossHair.and(InfoView.mousePositionVisibleProperty()));
+        crosshair.visibleProperty().bind(showCrosshair.and(InfoView.mousePositionVisibleProperty()));
 
-        crosshair2 = new Crosshair(width.get(), height.get());
+        crosshair2 = new Crosshair(width.get(), height.get(), crosshairColor);
         crosshair2.draw();
         crosshair2.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         crosshair2.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
@@ -149,7 +152,7 @@ public class ImageEditor extends Editor {
         );
 
         setShowGrid(gridSelectionConfig.isSelected());
-        setShowCrossHair(false);
+        setShowCrosshair(false);
         setShowBackground(false);
 
         setOnMousePressed(this::onMousePressed);
@@ -202,12 +205,12 @@ public class ImageEditor extends Editor {
         grid.setVisible(showGrid);
     }
 
-    public boolean isShowCrossHair() {
-        return showCrossHair.get();
+    public boolean isShowCrosshair() {
+        return showCrosshair.get();
     }
 
-    public void setShowCrossHair(boolean showCrossHair) {
-        this.showCrossHair.set(showCrossHair);
+    public void setShowCrosshair(boolean showCrosshair) {
+        this.showCrosshair.set(showCrosshair);
     }
 
     public boolean isShowBackground() {
@@ -227,6 +230,15 @@ public class ImageEditor extends Editor {
         grid.setYInterval(yInterval);
         grid.draw();
         IWC.get().setShowGrid(true);
+    }
+
+    public void setGridColor(Color color) {
+        grid.setColor(color);
+    }
+
+    public void setCrosshairColor(Color color) {
+        crosshair.setColor(color);
+        crosshair2.setColor(color);
     }
 
     private void makeWritable() {
@@ -293,7 +305,7 @@ public class ImageEditor extends Editor {
     }
 
     private void updateCrossHair() {
-        if (isShowCrossHair()) {
+        if (isShowCrosshair()) {
             Point mouse = Tool.getMouse();
             if (mouse.getX() >= 0 && mouse.getX() < width.get() && mouse.getY() >= 0 && mouse.getY() < height.get()) {
                 crosshair.setPosition(mouse);

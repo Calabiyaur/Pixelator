@@ -30,7 +30,7 @@ public class IWC extends Pane {
     private BooleanProperty imageAnimated = new SimpleBooleanProperty(false);
     private ObjectProperty<ImageWindow> currentWindow;
     private BooleanProperty showGrid = new SimpleBooleanProperty(false);
-    private BooleanProperty showCrossHair = new SimpleBooleanProperty(false);
+    private BooleanProperty showCrosshair = new SimpleBooleanProperty(false);
     private BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
     private BooleanProperty selectionActive = new SimpleBooleanProperty(false);
@@ -56,7 +56,7 @@ public class IWC extends Pane {
                 selectionActive.unbind();
                 selectionActive.set(false);
                 showGrid.setValue(false);
-                showCrossHair.setValue(false);
+                showCrosshair.setValue(false);
                 dirty.unbind();
                 dirty.set(false);
                 overallDirty.remove(o.getEditor().dirtyProperty());
@@ -72,12 +72,11 @@ public class IWC extends Pane {
                 redoEnabled.bind(window.getEditor().redoEnabledProperty());
                 selectionActive.bind(window.getEditor().selectionActiveProperty());
                 showGrid.setValue(window.getEditor().isShowGrid());
-                showCrossHair.setValue(window.getEditor().isShowCrossHair());
+                showCrosshair.setValue(window.getEditor().isShowCrosshair());
                 dirty.bind(window.getEditor().dirtyProperty());
                 overallDirty.add(window.getEditor().dirtyProperty());
                 showBackground.setValue(window.getEditor().isShowBackground());
                 updateImage(o == null ? null : o.getImage(), window);
-                readConfig(window);
                 window.toFront();
                 window.getEditor().updateColorCount();
             }
@@ -188,15 +187,6 @@ public class IWC extends Pane {
         }
     }
 
-    private void readConfig(ImageWindow window) {
-        if (Config.REPLACE.isUserDefinedAsLocal()) {
-            ToolView.get().setReplaceColor(Config.REPLACE.getBoolean(window.getFile()));
-        }
-        if (Config.FILL_SHAPE.isUserDefinedAsLocal()) {
-            ToolView.get().setFillShape(Config.FILL_SHAPE.getBoolean(window.getFile()));
-        }
-    }
-
     public void saveAll() {
         for (ImageWindow window : imageWindows()) {
             if (window.isDirty()) {
@@ -275,10 +265,10 @@ public class IWC extends Pane {
         }
     }
 
-    public void setShowCrossHair(boolean value) {
-        showCrossHair.set(value);
+    public void setShowCrosshair(boolean value) {
+        showCrosshair.set(value);
         if (currentWindow.get() != null) {
-            currentWindow.get().getEditor().setShowCrossHair(value);
+            currentWindow.get().getEditor().setShowCrosshair(value);
         }
     }
 
@@ -347,8 +337,8 @@ public class IWC extends Pane {
         return showGrid;
     }
 
-    public BooleanProperty showCrossHairProperty() {
-        return showCrossHair;
+    public BooleanProperty showCrosshairProperty() {
+        return showCrosshair;
     }
 
     public BooleanProperty showBackgroundProperty() {

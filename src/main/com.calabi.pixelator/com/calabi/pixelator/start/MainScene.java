@@ -160,8 +160,8 @@ public class MainScene extends Scene {
                 e -> IWC.get().setShowGrid(!IWC.get().showGridProperty().get()), IWC.get().imageSelectedProperty());
         IWC.get().showGridProperty().addListener((ov, o, n) -> gridItem.setSelected(n));
         CheckMenuItem crossHairItem = viewMenu.addCheckItem(CROSSHAIR,
-                e -> IWC.get().setShowCrossHair(!IWC.get().showCrossHairProperty().get()), IWC.get().imageSelectedProperty());
-        IWC.get().showCrossHairProperty().addListener((ov, o, n) -> crossHairItem.setSelected(n));
+                e -> IWC.get().setShowCrosshair(!IWC.get().showCrosshairProperty().get()), IWC.get().imageSelectedProperty());
+        IWC.get().showCrosshairProperty().addListener((ov, o, n) -> crossHairItem.setSelected(n));
         CheckMenuItem backgroundItem = viewMenu.addCheckItem(BACKGROUND,
                 e -> IWC.get().setShowBackground(!IWC.get().showBackgroundProperty().get()), IWC.get().imageSelectedProperty());
         IWC.get().showBackgroundProperty().addListener((ov, o, n) -> backgroundItem.setSelected(n));
@@ -250,11 +250,13 @@ public class MainScene extends Scene {
                         }
                     }
                 }
+                config.setSelected(n);
+                Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), config);
             }
         });
 
         ToggleButton crosshair = toolBar.addToggle(CROSSHAIR, Images.CROSSHAIR);
-        IWC.get().showCrossHairProperty().addListener((ov, o, n) -> crosshair.setSelected(n));
+        IWC.get().showCrosshairProperty().addListener((ov, o, n) -> crosshair.setSelected(n));
         ToggleButton background = toolBar.addToggle(BACKGROUND, Images.BACKGROUND);
         IWC.get().showBackgroundProperty().addListener((ov, o, n) -> background.setSelected(n));
 

@@ -4,6 +4,7 @@ module com.calabi.pixelator {
     requires java.prefs;
 
     requires javafx.controls;
+    requires javafx.graphics;
 
     requires org.apache.commons.lang3;
     requires org.apache.logging.log4j;

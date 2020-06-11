@@ -48,6 +48,10 @@ public class GridSelectionConfig extends ConfigObject {
         return selected;
     }
 
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     public int getXInterval() {
         return xInterval;
     }
