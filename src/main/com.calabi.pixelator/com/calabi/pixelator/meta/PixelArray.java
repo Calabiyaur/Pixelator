@@ -2,6 +2,7 @@ package com.calabi.pixelator.meta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javafx.scene.paint.Color;
 
@@ -59,15 +60,50 @@ public class PixelArray extends Matrix<Colors, Pixel> {
         return pointArray;
     }
 
-    static class Colors {
+    public static class Colors {
 
-        private final Color previousColor;
-        private final Color color;
+        private Color previousColor;
+        private Color color;
 
         public Colors(Color previousColor, Color color) {
             this.previousColor = previousColor;
             this.color = color;
         }
+
+        public Color getPreviousColor() {
+            return previousColor;
+        }
+
+        public void setPreviousColor(Color previousColor) {
+            this.previousColor = previousColor;
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public void setColor(Color color) {
+            this.color = color;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            Colors colors = (Colors) o;
+            return Objects.equals(previousColor, colors.previousColor) &&
+                    Objects.equals(color, colors.color);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(previousColor, color);
+        }
+
     }
 
 }

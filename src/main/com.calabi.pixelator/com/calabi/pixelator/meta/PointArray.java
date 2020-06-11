@@ -14,8 +14,8 @@ public class PointArray extends Matrix<Boolean, Point> {
 
     public final void add(Matrix<Boolean, Point> other) {
         for (int y = 0; y < other.height(); y++) {
-            if (other.hasLine(y)) {
-                List<Boolean> otherLine = other.getLine(y);
+            List<Boolean> otherLine = other.getLine(y);
+            if (otherLine != null) {
                 List<Boolean> line = getOrMakeLine(y);
                 for (int x = 0; x < otherLine.size(); x++) {
                     boolean newValue = Boolean.TRUE.equals(line.get(x)) || Boolean.TRUE.equals(otherLine.get(x));
@@ -29,8 +29,8 @@ public class PointArray extends Matrix<Boolean, Point> {
 
     public void forEach(BiConsumer<Integer, Integer> action) {
         for (int j = 0; j < height(); j++) {
-            if (hasLine(j)) {
-                List<Boolean> line = lines.get(j);
+            List<Boolean> line = getLine(j);
+            if (line != null) {
                 for (int i = 0; i < line.size(); i++) {
                     Boolean value = line.get(i);
                     if (Boolean.TRUE.equals(value)) {
@@ -42,15 +42,15 @@ public class PointArray extends Matrix<Boolean, Point> {
     }
 
     public void subtract(PointArray other) {
-        List<List<Boolean>> otherLines = other.lines;
-
-        for (int y = 0; y < Math.min(lines.size(), otherLines.size()); y++) {
-            List<Boolean> line = lines.get(y);
-            List<Boolean> otherLine = otherLines.get(y);
-            for (int x = 0; x < Math.min(line.size(), otherLine.size()); x++) {
-                if (line.get(x) && otherLine.get(x)) {
-                    line.set(x, false);
-                    modified = true;
+        for (int y = 0; y < Math.min(lines.size(), other.height()); y++) {
+            List<Boolean> line = getLine(y);
+            List<Boolean> otherLine = other.getLine(y);
+            if (line != null && otherLine != null) {
+                for (int x = 0; x < Math.min(line.size(), otherLine.size()); x++) {
+                    if (Boolean.TRUE.equals(line.get(x)) && Boolean.TRUE.equals(otherLine.get(x))) {
+                        line.set(x, false);
+                        modified = true;
+                    }
                 }
             }
         }

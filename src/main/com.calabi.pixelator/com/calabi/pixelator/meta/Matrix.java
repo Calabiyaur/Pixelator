@@ -34,8 +34,8 @@ public abstract class Matrix<T, P extends Point> {
 
     public void add(Matrix<T, P> other) {
         for (int y = 0; y < other.height(); y++) {
-            if (other.hasLine(y)) {
-                List<T> otherLine = other.getLine(y);
+            List<T> otherLine = other.getLine(y);
+            if (otherLine != null) {
                 List<T> line = getOrMakeLine(y);
                 for (int x = 0; x < otherLine.size(); x++) {
                     T newValue = otherLine.get(x);
@@ -48,11 +48,19 @@ public abstract class Matrix<T, P extends Point> {
     }
 
     public boolean contains(int x, int y) {
-        if (!hasLine(y)) {
+        List<T> line = getLine(y);
+        if (line == null) {
             return false;
         }
-        List<T> line = getLine(y);
         return line.size() > x && line.get(x) != null;
+    }
+
+    public boolean remove(int x, int y) {
+        List<T> line = getLine(y);
+        if (line == null) {
+            return false;
+        }
+        return line.size() > x && line.set(x, null) != null;
     }
 
     public List<P> getPoints() {
@@ -93,7 +101,7 @@ public abstract class Matrix<T, P extends Point> {
         return height() > y ? lines.get(y) : null;
     }
 
-    protected T getValue(int x, int y) {
+    public T getValue(int x, int y) {
         List<T> line = getLine(y);
         return line != null && line.size() > x ? line.get(x) : null;
     }

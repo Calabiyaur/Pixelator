@@ -361,13 +361,13 @@ public class ImageEditor extends Editor {
     }
 
     public void registerToolLayer() {
-        pixels.add(addToImage(toolLayer.retrievePixels()));
+        addToPixels(toolLayer.retrievePixels());
         writeAndRegister(pixels);
     }
 
     public void lockSelection() {
         if (!selectionLayer.isEmpty()) {
-            pixels.add(addToImage(selectionLayer.retrievePixels()));
+            addToPixels(selectionLayer.retrievePixels());
             writeAndRegister(pixels);
         }
     }
@@ -485,21 +485,32 @@ public class ImageEditor extends Editor {
         }
     }
 
-    private PixelChange addToImage(PixelArray add) {
-        PixelChange result = new PixelChange(writer);
+    private void addToPixels(PixelArray add) {
         for (Pixel pixel : add.getPoints()) {
             int x = pixel.getX();
             int y = pixel.getY();
-            if (!ImageUtil.outOfBounds(getImage(), x, y)) {
-                Color previousColor = pixels.getPreviousColor(x, y);
-                previousColor = previousColor == null ? reader.getColor(x, y) : previousColor;
-                boolean replaceColor = ToolView.get().isReplaceColor();
-                boolean alphaOnly = ToolView.get().isAlphaOnly();
-                Color color = ColorUtil.addColors(previousColor, pixel.getColor(), replaceColor, alphaOnly);
-                result.addForcefully(x, y, previousColor, color);
+            Color color = pixel.getColor();
+
+            Color previousColor;
+            PixelArray.Colors colors = pixels.getValue(x, y);
+
+            if (colors == null) {
+                previousColor = reader.getColor(x, y);
+            } else {
+                previousColor = colors.getPreviousColor();
             }
+
+            boolean replaceColor = ToolView.get().isReplaceColor();
+            boolean alphaOnly = ToolView.get().isAlphaOnly();
+            Color combined = ColorUtil.addColors(previousColor, color, replaceColor, alphaOnly);
+
+            //if (previousColor.equals(combined)) {
+            //    pixels.remove(x, y);
+            //    writer.setColor(x, y, combined);
+            //} else {
+                pixels.add(x, y, previousColor, combined);
+            //}
         }
-        return result;
     }
 
     public void flipHorizontally() {

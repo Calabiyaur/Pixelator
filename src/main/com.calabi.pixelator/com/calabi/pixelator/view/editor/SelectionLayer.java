@@ -88,7 +88,7 @@ public class SelectionLayer extends EditorLayer {
             effectivePoints.add(x, y);
             Color color = getReader().getColor(x, y);
             getWriter().setColor(x, y, color);
-            getPixels().addForcefully(x, y, null, color);
+            getPixels().add(x, y, null, color);
         }
         active.set(true);
         outlineShape.define(effectivePoints);

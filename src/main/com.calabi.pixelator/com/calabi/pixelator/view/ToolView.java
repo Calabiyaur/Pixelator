@@ -35,7 +35,6 @@ import com.calabi.pixelator.control.region.BalloonRegion;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;
-import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.tool.Select;
 import com.calabi.pixelator.view.tool.Tool;
 import com.calabi.pixelator.view.tool.Tools;
@@ -215,11 +214,11 @@ public class ToolView extends VBox {
     }
 
     private void initConfig() {
-        replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(IWC.get().getCurrentFile(), n));
-        alphaOnly.addListener((ov, o, n) -> Config.ALPHA_ONLY.putBoolean(IWC.get().getCurrentFile(), n));
-        fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(IWC.get().getCurrentFile(), n));
-        thickness.addListener((ov, o, n) -> Config.THICKNESS.putInt(IWC.get().getCurrentFile(), n.intValue()));
-        bulge.addListener((ov, o, n) -> Config.BULGE.putInt(IWC.get().getCurrentFile(), n.intValue()));
+        replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(n));
+        alphaOnly.addListener((ov, o, n) -> Config.ALPHA_ONLY.putBoolean(n));
+        fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(n));
+        thickness.addListener((ov, o, n) -> Config.THICKNESS.putInt(n.intValue()));
+        bulge.addListener((ov, o, n) -> Config.BULGE.putInt(n.intValue()));
     }
 
     public void setPreview(Image image, Image toolImage, Image selectionImage) {

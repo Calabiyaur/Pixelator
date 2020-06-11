@@ -20,15 +20,14 @@ import com.calabi.pixelator.util.CollectionUtil;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.ToolView;
-import com.calabi.pixelator.view.undo.PixelChange;
 
 public class SquareStack extends ShapeStack {
 
-    private PixelChange pixels;
+    private PixelArray pixels;
 
     public SquareStack(int pixelWidth, int pixelHeight) {
         super(pixelWidth, pixelHeight);
-        pixels = new PixelChange(null);
+        pixels = new PixelArray();
     }
 
     public void draw() {
