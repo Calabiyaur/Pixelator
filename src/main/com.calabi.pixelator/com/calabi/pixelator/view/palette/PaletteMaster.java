@@ -23,8 +23,17 @@ public final class PaletteMaster {
     public static final int MAX_COLORS = Integer.MAX_VALUE;
     public static final int HUE_VARIETY = 8;
 
+    public static Set<Color> extractColors(WritableImage image) {
+        return ImageUtil.extractColors(image, MAX_COLORS);
+    }
+
     public static WritableImage extractPalette(WritableImage image, int maxColors) {
-        Mapping mapping = hilbertSort3d(ImageUtil.extractColors(image, maxColors));
+        Set<Color> colors = ImageUtil.extractColors(image, maxColors);
+        return extractPaletteHilbert(colors);
+    }
+
+    private static WritableImage extractPaletteHilbert(Set<Color> colors) {
+        Mapping mapping = hilbertSort3d(colors);
 
         int width = Math.max(1, mapping.width());
         int height = Math.max(1, mapping.height());
@@ -37,10 +46,6 @@ public final class PaletteMaster {
         }
 
         return palette;
-    }
-
-    public static Set<Color> extractColors(WritableImage image) {
-        return ImageUtil.extractColors(image, MAX_COLORS);
     }
 
     /**
