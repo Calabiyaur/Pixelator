@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.util.Check;
+import com.calabi.pixelator.util.Move;
 import com.calabi.pixelator.util.Rotate;
 import com.calabi.pixelator.view.ToolSettings;
 
@@ -28,21 +29,22 @@ public final class ShapeMaster {
         Point rotatedP2 = Rotate.rotateRight(p1, p2);
         PointArray mask = LineHelper.getStraightPath(p1, rotatedP2, settings.thick);
 
-        // Move mask according to bulge
-        int iOrigin = switch(settings.bulge) {
-            case -1 -> 0;
-            case 1 -> mask.size() - 1;
-            default -> mask.size() / 2;
+        // Find origin according to bulge
+        Point origin = switch(settings.bulge) {
+            case -1 -> p1;
+            case 1 -> Move.towards(p1, rotatedP2, settings.thick);
+            default -> Move.towards(p1, rotatedP2, settings.thick / 2);
         };
-        Point origin = mask.getPoints().get(iOrigin);
-        PointArray translatedMask = new PointArray();
-        mask.forEach((x, y) -> translatedMask.add(x - origin.getX(), y - origin.getY()));
 
         // Combine line and mask
         PointArray thickLine = new PointArray();
         for (Point linePoint : line.getPoints()) {
-            for (Point maskPoint : translatedMask.getPoints()) {
-                thickLine.add(linePoint.getX() + maskPoint.getX(), linePoint.getY() + maskPoint.getY());
+            for (Point maskPoint : mask.getPoints()) {
+                int x = linePoint.getX() + maskPoint.getX() - origin.getX();
+                int y = linePoint.getY() + maskPoint.getY() - origin.getY();
+                if (x >= 0 && y >= 0) {
+                    thickLine.add(x, y);
+                }
             }
         }
         return thickLine;

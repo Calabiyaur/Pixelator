@@ -1,6 +1,6 @@
 package com.calabi.pixelator.util;
 
-public class NumberUtil {
+public final class NumberUtil {
 
     public static double round(double number, int afterComma) {
         return Math.round(number * Math.pow(10, afterComma)) / Math.pow(10, afterComma);
@@ -16,6 +16,10 @@ public class NumberUtil {
 
     public static double distance(double x, double y) {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+
+    public static int sign(int number) {
+        return Integer.compare(number, 0);
     }
 
 }

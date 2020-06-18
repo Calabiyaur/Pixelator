@@ -63,7 +63,9 @@ public class SelectionLayer extends EditorLayer {
         }
         int dX = (int) (getTranslateX() / getScaleX());
         int dY = (int) (getTranslateY() / getScaleY());
-        return getPixels().contains(p.getX() - dX, p.getY() - dY);
+        return p.getX() - dX >= 0
+                && p.getY() - dY >= 0
+                && getPixels().contains(p.getX() - dX, p.getY() - dY);
     }
 
     public boolean isEmpty() {

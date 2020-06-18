@@ -1,2 +1,7 @@
 # Pixelator
-Pixelator is a free open-source pixel art editor, designed to be intuitive and easy to use while providing powerful tools.
+
+The lovingly hand-crafted graphics editor for pixel art.
+
+Pixelator is designed to be intuitive and easy to use while providing powerful tools that will make your life easier.
+
+Absolutely free and open-source.
