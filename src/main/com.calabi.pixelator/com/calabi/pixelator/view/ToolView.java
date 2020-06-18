@@ -333,4 +333,8 @@ public class ToolView extends VBox {
         return thickness.get();
     }
 
+    public int getBulge() {
+        return bulge.get();
+    }
+
 }

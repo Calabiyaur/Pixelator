@@ -32,8 +32,8 @@ public final class ShapeMaster {
         // Find origin according to bulge
         Point origin = switch(settings.bulge) {
             case -1 -> p1;
-            case 1 -> Move.towards(p1, rotatedP2, settings.thick);
-            default -> Move.towards(p1, rotatedP2, settings.thick / 2);
+            case 1 -> Move.towards(p1, rotatedP2, settings.thick - 1);
+            default -> Move.towards(p1, rotatedP2, (settings.thick - 1) / 2);
         };
 
         // Combine line and mask

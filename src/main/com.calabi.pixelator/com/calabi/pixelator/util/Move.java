@@ -12,8 +12,8 @@ public final class Move {
         }
         double actualDistance = NumberUtil.distance(dx, dy);
 
-        int x = (int) (origin.getX() + dx * (distance / actualDistance));
-        int y = (int) (origin.getY() + dy * (distance / actualDistance));
+        int x = (int) Math.round(origin.getX() + dx * (distance / actualDistance));
+        int y = (int) Math.round(origin.getY() + dy * (distance / actualDistance));
         return new Point(x, y);
     }
 
