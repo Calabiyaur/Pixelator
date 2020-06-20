@@ -21,6 +21,16 @@
     -fx-background-insets: 0, 0 0 1 0;
 }
 
+.separator:horizontal .line {
+    -fx-border-color: -px_armed transparent -px_default transparent;
+    -fx-border-insets: 0;
+}
+.separator:vertical .line {
+    -fx-border-color: transparent transparent transparent -px_armed;
+    -fx-border-width: 1;
+    -fx-border-insets: 0;
+}
+
 .button {
     -fx-background-color: -px_bright_default, -px_hover;
     -fx-background-insets: 0, 1;

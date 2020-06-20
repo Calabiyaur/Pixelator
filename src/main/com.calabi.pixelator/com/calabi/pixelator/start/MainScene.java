@@ -9,11 +9,13 @@ import java.util.Collection;
 import java.util.List;
 
 import javafx.application.Platform;
+import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
@@ -215,11 +217,14 @@ public class MainScene extends Scene {
         toolBar.addButton(NEW);
         toolBar.addButton(OPEN);
         toolBar.addButton(SAVE);
+        toolBar.getItems().add(new Separator(Orientation.VERTICAL));
         toolBar.addButton(UNDO);
         toolBar.addButton(REDO);
+        toolBar.getItems().add(new Separator(Orientation.VERTICAL));
         toolBar.addButton(CUT);
         toolBar.addButton(COPY);
         toolBar.addButton(PASTE);
+        toolBar.getItems().add(new Separator(Orientation.VERTICAL));
         ToggleButton grid = toolBar.addToggle(GRID, Images.GRID);
         IWC.get().showGridProperty().addListener((ov, o, n) -> grid.setSelected(n));
 
@@ -260,6 +265,7 @@ public class MainScene extends Scene {
         ToggleButton background = toolBar.addToggle(BACKGROUND, Images.BACKGROUND);
         IWC.get().showBackgroundProperty().addListener((ov, o, n) -> background.setSelected(n));
 
+        toolBar.getItems().add(new Separator(Orientation.VERTICAL));
         toolBar.addButton(ZOOM_IN);
         toolBar.addButton(ZOOM_ZERO);
         toolBar.addButton(ZOOM_OUT);
