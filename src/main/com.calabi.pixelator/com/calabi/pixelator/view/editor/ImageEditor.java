@@ -428,7 +428,7 @@ public class ImageEditor extends Editor {
     }
 
     public void paintPoint(Point point) {
-        paintPoints(RectangleHelper.getCirclePoints(point.getX(), point.getY(), ToolView.get().getThickness()));
+        paintPoints(RectangleHelper.getCirclePoints(point.getX(), point.getY(), ToolView.get().getThickness(), getImageWidth(), getImageHeight()));
     }
 
     public void paintPoints(PointArray points) {

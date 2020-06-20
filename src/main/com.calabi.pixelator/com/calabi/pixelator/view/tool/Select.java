@@ -45,7 +45,7 @@ public class Select extends SelectionTool {
         Point start = getSelectionLayer().getStart();
         if (start != null) {
             PointArray pixels = getSelectionLayer().getPixels().toPointArray(); //TODO: This line is normally not necessary
-            PointArray rectanglePoints = RectangleHelper.getRectanglePoints(start, getMouse(), true);
+            PointArray rectanglePoints = RectangleHelper.getRectanglePoints(start, getMouse(), true, getSelectionLayer().getImageWidth(), getSelectionLayer().getImageHeight());
             switch(type.get()) {
                 case ADD -> pixels.add(rectanglePoints);
                 case SUBTRACT -> pixels.subtract(rectanglePoints);

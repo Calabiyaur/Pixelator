@@ -107,11 +107,13 @@ public class OutlineDialog extends PreviewDialog {
 
     private boolean isNeighbor(PixelReader reader, int x, int y, int width, Color outside, boolean inside) {
         PointArray points;
+        int imageWidth = (int) getImage().getWidth();
+        int imageHeight = (int) getImage().getHeight();
         if (solidEdges.getValue()) {
             points = RectangleHelper.getRectanglePoints(
-                    new Point(x - width, y - width), new Point(x + width, y + width), true);
+                    new Point(x - width, y - width), new Point(x + width, y + width), true, imageWidth, imageHeight);
         } else {
-            points = RectangleHelper.getDiamondPoints(x, y, width);
+            points = RectangleHelper.getDiamondPoints(x, y, width, imageWidth, imageHeight);
         }
         for (Point point : points.getPoints()) {
             try {

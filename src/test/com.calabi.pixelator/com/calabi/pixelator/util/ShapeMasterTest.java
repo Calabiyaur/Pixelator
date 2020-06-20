@@ -10,8 +10,8 @@ import com.calabi.pixelator.view.ToolSettings;
 
 class ShapeMasterTest {
 
-    public static final ToolSettings DEFAULT = new ToolSettings(null, false, false, 1, 0);
-    public static final ToolSettings FILL = new ToolSettings(null, false, true, 1, 0);
+    public static final ToolSettings DEFAULT = new ToolSettings(Integer.MAX_VALUE, Integer.MAX_VALUE, null, false, false, 1, 0);
+    public static final ToolSettings FILL = new ToolSettings(Integer.MAX_VALUE, Integer.MAX_VALUE, null, false, true, 1, 0);
 
     @Test
     void testGetLinePoints() {

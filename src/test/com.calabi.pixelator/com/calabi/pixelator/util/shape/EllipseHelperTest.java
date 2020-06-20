@@ -16,7 +16,7 @@ class EllipseHelperTest {
         expected.add(0, 1);
         expected.add(1, 1);
 
-        PointArray ellipse = EllipseHelper.getEllipse(1, 1, 1, 1, 1, 1, true);
+        PointArray ellipse = EllipseHelper.getEllipse(1, 1, 1, 1, 1, 1, true, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         Assert.assertEquals(String.format("expected = %s, ellipse = %s", expected, ellipse), ellipse, expected);
     }
@@ -29,7 +29,7 @@ class EllipseHelperTest {
         expected.add(0, 1);
         expected.add(1, 1);
 
-        PointArray ellipse = EllipseHelper.getEllipse(1, 1, 1, 1, 2, 2, true);
+        PointArray ellipse = EllipseHelper.getEllipse(1, 1, 1, 1, 2, 2, true, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         Assert.assertEquals(String.format("expected = %s, ellipse = %s", expected, ellipse), ellipse, expected);
     }

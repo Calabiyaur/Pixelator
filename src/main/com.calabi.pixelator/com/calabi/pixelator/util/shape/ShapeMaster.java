@@ -20,7 +20,7 @@ public final class ShapeMaster {
         Check.notNull(settings.thick);
         Check.notNull(settings.bulge);
 
-        PointArray line = LineHelper.getLinePoints(p1, p2);
+        PointArray line = LineHelper.getLinePoints(p1, p2, settings.maxX, settings.maxY);
         if (settings.thick == 1) {
             return line;
         }
@@ -42,7 +42,7 @@ public final class ShapeMaster {
             for (Point maskPoint : mask.getPoints()) {
                 int x = linePoint.getX() + maskPoint.getX() - origin.getX();
                 int y = linePoint.getY() + maskPoint.getY() - origin.getY();
-                if (x >= 0 && y >= 0) {
+                if (0 <= x && x < settings.maxX && 0 <= y && y < settings.maxY) {
                     thickLine.add(x, y);
                 }
             }
@@ -51,7 +51,7 @@ public final class ShapeMaster {
     }
 
     public static PointArray getRectanglePoints(Point p1, Point p2, ToolSettings settings) {
-        PointArray points = RectangleHelper.getRectanglePoints(p1, p2, settings.fill);
+        PointArray points = RectangleHelper.getRectanglePoints(p1, p2, settings.fill, settings.maxX, settings.maxY);
         if (settings.thick == 1) {
             return points;
         }
@@ -72,13 +72,13 @@ public final class ShapeMaster {
             };
             int dX = p1.getX() <= p2.getX() ? -factor : factor;
             int dY = p1.getY() <= p2.getY() ? -factor : factor;
-            points.add(RectangleHelper.getRectanglePoints(p1.getX() + dX, p1.getY() + dY, p2.getX() - dX, p2.getY() - dY, false));
+            points.add(RectangleHelper.getRectanglePoints(p1.getX() + dX, p1.getY() + dY, p2.getX() - dX, p2.getY() - dY, false, settings.maxX, settings.maxY));
         }
         return points;
     }
 
     public static PointArray getEllipsePoints(Point p1, Point p2, ToolSettings settings) {
-        // If width is odd, stretch by factor 2 to avoid half-ints
+        // If width (height) is odd, stretch by factor 2 to avoid half-ints
         int stretchH = (p1.getX() + p2.getX()) % 2 == 0 ? 1 : 2;
         int stretchV = (p1.getY() + p2.getY()) % 2 == 0 ? 1 : 2;
         int cx = (p1.getX() + p2.getX()) / (2 / stretchH);
@@ -88,13 +88,13 @@ public final class ShapeMaster {
 
         if (settings.thick == 1 || settings.bulge == -1) {
             if (rx == 0 || ry == 0) {
-                return LineHelper.getLinePoints(p1, p2);
+                return LineHelper.getLinePoints(p1, p2, settings.maxX, settings.maxY);
             } else if (Math.abs(p1.getX() - p2.getX()) == 1 || Math.abs(p1.getY() - p2.getY()) == 1) {
-                return RectangleHelper.getRectanglePoints(p1, p2, false);
+                return RectangleHelper.getRectanglePoints(p1, p2, false, settings.maxX, settings.maxY);
             }
         }
         if (settings.thick == 1 && settings.bulge == -1) {
-            return EllipseHelper.getEllipse(cx, cy, rx, ry, stretchH, stretchV, settings.fill);
+            return EllipseHelper.getEllipse(cx, cy, rx, ry, stretchH, stretchV, settings.fill, settings.maxX, settings.maxY);
         }
 
         int factorOuter = switch(settings.bulge) {
@@ -109,11 +109,11 @@ public final class ShapeMaster {
         int rxInner = rx - factorInner * stretchH;
         int ryInner = ry - factorInner * stretchV;
 
-        PointArray outer = EllipseHelper.getEllipse(cx, cy, rxOuter, ryOuter, stretchH, stretchV, true);
+        PointArray outer = EllipseHelper.getEllipse(cx, cy, rxOuter, ryOuter, stretchH, stretchV, true, settings.maxX, settings.maxY);
         if (settings.fill || rxInner < 0 || ryInner < 0) {
             return outer;
         }
-        PointArray inner = EllipseHelper.getEllipse(cx, cy, rxInner, ryInner, stretchH, stretchV, true);
+        PointArray inner = EllipseHelper.getEllipse(cx, cy, rxInner, ryInner, stretchH, stretchV, true, settings.maxX, settings.maxY);
         outer.subtract(inner);
         return outer;
     }

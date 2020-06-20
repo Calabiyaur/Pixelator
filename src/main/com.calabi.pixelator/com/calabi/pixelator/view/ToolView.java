@@ -45,6 +45,8 @@ public class ToolView extends VBox {
     private static ToolView instance;
     private List<Tools> tools = new ArrayList<>();
     private ObjectProperty<Tools> currentTool = new SimpleObjectProperty<>();
+    private int maxX;
+    private int maxY;
     private BooleanProperty replaceColor = new SimpleBooleanProperty();
     private BooleanProperty alphaOnly = new SimpleBooleanProperty();
     private BooleanProperty fillShape = new SimpleBooleanProperty();
@@ -119,7 +121,7 @@ public class ToolView extends VBox {
     }
 
     public ToolSettings getSettings() {
-        return new ToolSettings(replaceColor.get(), alphaOnly.get(), fillShape.get(), thickness.get(), bulge.get());
+        return new ToolSettings(maxX, maxY, replaceColor.get(), alphaOnly.get(), fillShape.get(), thickness.get(), bulge.get());
     }
 
     private FlowPane createFirstToolLayer(ToggleGroup tg) {
@@ -282,6 +284,8 @@ public class ToolView extends VBox {
     }
 
     public void setSize(int width, int height) {
+        maxX = width;
+        maxY = height;
         sizeText.setText(width + "×" + height);
     }
 
