@@ -142,6 +142,7 @@ public class IWC extends Pane {
                 selectNextWindow();
             }
             getChildren().remove(window);
+            window.dispose();
         });
         ImageWindow current = currentWindow.get();
 

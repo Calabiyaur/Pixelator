@@ -5,6 +5,7 @@ import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -55,7 +56,39 @@ public class AnimationLayout extends Layout {
     private BorderRegion borderSE;
     private BorderRegion borderE;
 
-    private ObjectProperty<FrameCell> selectedFrame = new SimpleObjectProperty<>();
+    private PlatformImageList frameList;
+
+    private final ObjectProperty<FrameCell> selectedFrame = new SimpleObjectProperty<>();
+
+    private final ChangeListener<Boolean> expandListener = (ov, o, n) -> Do.when(n, () -> expand(), () -> collapse());
+
+    private final ChangeListener<Boolean> playListener = (ov, o, n) -> Do.when(n, () -> editor.play(), () -> editor.stop());
+
+    private final ChangeListener<FrameCell> frameCellChangeListener = (ov, o, n) -> {
+        editor.setFrameIndex(flowPane.getChildren().indexOf(n));
+        if (o != null) {
+            o.setBordered(false);
+        }
+        if (n != null) {
+            n.setBordered(true);
+        }
+    };
+
+    private final ChangeListener<Boolean> playingListener = (pov, po, pn) -> {
+        Do.when(!pn, () -> play.setSelected(false));
+    };
+    private final ChangeListener<Number> indexChangeListener = (pov, po, pn) -> {
+        selectedFrame.set(((FrameCell) flowPane.getChildren().get(pn.intValue())));
+    };
+    private final ChangeListener<Image> imageChangeListener = (ov, o, n) -> {
+        if (o instanceof WritableImage) {
+            ((WritableImage) o).playingProperty().removeListener(playListener);
+            ((WritableImage) o).indexProperty().removeListener(indexChangeListener);
+        }
+        frameList.reload(((WritableImage) n).getFrameList());
+        ((WritableImage) n).playingProperty().addListener(playingListener);
+        ((WritableImage) n).indexProperty().addListener(indexChangeListener);
+    };
 
     public AnimationLayout(ImageWindow view) {
         super(view);
@@ -79,7 +112,7 @@ public class AnimationLayout extends Layout {
         frameButtonsPane.setMinWidth(0);
 
         // Handle collapsing / expanding
-        expand.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> expand(), () -> collapse()));
+        expand.selectedProperty().addListener(expandListener);
 
         Platform.runLater(() -> view.setPrefHeight(view.getPrefHeight() + expand.getHeight() + 4));
 
@@ -137,6 +170,11 @@ public class AnimationLayout extends Layout {
             collapse();
         }
         view.setPrefHeight(view.getPrefHeight() - expand.getHeight());
+
+        expand.selectedProperty().removeListener(expandListener);
+        play.selectedProperty().removeListener(playListener);
+        selectedFrame.removeListener(frameCellChangeListener);
+        imageView.imageProperty().removeListener(imageChangeListener);
     }
 
     private void createNodes() {
@@ -171,30 +209,17 @@ public class AnimationLayout extends Layout {
         nextFrame.setOnAction(e -> editor.nextFrame());
 
         // Store index because we want to continue with the frame we left off with
-        play.selectedProperty().addListener((ov, o, n) -> Do.when(n, () -> editor.play(), () -> editor.stop()));
+        play.selectedProperty().addListener(playListener);
 
         // Show border around selected frame
-        selectedFrame.addListener((ov, o, n) -> {
-            editor.setFrameIndex(flowPane.getChildren().indexOf(n));
-            if (o != null) {
-                o.setBordered(false);
-            }
-            if (n != null) {
-                n.setBordered(true);
-            }
-        });
+        selectedFrame.addListener(frameCellChangeListener);
 
         // Synchronize images with the underlying image's frames
-        PlatformImageList frameList = new PlatformImageList(image);
+        frameList = new PlatformImageList(image);
         refreshFrames(frameList);
         frameList.addListener(() -> refreshFrames(frameList));
-        imageView.imageProperty().addListener((ov, o, n) -> {
-            frameList.reload(((WritableImage) n).getFrameList());
-            ((WritableImage) n).playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> play.setSelected(false)));
-            ((WritableImage) n).indexProperty().addListener((pov, po, pn) -> selectedFrame.set(((FrameCell) flowPane.getChildren().get(pn.intValue()))));
-        });
-        image.playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> play.setSelected(false)));
-        image.indexProperty().addListener((ov, o, n) -> selectedFrame.set(((FrameCell) flowPane.getChildren().get(n.intValue()))));
+        imageView.imageProperty().addListener(imageChangeListener);
+        imageChangeListener.changed(imageView.imageProperty(), null, image);
     }
 
     private void refreshFrames(List<? extends Image> frameList) {

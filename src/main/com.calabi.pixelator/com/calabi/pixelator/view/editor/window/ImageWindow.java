@@ -81,6 +81,10 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         //popup.setDisable(true);
     }
 
+    public void dispose() {
+        this.layout.dispose();
+    }
+
     private void initLayout() {
         Layout newLayout = Layout.get(this);
         if (this.layout != null) {
