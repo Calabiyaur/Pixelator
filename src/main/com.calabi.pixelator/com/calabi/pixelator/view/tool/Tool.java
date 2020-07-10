@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -75,7 +76,34 @@ public abstract class Tool {
 
     void updateCursor(Images useImage) {
         if (useImage != null) {
-            cursor.set(new ImageCursor(new Image(useImage.getUrl()), getHotspotX(), getHotspotY()));
+            int bestSize = (int) ImageCursor.getBestSize(32, 32).getWidth();
+            Image image;
+            int hotspotX = getHotspotX();
+            int hotspotY = getHotspotY();
+
+            if (bestSize >= 32) { // Most OS use 32x32
+
+                image = new Image(useImage.getUrl());
+
+            } else { // Manjaro Linux uses 24x24 as default cursor size
+
+                Image fullImage = new Image(useImage.getUrl());
+                WritableImage writableImage = new WritableImage(bestSize, bestSize);
+
+                int d = (32 - bestSize) / 2;
+                for (int j = 0; j < bestSize; j++) {
+                    for (int i = 0; i < bestSize; i++) {
+                        writableImage.getPixelWriter().setColor(i, j, fullImage.getPixelReader().getColor(i + d, j + d));
+                    }
+                }
+
+                image = writableImage;
+                hotspotX -= d;
+                hotspotY -= d;
+            }
+
+            cursor.set(new ImageCursor(image, hotspotX, hotspotY));
+
         } else if (this == None.getMe()) {
             throw new IllegalStateException("Tool without useImage: " + this);
         }
