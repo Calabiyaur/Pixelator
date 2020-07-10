@@ -11,8 +11,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.Pane;
 
-import com.calabi.pixelator.control.image.ScalableImageView;
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.ScalableImageView;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.CompoundBooleanProperty;

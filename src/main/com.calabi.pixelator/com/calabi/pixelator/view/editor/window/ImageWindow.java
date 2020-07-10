@@ -9,11 +9,11 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import com.calabi.pixelator.control.basic.ImageButton;
-import com.calabi.pixelator.control.image.ScalableImageView;
-import com.calabi.pixelator.control.image.WritableImage;
-import com.calabi.pixelator.control.parent.BasicScrollPane;
-import com.calabi.pixelator.control.parent.BasicWindow;
+import com.calabi.pixelator.ui.control.ImageButton;
+import com.calabi.pixelator.ui.image.ScalableImageView;
+import com.calabi.pixelator.ui.image.WritableImage;
+import com.calabi.pixelator.ui.parent.BasicScrollPane;
+import com.calabi.pixelator.ui.parent.BasicWindow;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.Files;

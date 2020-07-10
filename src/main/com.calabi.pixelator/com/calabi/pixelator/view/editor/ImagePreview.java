@@ -2,7 +2,7 @@ package com.calabi.pixelator.view.editor;
 
 import javafx.scene.layout.StackPane;
 
-import com.calabi.pixelator.control.image.ScalableImageView;
+import com.calabi.pixelator.ui.image.ScalableImageView;
 
 public class ImagePreview extends StackPane {
 

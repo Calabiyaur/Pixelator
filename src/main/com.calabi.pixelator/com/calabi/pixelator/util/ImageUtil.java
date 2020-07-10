@@ -22,7 +22,7 @@ import javax.imageio.ImageIO;
 
 import com.sun.javafx.tk.PlatformImage;
 
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.meta.Pixel;
 import com.calabi.pixelator.meta.PixelArray;
 import com.calabi.pixelator.meta.Point;

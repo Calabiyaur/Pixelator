@@ -4,7 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;

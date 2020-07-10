@@ -11,7 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.control.basic.BasicNumberField;
+import com.calabi.pixelator.ui.control.BasicNumberField;
 
 public class ColorSelection extends BorderPane {
 

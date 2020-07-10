@@ -18,7 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PaletteFile;

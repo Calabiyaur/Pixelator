@@ -1,6 +1,6 @@
 package com.calabi.pixelator.view.dialog;
 
-import com.calabi.pixelator.control.basic.BasicIntegerField;
+import com.calabi.pixelator.ui.control.BasicIntegerField;
 
 public abstract class NewDialog extends BasicDialog {
 

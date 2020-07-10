@@ -5,7 +5,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.control.image.PixelatedImageView;
+import com.calabi.pixelator.ui.image.PixelatedImageView;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.view.undo.PixelChange;
 

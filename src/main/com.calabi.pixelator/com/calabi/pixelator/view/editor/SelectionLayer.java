@@ -8,8 +8,8 @@ import javafx.scene.paint.Color;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.calabi.pixelator.control.image.OutlineRect;
-import com.calabi.pixelator.control.image.OutlineShape;
+import com.calabi.pixelator.ui.image.OutlineRect;
+import com.calabi.pixelator.ui.image.OutlineShape;
 import com.calabi.pixelator.meta.Pixel;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;

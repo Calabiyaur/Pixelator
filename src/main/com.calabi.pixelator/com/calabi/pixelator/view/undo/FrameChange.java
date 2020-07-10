@@ -2,7 +2,7 @@ package com.calabi.pixelator.view.undo;
 
 import com.sun.javafx.tk.PlatformImage;
 
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.WritableImage;
 
 public abstract class FrameChange implements Undoable {
 

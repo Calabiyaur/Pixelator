@@ -21,19 +21,19 @@ import javafx.scene.paint.Color;
 import com.sun.javafx.scene.DirtyBits;
 import com.sun.javafx.scene.NodeHelper;
 
-import com.calabi.pixelator.control.basic.ImageButton;
-import com.calabi.pixelator.control.basic.ToggleImageButton;
-import com.calabi.pixelator.control.image.PlatformImageList;
-import com.calabi.pixelator.control.image.WritableImage;
-import com.calabi.pixelator.control.parent.BasicScrollPane;
-import com.calabi.pixelator.control.parent.DraggablePane.BorderRegion;
-import com.calabi.pixelator.control.region.BalloonRegion;
+import com.calabi.pixelator.ui.control.ImageButton;
+import com.calabi.pixelator.ui.control.ToggleImageButton;
+import com.calabi.pixelator.ui.image.PlatformImageList;
+import com.calabi.pixelator.ui.image.WritableImage;
+import com.calabi.pixelator.ui.parent.BasicScrollPane;
+import com.calabi.pixelator.ui.parent.DraggablePane.BorderRegion;
+import com.calabi.pixelator.ui.region.BalloonRegion;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.BackgroundBuilder;
 import com.calabi.pixelator.util.Do;
 
-import static com.calabi.pixelator.control.parent.DraggablePane.RESIZE_MARGIN;
+import static com.calabi.pixelator.ui.parent.DraggablePane.RESIZE_MARGIN;
 
 public class AnimationLayout extends Layout {
 

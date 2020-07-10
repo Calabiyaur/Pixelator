@@ -1,6 +1,6 @@
 package com.calabi.pixelator.view.undo;
 
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.WritableImage;
 
 /**
  * Undoable frame index change.

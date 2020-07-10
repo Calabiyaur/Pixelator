@@ -12,9 +12,9 @@ import javafx.scene.control.Skin;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.control.basic.BasicDoubleField;
-import com.calabi.pixelator.control.basic.BasicNumberField;
-import com.calabi.pixelator.control.basic.CustomSliderSkin;
+import com.calabi.pixelator.ui.control.BasicDoubleField;
+import com.calabi.pixelator.ui.control.BasicNumberField;
+import com.calabi.pixelator.ui.control.CustomSliderSkin;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.MapUtil;

@@ -12,8 +12,8 @@ import javafx.scene.paint.Color;
 
 import org.apache.logging.log4j.util.TriConsumer;
 
-import com.calabi.pixelator.control.basic.BasicControl;
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.control.BasicControl;
+import com.calabi.pixelator.ui.image.WritableImage;
 
 public abstract class PreviewDialog extends BasicDialog {
 

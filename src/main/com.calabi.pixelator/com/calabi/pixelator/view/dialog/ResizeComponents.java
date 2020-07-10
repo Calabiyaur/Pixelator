@@ -2,9 +2,9 @@ package com.calabi.pixelator.view.dialog;
 
 import javafx.beans.value.ChangeListener;
 
-import com.calabi.pixelator.control.basic.BasicCheckBox;
-import com.calabi.pixelator.control.basic.BasicIntegerField;
-import com.calabi.pixelator.control.basic.BiasButton;
+import com.calabi.pixelator.ui.control.BasicCheckBox;
+import com.calabi.pixelator.ui.control.BasicIntegerField;
+import com.calabi.pixelator.ui.control.BiasButton;
 
 public class ResizeComponents {
 

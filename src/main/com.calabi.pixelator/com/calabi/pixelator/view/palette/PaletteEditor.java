@@ -12,8 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.control.image.ScalableImageView;
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.ScalableImageView;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.meta.Point;

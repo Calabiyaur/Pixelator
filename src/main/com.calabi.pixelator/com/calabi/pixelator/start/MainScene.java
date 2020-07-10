@@ -24,8 +24,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import com.calabi.pixelator.control.basic.BasicMenuBar;
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.control.BasicMenuBar;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PaletteFile;

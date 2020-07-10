@@ -3,8 +3,8 @@ package com.calabi.pixelator.view.undo;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 
-import com.calabi.pixelator.control.image.PixelatedImageView;
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.PixelatedImageView;
+import com.calabi.pixelator.ui.image.WritableImage;
 
 public class ImageChange implements Undoable {
 

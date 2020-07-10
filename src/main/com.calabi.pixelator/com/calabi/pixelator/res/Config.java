@@ -45,7 +45,7 @@ public enum Config {
     THICKNESS(ConfigMode.GLOBAL, ConfigType.INT, 1),
     TOOL(ConfigMode.GLOBAL, ConfigType.INT, 0),
 
-    // Local config
+    // Local (image) config
     FRAME_INDEX(ConfigMode.IMAGE, ConfigType.INT, 0),
     GRID_SELECTION(ConfigMode.IMAGE, ConfigType.OBJECT, GridSelectionConfig.class, ""),
     IMAGE_H_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),

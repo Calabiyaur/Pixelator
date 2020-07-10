@@ -12,12 +12,12 @@ import javafx.scene.paint.Color;
 
 import org.apache.logging.log4j.util.TriConsumer;
 
-import com.calabi.pixelator.control.basic.ImageButton;
-import com.calabi.pixelator.control.basic.ToggleImageButton;
-import com.calabi.pixelator.control.image.ScalableImageView;
-import com.calabi.pixelator.control.image.WritableImage;
-import com.calabi.pixelator.control.parent.BasicScrollPane;
-import com.calabi.pixelator.control.region.BalloonRegion;
+import com.calabi.pixelator.ui.control.ImageButton;
+import com.calabi.pixelator.ui.control.ToggleImageButton;
+import com.calabi.pixelator.ui.image.ScalableImageView;
+import com.calabi.pixelator.ui.image.WritableImage;
+import com.calabi.pixelator.ui.parent.BasicScrollPane;
+import com.calabi.pixelator.ui.region.BalloonRegion;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;

@@ -13,8 +13,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 
-import com.calabi.pixelator.control.basic.ImageButton;
-import com.calabi.pixelator.control.window.Popup;
+import com.calabi.pixelator.ui.control.ImageButton;
+import com.calabi.pixelator.ui.window.Popup;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;

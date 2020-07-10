@@ -5,7 +5,7 @@ import java.util.Properties;
 
 import javafx.util.Builder;
 
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.Check;
 
 public class PixelFileBuilder implements Builder<PixelFile> {

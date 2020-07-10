@@ -15,7 +15,7 @@ import javax.imageio.stream.FileImageOutputStream;
 
 import com.sun.javafx.tk.PlatformImage;
 
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.FileConfig;
 import com.calabi.pixelator.files.Metadata;

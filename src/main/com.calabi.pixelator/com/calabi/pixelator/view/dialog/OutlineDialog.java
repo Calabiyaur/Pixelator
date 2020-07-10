@@ -8,11 +8,11 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.control.basic.BasicCheckBox;
-import com.calabi.pixelator.control.basic.BasicColorField;
-import com.calabi.pixelator.control.basic.BasicIntegerField;
-import com.calabi.pixelator.control.basic.SwapColorButton;
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.control.BasicCheckBox;
+import com.calabi.pixelator.ui.control.BasicColorField;
+import com.calabi.pixelator.ui.control.BasicIntegerField;
+import com.calabi.pixelator.ui.control.SwapColorButton;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.util.shape.RectangleHelper;

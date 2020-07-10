@@ -1,5 +1,7 @@
 .idea/
 Pixelator.iml
+pixelator.iml
+.attach_*
 concept/
 target/
 out/

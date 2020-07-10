@@ -1,7 +1,7 @@
 package com.calabi.pixelator.view.dialog;
 
-import com.calabi.pixelator.control.basic.BasicDoubleField;
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.control.BasicDoubleField;
+import com.calabi.pixelator.ui.image.WritableImage;
 
 public class FpsDialog extends PreviewDialog {
 

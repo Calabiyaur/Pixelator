@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.FileConfig;
 import com.calabi.pixelator.files.PixelFileBuilder;
 import com.calabi.pixelator.logging.Logger;

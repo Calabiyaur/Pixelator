@@ -27,12 +27,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-import com.calabi.pixelator.control.basic.BasicCheckBox;
-import com.calabi.pixelator.control.basic.BasicIntegerField;
-import com.calabi.pixelator.control.basic.ToggleImageButton;
-import com.calabi.pixelator.control.basic.UndeselectableToggleGroup;
-import com.calabi.pixelator.control.image.PixelatedImageView;
-import com.calabi.pixelator.control.region.BalloonRegion;
+import com.calabi.pixelator.ui.control.BasicCheckBox;
+import com.calabi.pixelator.ui.control.BasicIntegerField;
+import com.calabi.pixelator.ui.control.ToggleImageButton;
+import com.calabi.pixelator.ui.control.UndeselectableToggleGroup;
+import com.calabi.pixelator.ui.image.PixelatedImageView;
+import com.calabi.pixelator.ui.region.BalloonRegion;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;

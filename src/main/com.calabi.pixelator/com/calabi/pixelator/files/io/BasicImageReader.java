@@ -3,7 +3,7 @@ package com.calabi.pixelator.files.io;
 import java.io.File;
 import java.io.IOException;
 
-import com.calabi.pixelator.control.image.WritableImage;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.PixelFileBuilder;
 
 public final class BasicImageReader extends PixelFileReader {

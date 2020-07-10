@@ -5,7 +5,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 
-import com.calabi.pixelator.control.basic.UndeselectableToggleGroup;
+import com.calabi.pixelator.ui.control.UndeselectableToggleGroup;
 
 public class ColorTabButtons extends Group {
 
