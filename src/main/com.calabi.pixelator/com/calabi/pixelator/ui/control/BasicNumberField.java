@@ -53,13 +53,17 @@ public abstract class BasicNumberField<T extends Number> extends BasicControl<T>
             }
         });
 
-        DoubleBinding halfHeight = textField.heightProperty().divide(2);
+        DoubleBinding halfHeight = textField.heightProperty().divide(2).subtract(1);
         up = new SpinnerButton(true);
         up.minHeightProperty().bind(halfHeight);
         up.maxHeightProperty().bind(halfHeight);
+        up.minWidthProperty().bind(halfHeight);
+        up.maxWidthProperty().bind(halfHeight);
         down = new SpinnerButton(false);
         down.minHeightProperty().bind(halfHeight);
         down.maxHeightProperty().bind(halfHeight);
+        down.minWidthProperty().bind(halfHeight);
+        down.maxWidthProperty().bind(halfHeight);
 
         VBox spinner = new VBox(up, down);
         addControl(spinner, 1);

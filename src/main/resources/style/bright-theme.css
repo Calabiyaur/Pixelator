@@ -498,9 +498,9 @@
 
 .decrement-arrow-button {
     -fx-background-color: -px_bright_default, -px_default;
-    -fx-background-insets: 0 0 1 0, 0 1 2 0;
+    -fx-background-insets: 0, 0 1 1 0;
     -fx-background-radius: 0, 0;
-    -fx-padding: -1 0 1 0; /* 2 10 3 10 */
+    -fx-padding: 0; /* 2 10 3 10 */
     -fx-text-fill: -fx-text-base-color;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
