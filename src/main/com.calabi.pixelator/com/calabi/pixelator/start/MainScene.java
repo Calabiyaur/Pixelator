@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -24,8 +23,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import com.calabi.pixelator.ui.control.BasicMenuBar;
-import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PaletteFile;
@@ -35,6 +32,8 @@ import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.GridConfig;
 import com.calabi.pixelator.res.GridSelectionConfig;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.ui.control.BasicMenuBar;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.view.ColorView;
@@ -98,12 +97,10 @@ public class MainScene extends Scene {
         barBox.getChildren().addAll(menuBar, toolBar);
 
         root.getChildren().add(splitPane);
+        toolView.setMinWidth(208);
+        colorView.setMinWidth(292);
         toolView.setMaxWidth(208);
         colorView.setMaxWidth(292);
-        Platform.runLater(() -> {
-            toolView.setMaxWidth(-1);
-            colorView.setMaxWidth(-1);
-        });
 
         paletteSelection.init();
 
