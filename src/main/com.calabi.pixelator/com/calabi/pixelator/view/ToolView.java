@@ -27,14 +27,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.ui.control.BasicCheckBox;
 import com.calabi.pixelator.ui.control.BasicIntegerField;
 import com.calabi.pixelator.ui.control.ToggleImageButton;
 import com.calabi.pixelator.ui.control.UndeselectableToggleGroup;
 import com.calabi.pixelator.ui.image.PixelatedImageView;
 import com.calabi.pixelator.ui.region.BalloonRegion;
-import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.view.tool.Select;
 import com.calabi.pixelator.view.tool.Tool;
@@ -43,22 +43,22 @@ import com.calabi.pixelator.view.tool.Tools;
 public class ToolView extends VBox {
 
     private static ToolView instance;
-    private List<Tools> tools = new ArrayList<>();
-    private ObjectProperty<Tools> currentTool = new SimpleObjectProperty<>();
+    private final List<Tools> tools = new ArrayList<>();
+    private final ObjectProperty<Tools> currentTool = new SimpleObjectProperty<>();
     private int maxX;
     private int maxY;
-    private BooleanProperty replaceColor = new SimpleBooleanProperty();
-    private BooleanProperty alphaOnly = new SimpleBooleanProperty();
-    private BooleanProperty fillShape = new SimpleBooleanProperty();
-    private IntegerProperty thickness = new SimpleIntegerProperty();
-    private IntegerProperty bulge = new SimpleIntegerProperty();
-    private Label preview = new Label();
-    private Label previewTool = new Label();
-    private Label previewSelection = new Label();
-    private Pane clipWrapper;
-    private Text sizeText = new Text();
-    private Text zoomText = new Text();
-    private Text frameIndexText = new Text();
+    private final BooleanProperty replaceColor = new SimpleBooleanProperty();
+    private final BooleanProperty alphaOnly = new SimpleBooleanProperty();
+    private final BooleanProperty fillShape = new SimpleBooleanProperty();
+    private final IntegerProperty thickness = new SimpleIntegerProperty();
+    private final IntegerProperty bulge = new SimpleIntegerProperty();
+    private final Label preview = new Label();
+    private final Label previewTool = new Label();
+    private final Label previewSelection = new Label();
+    private final Pane clipWrapper;
+    private final Text sizeText = new Text();
+    private final Text zoomText = new Text();
+    private final Text frameIndexText = new Text();
 
     private ToolView() {
         setSpacing(6);

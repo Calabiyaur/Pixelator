@@ -34,17 +34,18 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     public static final int DEFAULT_FRAME_DELAY = 60;
 
     private PixelFile file;
-    private SimpleBooleanProperty animated = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty animated = new SimpleBooleanProperty(false);
 
-    private SimpleIntegerProperty index;
+    private final SimpleIntegerProperty index = new SimpleIntegerProperty();
+    private SimpleIntegerProperty _index;
     private Object anim;
     private Timeline timeline;
-    private BooleanProperty playing = new SimpleBooleanProperty(false);
+    private final BooleanProperty playing = new SimpleBooleanProperty(false);
     private int delay = DEFAULT_FRAME_DELAY;
 
     private PlatformImage[] frames;
-    private ObservableList<PlatformImage> frameList = FXCollections.observableArrayList();
-    private IntegerProperty frameCount;
+    private final ObservableList<PlatformImage> frameList = FXCollections.observableArrayList();
+    private final IntegerProperty frameCount = new SimpleIntegerProperty();
 
     private FrameReader frameReader = null;
     private FrameWriter frameWriter = null;
@@ -97,7 +98,8 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     private Object initAnimationInternal(Image image) {
         anim = ReflectionUtil.getField(image, "animation");
         frames = ReflectionUtil.getField(image, "animFrames");
-        index = ReflectionUtil.getField(anim, "frameIndex");
+        _index = ReflectionUtil.getField(anim, "frameIndex");
+        index.bindBidirectional(_index);
         timeline = ReflectionUtil.getField(anim, "timeline");
 
         Check.notNull(timeline);
@@ -111,7 +113,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
             //TODO
             throw new NotImplementedException("");
         }
-        frameCount = new SimpleIntegerProperty(frames.length);
+        frameCount.setValue(frames.length);
         frameList.setAll(frames);
         frameList.addListener((ListChangeListener<PlatformImage>) c -> {
             setFrames(c.getList().toArray(new PlatformImage[0]));
@@ -125,7 +127,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
      * which refreshes the currently shown frame.
      */
     private void invalidate() {
-        ReflectionUtil.invokeMethod(index, "invalidated");
+        ReflectionUtil.invokeMethod(_index, "invalidated");
     }
 
     public WritableImage copy() {
@@ -182,7 +184,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     public int getIndex() {
-        return index == null ? 0 : index.get();
+        return index.get();
     }
 
     public SimpleIntegerProperty indexProperty() {
@@ -304,7 +306,7 @@ public class WritableImage extends javafx.scene.image.WritableImage {
     }
 
     public int getFrameCount() {
-        return frameCount == null ? 1 : frameCount.get();
+        return frameCount.get();
     }
 
     public IntegerProperty frameCountProperty() {
