@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javafx.scene.image.PixelReader;
 
+import javax.imageio.IIOException;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -15,11 +16,12 @@ import javax.imageio.stream.FileImageOutputStream;
 
 import com.sun.javafx.tk.PlatformImage;
 
-import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.FileConfig;
+import com.calabi.pixelator.files.FileException;
 import com.calabi.pixelator.files.Metadata;
 import com.calabi.pixelator.files.PixelFile;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.FileUtil;
 
 public abstract class PixelFileWriter {
@@ -49,8 +51,12 @@ public abstract class PixelFileWriter {
             }
         }
 
-        if (!ImageIO.write(bImage, Extension.PNG.name(), file)) {
-            throw new IOException("Failed to write image: " + bImage.toString());
+        try {
+            if (!ImageIO.write(bImage, Extension.PNG.name(), file)) {
+                throw new FileException("Failed to write image: " + file.getName());
+            }
+        } catch (IIOException e) {
+            throw new FileException("Failed to write image: " + file.getName(), e);
         }
     }
 
@@ -63,6 +69,9 @@ public abstract class PixelFileWriter {
         ImageWriter writer = ImageIO.getImageWritersBySuffix("gif").next();
         ImageWriteParam imageWriteParam = writer.getDefaultWriteParam();
 
+        if (metadata == null) {
+            metadata = Metadata.DEFAULT;
+        }
         metadata.setDelayTime(image.getDelay());
         IIOMetadata iioMetadata = Metadata.write(writer, metadata);
 

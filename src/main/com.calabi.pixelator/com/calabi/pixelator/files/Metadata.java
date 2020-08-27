@@ -31,7 +31,7 @@ public final class Metadata {
     private static final String AUTHENTICATION_CODE = "authenticationCode";
 
     // Default metadata:
-    private static final Metadata DEFAULT = new Metadata();
+    public static final Metadata DEFAULT = new Metadata();
 
     static {
         DEFAULT.disposalMethod = "restoreToBackgroundColor";
@@ -84,7 +84,7 @@ public final class Metadata {
     public static IIOMetadata write(ImageWriter writer, Metadata metadata) throws IOException {
 
         if (metadata == null) {
-            metadata = DEFAULT;
+            throw new NullPointerException();
         }
 
         ImageTypeSpecifier type = ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_INT_ARGB);

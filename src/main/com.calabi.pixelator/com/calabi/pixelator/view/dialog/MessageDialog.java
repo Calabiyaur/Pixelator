@@ -4,13 +4,11 @@ import javafx.scene.control.Label;
 
 public class MessageDialog extends BasicDialog {
 
-    private Label messageLabel = new Label();
-
-    public MessageDialog() {
-        this("You got a message!", "Someone forgot to put text here...");
-    }
+    private final Label messageLabel = new Label();
 
     public MessageDialog(String title, String message) {
+        messageLabel.setWrapText(true);
+
         addContent(this.messageLabel, 0, 0);
 
         setTitle(title);
@@ -21,7 +19,7 @@ public class MessageDialog extends BasicDialog {
     }
 
     public void setMessage(String message) {
-        this.messageLabel.setText(message);
+        messageLabel.setText(message);
     }
 
     @Override

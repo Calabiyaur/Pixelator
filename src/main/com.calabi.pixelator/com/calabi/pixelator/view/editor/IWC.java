@@ -11,12 +11,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.Pane;
 
-import com.calabi.pixelator.ui.image.ScalableImageView;
-import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.CompoundBooleanProperty;
 import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.ui.image.ScalableImageView;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
@@ -233,12 +233,12 @@ public class IWC extends Pane {
 
     public List<ImageWindow> imageWindows() {
         return FXCollections.observableArrayList(getChildren()).stream()
-                    .filter(node -> node instanceof ImageWindow)
-                    .map(node -> (ImageWindow) node).collect(Collectors.toList());
+                .filter(node -> node instanceof ImageWindow)
+                .map(node -> (ImageWindow) node).collect(Collectors.toList());
     }
 
-    public boolean closeCurrent() {
-        return currentWindow.get().closeIfClean();
+    public void closeCurrent() {
+        currentWindow.get().closeIfClean();
     }
 
     public void selectNextWindow() {

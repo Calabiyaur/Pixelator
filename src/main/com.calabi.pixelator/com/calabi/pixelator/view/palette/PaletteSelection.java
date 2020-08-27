@@ -18,7 +18,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PaletteFile;
@@ -26,6 +25,7 @@ import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.res.Action;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.start.BasicToolBar;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.view.dialog.MessageDialog;
 import com.calabi.pixelator.view.dialog.NewPaletteDialog;
 import com.calabi.pixelator.view.editor.IWC;
@@ -121,9 +121,8 @@ public class PaletteSelection extends BorderPane {
         }
         Image image = imageFile.getImage();
         if (image.getWidth() > 16 || image.getHeight() > 16) {
-            MessageDialog dialog = new MessageDialog();
-            dialog.setTitle("This is too big to be a preview!");
-            dialog.setMessage("The size of a palette preview can at most be 16 x 16 pixels.");
+            MessageDialog dialog = new MessageDialog("This is too big to be a preview!",
+                    "The size of a palette preview can at most be 16 x 16 pixels.");
             dialog.show();
         } else {
             getFile().setPreview(imageFile.getImage());

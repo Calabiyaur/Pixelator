@@ -7,8 +7,8 @@ import javafx.scene.layout.StackPane;
 
 public class ErrorDialog extends BasicDialog {
 
-    private Label message = new Label();
-    private Label header = new Label();
+    private final Label message = new Label();
+    private final Label header = new Label();
 
     public ErrorDialog() {
         setTitle("An error has occurred.");

@@ -10,6 +10,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import com.calabi.pixelator.files.FileException;
 import com.calabi.pixelator.logging.Logger;
 
 public final class ZipUtil {
@@ -22,7 +23,7 @@ public final class ZipUtil {
         //create output directory if it doesn't exist
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
-                throw new IOException("Failed to create directory '" + outputPath + "'");
+                throw new FileException("Failed to create directory '" + outputPath + "'");
             }
         }
         FileInputStream fis;
