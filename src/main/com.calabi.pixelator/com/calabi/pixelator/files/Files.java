@@ -78,7 +78,7 @@ public class Files {
         return true;
     }
 
-    private void saveFile(PixelFile pixelFile) {
+    public void saveFile(PixelFile pixelFile) {
         if (pixelFile.getFile() == null) {
             throw new NullPointerException();
         }

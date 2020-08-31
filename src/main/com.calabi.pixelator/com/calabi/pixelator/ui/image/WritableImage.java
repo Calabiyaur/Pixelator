@@ -81,6 +81,13 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         }
     }
 
+    public WritableImage(com.sun.prism.Image image) {
+        super(image.getWidth(), image.getHeight());
+
+        Object platformImage = ReflectionUtil.getField(this, "platformImage");
+        ReflectionUtil.invokeMethod(platformImage, "set", image);
+    }
+
     public void initAnimation(int frameCount, int frameDelay) {
         Check.ensure(!isAnimated());
         Check.ensure(frameCount > 0);
@@ -378,6 +385,10 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         }
 
         if (isAnimated()) {
+            if (frames.length != other.frames.length) {
+                return false;
+            }
+
             for (int n = 0; n < frames.length; n++) {
                 PlatformImage frame = frames[n];
                 PlatformImage otherFrame = other.frames[n];

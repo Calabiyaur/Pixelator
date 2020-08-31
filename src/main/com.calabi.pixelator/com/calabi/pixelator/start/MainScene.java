@@ -4,6 +4,8 @@ import java.awt.AWTException;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +24,12 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 
+import com.sun.javafx.tk.PlatformImage;
+
+import com.calabi.pixelator.files.Category;
+import com.calabi.pixelator.files.FileException;
 import com.calabi.pixelator.files.Files;
 import com.calabi.pixelator.files.ImageFile;
 import com.calabi.pixelator.files.PaletteFile;
@@ -45,6 +52,7 @@ import com.calabi.pixelator.view.dialog.MoveImageDialog;
 import com.calabi.pixelator.view.dialog.NewImageDialog;
 import com.calabi.pixelator.view.dialog.OutlineDialog;
 import com.calabi.pixelator.view.dialog.ResizeDialog;
+import com.calabi.pixelator.view.dialog.SaveRequestDialog;
 import com.calabi.pixelator.view.dialog.SettingsDialog;
 import com.calabi.pixelator.view.dialog.StretchDialog;
 import com.calabi.pixelator.view.editor.IWC;
@@ -139,6 +147,8 @@ public class MainScene extends Scene {
         fileMenu.addItem(SAVE_AS, e -> Files.get().create(IWC.get().getCurrentFile()), IWC.get().imageSelectedProperty());
         fileMenu.addItem(SAVE_ALL, e -> IWC.get().saveAll(), IWC.get().overallDirtyProperty());
         fileMenu.addItem(CREATE_FROM_CLIPBOARD, e -> createFromClipboard(), Pixelator.clipboardActiveProperty());
+        //TODO: IMPORT_STRIP
+        fileMenu.addItem(EXPORT_STRIP, e -> exportStrip(), IWC.get().imageSelectedProperty().and(IWC.get().imageAnimatedProperty()));
         fileMenu.addItem(CLOSE, e -> IWC.get().closeCurrent(), IWC.get().imageSelectedProperty());
         fileMenu.addItem(CLOSE_ALL, e -> IWC.get().closeAll(), IWC.get().imageSelectedProperty());
         fileMenu.addItem(SETTINGS, e -> showSettings());
@@ -323,6 +333,33 @@ public class MainScene extends Scene {
             IWC.get().addImage(new ImageFile(null, writableImage));
             getEditor().setCleanImage(writableImage);
             getEditor().updateDirty();
+        }
+    }
+
+    private void exportStrip() {
+        String name = IWC.get().getCurrentFile().getName();
+
+        DirectoryChooser dialog = new DirectoryChooser();
+        dialog.setInitialDirectory(Category.IMAGE.getDirectory());
+        File directory = dialog.showDialog(Pixelator.getPrimaryStage());
+
+        WritableImage animation = IWC.get().getCurrentImage();
+        for (int i = 0; i < animation.getFrames().length; i++) {
+            PlatformImage platformImage = animation.getFrames()[i];
+            WritableImage frame = new WritableImage(((com.sun.prism.Image) platformImage));
+
+            File file = new File(directory.getPath() + File.separator + name + "_" + i + ".png");
+            if (!file.exists()) {
+                try {
+                    if (!file.createNewFile()) {
+                        throw new FileException("");
+                    }
+                } catch (IOException e) {
+                    throw new FileException(e);
+                }
+            }
+            PixelFile pixelFile = new ImageFile(file, frame);
+            Files.get().saveFile(pixelFile);
         }
     }
 

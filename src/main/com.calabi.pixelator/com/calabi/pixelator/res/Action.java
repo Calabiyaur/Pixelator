@@ -24,6 +24,7 @@ public enum Action {
     DOWN("Down", false, false, false, KeyCode.DOWN),
     EDIT_PALETTE("Edit palette"),
     ESCAPE("Escape", false, false, false, KeyCode.ESCAPE),
+    EXPORT_STRIP("Export strip"),
     EXTRACT_PALETTE("Extract palette", true, false, true, KeyCode.P),
     FIT_WINDOW("Fit window", false, false, false, KeyCode.F4),
     FLIP_HORIZONTALLY("Flip horizontally"),
