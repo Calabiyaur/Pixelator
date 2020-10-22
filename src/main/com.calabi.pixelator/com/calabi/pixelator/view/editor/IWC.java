@@ -152,7 +152,6 @@ public class IWC extends Pane {
         window.setTranslateY(Config.IMAGE_Y.getDouble(window.getFile(), defY));
 
         setCurrentWindow(window);
-        window.adjustSize();
         window.getImageView().imageProperty().addListener((ov, o, n) -> updateImage((WritableImage) o, window));
         return window;
     }

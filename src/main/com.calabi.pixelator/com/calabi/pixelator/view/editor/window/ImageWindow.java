@@ -39,8 +39,8 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
 
     private Layout layout;
 
-    private ImageEditor imageEditor;
-    private PixelFile imageFile;
+    private final ImageEditor imageEditor;
+    private final PixelFile imageFile;
 
     public ImageWindow(ScalableImageView imageView, PixelFile imageFile) {
         super(true);
@@ -114,7 +114,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         Config.IMAGE_X.putDouble(getFile(), getTranslateX());
         Config.IMAGE_Y.putDouble(getFile(), getTranslateY());
         Config.IMAGE_WIDTH.putDouble(getFile(), getWidth());
-        Config.IMAGE_HEIGHT.putDouble(getFile(), getHeight() - layout.getExtraHeight());
+        Config.IMAGE_HEIGHT.putDouble(getFile(), getHeight());
         Config.IMAGE_H_SCROLL.putDouble(getFile(), getContent().getHvalue());
         Config.IMAGE_V_SCROLL.putDouble(getFile(), getContent().getVvalue());
         Config.FRAME_INDEX.putInt(getFile(), getImage().getIndex());
