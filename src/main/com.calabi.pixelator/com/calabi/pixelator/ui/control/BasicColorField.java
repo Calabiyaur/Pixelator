@@ -1,6 +1,8 @@
 package com.calabi.pixelator.ui.control;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Control;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.res.Images;
@@ -22,7 +24,9 @@ public class BasicColorField extends BasicControl<Color> {
 
     private void init() {
         colorButton = new ImageButton(Images.CHOOSE_COLOR);
+        colorButton.getStyleClass().add("tight-button");
         colorButton.setOnAction(e -> ColorDialog.chooseColor(getValue(), color -> setValue(color)));
+        HBox.setMargin(colorButton, new Insets(3));
         addControl(colorButton, 1);
 
         colorField.colorProperty().bindBidirectional(this.valueProperty());

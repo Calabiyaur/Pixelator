@@ -6,17 +6,17 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.ui.control.BasicColorField;
 import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.ui.control.BasicColorField;
 import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.editor.window.ImageWindow;
 
 public class SettingsDialog extends BasicDialog {
 
-    private BasicColorField backgroundColorField;
-    private BasicColorField borderColorField;
-    private BasicColorField gridColorField;
-    private BasicColorField crosshairColorField;
+    private final BasicColorField backgroundColorField;
+    private final BasicColorField borderColorField;
+    private final BasicColorField gridColorField;
+    private final BasicColorField crosshairColorField;
 
     public SettingsDialog() {
         super(330, 240);

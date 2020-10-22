@@ -164,6 +164,10 @@
     -fx-opacity: 0.4
 }
 
+.tight-button {
+    -fx-padding: 0 0 0 0;
+}
+
 .toggle-button {
     -fx-background-color: transparent;
     -fx-background-insets: 0 0 0 0;
@@ -451,10 +455,12 @@
     -fx-padding: 0.25em 0.416667em 0.333333em 0.416667em;
 }
 
+.color-field:hover {
+    -fx-background-color: -px_selected, -px_hover, -px-custom-background;
+}
+
 .color-field:focused {
-    -fx-background-color: -fx-focus-color, -px_default, -px-custom-background;
-    -fx-background-insets: -0.4, 1, 3;
-    -fx-background-radius: 3.4, 2, 2;
+    -fx-background-color: -px_selected, -fx-focus-color, -px-custom-background;
 }
 
 .color-field:disabled {
