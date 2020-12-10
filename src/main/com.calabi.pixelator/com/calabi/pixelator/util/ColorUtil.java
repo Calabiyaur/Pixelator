@@ -117,4 +117,17 @@ public final class ColorUtil {
     public static Color makeOpaque(Color color) {
         return Color.color(color.getRed(), color.getGreen(), color.getBlue());
     }
+
+    /**
+     * Compare two colors.
+     *
+     * @return a value between 0.0 and 1.0
+     */
+    public static double compare(Color c1, Color c2) {
+        return Math.abs(c1.getRed() - c2.getRed())
+                + Math.abs(c1.getGreen() - c2.getGreen())
+                + Math.abs(c1.getBlue() - c2.getBlue())
+                / 3;
+    }
+
 }

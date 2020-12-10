@@ -52,6 +52,7 @@ public class ToolView extends VBox {
     private final BooleanProperty fillShape = new SimpleBooleanProperty();
     private final IntegerProperty thickness = new SimpleIntegerProperty();
     private final IntegerProperty bulge = new SimpleIntegerProperty();
+    private final IntegerProperty tolerance = new SimpleIntegerProperty();
     private final Label preview = new Label();
     private final Label previewTool = new Label();
     private final Label previewSelection = new Label();
@@ -121,7 +122,9 @@ public class ToolView extends VBox {
     }
 
     public ToolSettings getSettings() {
-        return new ToolSettings(maxX, maxY, replaceColor.get(), alphaOnly.get(), fillShape.get(), thickness.get(), bulge.get());
+        return new ToolSettings(maxX, maxY, replaceColor.get(), alphaOnly.get(), fillShape.get(), thickness.get(),
+                bulge.get(),
+                tolerance.get());
     }
 
     private FlowPane createFirstToolLayer(ToggleGroup tg) {
@@ -172,8 +175,9 @@ public class ToolView extends VBox {
         BasicCheckBox replaceColorField = new BasicCheckBox("Replace", Config.REPLACE.getBoolean());
         BasicCheckBox alphaOnlyField = new BasicCheckBox("Alpha only", Config.ALPHA_ONLY.getBoolean());
         BasicCheckBox fillShapeField = new BasicCheckBox("Fill shape", Config.FILL_SHAPE.getBoolean());
-        BasicIntegerField thicknessField = new BasicIntegerField("Thickness", Config.THICKNESS.getInt());
-        Arrays.asList(replaceColorField, alphaOnlyField, fillShapeField, thicknessField).forEach(field -> {
+        BasicIntegerField thicknessField = new BasicIntegerField("Thickness", Config.TOLERANCE.getInt());
+        BasicIntegerField toleranceField = new BasicIntegerField("Tolerance", Config.TOLERANCE.getInt());
+        Arrays.asList(replaceColorField, alphaOnlyField, fillShapeField, thicknessField, toleranceField).forEach(field -> {
             field.getControlWrapper().setPrefWidth(45);
             field.setMinWidth(100);
         });
@@ -184,6 +188,8 @@ public class ToolView extends VBox {
         ToggleImageButton bulgeLeft = new ToggleImageButton(tg, Images.BULGE_LEFT);
         ToggleImageButton bulgeCenter = new ToggleImageButton(tg, Images.BULGE_CENTER);
         ToggleImageButton bulgeRight = new ToggleImageButton(tg, Images.BULGE_RIGHT);
+        toleranceField.setMinValue(0);
+        toleranceField.setMaxValue(99);
 
         replaceColor.bindBidirectional(replaceColorField.valueProperty());
         alphaOnly.bindBidirectional(alphaOnlyField.valueProperty());
@@ -200,12 +206,14 @@ public class ToolView extends VBox {
             default -> bulgeCenter.fire();
         }
         bulgeButtons.forEach(b -> b.setDisable(getThickness() == 1));
+        tolerance.bind(toleranceField.valueProperty());
 
         GridPane prefBox = new GridPane();
         prefBox.addRow(0, replaceColorField);
         prefBox.addRow(1, alphaOnlyField);
         prefBox.addRow(2, fillShapeField);
         prefBox.addRow(3, thicknessField, bulgeLeft, bulgeCenter, bulgeRight);
+        prefBox.addRow(4, toleranceField);
         prefBox.setVgap(4);
         GridPane.setMargin(bulgeLeft, new Insets(0, 0, 0, 3));
         GridPane.setMargin(bulgeCenter, new Insets(0, 1, 0, 1));
@@ -234,7 +242,7 @@ public class ToolView extends VBox {
         replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(n));
         alphaOnly.addListener((ov, o, n) -> Config.ALPHA_ONLY.putBoolean(n));
         fillShape.addListener((ov, o, n) -> Config.FILL_SHAPE.putBoolean(n));
-        thickness.addListener((ov, o, n) -> Config.THICKNESS.putInt(n.intValue()));
+        thickness.addListener((ov, o, n) -> Config.TOLERANCE.putInt(n.intValue()));
         bulge.addListener((ov, o, n) -> Config.BULGE.putInt(n.intValue()));
     }
 

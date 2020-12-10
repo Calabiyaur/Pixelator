@@ -43,6 +43,7 @@ public enum Config {
     SCREEN_Y(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
     STRETCH_KEEP_RATIO(ConfigMode.GLOBAL, ConfigType.BOOLEAN, true),
     THICKNESS(ConfigMode.GLOBAL, ConfigType.INT, 1),
+    TOLERANCE(ConfigMode.GLOBAL, ConfigType.INT, 0),
     TOOL(ConfigMode.GLOBAL, ConfigType.INT, 0),
 
     // Local (image) config

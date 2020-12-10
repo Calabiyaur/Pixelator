@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.util.Check;
+import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.Move;
 import com.calabi.pixelator.util.Rotate;
 import com.calabi.pixelator.view.ToolSettings;
@@ -125,7 +126,8 @@ public final class ShapeMaster {
      * @param point the starting point
      * @param cStart color of the starting point
      */
-    public static PointArray getFillPoints(Point point, Color cStart, PixelReader reader, int width, int height) {
+    public static PointArray getFillPoints(Point point, Color cStart, PixelReader reader, int width, int height,
+            ToolSettings settings) {
 
         PointArray result = new PointArray();
 
@@ -153,7 +155,7 @@ public final class ShapeMaster {
 
                         try {
                             if (activeMap[newX][newY] == null) {
-                                if (cStart.equals(reader.getColor(newX, newY))) {
+                                if (isEqualOrSimilar(cStart, reader.getColor(newX, newY), settings)) {
                                     activeMap[newX][newY] = true;
                                     newActiveSet.add(newX, newY);
                                     done = false;
@@ -174,16 +176,22 @@ public final class ShapeMaster {
     /**
      * Return all points in the image that have the given color.
      */
-    public static PointArray getPointsOfColor(Color color, PixelReader reader, int width, int height) {
+    public static PointArray getPointsOfColor(Color color, PixelReader reader, int width, int height,
+            ToolSettings settings) {
         PointArray result = new PointArray();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if (reader.getColor(i, j).equals(color)) {
+                if (isEqualOrSimilar(color, reader.getColor(i, j), settings)) {
                     result.add(i, j);
                 }
             }
         }
         return result;
+    }
+
+    private static boolean isEqualOrSimilar(Color color, Color otherColor, ToolSettings settings) {
+        return (settings.tolerance == 0 && color.equals(otherColor))
+                || ColorUtil.compare(color, otherColor) * 100 <= settings.tolerance;
     }
 
 }

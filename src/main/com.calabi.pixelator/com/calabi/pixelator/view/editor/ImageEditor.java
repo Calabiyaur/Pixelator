@@ -25,14 +25,6 @@ import javafx.scene.paint.Color;
 import com.sun.javafx.tk.PlatformImage;
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.calabi.pixelator.ui.image.Crosshair;
-import com.calabi.pixelator.ui.image.Grid;
-import com.calabi.pixelator.ui.image.ImageBackground;
-import com.calabi.pixelator.ui.image.OutlineRect;
-import com.calabi.pixelator.ui.image.OutlineShape;
-import com.calabi.pixelator.ui.image.ScalableImageView;
-import com.calabi.pixelator.ui.image.SquareStack;
-import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.meta.Pixel;
@@ -42,6 +34,14 @@ import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.meta.QuadConsumer;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.GridSelectionConfig;
+import com.calabi.pixelator.ui.image.Crosshair;
+import com.calabi.pixelator.ui.image.Grid;
+import com.calabi.pixelator.ui.image.ImageBackground;
+import com.calabi.pixelator.ui.image.OutlineRect;
+import com.calabi.pixelator.ui.image.OutlineShape;
+import com.calabi.pixelator.ui.image.ScalableImageView;
+import com.calabi.pixelator.ui.image.SquareStack;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.Check;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.Do;
@@ -452,7 +452,7 @@ public class ImageEditor extends Editor {
             return;
         }
         Color c = reader.getColor(point.getX(), point.getY());
-        paintPoints(ShapeMaster.getFillPoints(point, c, reader, width.get(), height.get()));
+        paintPoints(ShapeMaster.getFillPoints(point, c, reader, width.get(), height.get(), ToolView.get().getSettings()));
     }
 
     public void fillColor(Point point) {
@@ -460,7 +460,7 @@ public class ImageEditor extends Editor {
             return;
         }
         Color color = reader.getColor(point.getX(), point.getY());
-        paintPoints(ShapeMaster.getPointsOfColor(color, reader, width.get(), height.get()));
+        paintPoints(ShapeMaster.getPointsOfColor(color, reader, width.get(), height.get(), ToolView.get().getSettings()));
     }
 
     public PointArray getSelectFill(Point point) {
@@ -468,7 +468,8 @@ public class ImageEditor extends Editor {
             return null;
         }
         return ShapeMaster.getFillPoints(
-                point, reader.getColor(point.getX(), point.getY()), reader, width.get(), height.get());
+                point, reader.getColor(point.getX(), point.getY()), reader, width.get(), height.get(),
+                ToolView.get().getSettings());
     }
 
     public PointArray getSelectColor(Point point) {
@@ -476,7 +477,7 @@ public class ImageEditor extends Editor {
             return null;
         }
         Color color = reader.getColor(point.getX(), point.getY());
-        return ShapeMaster.getPointsOfColor(color, reader, width.get(), height.get());
+        return ShapeMaster.getPointsOfColor(color, reader, width.get(), height.get(), ToolView.get().getSettings());
     }
 
     public void pickColor(Point p) {
