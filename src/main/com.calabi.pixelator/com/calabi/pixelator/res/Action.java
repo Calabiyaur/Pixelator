@@ -53,6 +53,7 @@ public enum Action {
     RESIZE("Resize..."),
     REVERSE("Reverse"),
     RIGHT("Right", false, false, false, KeyCode.RIGHT),
+    ROTATE("Rotate..."),
     ROTATE_CLOCKWISE("Rotate clockwise"),
     ROTATE_COUNTER_CLOCKWISE("Rotate counter-clockwise"),
     SAVE("Save", true, false, false, KeyCode.S),

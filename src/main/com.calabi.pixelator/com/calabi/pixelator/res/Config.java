@@ -37,6 +37,7 @@ public enum Config {
     REPLACE(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
     RESIZE_BIAS(ConfigMode.GLOBAL, ConfigType.STRING, Direction.NONE.name()),
     RESIZE_KEEP_RATIO(ConfigMode.GLOBAL, ConfigType.BOOLEAN, true),
+    ROTATE_DEGREES(ConfigMode.GLOBAL, ConfigType.INT, 0),
     SCREEN_HEIGHT(ConfigMode.GLOBAL, ConfigType.DOUBLE, 400d),
     SCREEN_WIDTH(ConfigMode.GLOBAL, ConfigType.DOUBLE, 600d),
     SCREEN_X(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),

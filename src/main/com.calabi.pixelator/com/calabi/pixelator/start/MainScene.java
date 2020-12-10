@@ -52,7 +52,7 @@ import com.calabi.pixelator.view.dialog.MoveImageDialog;
 import com.calabi.pixelator.view.dialog.NewImageDialog;
 import com.calabi.pixelator.view.dialog.OutlineDialog;
 import com.calabi.pixelator.view.dialog.ResizeDialog;
-import com.calabi.pixelator.view.dialog.SaveRequestDialog;
+import com.calabi.pixelator.view.dialog.RotateDialog;
 import com.calabi.pixelator.view.dialog.SettingsDialog;
 import com.calabi.pixelator.view.dialog.StretchDialog;
 import com.calabi.pixelator.view.editor.IWC;
@@ -187,7 +187,9 @@ public class MainScene extends Scene {
         imageMenu.addItem(FLIP_HORIZONTALLY, e -> getEditor().flipHorizontally(), IWC.get().imageSelectedProperty());
         imageMenu.addItem(FLIP_VERTICALLY, e -> getEditor().flipVertically(), IWC.get().imageSelectedProperty());
         imageMenu.addItem(ROTATE_CLOCKWISE, e -> getEditor().rotateClockwise(), IWC.get().imageSelectedProperty());
-        imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, e -> getEditor().rotateCounterClockwise(), IWC.get().imageSelectedProperty());
+        imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, e -> getEditor().rotateCounterClockwise(),
+                IWC.get().imageSelectedProperty());
+        imageMenu.addItem(ROTATE, e -> rotateAction(), IWC.get().imageSelectedProperty());
         imageMenu.addItem(INVERT, e -> getEditor().invert(), IWC.get().imageSelectedProperty());
         imageMenu.addItem(INVERT_WITHIN_PALETTE, e -> getEditor().invertWithinPalette(), IWC.get().imageSelectedProperty());
 
@@ -418,6 +420,20 @@ public class MainScene extends Scene {
             getEditor().stretchImage(w, h);
             dialog.close();
             Config.STRETCH_KEEP_RATIO.putBoolean(dialog.isKeepRatio());
+        });
+        dialog.showAndFocus();
+    }
+
+    private void rotateAction() {
+        RotateDialog dialog = new RotateDialog();
+        dialog.setOnOk(e -> {
+            Integer degrees = dialog.getDegrees();
+            if (degrees == null) {
+                return;
+            }
+            getEditor().rotate(degrees);
+            dialog.close();
+            Config.ROTATE_DEGREES.putInt(degrees);
         });
         dialog.showAndFocus();
     }

@@ -558,6 +558,23 @@ public class ImageEditor extends Editor {
         });
     }
 
+    public void rotate(int degrees) {
+        changeImage(height.get(), width.get(), (o, n, reader, writer) -> {
+            for (int i = 0; i < width.get(); i++) {
+                for (int j = 0; j < width.get(); j++) {
+                    double radians = degrees / 180d * Math.PI;
+                    int oi = i - width.get() / 2;
+                    int oj = j - height.get() / 2;
+                    int ni = (int) (oi * Math.cos(radians) - oj * Math.sin(radians)) + width.get() / 2;
+                    int nj = (int) (oi * Math.sin(radians) + oj * Math.cos(radians)) + height.get() / 2;
+                    if (0 <= ni && ni < width.get() && 0 <= nj && nj < height.get()) {
+                        writer.setColor(i, j, reader.getColor(ni, nj));
+                    }
+                }
+            }
+        });
+    }
+
     public void moveImage(int h, int v) {
 
         int posH = Math.floorMod(h, width.get());
