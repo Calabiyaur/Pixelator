@@ -397,7 +397,9 @@ public class ImageEditor extends Editor {
         int imageOriginY = (int) Math.round((getHeight() - height.get() * getImageView().getScaleY()) / 2);
         int imageX = (int) Math.floor((x - imageOriginX) / getImageView().getScaleX());
         int imageY = (int) Math.floor((y - imageOriginY) / getImageView().getScaleY());
-        return new Point(imageX, imageY);
+        int vx = Math.min(getImageWidth() - 1, Math.max(0, imageX));
+        int vy = Math.min(getImageHeight() - 1, Math.max(0, imageY));
+        return new Point(vx, vy);
     }
 
     /**

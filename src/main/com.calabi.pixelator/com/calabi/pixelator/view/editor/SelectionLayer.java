@@ -8,12 +8,13 @@ import javafx.scene.paint.Color;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.calabi.pixelator.ui.image.OutlineRect;
-import com.calabi.pixelator.ui.image.OutlineShape;
 import com.calabi.pixelator.meta.Pixel;
 import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.meta.PointArray;
+import com.calabi.pixelator.ui.image.OutlineRect;
+import com.calabi.pixelator.ui.image.OutlineShape;
 import com.calabi.pixelator.util.ImageUtil;
+import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.undo.PixelChange;
 
@@ -77,10 +78,15 @@ public class SelectionLayer extends EditorLayer {
     }
 
     public void definePixels(PointArray points) {
+        if (points.getPoints().isEmpty()) {
+            clear();
+            return;
+        }
         clearImage();
         getPixels().reset();
 
         PointArray effectivePoints = new PointArray();
+        int xMin = Integer.MAX_VALUE, yMin = Integer.MAX_VALUE, xMax = 0, yMax = 0;
         for (Point point : points.getPoints()) {
             int x = point.getX();
             int y = point.getY();
@@ -88,6 +94,10 @@ public class SelectionLayer extends EditorLayer {
                 continue;
             }
             effectivePoints.add(x, y);
+            xMin = Math.min(xMin, x);
+            yMin = Math.min(yMin, y);
+            xMax = Math.max(xMax, x);
+            yMax = Math.max(yMax, y);
             Color color = getReader().getColor(x, y);
             getWriter().setColor(x, y, color);
             getPixels().add(x, y, null, color);
@@ -95,6 +105,7 @@ public class SelectionLayer extends EditorLayer {
         active.set(true);
         outlineShape.define(effectivePoints);
         outlineRect.clear();
+        InfoView.setSelectionSize(new Point(xMin, yMin), new Point(xMax, yMax));
     }
 
     public void defineShape(PointArray points) {
@@ -106,6 +117,7 @@ public class SelectionLayer extends EditorLayer {
         PointArray points = new PointArray();
 
         PixelReader reader = image.getPixelReader();
+        int xMin = Integer.MAX_VALUE, yMin = Integer.MAX_VALUE, xMax = 0, yMax = 0;
         for (int i = 0; i < image.getWidth(); i++) {
             for (int j = 0; j < image.getHeight(); j++) {
                 if (ImageUtil.outOfBounds(getImage(), i, j)) {
@@ -116,12 +128,17 @@ public class SelectionLayer extends EditorLayer {
                 getPixels().add(i, j, Color.TRANSPARENT, color);
                 if (!Color.TRANSPARENT.equals(color)) {
                     points.add(i, j);
+                    xMin = Math.min(xMin, i);
+                    yMin = Math.min(yMin, j);
+                    xMax = Math.max(xMax, i);
+                    yMax = Math.max(yMax, j);
                 }
             }
         }
         active.set(true);
         this.pasted = pasted;
         outlineShape.define(points);
+        InfoView.setSelectionSize(new Point(xMin, yMin), new Point(xMax, yMax));
     }
 
     public void setEdges(Point start, Point end) {
@@ -175,6 +192,7 @@ public class SelectionLayer extends EditorLayer {
         outlineShape.clear();
         setTranslateX(0);
         setTranslateY(0);
+        InfoView.setSelectionSize(null, null);
 
         drag = null;
     }

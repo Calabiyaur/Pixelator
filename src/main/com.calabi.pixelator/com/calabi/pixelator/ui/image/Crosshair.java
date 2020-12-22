@@ -9,9 +9,9 @@ import com.calabi.pixelator.meta.Point;
 
 public class Crosshair extends ShapeStack {
 
-    private IntegerProperty pixelX = new SimpleIntegerProperty(0);
-    private IntegerProperty pixelY = new SimpleIntegerProperty(0);
-    private Color color;
+    private final IntegerProperty pixelX = new SimpleIntegerProperty(0);
+    private final IntegerProperty pixelY = new SimpleIntegerProperty(0);
+    private final Color color;
 
     public Crosshair(int pixelWidth, int pixelHeight, Color color) {
         super(pixelWidth, pixelHeight);

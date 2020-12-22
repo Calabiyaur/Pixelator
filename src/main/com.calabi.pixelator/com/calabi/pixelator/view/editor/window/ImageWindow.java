@@ -63,8 +63,8 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         initLayout();
         imageEditor.imageAnimatedProperty().addListener((ov, o, n) -> initLayout());
 
-        setOnScroll(e -> onScroll(e));
-        setOnMouseClicked(e -> mouseClick(e));
+        setOnScroll(this::onScroll);
+        setOnMouseClicked(this::mouseClick);
         getEditor().mousePositionProperty().addListener((ov, o, n) -> updateMouse(n));
         getEditor().setOnMouseExited(e -> updateMouse(null));
         getClose().setOnAction(e -> closeIfClean());
@@ -196,8 +196,8 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         BasicScrollPane root = new BasicScrollPane(imageEditor);
         stage.setScene(new Scene(root));
 
-        root.setOnMouseClicked(e -> mouseClick(e));
-        stage.getScene().setOnKeyPressed(e -> ActionManager.fire(e));
+        root.setOnMouseClicked(this::mouseClick);
+        stage.getScene().setOnKeyPressed(ActionManager::fire);
 
         stage.setAlwaysOnTop(true);
         stage.setOnCloseRequest(e -> {

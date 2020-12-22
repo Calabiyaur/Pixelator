@@ -5,6 +5,7 @@ import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Check;
 import com.calabi.pixelator.util.shape.RectangleHelper;
+import com.calabi.pixelator.view.InfoView;
 
 public class Select extends SelectionTool {
 
@@ -38,6 +39,7 @@ public class Select extends SelectionTool {
         Point start = getSelectionLayer().getStart();
         if (start != null) {
             getSelectionLayer().setEdges(start, getMouse());
+            InfoView.setSelectionSize(start, getMouse());
         }
     }
 
