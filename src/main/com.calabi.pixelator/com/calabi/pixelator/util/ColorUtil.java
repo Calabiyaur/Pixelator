@@ -1,5 +1,7 @@
 package com.calabi.pixelator.util;
 
+import java.util.Objects;
+
 import javafx.scene.paint.Color;
 
 public final class ColorUtil {
@@ -129,6 +131,11 @@ public final class ColorUtil {
                 + Math.abs(c1.getBlue() - c2.getBlue())
                 + Math.abs(c1.getOpacity() - c2.getOpacity()))
                 / 4;
+    }
+
+    public static boolean equals(Color c1, Color c2) {
+        return (c1.getOpacity() == 0 && c2.getOpacity() == 0)
+                || Objects.equals(c1, c2);
     }
 
 }

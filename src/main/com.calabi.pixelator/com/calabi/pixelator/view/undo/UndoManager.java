@@ -10,10 +10,10 @@ import javafx.collections.FXCollections;
 
 public class UndoManager {
 
-    private ListProperty<Undoable> changeList = new SimpleListProperty<>(FXCollections.observableArrayList());
-    private IntegerProperty position = new SimpleIntegerProperty(-1);
-    private BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
-    private BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
+    private final ListProperty<Undoable> changeList = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final IntegerProperty position = new SimpleIntegerProperty(-1);
+    private final BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
+    private final BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
 
     public UndoManager() {
         undoEnabled.bind(position.greaterThanOrEqualTo(0).and(changeList.emptyProperty().not()));

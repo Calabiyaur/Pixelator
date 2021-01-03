@@ -1,6 +1,5 @@
 package com.calabi.pixelator.meta;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,7 +53,7 @@ public class PixelArray extends Matrix<Colors, Pixel> {
     public PixelArray copy() {
         PixelArray pointArray = new PixelArray();
         for (List<Colors> line : lines) {
-            pointArray.lines.add(line == null ? null : new ArrayList<>(line));
+            pointArray.lines.add(line == null ? null : new MatrixList<>(line));
         }
         pointArray.modified = true;
         return pointArray;

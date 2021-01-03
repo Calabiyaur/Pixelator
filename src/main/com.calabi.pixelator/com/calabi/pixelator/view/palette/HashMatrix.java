@@ -17,7 +17,7 @@ import java.util.function.UnaryOperator;
 
 public class HashMatrix<T> implements Matrix<T> {
 
-    private Map<Integer, Map<Integer, T>> values;
+    private final Map<Integer, Map<Integer, T>> values;
 
     public HashMatrix() {
         values = new HashMap<>();

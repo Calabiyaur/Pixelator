@@ -1,4 +1,4 @@
-package com.calabi.pixelator.meta;
+package com.calabi.pixelator.view;
 
 import java.util.Map;
 

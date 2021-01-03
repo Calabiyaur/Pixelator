@@ -59,9 +59,9 @@ public class PointArray extends Matrix<Boolean, Point> {
 
     public void invert(int maxX, int maxY) {
         for (int y = 0; y < maxY; y++) {
-            List<Boolean> line;
+            MatrixList<Boolean> line;
             if (y >= lines.size()) {
-                line = new ArrayList<>();
+                line = new MatrixList<>();
                 lines.add(line);
             } else {
                 line = lines.get(y);
@@ -86,7 +86,7 @@ public class PointArray extends Matrix<Boolean, Point> {
     public PointArray copy() {
         PointArray pointArray = new PointArray();
         for (List<Boolean> line : lines) {
-            pointArray.lines.add(line == null ? null : new ArrayList<>(line));
+            pointArray.lines.add(line == null ? null : new MatrixList<>(line));
         }
         pointArray.modified = true;
         return pointArray;

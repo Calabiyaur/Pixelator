@@ -1,12 +1,13 @@
 package com.calabi.pixelator.meta;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 public abstract class Matrix<T, P extends Point> {
 
-    protected final List<List<T>> lines;
+    protected final List<MatrixList<T>> lines;
     protected int size;
 
     protected final List<P> points;
@@ -15,7 +16,7 @@ public abstract class Matrix<T, P extends Point> {
     public Matrix() {
         this.lines = new ArrayList<>();
         this.size = 0;
-        this.points = new ArrayList<>();
+        this.points = new MatrixList<>();
         this.modified = false;
     }
 
@@ -56,11 +57,18 @@ public abstract class Matrix<T, P extends Point> {
     }
 
     public boolean remove(int x, int y) {
-        List<T> line = getLine(y);
+        MatrixList<T> line = getLine(y);
         if (line == null) {
             return false;
         }
-        return line.size() > x && line.set(x, null) != null;
+        boolean success = line.size() > x && line.set(x, null) != null;
+        if (success) {
+            size--;
+            if (line.nonNullEmpty()) {
+                lines.remove(line);
+            }
+        }
+        return success;
     }
 
     public List<P> getPoints() {
@@ -84,7 +92,7 @@ public abstract class Matrix<T, P extends Point> {
     }
 
     public boolean isEmpty() {
-        return height() == 0;
+        return size == 0;
     }
 
     protected abstract void toPoints();
@@ -97,7 +105,7 @@ public abstract class Matrix<T, P extends Point> {
         return getLine(y) != null;
     }
 
-    protected List<T> getLine(int y) {
+    protected MatrixList<T> getLine(int y) {
         return height() > y ? lines.get(y) : null;
     }
 
@@ -111,19 +119,19 @@ public abstract class Matrix<T, P extends Point> {
             lines.add(null);
         }
 
+        MatrixList<T> line;
         if (y == lines.size()) {
-            ArrayList<T> line = new ArrayList<>();
+            line = new MatrixList<>();
             lines.add(line);
             modified = true;
-            return line;
         } else {
-            List<T> line = getLine(y);
+            line = getLine(y);
             if (line == null) {
-                line = new ArrayList<>();
+                line = new MatrixList<>();
                 lines.set(y, line);
             }
-            return line;
         }
+        return line;
     }
 
     protected void addToLine(List<T> line, int x, T value) {
@@ -160,6 +168,102 @@ public abstract class Matrix<T, P extends Point> {
     @Override
     public int hashCode() {
         return lines.hashCode();
+    }
+
+    /**
+     * ArrayList extension for counting non-null values
+     * //TODO: Not all potentially relevant methods are overwritten.
+     */
+    protected static class MatrixList<U> extends ArrayList<U> {
+
+        private int nonNullSize = 0;
+
+        public MatrixList() {
+            // Default constructor
+        }
+
+        public MatrixList(Collection<? extends U> c) {
+            super(c);
+            if (c instanceof MatrixList) {
+                nonNullSize += ((MatrixList<?>) c).nonNullSize;
+            } else {
+                nonNullSize += c.stream().filter(Objects::nonNull).count();
+            }
+        }
+
+        public int nonNullSize() {
+            return nonNullSize;
+        }
+
+        public boolean nonNullEmpty() {
+            return nonNullSize == 0;
+        }
+
+        @Override
+        public boolean add(U u) {
+            if (u != null) {
+                nonNullSize++;
+            }
+            return super.add(u);
+        }
+
+        @Override
+        public void add(int index, U element) {
+            if (element != null) {
+                nonNullSize++;
+            }
+            super.add(index, element);
+        }
+
+        @Override public boolean addAll(Collection<? extends U> c) {
+            if (c instanceof MatrixList) {
+                nonNullSize += ((MatrixList<?>) c).nonNullSize;
+            } else {
+                nonNullSize += c.stream().filter(Objects::nonNull).count();
+            }
+            return super.addAll(c);
+        }
+
+        @Override
+        public boolean addAll(int index, Collection<? extends U> c) {
+            if (c instanceof MatrixList) {
+                nonNullSize += ((MatrixList<?>) c).nonNullSize;
+            } else {
+                nonNullSize += c.stream().filter(Objects::nonNull).count();
+            }
+            return super.addAll(index, c);
+        }
+
+        @Override
+        public U set(int index, U element) {
+            U oldValue = super.set(index, element);
+            if (oldValue == null) {
+                nonNullSize++;
+            }
+            if (element == null) {
+                nonNullSize--;
+            }
+            return oldValue;
+        }
+
+        @Override
+        public U remove(int index) {
+            U removed = super.remove(index);
+            if (removed != null) {
+                nonNullSize--;
+            }
+            return removed;
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            boolean success = super.remove(o);
+            if (success && o != null) {
+                nonNullSize--;
+            }
+            return success;
+        }
+
     }
 
 }

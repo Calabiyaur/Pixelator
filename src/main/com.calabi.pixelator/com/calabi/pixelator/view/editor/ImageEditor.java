@@ -507,12 +507,12 @@ public class ImageEditor extends Editor {
             boolean alphaOnly = ToolView.get().isAlphaOnly();
             Color combined = ColorUtil.addColors(previousColor, color, replaceColor, alphaOnly);
 
-            //if (previousColor.equals(combined)) {
-            //    pixels.remove(x, y);
-            //    writer.setColor(x, y, combined);
-            //} else {
+            if (ColorUtil.equals(previousColor, combined)) {
+                //pixels.remove(x, y);
+                //writer.setColor(x, y, combined);
+            } else {
                 pixels.add(x, y, previousColor, combined);
-            //}
+            }
         }
     }
 
