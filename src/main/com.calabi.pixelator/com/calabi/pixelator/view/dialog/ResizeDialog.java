@@ -4,18 +4,18 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.GridPane;
 
+import com.calabi.pixelator.meta.Direction;
+import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.ui.control.BasicCheckBox;
 import com.calabi.pixelator.ui.control.BasicIntegerField;
 import com.calabi.pixelator.ui.control.BiasButton;
-import com.calabi.pixelator.meta.Direction;
-import com.calabi.pixelator.res.Config;
 
 public class ResizeDialog extends BasicDialog {
 
-    private BasicIntegerField widthField;
-    private BasicIntegerField heightField;
-    private BasicCheckBox keepRatio;
-    private BiasButton biasButton;
+    private final BasicIntegerField widthField;
+    private final BasicIntegerField heightField;
+    private final BasicCheckBox keepRatio;
+    private final BiasButton biasButton;
 
     public ResizeDialog(int width, int height) {
         setTitle("Resize");

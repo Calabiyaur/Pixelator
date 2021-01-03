@@ -1,14 +1,14 @@
 package com.calabi.pixelator.view.dialog;
 
+import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.ui.control.BasicCheckBox;
 import com.calabi.pixelator.ui.control.BasicIntegerField;
-import com.calabi.pixelator.res.Config;
 
 public class StretchDialog extends BasicDialog {
 
-    private BasicIntegerField widthField;
-    private BasicIntegerField heightField;
-    private BasicCheckBox keepRatio;
+    private final BasicIntegerField widthField;
+    private final BasicIntegerField heightField;
+    private final BasicCheckBox keepRatio;
 
     public StretchDialog(int width, int height) {
         setTitle("Stretch");
