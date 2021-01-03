@@ -21,6 +21,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
+import javafx.scene.input.Clipboard;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -42,7 +43,6 @@ import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.ui.control.BasicMenuBar;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.ColorUtil;
-import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
@@ -329,9 +329,9 @@ public class MainScene extends Scene {
     }
 
     private void createFromClipboard() {
-        Image image = ImageUtil.getFromClipboard();
+        Image image = Clipboard.getSystemClipboard().getImage();
         if (image != null) {
-            WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
+            WritableImage writableImage = new WritableImage(image);
             IWC.get().addImage(new ImageFile(null, writableImage));
             getEditor().setCleanImage(writableImage);
             getEditor().updateDirty();

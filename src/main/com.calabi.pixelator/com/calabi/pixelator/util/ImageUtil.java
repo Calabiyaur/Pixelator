@@ -1,15 +1,5 @@
 package com.calabi.pixelator.util;
 
-import java.awt.Graphics;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,15 +8,12 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 
-import javax.imageio.ImageIO;
-
 import com.sun.javafx.tk.PlatformImage;
 
-import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.meta.Pixel;
 import com.calabi.pixelator.meta.PixelArray;
 import com.calabi.pixelator.meta.Point;
-import com.calabi.pixelator.start.ExceptionHandler;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.view.palette.SortMaster;
 
 public class ImageUtil {
@@ -92,34 +79,6 @@ public class ImageUtil {
         } else {
             return new HashSet<>(CollectionUtil.reduceEvenly(SortMaster.sortByValues(colors), maxColors));
         }
-    }
-
-    public static Image getFromClipboard() {
-        Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-        if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
-            try {
-                java.awt.Image transferData = (java.awt.Image) transferable.getTransferData(DataFlavor.imageFlavor);
-
-                if (!(transferable instanceof RenderedImage)) {
-                    BufferedImage bufferedImage = new BufferedImage(transferData.getWidth(null),
-                            transferData.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-                    Graphics g = bufferedImage.createGraphics();
-                    g.drawImage(transferData, 0, 0, null);
-                    g.dispose();
-
-                    transferData = bufferedImage;
-
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    ImageIO.write((RenderedImage) transferData, "png", out);
-                    out.flush();
-                    ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-                    return new Image(in);
-                }
-            } catch (UnsupportedFlavorException | IOException e) {
-                ExceptionHandler.handle(e);
-            }
-        }
-        return null;
     }
 
     public static Color getColor(PlatformImage platformImage, int x, int y) {

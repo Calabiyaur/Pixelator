@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.input.Clipboard;
+import javafx.scene.input.DataFormat;
 import javafx.stage.Stage;
 
 import com.sun.glass.ui.ClipboardAssistance;
@@ -75,12 +76,15 @@ public class Pixelator extends Application {
     }
 
     private void initClipboardListener() {
-        final Clipboard systemClipboard = Clipboard.getSystemClipboard();
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        if (clipboard.getContent(DataFormat.IMAGE) != null) {
+            clipboardActive.set(true);
+        }
 
         new ClipboardAssistance(com.sun.glass.ui.Clipboard.SYSTEM) {
             @Override
             public void contentChanged() {
-                clipboardActive.set(systemClipboard.hasImage());
+                clipboardActive.set(clipboard.hasImage());
             }
         };
     }
