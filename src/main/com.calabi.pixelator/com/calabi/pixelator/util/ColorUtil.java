@@ -124,10 +124,11 @@ public final class ColorUtil {
      * @return a value between 0.0 and 1.0
      */
     public static double compare(Color c1, Color c2) {
-        return Math.abs(c1.getRed() - c2.getRed())
+        return (Math.abs(c1.getRed() - c2.getRed())
                 + Math.abs(c1.getGreen() - c2.getGreen())
                 + Math.abs(c1.getBlue() - c2.getBlue())
-                / 3;
+                + Math.abs(c1.getOpacity() - c2.getOpacity()))
+                / 4;
     }
 
 }

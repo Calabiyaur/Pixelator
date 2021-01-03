@@ -190,8 +190,9 @@ public final class ShapeMaster {
     }
 
     private static boolean isEqualOrSimilar(Color color, Color otherColor, ToolSettings settings) {
-        return (settings.tolerance == 0 && color.equals(otherColor))
-                || ColorUtil.compare(color, otherColor) * 100 <= settings.tolerance;
+        return settings.tolerance == 0
+                ? color.equals(otherColor)
+                : ColorUtil.compare(color, otherColor) * 100 <= settings.tolerance;
     }
 
 }

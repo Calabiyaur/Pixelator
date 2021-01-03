@@ -671,7 +671,7 @@ public class ImageEditor extends Editor {
         selectionLayer.definePixels(ShapeMaster.getRectanglePoints(
                 new Point(0, 0),
                 new Point(width.get() - 1, height.get() - 1),
-                ToolView.get().getSettings()));
+                ToolView.get().getDefaultSettings()));
     }
 
     public void invertSelection() {

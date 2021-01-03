@@ -127,6 +127,10 @@ public class ToolView extends VBox {
                 tolerance.get());
     }
 
+    public ToolSettings getDefaultSettings() {
+        return new ToolSettings(maxX, maxY, false, false, true, 1, 0, 0);
+    }
+
     private FlowPane createFirstToolLayer(ToggleGroup tg) {
         tools.addAll(List.of(
                 Tools.PEN,
