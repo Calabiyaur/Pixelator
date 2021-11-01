@@ -63,11 +63,15 @@ import com.calabi.pixelator.view.undo.PixelChange;
 
 public class ImageEditor extends Editor {
 
-    private IntegerProperty width = new SimpleIntegerProperty();
-    private IntegerProperty height = new SimpleIntegerProperty();
+    private final IntegerProperty width = new SimpleIntegerProperty();
+    private final IntegerProperty height = new SimpleIntegerProperty();
+    private final BooleanProperty imageAnimated = new SimpleBooleanProperty(false);
+
+    private final ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>();
+    private final BooleanProperty showCrosshair = new SimpleBooleanProperty();
+
     private PixelReader reader;
     private PixelWriter writer;
-    private BooleanProperty imageAnimated = new SimpleBooleanProperty(false);
     private int animationStart;
 
     private PixelChange pixels;
@@ -83,9 +87,6 @@ public class ImageEditor extends Editor {
     private Crosshair crosshair;
     private Crosshair crosshair2;
     private ImageBackground background;
-
-    private ObjectProperty<Point> mousePosition = new SimpleObjectProperty<>();
-    private BooleanProperty showCrosshair = new SimpleBooleanProperty();
 
     public ImageEditor(PixelFile file, ScalableImageView imageView) {
         super(file, imageView);
@@ -194,7 +195,6 @@ public class ImageEditor extends Editor {
         });
 
         getImage().playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> stop()));
-        updateColorCount();
     }
 
     public boolean isShowGrid() {
@@ -881,10 +881,13 @@ public class ImageEditor extends Editor {
     }
 
     public void updateColorCount() {
-        InfoView.setColorCount(ImageUtil.countColors(getImage()));
+        int colorCount = ImageUtil.countColors(getImage());
+        InfoView.setColorCount(colorCount);
         //TODO: Update default palette only if colors changed && default palette is visible
-        ColorView.getPaletteSelection().getDefaultEditor()
-                .updateImage(PaletteMaster.extractPalette(getImage(), Config.PALETTE_MAX_COLORS.getInt()));
+        if (colorCount < Config.PALETTE_MAX_COLORS.getInt()) {
+            ColorView.getPaletteSelection().getDefaultEditor()
+                    .updateImage(PaletteMaster.extractPalette(getImage(), Config.PALETTE_MAX_COLORS.getInt()));
+        }
     }
 
     public ToolLayer getToolLayer() {
