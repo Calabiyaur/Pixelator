@@ -348,7 +348,7 @@ public class MainScene extends Scene {
         WritableImage animation = IWC.get().getCurrentImage();
         for (int i = 0; i < animation.getFrames().length; i++) {
             PlatformImage platformImage = animation.getFrames()[i];
-            WritableImage frame = new WritableImage(((com.sun.prism.Image) platformImage));
+            WritableImage frame = new WritableImage((com.sun.prism.Image) platformImage);
 
             File file = new File(directory.getPath() + File.separator + name + "_" + i + ".png");
             if (!file.exists()) {

@@ -7,13 +7,6 @@ Pixelator is intuitive and easy to use while providing powerful tools that will 
 Absolutely free and open-source.
 
 
-## Build
-
-1. Build with IntelliJ
-2. mvn package
-3. JAR with dependencies can be found at ./target/pixelator-X.X.X.jar
-
-
 ## Installation
 
 1. Download current pixelator.jar
@@ -26,3 +19,11 @@ Double-click pixelator.jar
 Linux:
 
 > java -jar pixelator.jar
+
+
+## Manual Build
+
+1. Add compile options (see vm_options.txt)
+2. Build with IntelliJ
+3. mvn package
+4. JAR with dependencies can be found at ./target/pixelator-X.X.X.jar

@@ -2,7 +2,7 @@ package com.calabi.pixelator.meta;
 
 import javafx.scene.paint.Color;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,19 +28,19 @@ class PixelArrayTest {
 
     @Test
     void testSizes() {
-        Assert.assertEquals(5, matrix.size());
-        Assert.assertEquals(3, matrix.height());
+        Assertions.assertEquals(5, matrix.size());
+        Assertions.assertEquals(3, matrix.height());
     }
 
     @Test
     void testRemoveLines() {
         matrix.remove(2, 2);
-        Assert.assertEquals(4, matrix.size());
-        Assert.assertEquals(3, matrix.height());
+        Assertions.assertEquals(4, matrix.size());
+        Assertions.assertEquals(3, matrix.height());
 
         matrix.remove(0, 2);
-        Assert.assertEquals(3, matrix.size());
-        Assert.assertEquals(2, matrix.height());
+        Assertions.assertEquals(3, matrix.size());
+        Assertions.assertEquals(2, matrix.height());
     }
 
 }

@@ -2,7 +2,7 @@ package com.calabi.pixelator.view;
 
 import java.util.Map;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.calabi.pixelator.view.palette.HashMatrix;
@@ -21,7 +21,7 @@ class HashMatrixTest {
         Map<Integer, String> column = matrix.getColumn(3);
         column.clear();
 
-        Assert.assertEquals("Left", row.get(1));
-        Assert.assertNull(row.get(3));
+        Assertions.assertEquals("Left", row.get(1));
+        Assertions.assertNull(row.get(3));
     }
 }

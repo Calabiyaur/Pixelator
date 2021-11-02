@@ -1,6 +1,6 @@
 package com.calabi.pixelator.util.shape;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.calabi.pixelator.meta.PointArray;
@@ -18,7 +18,7 @@ class EllipseHelperTest {
 
         PointArray ellipse = EllipseHelper.getEllipse(1, 1, 1, 1, 1, 1, true, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-        Assert.assertEquals(String.format("expected = %s, ellipse = %s", expected, ellipse), ellipse, expected);
+        Assertions.assertEquals(expected, ellipse, String.format("expected #= %s, ellipse = %s", expected, ellipse));
     }
 
     @Test
@@ -31,7 +31,7 @@ class EllipseHelperTest {
 
         PointArray ellipse = EllipseHelper.getEllipse(1, 1, 1, 1, 2, 2, true, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-        Assert.assertEquals(String.format("expected = %s, ellipse = %s", expected, ellipse), ellipse, expected);
+        Assertions.assertEquals(expected, ellipse, String.format("expected = %s, ellipse = %s", expected, ellipse));
     }
 
 }

@@ -20,4 +20,3 @@
 --add-opens=javafx.controls/javafx.scene.control.skin=org.apache.commons.lang3
 --add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=org.apache.commons.lang3
 --add-opens=javafx.base/javafx.beans.property=org.apache.commons.lang3
---add-opens=com.calabi.pixelator/com.calabi.pixelator.control.image=org.apache.commons.lang3

@@ -6,11 +6,10 @@ import java.util.Set;
 import javafx.scene.input.KeyCode;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.calabi.pixelator.res.Action;
-
-import static org.junit.Assert.fail;
 
 class ActionManagerTest {
 
@@ -32,7 +31,7 @@ class ActionManagerTest {
             if (!combinations.contains(c)) {
                 combinations.add(c);
             } else {
-                fail(action.name());
+                Assertions.fail(action.name());
             }
         }
     }
