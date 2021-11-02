@@ -6,10 +6,12 @@ import java.awt.Point;
 import java.awt.Robot;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -40,6 +42,7 @@ import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.GridConfig;
 import com.calabi.pixelator.res.GridSelectionConfig;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.res.Theme;
 import com.calabi.pixelator.ui.control.BasicMenuBar;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.ColorUtil;
@@ -64,7 +67,7 @@ import static com.calabi.pixelator.res.Action.*;
 
 public class MainScene extends Scene {
 
-    private static final List<String> styleSheets = new ArrayList<>();
+    private static final ObservableList<String> styleSheets = FXCollections.observableArrayList();
     private final PaletteSelection paletteSelection;
 
     public MainScene() {
@@ -77,8 +80,8 @@ public class MainScene extends Scene {
         double height = Config.SCREEN_HEIGHT.getDouble();
         root.setPrefSize(width, height);
 
-        styleSheets.add(getClass().getResource("/style/bright-theme.css").toExternalForm());
-        getStylesheets().addAll(getStyle());
+        registerStyle(getStylesheets());
+        setTheme(Theme.valueOf(Config.THEME.getString()));
 
         createKeyListener();
         IWC.get().setOnKeyPressed(this.getOnKeyPressed());
@@ -123,6 +126,14 @@ public class MainScene extends Scene {
                 getEditor().onKeyReleased(e);
             }
         });
+    }
+
+    public static void setTheme(Theme theme) {
+        styleSheets.setAll(MainScene.class.getResource(theme.getPath()).toExternalForm());
+    }
+
+    public static void registerStyle(ObservableList<String> style) {
+        styleSheets.addListener((ListChangeListener<String>) c -> style.setAll(c.getList()));
     }
 
     public static List<String> getStyle() {

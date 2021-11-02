@@ -7,12 +7,16 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.res.Theme;
+import com.calabi.pixelator.start.MainScene;
 import com.calabi.pixelator.ui.control.BasicColorField;
+import com.calabi.pixelator.ui.control.BasicComboBox;
 import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.editor.window.ImageWindow;
 
 public class SettingsDialog extends BasicDialog {
 
+    private final BasicComboBox<Theme> themeField;
     private final BasicColorField backgroundColorField;
     private final BasicColorField borderColorField;
     private final BasicColorField gridColorField;
@@ -27,6 +31,11 @@ public class SettingsDialog extends BasicDialog {
         addContent(content, 0, 0);
 
         // CONFIGURABLE SETTINGS:
+
+        // Theme
+        Theme theme = Theme.valueOf(Config.THEME.getString());
+        themeField = new BasicComboBox<>("Theme", Theme.values(), theme);
+        themeField.setValue(theme);
 
         // Image background color
         Color backgroundColor = Color.valueOf(Config.IMAGE_BACKGROUND_COLOR.getString());
@@ -43,7 +52,7 @@ public class SettingsDialog extends BasicDialog {
         gridColorField = new BasicColorField("Grid color", gridColor);
         gridColorField.setValue(gridColor);
 
-        // Grid color
+        // Crosshair color
         Color crosshairColor = Color.valueOf(Config.CROSSHAIR_COLOR.getString());
         crosshairColorField = new BasicColorField("Crosshair color", crosshairColor);
         crosshairColorField.setValue(crosshairColor);
@@ -51,11 +60,13 @@ public class SettingsDialog extends BasicDialog {
         // LAYOUT:
 
         // Add input fields to content
-        content.addRow(0, backgroundColorField.getFrontLabel(), backgroundColorField.getControlWrapper());
-        content.addRow(1, borderColorField.getFrontLabel(), borderColorField.getControlWrapper());
-        content.add(new Separator(), 0, 2, 3, 1);
-        content.addRow(3, gridColorField.getFrontLabel(), gridColorField.getControlWrapper());
-        content.addRow(4, crosshairColorField.getFrontLabel(), crosshairColorField.getControlWrapper());
+        content.addRow(0, themeField.getFrontLabel(), themeField.getControlWrapper());
+        content.add(new Separator(), 0, 1, 3, 1);
+        content.addRow(2, backgroundColorField.getFrontLabel(), backgroundColorField.getControlWrapper());
+        content.addRow(3, borderColorField.getFrontLabel(), borderColorField.getControlWrapper());
+        content.add(new Separator(), 0, 4, 3, 1);
+        content.addRow(5, gridColorField.getFrontLabel(), gridColorField.getControlWrapper());
+        content.addRow(6, crosshairColorField.getFrontLabel(), crosshairColorField.getControlWrapper());
 
         // Layout separators
         for (Node child : content.getChildren()) {
@@ -73,16 +84,21 @@ public class SettingsDialog extends BasicDialog {
 
     private void apply() {
         // Get values from input fields
+        Theme theme = themeField.getValue();
         Color color = backgroundColorField.getValue();
         Color borderColor = borderColorField.getValue();
         Color gridColor = gridColorField.getValue();
         Color crosshairColor = crosshairColorField.getValue();
 
         // Update global config
+        Config.THEME.putString(theme.name());
         Config.IMAGE_BACKGROUND_COLOR.putString(color.toString());
         Config.IMAGE_BORDER_COLOR.putString(borderColor.toString());
         Config.GRID_COLOR.putString(gridColor.toString());
         Config.CROSSHAIR_COLOR.putString(crosshairColor.toString());
+
+        // Update application
+        MainScene.setTheme(theme);
 
         // Update open windows
         for (ImageWindow imageWindow : IWC.get().imageWindows()) {

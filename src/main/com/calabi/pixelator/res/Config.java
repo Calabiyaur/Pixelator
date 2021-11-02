@@ -43,6 +43,7 @@ public enum Config {
     SCREEN_X(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
     SCREEN_Y(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
     STRETCH_KEEP_RATIO(ConfigMode.GLOBAL, ConfigType.BOOLEAN, true),
+    THEME(ConfigMode.GLOBAL, ConfigType.STRING, Theme.BRIGHT.name()),
     THICKNESS(ConfigMode.GLOBAL, ConfigType.INT, 1),
     TOLERANCE(ConfigMode.GLOBAL, ConfigType.INT, 0),
     TOOL(ConfigMode.GLOBAL, ConfigType.INT, 0),
