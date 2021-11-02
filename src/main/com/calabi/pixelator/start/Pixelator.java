@@ -43,7 +43,7 @@ public class Pixelator extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        String title = TITLE + " " + BuildInfo.VERSION;
+        String title = TITLE + " " + BuildInfo.getVersion();
         Logger.log("Started " + title + "!");
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> ExceptionHandler.handle(e));
         initClipboardListener();
