@@ -10,6 +10,7 @@ public enum Action {
 
     ADD_FRAME("Add frame", true, false, false, KeyCode.F),
     BACKGROUND("Show background", true, true, false, KeyCode.B),
+    CHANGE_COLOR("Change color..."),
     CHANGE_PALETTE("Change palette..."),
     CHANGE_PALETTE_PREVIEW("Change preview..."),
     CLOSE("Close", true, false, false, KeyCode.F4),

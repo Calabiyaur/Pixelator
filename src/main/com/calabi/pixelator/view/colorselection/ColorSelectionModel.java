@@ -6,18 +6,16 @@ import java.util.Map;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.control.Skin;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.ui.control.BasicDoubleField;
-import com.calabi.pixelator.ui.control.BasicNumberField;
-import com.calabi.pixelator.ui.control.CustomSliderSkin;
 import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.ui.control.BasicNumberField;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.MapUtil;
+import com.calabi.pixelator.view.colorselection.control.CustomSlider;
+import com.calabi.pixelator.view.colorselection.control.CustomTextField;
 
 import static com.calabi.pixelator.view.colorselection.ColorDimension.ALPHA;
 import static com.calabi.pixelator.view.colorselection.ColorDimension.BLUE;
@@ -267,51 +265,6 @@ final class ColorSelectionModel {
 
     public Slider getAlphaSlider() {
         return alphaSlider;
-    }
-
-    private static class CustomTextField extends BasicDoubleField {
-
-        private DoubleProperty target;
-        private ObjectProperty<Double> targetAsObject;
-
-        public CustomTextField() {
-            super("Temp", 0.);
-            setPrecision(0);
-        }
-
-        public DoubleProperty getTarget() {
-            return target;
-        }
-
-        public void setTarget(DoubleProperty target) {
-            this.target = target;
-        }
-
-        public ObjectProperty<Double> getTargetAsObject() {
-            return targetAsObject;
-        }
-
-        public void setTargetAsObject(ObjectProperty<Double> targetAsObject) {
-            this.targetAsObject = targetAsObject;
-        }
-    }
-
-    private static class CustomSlider extends Slider {
-
-        private DoubleProperty target;
-
-        @Override
-        protected Skin<?> createDefaultSkin() {
-            return new CustomSliderSkin(this);
-        }
-
-        public DoubleProperty getTarget() {
-            return target;
-        }
-
-        public void setTarget(DoubleProperty target) {
-            this.target = target;
-        }
     }
 
 }

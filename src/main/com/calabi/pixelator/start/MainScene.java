@@ -49,6 +49,7 @@ import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
+import com.calabi.pixelator.view.dialog.ChangeColorDialog;
 import com.calabi.pixelator.view.dialog.ChangePaletteDialog;
 import com.calabi.pixelator.view.dialog.FpsDialog;
 import com.calabi.pixelator.view.dialog.MoveImageDialog;
@@ -201,6 +202,8 @@ public class MainScene extends Scene {
         imageMenu.addItem(ROTATE_COUNTER_CLOCKWISE, e -> getEditor().rotateCounterClockwise(),
                 IWC.get().imageSelectedProperty());
         imageMenu.addItem(ROTATE, e -> rotateAction(), IWC.get().imageSelectedProperty());
+        imageMenu.addSeparator();
+        imageMenu.addItem(CHANGE_COLOR, e -> changeColor(), IWC.get().imageSelectedProperty());
         imageMenu.addItem(INVERT, e -> getEditor().invert(), IWC.get().imageSelectedProperty());
         imageMenu.addItem(INVERT_WITHIN_PALETTE, e -> getEditor().invertWithinPalette(), IWC.get().imageSelectedProperty());
 
@@ -445,6 +448,15 @@ public class MainScene extends Scene {
             getEditor().rotate(degrees);
             dialog.close();
             Config.ROTATE_DEGREES.putInt(degrees);
+        });
+        dialog.showAndFocus();
+    }
+
+    private void changeColor() {
+        ChangeColorDialog dialog = new ChangeColorDialog(IWC.get().getCurrentImage());
+        dialog.setOnOk(e -> {
+            getEditor().updateImage(dialog.getImage());
+            dialog.close();
         });
         dialog.showAndFocus();
     }
