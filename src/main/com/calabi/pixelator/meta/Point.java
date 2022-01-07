@@ -39,22 +39,26 @@ public class Point {
         return Math.max(Math.abs(x - other.x), Math.abs(y - other.y));
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "(" + x + " | " + y + ")";
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         int result = 31;
         result = result + 31 * x;
         result = result + 31 * y;
         return result;
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (!(obj instanceof Point)) {
             return false;
         }
         Point p = (Point) obj;
         return x == p.x && y == p.y;
     }
+
 }

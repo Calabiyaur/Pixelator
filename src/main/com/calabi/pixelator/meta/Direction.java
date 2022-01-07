@@ -14,7 +14,7 @@ public enum Direction {
     SOUTH(180d),
     SOUTH_EAST(135d);
 
-    private Double rotate;
+    private final Double rotate;
 
     Direction(Double rotate) {
         this.rotate = rotate;

@@ -6,7 +6,7 @@ import com.calabi.pixelator.view.ToolView;
 
 public class Line extends ShapeTool {
 
-    private static Line me = new Line();
+    private static final Line me = new Line();
 
     private Line() {
         secondary = PickSelect.getMe();

@@ -21,8 +21,8 @@ import com.calabi.pixelator.util.ReflectionUtil;
 
 public class PixelatedImageView extends ImageView { //FIXME: Horizontally, pixels vary in size (e.g. 2, 2, 2, 3, 1, 2, ...)
 
-    private IntegerProperty width = new SimpleIntegerProperty();
-    private IntegerProperty height = new SimpleIntegerProperty();
+    private final IntegerProperty width = new SimpleIntegerProperty();
+    private final IntegerProperty height = new SimpleIntegerProperty();
 
     public PixelatedImageView(javafx.scene.image.Image image) {
         super(image);

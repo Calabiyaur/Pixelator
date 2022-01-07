@@ -276,11 +276,13 @@ public abstract class Tool {
         return stillSincePress;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         String s = this.getClass().getSimpleName() + " (" + secondary.getClass().getSimpleName() + ") ";
         if (getUseImage() != null) {
             s += getUseImage().name();
         }
         return s;
     }
+
 }

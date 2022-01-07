@@ -33,7 +33,7 @@ import com.calabi.pixelator.view.editor.IWC;
 public class PaletteSelection extends BorderPane {
 
     private final PaletteSelectionModel model;
-    private BooleanProperty defaultPaletteSelected = new SimpleBooleanProperty(true);
+    private final BooleanProperty defaultPaletteSelected = new SimpleBooleanProperty(true);
 
     public PaletteSelection() {
         model = new PaletteSelectionModel();

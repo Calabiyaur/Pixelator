@@ -6,7 +6,7 @@ import com.calabi.pixelator.view.ToolView;
 
 public class Rectangle extends ShapeTool {
 
-    private static Rectangle me = new Rectangle();
+    private static final Rectangle me = new Rectangle();
 
     private Rectangle() {
     }

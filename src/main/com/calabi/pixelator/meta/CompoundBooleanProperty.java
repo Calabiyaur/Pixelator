@@ -13,10 +13,10 @@ import javafx.collections.ObservableSet;
  */
 public class CompoundBooleanProperty extends SimpleBooleanProperty {
 
-    private ObservableSet<ObservableBooleanValue> children = FXCollections.observableSet();
-    private IntegerProperty trueAmount = new SimpleIntegerProperty(0);
+    private final ObservableSet<ObservableBooleanValue> children = FXCollections.observableSet();
+    private final IntegerProperty trueAmount = new SimpleIntegerProperty(0);
 
-    private ChangeListener<Boolean> childValueListener = (ov, o, n) -> {
+    private final ChangeListener<Boolean> childValueListener = (ov, o, n) -> {
         if (n) {
             trueAmount.set(trueAmount.get() + 1);
         } else {

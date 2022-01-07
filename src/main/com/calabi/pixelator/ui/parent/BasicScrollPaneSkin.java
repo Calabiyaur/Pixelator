@@ -51,7 +51,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
     private ScrollBar hsb;
     private ScrollBar vsb;
     private final InvalidationListener nodeListener = new InvalidationListener() {
-        @Override public void invalidated(Observable valueModel) {
+        @Override
+        public void invalidated(Observable valueModel) {
             if (!nodeSizeInvalid) {
                 final Bounds scrollNodeBounds = scrollNode.getLayoutBounds();
                 final double scrollNodeWidth = scrollNodeBounds.getWidth();
@@ -69,7 +70,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         }
     };
     private final ChangeListener<Bounds> boundsChangeListener = new ChangeListener<>() {
-        @Override public void changed(ObservableValue<? extends Bounds> observable, Bounds oldBounds, Bounds newBounds) {
+        @Override
+        public void changed(ObservableValue<? extends Bounds> observable, Bounds oldBounds, Bounds newBounds) {
 
             double oldHeight = oldBounds.getHeight();
             double newHeight = newBounds.getHeight();
@@ -372,7 +374,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         scrollNode = control.getContent();
 
         viewRect = new StackPane() {
-            @Override protected void layoutChildren() {
+            @Override
+            protected void layoutChildren() {
                 viewContent.resize(getWidth(), getHeight());
                 updatePosX();
                 updatePosY();
@@ -400,7 +403,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         vsb.addEventFilter(MouseEvent.MOUSE_PRESSED, barHandler);
 
         viewContent = new StackPane() {
-            @Override public void requestLayout() {
+            @Override
+            public void requestLayout() {
                 // if scrollNode requested layout, will want to recompute
                 nodeSizeInvalid = true;
 
@@ -412,7 +416,8 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
             }
 
             @SuppressWarnings(value = "deprecation")
-            @Override protected void layoutChildren() {
+            @Override
+            protected void layoutChildren() {
                 if (nodeSizeInvalid) {
                     computeScrollNodeSize(getWidth(), getHeight());
                 }

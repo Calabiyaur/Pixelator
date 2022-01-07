@@ -17,7 +17,8 @@ public class SaveRequestDialog extends BasicDialog {
         setOkText("Yes");
     }
 
-    @Override public void focus() {
+    @Override
+    public void focus() {
 
     }
 

@@ -26,17 +26,17 @@ import com.calabi.pixelator.view.tool.ToolManager;
 public class IWC extends Pane {
 
     private static IWC instance;
-    private BooleanProperty imageSelected = new SimpleBooleanProperty(false);
-    private BooleanProperty imageAnimated = new SimpleBooleanProperty(false);
-    private ObjectProperty<ImageWindow> currentWindow;
-    private BooleanProperty showGrid = new SimpleBooleanProperty(false);
-    private BooleanProperty showCrosshair = new SimpleBooleanProperty(false);
-    private BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
-    private BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
-    private BooleanProperty selectionActive = new SimpleBooleanProperty(false);
-    private BooleanProperty dirty = new SimpleBooleanProperty(false);
-    private CompoundBooleanProperty overallDirty = new CompoundBooleanProperty(false);
-    private BooleanProperty showBackground = new SimpleBooleanProperty(false);
+    private final BooleanProperty imageSelected = new SimpleBooleanProperty(false);
+    private final BooleanProperty imageAnimated = new SimpleBooleanProperty(false);
+    private final ObjectProperty<ImageWindow> currentWindow;
+    private final BooleanProperty showGrid = new SimpleBooleanProperty(false);
+    private final BooleanProperty showCrosshair = new SimpleBooleanProperty(false);
+    private final BooleanProperty undoEnabled = new SimpleBooleanProperty(false);
+    private final BooleanProperty redoEnabled = new SimpleBooleanProperty(false);
+    private final BooleanProperty selectionActive = new SimpleBooleanProperty(false);
+    private final BooleanProperty dirty = new SimpleBooleanProperty(false);
+    private final CompoundBooleanProperty overallDirty = new CompoundBooleanProperty(false);
+    private final BooleanProperty showBackground = new SimpleBooleanProperty(false);
 
     ChangeListener<? super Number> frameChangeListener = (ov, o, n)
             -> ToolView.get().setFrameIndex(getCurrentImage().getIndex(), getCurrentImage().getFrameCount());

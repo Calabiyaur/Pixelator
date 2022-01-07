@@ -28,7 +28,8 @@ public class StretchDialog extends BasicDialog {
         keepRatio.setValue(Config.STRETCH_KEEP_RATIO.getBoolean());
     }
 
-    @Override public void focus() {
+    @Override
+    public void focus() {
         widthField.focus();
     }
 

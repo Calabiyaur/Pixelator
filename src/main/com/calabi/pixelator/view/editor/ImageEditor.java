@@ -79,14 +79,14 @@ public class ImageEditor extends Editor {
     private boolean updateCursor;
 
     private ToolLayer toolLayer;
-    private SquareStack squareStack;
+    private final SquareStack squareStack;
     private SelectionLayer selectionLayer;
-    private OutlineRect outlineRect;
-    private OutlineShape outlineShape;
-    private Grid grid;
-    private Crosshair crosshair;
-    private Crosshair crosshair2;
-    private ImageBackground background;
+    private final OutlineRect outlineRect;
+    private final OutlineShape outlineShape;
+    private final Grid grid;
+    private final Crosshair crosshair;
+    private final Crosshair crosshair2;
+    private final ImageBackground background;
 
     public ImageEditor(PixelFile file, ScalableImageView imageView) {
         super(file, imageView);

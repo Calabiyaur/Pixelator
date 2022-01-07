@@ -6,7 +6,7 @@ import com.calabi.pixelator.view.ToolView;
 
 public class Ellipse extends ShapeTool {
 
-    private static Ellipse me = new Ellipse();
+    private static final Ellipse me = new Ellipse();
 
     private Ellipse() {
     }

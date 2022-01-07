@@ -14,8 +14,8 @@ import com.calabi.pixelator.res.Action;
 
 public class ActionManager {
 
-    private static Map<Action, MenuItem> controlMap = new HashMap<>();
-    private static Map<Action, EventHandler<ActionEvent>> eventMap = new HashMap<>();
+    private static final Map<Action, MenuItem> controlMap = new HashMap<>();
+    private static final Map<Action, EventHandler<ActionEvent>> eventMap = new HashMap<>();
 
     private ActionManager() {
     }

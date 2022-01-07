@@ -9,7 +9,7 @@ import com.calabi.pixelator.view.InfoView;
 
 public class Select extends SelectionTool {
 
-    private static Select me = new Select();
+    private static final Select me = new Select();
 
     Select() {
         super(
@@ -23,7 +23,8 @@ public class Select extends SelectionTool {
         return me;
     }
 
-    @Override public void pressPrimary() {
+    @Override
+    public void pressPrimary() {
         if (type.get() == SelectType.SELECT) {
             getSelectionLayer().setStart(getMouse());
         } else {
@@ -35,7 +36,8 @@ public class Select extends SelectionTool {
         getSelectionLayer().playRect(false);
     }
 
-    @Override public void dragPrimary() {
+    @Override
+    public void dragPrimary() {
         Point start = getSelectionLayer().getStart();
         if (start != null) {
             getSelectionLayer().setEdges(start, getMouse());
@@ -43,11 +45,14 @@ public class Select extends SelectionTool {
         }
     }
 
-    @Override public void releasePrimary() {
+    @Override
+    public void releasePrimary() {
         Point start = getSelectionLayer().getStart();
         if (start != null) {
             PointArray pixels = getSelectionLayer().getPixels().toPointArray(); //TODO: This line is normally not necessary
-            PointArray rectanglePoints = RectangleHelper.getRectanglePoints(start, getMouse(), true, getSelectionLayer().getImageWidth(), getSelectionLayer().getImageHeight());
+            PointArray rectanglePoints = RectangleHelper
+                    .getRectanglePoints(start, getMouse(), true, getSelectionLayer().getImageWidth(),
+                            getSelectionLayer().getImageHeight());
             switch(type.get()) {
                 case ADD -> pixels.add(rectanglePoints);
                 case SUBTRACT -> pixels.subtract(rectanglePoints);

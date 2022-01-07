@@ -22,9 +22,9 @@ import com.calabi.pixelator.util.FileUtil;
 
 public class Files {
 
-    private static Files instance = new Files();
-    private static Map<Extension, PixelFileWriter> writers = new HashMap<>();
-    private static Map<Extension, PixelFileReader> readers = new HashMap<>();
+    private static final Files instance = new Files();
+    private static final Map<Extension, PixelFileWriter> writers = new HashMap<>();
+    private static final Map<Extension, PixelFileReader> readers = new HashMap<>();
 
     static {
         PIXImageWriter writer = new PIXImageWriter();

@@ -24,10 +24,12 @@ public class CustomSliderSkin extends SkinBase<Slider> {
      *                                                                         *
      **************************************************************************/
 
-    /** Track if slider is vertical/horizontal and cause re layout */
+    /**
+     * Track if slider is vertical/horizontal and cause re layout
+     */
 //    private boolean horizontal;
     private NumberAxis tickLine = null;
-    private double trackToTickGap = 2;
+    private final double trackToTickGap = 2;
 
     private boolean showTickMarks;
     private double thumbWidth;
@@ -52,11 +54,15 @@ public class CustomSliderSkin extends SkinBase<Slider> {
     private final SliderBehavior behavior;
 
     StringConverter<Number> stringConverterWrapper = new StringConverter<Number>() {
-        Slider slider = getSkinnable();
-        @Override public String toString(Number object) {
-            return(object != null) ? slider.getLabelFormatter().toString(object.doubleValue()) : "";
+        final Slider slider = getSkinnable();
+
+        @Override
+        public String toString(Number object) {
+            return (object != null) ? slider.getLabelFormatter().toString(object.doubleValue()) : "";
         }
-        @Override public Number fromString(String string) {
+
+        @Override
+        public Number fromString(String string) {
             return slider.getLabelFormatter().fromString(string);
         }
     };
@@ -143,8 +149,11 @@ public class CustomSliderSkin extends SkinBase<Slider> {
      *                                                                         *
      **************************************************************************/
 
-    /** {@inheritDoc} */
-    @Override public void dispose() {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
         super.dispose();
 
         if (behavior != null) {
@@ -152,8 +161,11 @@ public class CustomSliderSkin extends SkinBase<Slider> {
         }
     }
 
-    /** {@inheritDoc} */
-    @Override protected void layoutChildren(final double x, final double y,
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void layoutChildren(final double x, final double y,
             final double w, final double h) {
         // calculate the available space
         // resize thumb to preferred size
@@ -238,18 +250,26 @@ public class CustomSliderSkin extends SkinBase<Slider> {
         }
     }
 
-    /** {@inheritDoc} */
-    @Override protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset,
+            double leftInset) {
         final Slider s = getSkinnable();
         if (s.getOrientation() == Orientation.HORIZONTAL) {
             return (leftInset + minTrackLength() + thumb.minWidth(-1) + rightInset);
         } else {
-            return(leftInset + thumb.prefWidth(-1) + rightInset);
+            return (leftInset + thumb.prefWidth(-1) + rightInset);
         }
     }
 
-    /** {@inheritDoc} */
-    @Override protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset,
+            double leftInset) {
         final Slider s = getSkinnable();
         if (s.getOrientation() == Orientation.HORIZONTAL) {
             double axisHeight = showTickMarks ? (tickLine.prefHeight(-1) + trackToTickGap) : 0;
@@ -259,11 +279,15 @@ public class CustomSliderSkin extends SkinBase<Slider> {
         }
     }
 
-    /** {@inheritDoc} */
-    @Override protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected double computePrefWidth(double height, double topInset, double rightInset, double bottomInset,
+            double leftInset) {
         final Slider s = getSkinnable();
         if (s.getOrientation() == Orientation.HORIZONTAL) {
-            if(showTickMarks) {
+            if (showTickMarks) {
                 return Math.max(140, tickLine.prefWidth(-1));
             } else {
                 return 140;
@@ -274,14 +298,18 @@ public class CustomSliderSkin extends SkinBase<Slider> {
         }
     }
 
-    /** {@inheritDoc} */
-    @Override protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected double computePrefHeight(double width, double topInset, double rightInset, double bottomInset,
+            double leftInset) {
         final Slider s = getSkinnable();
         if (s.getOrientation() == Orientation.HORIZONTAL) {
             return topInset + Math.max(thumb.prefHeight(-1), track.prefHeight(-1)) +
-                    ((showTickMarks) ? (trackToTickGap+tickLine.prefHeight(-1)) : 0)  + bottomInset;
+                    ((showTickMarks) ? (trackToTickGap + tickLine.prefHeight(-1)) : 0) + bottomInset;
         } else {
-            if(showTickMarks) {
+            if (showTickMarks) {
                 return Math.max(140, tickLine.prefHeight(-1));
             } else {
                 return 140;
@@ -289,8 +317,12 @@ public class CustomSliderSkin extends SkinBase<Slider> {
         }
     }
 
-    /** {@inheritDoc} */
-    @Override protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset,
+            double leftInset) {
         if (getSkinnable().getOrientation() == Orientation.HORIZONTAL) {
             return Double.MAX_VALUE;
         } else {
@@ -298,8 +330,12 @@ public class CustomSliderSkin extends SkinBase<Slider> {
         }
     }
 
-    /** {@inheritDoc} */
-    @Override protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset,
+            double leftInset) {
         if (getSkinnable().getOrientation() == Orientation.HORIZONTAL) {
             return getSkinnable().prefHeight(width);
         } else {
@@ -440,7 +476,8 @@ public class CustomSliderSkin extends SkinBase<Slider> {
                     setCycleDuration(Duration.millis(200));
                 }
 
-                @Override protected void interpolate(double frac) {
+                @Override
+                protected void interpolate(double frac) {
                     if (!Double.isNaN(startX)) {
                         thumb.setLayoutX(startX + frac * (endX - startX));
                         thumbAura.setLayoutX(startX + frac * (endX - startX));

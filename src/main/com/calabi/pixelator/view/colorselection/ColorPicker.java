@@ -32,10 +32,10 @@ import com.calabi.pixelator.util.NumberUtil;
 class ColorPicker extends StackPane {
 
     private final ObjectProperty<Color> colorProperty = new SimpleObjectProperty<>();
-    private DoubleProperty hue = new SimpleDoubleProperty(0.0); // in degrees: 0.0 - 360.0
-    private DoubleProperty sat = new SimpleDoubleProperty(0.0);
-    private DoubleProperty bright = new SimpleDoubleProperty(0.0);
-    private DoubleProperty alpha = new SimpleDoubleProperty(1.0);
+    private final DoubleProperty hue = new SimpleDoubleProperty(0.0); // in degrees: 0.0 - 360.0
+    private final DoubleProperty sat = new SimpleDoubleProperty(0.0);
+    private final DoubleProperty bright = new SimpleDoubleProperty(0.0);
+    private final DoubleProperty alpha = new SimpleDoubleProperty(1.0);
 
     public ColorPicker() {
         // Color rectangle
@@ -76,7 +76,8 @@ class ColorPicker extends StackPane {
                 bind(hue);
             }
 
-            @Override protected Background computeValue() {
+            @Override
+            protected Background computeValue() {
                 return new Background(new BackgroundFill(
                         Color.hsb(hue.getValue(), 1.0, 1.0), CornerRadii.EMPTY, Insets.EMPTY));
             }

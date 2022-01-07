@@ -4,7 +4,7 @@ import javafx.scene.input.MouseButton;
 
 public class Drag extends Tool {
 
-    private static Drag me = new Drag();
+    private static final Drag me = new Drag();
 
     private Drag() {
     }
@@ -13,7 +13,8 @@ public class Drag extends Tool {
         return me;
     }
 
-    @Override public void pressPrimary() {
+    @Override
+    public void pressPrimary() {
         if (MouseButton.SECONDARY.equals(getMouseButton())) {
             getEditor().paintPixels(getSelectionLayer().getPixelsTransformed());
             getEditor().register();
@@ -24,11 +25,14 @@ public class Drag extends Tool {
         getSelectionLayer().playBorder(false);
     }
 
-    @Override public void dragPrimary() {
+    @Override
+    public void dragPrimary() {
         getSelectionLayer().dragTo(getMouse());
     }
 
-    @Override public void releasePrimary() {
+    @Override
+    public void releasePrimary() {
         getSelectionLayer().playBorder(true);
     }
+
 }

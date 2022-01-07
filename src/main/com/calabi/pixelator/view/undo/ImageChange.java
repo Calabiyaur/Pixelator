@@ -8,9 +8,9 @@ import com.calabi.pixelator.ui.image.WritableImage;
 
 public class ImageChange implements Undoable {
 
-    private PixelatedImageView imageView;
-    private WritableImage previousImage;
-    private WritableImage image;
+    private final PixelatedImageView imageView;
+    private final WritableImage previousImage;
+    private final WritableImage image;
 
     public ImageChange(PixelatedImageView imageView, WritableImage previousImage, WritableImage image) {
         this.imageView = imageView;

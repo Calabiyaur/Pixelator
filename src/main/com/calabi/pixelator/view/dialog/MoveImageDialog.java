@@ -5,8 +5,8 @@ import com.calabi.pixelator.ui.control.number.IntPattern;
 
 public class MoveImageDialog extends BasicDialog {
 
-    private BasicIntegerField hField;
-    private BasicIntegerField vField;
+    private final BasicIntegerField hField;
+    private final BasicIntegerField vField;
 
     public MoveImageDialog() {
         setTitle("Move the Image");
@@ -27,7 +27,9 @@ public class MoveImageDialog extends BasicDialog {
         return vField.getValue();
     }
 
-    @Override public void focus() {
+    @Override
+    public void focus() {
         hField.focus();
     }
+
 }

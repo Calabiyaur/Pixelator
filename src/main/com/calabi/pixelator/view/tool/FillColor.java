@@ -2,7 +2,7 @@ package com.calabi.pixelator.view.tool;
 
 public class FillColor extends Tool {
 
-    private static FillColor me = new FillColor();
+    private static final FillColor me = new FillColor();
 
     private FillColor() {
         secondary = Pick.getMe();
@@ -12,16 +12,19 @@ public class FillColor extends Tool {
         return me;
     }
 
-    @Override public void pressPrimary() {
+    @Override
+    public void pressPrimary() {
         getEditor().fillColor(getMouse());
         getEditor().register();
     }
 
-    @Override public void dragPrimary() {
+    @Override
+    public void dragPrimary() {
         // Do nothing.
     }
 
-    @Override public void releasePrimary() {
+    @Override
+    public void releasePrimary() {
         // Do nothing.
     }
 

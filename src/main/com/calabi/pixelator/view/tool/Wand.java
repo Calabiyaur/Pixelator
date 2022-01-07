@@ -5,7 +5,7 @@ import com.calabi.pixelator.res.Images;
 
 public class Wand extends SelectionTool {
 
-    private static Wand me = new Wand();
+    private static final Wand me = new Wand();
 
     private Wand() {
         super(
@@ -19,7 +19,8 @@ public class Wand extends SelectionTool {
         return me;
     }
 
-    @Override public void pressPrimary() {
+    @Override
+    public void pressPrimary() {
         PointArray pixels = getSelectionLayer().getPixels().toPointArray(); //TODO: This line is normally not necessary
         PointArray selectFillPoints = getEditor().getSelectFill(getMouse());
         if (selectFillPoints == null) {
@@ -33,11 +34,13 @@ public class Wand extends SelectionTool {
         getSelectionLayer().definePixels(pixels);
     }
 
-    @Override public void dragPrimary() {
+    @Override
+    public void dragPrimary() {
         // Do nothing.
     }
 
-    @Override public void releasePrimary() {
+    @Override
+    public void releasePrimary() {
         // Do nothing.
     }
 

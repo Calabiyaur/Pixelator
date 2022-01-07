@@ -40,7 +40,8 @@ public class ResizeDialog extends BasicDialog {
         keepRatio.setValue(Config.RESIZE_KEEP_RATIO.getBoolean());
     }
 
-    @Override public void focus() {
+    @Override
+    public void focus() {
         widthField.focus();
     }
 

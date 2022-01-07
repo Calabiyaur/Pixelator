@@ -180,7 +180,7 @@ public class HashMatrix<T> implements Matrix<T> {
 
     private class MatrixEntry<V> implements Map.Entry<Integer, V> {
 
-        private Integer key;
+        private final Integer key;
         private V value;
 
         public MatrixEntry(Integer key, V value) {

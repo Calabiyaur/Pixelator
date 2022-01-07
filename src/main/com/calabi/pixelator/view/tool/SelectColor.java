@@ -5,7 +5,7 @@ import com.calabi.pixelator.res.Images;
 
 public class SelectColor extends SelectionTool {
 
-    private static SelectColor me = new SelectColor();
+    private static final SelectColor me = new SelectColor();
 
     private SelectColor() {
         super(
@@ -19,7 +19,8 @@ public class SelectColor extends SelectionTool {
         return me;
     }
 
-    @Override public void pressPrimary() {
+    @Override
+    public void pressPrimary() {
         PointArray pixels = getSelectionLayer().getPixels().toPointArray(); //TODO: This line is normally not necessary
         PointArray selectColorPoints = getEditor().getSelectColor(getMouse());
         if (selectColorPoints == null) {
@@ -33,11 +34,13 @@ public class SelectColor extends SelectionTool {
         getSelectionLayer().definePixels(pixels);
     }
 
-    @Override public void dragPrimary() {
+    @Override
+    public void dragPrimary() {
         // Do nothing.
     }
 
-    @Override public void releasePrimary() {
+    @Override
+    public void releasePrimary() {
         // Do nothing.
     }
 

@@ -46,9 +46,9 @@ public enum Category {
             }
     );
 
-    private Config config;
-    private List<FileChooser.ExtensionFilter> filtersToSave;
-    private List<FileChooser.ExtensionFilter> filtersToOpen;
+    private final Config config;
+    private final List<FileChooser.ExtensionFilter> filtersToSave;
+    private final List<FileChooser.ExtensionFilter> filtersToOpen;
 
     Category(Config config, Filter[] filtersToSave, Filter[] filtersToOpen) {
         this.config = config;

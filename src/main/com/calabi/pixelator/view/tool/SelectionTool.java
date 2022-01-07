@@ -41,17 +41,20 @@ public abstract class SelectionTool extends Tool {
         };
     }
 
-    @Override public final void keyPressPrimary(KeyCode code) {
+    @Override
+    public final void keyPressPrimary(KeyCode code) {
         type.set(getType(code, false));
         updateUseImage();
     }
 
-    @Override public final void keyReleasePrimary(KeyCode code) {
+    @Override
+    public final void keyReleasePrimary(KeyCode code) {
         type.set(getType(code, true));
         updateUseImage();
     }
 
-    @Override protected final boolean isFlexible() {
+    @Override
+    protected final boolean isFlexible() {
         return type.get() == SelectType.SELECT;
     }
 
@@ -67,7 +70,8 @@ public abstract class SelectionTool extends Tool {
         return type;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return super.toString() + ", type = " + type.get().name();
     }
 
@@ -76,4 +80,5 @@ public abstract class SelectionTool extends Tool {
         ADD,
         SUBTRACT
     }
+
 }

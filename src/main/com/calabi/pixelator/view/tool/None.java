@@ -2,7 +2,7 @@ package com.calabi.pixelator.view.tool;
 
 public class None extends Tool {
 
-    private static None me = new None();
+    private static final None me = new None();
 
     private None() {
     }
@@ -11,15 +11,18 @@ public class None extends Tool {
         return me;
     }
 
-    @Override public void pressPrimary() {
+    @Override
+    public void pressPrimary() {
         // Do nothing.
     }
 
-    @Override public void dragPrimary() {
+    @Override
+    public void dragPrimary() {
         // Do nothing.
     }
 
-    @Override public void releasePrimary() {
+    @Override
+    public void releasePrimary() {
         // Do nothing.
     }
 

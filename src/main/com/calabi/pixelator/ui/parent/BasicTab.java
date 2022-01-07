@@ -5,8 +5,8 @@ import javafx.scene.layout.Region;
 
 public abstract class BasicTab extends Pane {
 
-    private TabToggle toggle;
-    private Region content;
+    private final TabToggle toggle;
+    private final Region content;
 
     public BasicTab(Region content) {
         super(content);

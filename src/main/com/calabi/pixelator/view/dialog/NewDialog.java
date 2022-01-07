@@ -23,7 +23,8 @@ public abstract class NewDialog extends BasicDialog {
         return heightField.getValue();
     }
 
-    @Override public void focus() {
+    @Override
+    public void focus() {
         widthField.focus();
     }
 

@@ -13,9 +13,9 @@ import com.calabi.pixelator.view.editor.window.ImageWindow;
 
 public class ToolManager {
 
-    private static ObjectProperty<ImageWindow> imageWindow = new SimpleObjectProperty<>();
-    private static Map<Tools, Tool> fromEnumMap = new IdentityHashMap<>();
-    private static Map<Tool, Tools> toEnumMap = new IdentityHashMap<>();
+    private static final ObjectProperty<ImageWindow> imageWindow = new SimpleObjectProperty<>();
+    private static final Map<Tools, Tool> fromEnumMap = new IdentityHashMap<>();
+    private static final Map<Tool, Tools> toEnumMap = new IdentityHashMap<>();
 
     private ToolManager() {
     }

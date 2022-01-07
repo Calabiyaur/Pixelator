@@ -5,7 +5,7 @@ import com.calabi.pixelator.ui.control.BasicIntegerField;
 
 public class RotateDialog extends BasicDialog {
 
-    private BasicIntegerField degreeField;
+    private final BasicIntegerField degreeField;
 
     public RotateDialog() {
         setTitle("Rotate image");

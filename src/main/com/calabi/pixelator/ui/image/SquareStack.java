@@ -23,7 +23,7 @@ import com.calabi.pixelator.view.ToolView;
 
 public class SquareStack extends ShapeStack {
 
-    private PixelArray pixels;
+    private final PixelArray pixels;
 
     public SquareStack(int pixelWidth, int pixelHeight) {
         super(pixelWidth, pixelHeight);

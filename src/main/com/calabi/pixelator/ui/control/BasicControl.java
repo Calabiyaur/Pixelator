@@ -18,10 +18,10 @@ import javafx.scene.layout.HBox;
 public abstract class BasicControl<T> extends GridPane {
 
     private Label titleText;
-    private HBox controlWrapper;
-    private Control control;
+    private final HBox controlWrapper;
+    private final Control control;
     private Label tailText;
-    private ObjectProperty<T> value = new SimpleObjectProperty<>();
+    private final ObjectProperty<T> value = new SimpleObjectProperty<>();
 
     public BasicControl(String title, String tail, T value) {
         List<Node> children = new ArrayList<>();

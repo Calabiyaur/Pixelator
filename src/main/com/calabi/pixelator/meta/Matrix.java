@@ -215,7 +215,8 @@ public abstract class Matrix<T, P extends Point> {
             super.add(index, element);
         }
 
-        @Override public boolean addAll(Collection<? extends U> c) {
+        @Override
+        public boolean addAll(Collection<? extends U> c) {
             if (c instanceof MatrixList) {
                 nonNullSize += ((MatrixList<?>) c).nonNullSize;
             } else {

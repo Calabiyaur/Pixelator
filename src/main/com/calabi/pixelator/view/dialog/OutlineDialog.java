@@ -21,12 +21,12 @@ import com.calabi.pixelator.view.ColorView;
 
 public class OutlineDialog extends PreviewDialog {
 
-    private BasicIntegerField widthField;
-    private BasicColorField colorField;
-    private BasicColorField outsideField;
-    private SwapColorButton swapColorButton;
-    private BasicCheckBox inside;
-    private BasicCheckBox solidEdges;
+    private final BasicIntegerField widthField;
+    private final BasicColorField colorField;
+    private final BasicColorField outsideField;
+    private final SwapColorButton swapColorButton;
+    private final BasicCheckBox inside;
+    private final BasicCheckBox solidEdges;
 
     public OutlineDialog(WritableImage image) {
         super(image);

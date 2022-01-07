@@ -2,7 +2,7 @@ package com.calabi.pixelator.view.tool;
 
 public class PickSelect extends Select {
 
-    private static PickSelect me = new PickSelect();
+    private static final PickSelect me = new PickSelect();
 
     private PickSelect() {
     }
@@ -11,11 +11,13 @@ public class PickSelect extends Select {
         return me;
     }
 
-    @Override public void releasePrimary() {
+    @Override
+    public void releasePrimary() {
         if (isStillSincePress() && getSelectionLayer().isEmpty()) {
             Pick.getMe().releasePrimary();
         } else {
             super.releasePrimary();
         }
     }
+
 }

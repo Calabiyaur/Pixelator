@@ -13,20 +13,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import com.calabi.pixelator.ui.control.ImageButton;
-import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.start.ActionManager;
 import com.calabi.pixelator.start.Pixelator;
+import com.calabi.pixelator.ui.control.ImageButton;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.view.colorselection.ColorSelection;
 import com.calabi.pixelator.view.palette.PaletteSelection;
 
 public class ColorView extends BorderPane {
 
     private static ColorView instance;
-    private ColorSelection colorSelection;
-    private PaletteSelection paletteSelection;
+    private final ColorSelection colorSelection;
+    private final PaletteSelection paletteSelection;
 
     private ColorView() {
         VBox box = new VBox();

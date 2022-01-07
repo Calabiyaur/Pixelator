@@ -8,19 +8,23 @@ public abstract class ShapeTool extends Tool {
 
     private boolean shiftPressed;
 
-    @Override public void pressPrimary() {
+    @Override
+    public void pressPrimary() {
         getToolLayer().setStart(getMouse());
     }
 
-    @Override public void dragPrimary() {
+    @Override
+    public void dragPrimary() {
         update();
     }
 
-    @Override public void releasePrimary() {
+    @Override
+    public void releasePrimary() {
         getEditor().registerToolLayer();
     }
 
-    @Override public void keyPressPrimary(KeyCode code) {
+    @Override
+    public void keyPressPrimary(KeyCode code) {
         if (KeyCode.SHIFT.equals(code)) {
             shiftPressed = true;
             if (isActive()) {
@@ -29,7 +33,8 @@ public abstract class ShapeTool extends Tool {
         }
     }
 
-    @Override public void keyReleasePrimary(KeyCode code) {
+    @Override
+    public void keyReleasePrimary(KeyCode code) {
         if (KeyCode.SHIFT.equals(code)) {
             shiftPressed = false;
             if (isActive()) {

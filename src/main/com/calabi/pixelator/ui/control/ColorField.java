@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 
 public class ColorField extends Button {
 
-    private ObjectProperty<Color> color = new SimpleObjectProperty<>();
+    private final ObjectProperty<Color> color = new SimpleObjectProperty<>();
 
     public ColorField(Color color) {
         setPrefWidth(200);

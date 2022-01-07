@@ -19,12 +19,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import com.calabi.pixelator.files.PaletteFile;
+import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.image.PixelatedImageView;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.ui.parent.BasicScrollPane;
-import com.calabi.pixelator.files.PaletteFile;
-import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.view.colorselection.control.ChangeColorButton;
 import com.calabi.pixelator.view.palette.PaletteMaster;
 import com.calabi.pixelator.view.palette.SortMaster;
@@ -33,7 +33,7 @@ public class ChangePaletteDialog extends BasicDialog {
 
     private final Map<Color, Color> colorMap = new HashMap<>();
     private final Map<Color, ChangeColorButton> buttonMap = new HashMap<>();
-    private Preview preview;
+    private final Preview preview;
 
     public ChangePaletteDialog(WritableImage image, PaletteFile paletteFile) {
         preview = new Preview(image);

@@ -13,8 +13,8 @@ import com.calabi.pixelator.util.ReflectionUtil;
 
 public class PlatformImageList extends ArrayList<Image> {
 
-    private Image image;
-    private List<Runnable> listeners = new ArrayList<>();
+    private final Image image;
+    private final List<Runnable> listeners = new ArrayList<>();
 
     public PlatformImageList(WritableImage image) {
         this.image = image;

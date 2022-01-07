@@ -23,10 +23,10 @@ public abstract class DraggablePane extends GridPane {
     private double previousY;
     private boolean dragging;
 
-    private DoubleProperty minX = new SimpleDoubleProperty(Double.MIN_VALUE); //FIXME: Min / Max values work only half
-    private DoubleProperty minY = new SimpleDoubleProperty(Double.MIN_VALUE);
-    private DoubleProperty maxX = new SimpleDoubleProperty(Double.MAX_VALUE);
-    private DoubleProperty maxY = new SimpleDoubleProperty(Double.MAX_VALUE);
+    private final DoubleProperty minX = new SimpleDoubleProperty(Double.MIN_VALUE); //FIXME: Min / Max values work only half
+    private final DoubleProperty minY = new SimpleDoubleProperty(Double.MIN_VALUE);
+    private final DoubleProperty maxX = new SimpleDoubleProperty(Double.MAX_VALUE);
+    private final DoubleProperty maxY = new SimpleDoubleProperty(Double.MAX_VALUE);
 
     private boolean dragHorizontal = true;
     private boolean dragVertical = true;

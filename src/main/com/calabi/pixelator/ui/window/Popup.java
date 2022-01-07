@@ -11,9 +11,9 @@ import com.calabi.pixelator.meta.Direction;
 
 public class Popup extends PopupControl {
 
-    private Control control;
-    private Direction originAnchor;
-    private AnchorLocation popupAnchor;
+    private final Control control;
+    private final Direction originAnchor;
+    private final AnchorLocation popupAnchor;
 
     public Popup(Control control, Node content, Direction originAnchor, Direction popupAnchor, boolean autoHide) {
 

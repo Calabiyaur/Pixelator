@@ -8,7 +8,7 @@ import com.calabi.pixelator.view.colorselection.ColorSelection;
 
 public class ColorDialog extends BasicDialog {
 
-    private ColorSelection colorSelection;
+    private final ColorSelection colorSelection;
 
     public ColorDialog(Color color) {
         setTitle("Choose Color");
@@ -34,7 +34,9 @@ public class ColorDialog extends BasicDialog {
         dialog.show();
     }
 
-    @Override public void focus() {
+    @Override
+    public void focus() {
         // Color selection doesn't need to be focused
     }
+
 }

@@ -18,9 +18,9 @@ public abstract class PixelFile {
     private Category category;
     private File file;
     private WritableImage image;
-    private StringProperty name = new SimpleStringProperty();
+    private final StringProperty name = new SimpleStringProperty();
     private Extension extension;
-    private Properties properties = new Properties();
+    private final Properties properties = new Properties();
     private Metadata metaData;
 
     public PixelFile(Category category, File file, WritableImage image) {

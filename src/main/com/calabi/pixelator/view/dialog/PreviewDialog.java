@@ -17,8 +17,8 @@ import com.calabi.pixelator.ui.image.WritableImage;
 
 public abstract class PreviewDialog extends BasicDialog {
 
-    private GridPane leftContent;
-    private Preview preview;
+    private final GridPane leftContent;
+    private final Preview preview;
 
     public PreviewDialog(WritableImage image) {
         setPrefSize(480, 320);

@@ -10,8 +10,8 @@ public enum Extension {
     PALI("Palette image", "*.pali"),
     PIX("Pixelator", "*.pix");
 
-    private String notation;
-    private String suffix;
+    private final String notation;
+    private final String suffix;
 
     Extension(String notation, String suffix) {
         this.notation = notation;
