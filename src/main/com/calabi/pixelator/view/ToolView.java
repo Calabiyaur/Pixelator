@@ -57,9 +57,9 @@ public class ToolView extends VBox {
     private final Label previewTool = new Label();
     private final Label previewSelection = new Label();
     private final Pane clipWrapper;
-    private final Text sizeText = new Text();
-    private final Text zoomText = new Text();
-    private final Text frameIndexText = new Text();
+    private final Label sizeText = new Label();
+    private final Label zoomText = new Label();
+    private final Label frameIndexText = new Label();
 
     private ToolView() {
         setSpacing(6);

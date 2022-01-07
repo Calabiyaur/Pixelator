@@ -130,7 +130,10 @@ public class MainScene extends Scene {
     }
 
     public static void setTheme(Theme theme) {
-        styleSheets.setAll(MainScene.class.getResource(theme.getPath()).toExternalForm());
+        styleSheets.setAll(
+                MainScene.class.getResource("/style/basic-theme.css").toExternalForm(),
+                MainScene.class.getResource(theme.getPath()).toExternalForm()
+        );
     }
 
     public static void registerStyle(ObservableList<String> style) {
