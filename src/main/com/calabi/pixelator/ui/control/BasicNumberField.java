@@ -12,7 +12,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -174,7 +173,7 @@ public abstract class BasicNumberField<T extends Number> extends BasicControl<T>
         this.showButtons.set(showButtons);
     }
 
-    private class SpinnerButton extends Button {
+    private class SpinnerButton extends ImageButton {
 
         private boolean increment;
         private Timeline timeline;
@@ -188,7 +187,7 @@ public abstract class BasicNumberField<T extends Number> extends BasicControl<T>
         };
 
         public SpinnerButton(boolean increment) {
-            super("", increment ? Images.SPINNER_UP.getImageView() : Images.SPINNER_DOWN.getImageView());
+            super(increment ? Images.SPINNER_UP : Images.SPINNER_DOWN);
             setFocusTraversable(false);
             this.increment = increment;
             if (increment) {

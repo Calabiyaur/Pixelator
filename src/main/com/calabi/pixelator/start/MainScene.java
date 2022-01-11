@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -68,7 +70,9 @@ import static com.calabi.pixelator.res.Action.*;
 
 public class MainScene extends Scene {
 
+    private static final ObjectProperty<Theme> theme = new SimpleObjectProperty<>();
     private static final ObservableList<String> styleSheets = FXCollections.observableArrayList();
+
     private final PaletteSelection paletteSelection;
 
     public MainScene() {
@@ -130,10 +134,15 @@ public class MainScene extends Scene {
     }
 
     public static void setTheme(Theme theme) {
+        MainScene.theme.set(theme);
         styleSheets.setAll(
                 MainScene.class.getResource("/style/basic-theme.css").toExternalForm(),
                 MainScene.class.getResource(theme.getPath()).toExternalForm()
         );
+    }
+
+    public static ObjectProperty<Theme> themeProperty() {
+        return theme;
     }
 
     public static void registerStyle(ObservableList<String> style) {

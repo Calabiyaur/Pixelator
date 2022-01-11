@@ -1,11 +1,6 @@
 package com.calabi.pixelator.res;
 
-import java.net.URISyntaxException;
-
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
-import com.calabi.pixelator.logging.Logger;
 
 public enum Images {
 
@@ -96,37 +91,37 @@ public enum Images {
 
     private final static String DIR = "/images/";
     private final static String TYPE = ".png";
+
+    private final String effectiveName;
+    private String theme = "";
     private String url;
 
-    Images(String url) {
-        setUrl(url);
+    Images(String effectiveName) {
+        this.effectiveName = effectiveName;
     }
 
     Images() {
-        setUrl(name().toLowerCase());
-    }
-
-    private void setUrl(String url) {
-        try {
-            this.url = Images.class.getResource(DIR + url + TYPE).toURI().toString();
-        } catch (URISyntaxException e) {
-            Logger.error(e, name());
-        }
+        this.effectiveName = name().toLowerCase();
     }
 
     public String getUrl() {
+        if (url == null || !theme.equalsIgnoreCase(Config.THEME.getString())) {
+            theme = Config.THEME.getString().toLowerCase();
+            String path = DIR + theme + "/" + effectiveName + TYPE;
+            try {
+                url = Images.class.getResource(path).toURI().toString();
+            } catch (Exception e) {
+                throw new RuntimeException("Could not find image '" + name() + "' at " + path, e);
+            }
+        }
         return url;
     }
 
     public Image getImage() {
-        return Images.get(getUrl());
+        return Images.getImage(getUrl());
     }
 
-    public ImageView getImageView() {
-        return new ImageView(Images.get(getUrl()));
-    }
-
-    public static Image get(String url) {
+    public static Image getImage(String url) {
         try {
             return new Image(url);
         } catch (IllegalArgumentException e) {
@@ -134,24 +129,21 @@ public enum Images {
                 System.out.println("Image not found: " + url);
                 return null;
             } else {
-                return get(ERROR_20.getUrl());
+                return getImage(ERROR_20.getUrl());
             }
         }
     }
 
-    public static ImageView getImageView(Action action) {
-        ImageView imageView = new ImageView();
-
+    public static Images get(Action action) {
         if (Action.BETA_ACTIONS.contains(action)) {
-            imageView.setImage(Images.BETA.getImage());
+            return Images.BETA;
         } else {
             try {
-                imageView.setImage(Images.valueOf(action.name()).getImage());
+                return Images.valueOf(action.name());
             } catch (IllegalArgumentException e) {
-                // Do nothing.
+                return null;
             }
         }
-        return imageView;
     }
 
 }

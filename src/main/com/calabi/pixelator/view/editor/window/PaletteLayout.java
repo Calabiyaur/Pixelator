@@ -19,7 +19,7 @@ public class PaletteLayout extends Layout {
     @Override
     public Node createGraphic() {
         Image previewImage = ((PaletteFile) file).getPreview();
-        ImageView graphic = previewImage != null ? new ImageView(previewImage) : Images.PALETTE.getImageView();
+        ImageView graphic = previewImage != null ? new ImageView(previewImage) : new ImageView(Images.PALETTE.getImage());
 
         graphic.setOnMouseClicked(e -> ColorView.getPaletteSelection().changePreview(file));
 

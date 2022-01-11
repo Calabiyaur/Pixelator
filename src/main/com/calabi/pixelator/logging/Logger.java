@@ -14,7 +14,6 @@ public class Logger {
 
     public static final int SUBJECT_LENGTH = 15;
     public static final int WHO_LENGTH = 16;
-    public static final int WHAT_LENGTH = 4000;
 
     public static void log(Object message) {
         LOGGER.info(message);
@@ -41,7 +40,7 @@ public class Logger {
     }
 
     public static void error(String message) {
-        log("ERROR", message);
+        LOGGER.error(message);
     }
 
     public static void logEvent(InputEvent e, String action) {
@@ -79,17 +78,23 @@ public class Logger {
     }
 
     private static String toWhat(Object subject) {
-        return format(subject == null ? "null" : subject.toString(), WHAT_LENGTH, ".");
+        return format(subject == null ? "null" : subject.toString(), -1, ".");
     }
 
     private static String format(String string, int length, String separator) {
         separator = string.isEmpty() ? "" : separator;
-        String s = string.trim();
-        String subString = s.substring(0, Math.min(length - separator.length(), s.length()));
-        StringBuilder builder = new StringBuilder(subString + separator);
-        for (int i = builder.length(); i < length; i++) {
-            builder.append(" ");
+        String s = string.strip();
+
+        String subString;
+        if (length > 0) {
+            subString = s.substring(0, Math.min(length - separator.length(), s.length()));
+        } else {
+            subString = s;
         }
+
+        StringBuilder builder = new StringBuilder(subString + separator);
+        builder.append(" ".repeat(Math.max(0, length - builder.length())));
+
         return builder.toString();
     }
 

@@ -7,6 +7,7 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
@@ -27,9 +28,8 @@ public class BasicMenu extends Menu {
         return item;
     }
 
-    public CheckMenuItem addCheckItem(Action key, EventHandler<ActionEvent> event,
-            BooleanExpression condition) {
-        CheckMenuItem item = new CheckMenuItem(key.getText(), Images.getImageView(key));
+    public CheckMenuItem addCheckItem(Action key, EventHandler<ActionEvent> event, BooleanExpression condition) {
+        CheckMenuItem item = new CheckMenuItem(key.getText(), createImageView(key));
         accelerate(key, item);
         register(key, item, event);
         item.disableProperty().bind(condition.not());
@@ -37,10 +37,21 @@ public class BasicMenu extends Menu {
     }
 
     public MenuItem addItem(Action key, EventHandler<ActionEvent> event) {
-        MenuItem item = new MenuItem(key.getText(), Images.getImageView(key));
+        MenuItem item = new MenuItem(key.getText(), createImageView(key));
         accelerate(key, item);
         register(key, item, event);
         return item;
+    }
+
+    private ImageView createImageView(Action key) {
+        Images image = Images.get(key);
+        if (image != null) {
+            ImageView imageView = new ImageView(image.getImage());
+            MainScene.themeProperty().addListener((ov, o, n) -> imageView.setImage(image.getImage()));
+            return imageView;
+        } else {
+            return new ImageView();
+        }
     }
 
     static void accelerate(Action key, MenuItem item) {
