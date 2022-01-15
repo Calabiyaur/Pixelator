@@ -1,7 +1,7 @@
 package com.calabi.pixelator.view.dialog;
 
 import javafx.scene.Scene;
-import javafx.scene.text.Text;
+import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -13,7 +13,7 @@ public class SaveRequestDialog extends BasicDialog {
 
     private SaveRequestDialog(int minWidth, int minHeight) {
         super(minWidth, minHeight);
-        addContent(new Text("There are unsaved changes. \nDo you wish to save before closing?"), 0, 0);
+        addContent(new Label("There are unsaved changes. \nDo you wish to save before closing?"), 0, 0);
         setOkText("Yes");
     }
 

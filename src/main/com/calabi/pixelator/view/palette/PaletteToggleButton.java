@@ -3,6 +3,7 @@ package com.calabi.pixelator.view.palette;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,18 +12,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.Text;
 
-import com.calabi.pixelator.ui.control.ImageButton;
-import com.calabi.pixelator.ui.window.Popup;
 import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.ui.control.ImageButton;
+import com.calabi.pixelator.ui.window.Popup;
 import com.calabi.pixelator.util.Do;
 
 public class PaletteToggleButton extends ToggleButton {
 
     private final PaletteEditor editor;
-    private final Text textPane;
+    private final Label textPane;
     private final Popup popup;
     private EventHandler<? super MouseEvent> onClose;
 
@@ -36,7 +36,7 @@ public class PaletteToggleButton extends ToggleButton {
         content.setStyle("-fx-background-color: -px_empty_area");
         content.prefHeightProperty().bind(heightProperty());
 
-        textPane = new Text(text);
+        textPane = new Label(text);
         content.add(textPane, 0, 0);
         GridPane.setVgrow(textPane, Priority.SOMETIMES);
         GridPane.setMargin(textPane, new Insets(0, 6, 0, 5));

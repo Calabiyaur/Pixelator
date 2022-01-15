@@ -25,7 +25,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
@@ -231,13 +230,13 @@ public class ToolView extends VBox {
         grid.setVgap(6);
         grid.setHgap(6);
 
-        Text actingText = new Text();
+        Label actingText = new Label();
         Tool.actingToolProperty().addListener((ov, o, n) -> actingText.setText(n.toString()));
-        grid.addRow(0, new Text("actingTool ="), actingText);
+        grid.addRow(0, new Label("actingTool ="), actingText);
 
-        Text selectText = new Text();
+        Label selectText = new Label();
         Select.getMe().typeProperty().addListener((ov, o, n) -> selectText.setText(n.name()));
-        grid.addRow(1, new Text("select.type ="), selectText);
+        grid.addRow(1, new Label("select.type ="), selectText);
 
         return grid;
     }
