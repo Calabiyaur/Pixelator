@@ -1,13 +1,33 @@
 package com.calabi.pixelator.util;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
 import com.calabi.pixelator.start.ExceptionHandler;
 
-public class ReflectionUtil {
+public final class ReflectionUtil {
+
+    public static <T> T instantiate(String className, Param<?>... args) {
+        Check.notNull(className);
+        try {
+            Class<?>[] types = Arrays.stream(args).map(Param::getType).toArray(Class<?>[]::new);
+            Object[] objects = Arrays.stream(args).map(Param::getObject).toArray();
+
+            Class<?> type = Class.forName(className);
+
+            Constructor<?> constructor = type.getConstructor(types);
+            constructor.setAccessible(true);
+
+            return (T) constructor.newInstance(objects);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to instantiate " + className, e);
+        }
+    }
 
     public static <T> T invokeMethod(final Object object, final String methodName, Object... args) {
         Check.notNull(object);

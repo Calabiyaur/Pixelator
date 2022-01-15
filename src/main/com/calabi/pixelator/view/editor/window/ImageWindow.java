@@ -105,7 +105,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         setPrefWidth(Config.IMAGE_WIDTH.getDouble(getFile(), getPrefWidth()));
         setPrefHeight(Config.IMAGE_HEIGHT.getDouble(getFile(), getPrefHeight()));
         if (getImage().isAnimated()) {
-            getImage().setIndex(Config.FRAME_INDEX.getInt(getFile()));
+            Platform.runLater(() -> getImage().setIndex(Config.FRAME_INDEX.getInt(getFile())));
         }
     }
 

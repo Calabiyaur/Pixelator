@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -260,7 +261,10 @@ public class ImageEditor extends Editor {
         selectionLayer.scaleXProperty().bind(getImageView().scaleXProperty());
         selectionLayer.scaleYProperty().bind(getImageView().scaleYProperty());
 
-        setCleanImage(image.copy());
+        Platform.runLater(() -> {
+            setCleanImage(image.copy());
+            updateDirty();
+        });
     }
 
     private void onMousePressed(MouseEvent e) {

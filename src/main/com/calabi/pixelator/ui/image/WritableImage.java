@@ -8,6 +8,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -27,6 +28,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import com.calabi.pixelator.files.Category;
 import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.util.Check;
+import com.calabi.pixelator.util.Param;
 import com.calabi.pixelator.util.ReflectionUtil;
 
 public class WritableImage extends javafx.scene.image.WritableImage {
@@ -65,13 +67,15 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         setAnimated(reader == null);
 
         if (isAnimated()) {
-            Object animation = initAnimationInternal(image);
+            Platform.runLater(() -> {
+                Object animation = initAnimationInternal(image);
 
-            ReflectionUtil.setField(this, "animation", animation);
-            ReflectionUtil.setField(this, "animFrames", frames);
-            ReflectionUtil.setField(animation, "imageRef", new WeakReference<>(this));
+                ReflectionUtil.setField(this, "animation", animation);
+                ReflectionUtil.setField(this, "animFrames", frames);
+                ReflectionUtil.setField(animation, "imageRef", new WeakReference<>(this));
 
-            invalidate();
+                invalidate();
+            });
 
         } else {
 
@@ -96,10 +100,32 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         Check.notNull(platformImage.getValue());
 
         ImageLoader loader = new ImageLoader(platformImage.getValue(), frameCount, frameDelay, getWidth(), getHeight());
-        ReflectionUtil.invokeMethod(this, "initializeAnimatedImage", loader);
+        initializeAnimatedImage(loader);
 
         initAnimationInternal(this);
         setAnimated(true);
+    }
+
+    private void initializeAnimatedImage(ImageLoader loader) {
+        final int frameCount = loader.getFrameCount();
+        frames = new PlatformImage[frameCount];
+        ReflectionUtil.setField(this, "animFrames", frames);
+
+        for (int i = 0; i < frameCount; ++i) {
+            frames[i] = loader.getFrame(i);
+        }
+
+        PlatformImage zeroFrame = loader.getFrame(0);
+
+        double w = loader.getWidth() / zeroFrame.getPixelScale();
+        double h = loader.getHeight() / zeroFrame.getPixelScale();
+        ReflectionUtil.invokeMethod(this, "setPlatformImageWH", zeroFrame, w, h);
+
+        ReflectionUtil.setField(this, "isAnimated", true);
+        anim = ReflectionUtil.instantiate("javafx.scene.image.Image$Animation",
+                new Param<>(Image.class, this), new Param<>(com.sun.javafx.tk.ImageLoader.class, loader));
+        ReflectionUtil.setField(this, "animation", anim);
+        ReflectionUtil.invokeMethod(anim, "start");
     }
 
     private Object initAnimationInternal(Image image) {

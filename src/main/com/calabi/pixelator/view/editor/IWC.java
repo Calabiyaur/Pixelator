@@ -3,6 +3,7 @@ package com.calabi.pixelator.view.editor;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -78,7 +79,7 @@ public class IWC extends Pane {
                 showBackground.setValue(window.getEditor().isShowBackground());
                 updateImage(o == null ? null : o.getImage(), window);
                 window.toFront();
-                window.getEditor().updateColorCount();
+                Platform.runLater(() -> window.getEditor().updateColorCount());
             }
         });
     }
