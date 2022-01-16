@@ -3,10 +3,12 @@ package com.calabi.pixelator.view.palette;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.start.MainScene;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.view.ColorView;
 
@@ -27,6 +29,8 @@ final class PaletteSelectionModel {
         defaultEditor = new PaletteEditor(file);
         defaultEditor.selectedColorProperty().addListener((ov, o, n) -> Do.when(n != null, () -> ColorView.setColor(n)));
         PaletteToggleButton button = tabButtons.create(Images.ASTERISK.getImage(), defaultEditor, "Current Image", false);
+        MainScene.themeProperty()
+                .addListener((ov, o, n) -> ((ImageView) button.getGraphic()).setImage(Images.ASTERISK.getImage()));
         button.fire();
     }
 

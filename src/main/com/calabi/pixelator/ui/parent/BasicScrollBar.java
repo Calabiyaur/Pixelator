@@ -5,7 +5,7 @@ import javafx.scene.control.ScrollBar;
 public class BasicScrollBar extends ScrollBar {
 
     public BasicScrollBar() {
-        setStyle("-fx-background-color: white");
+        setStyle("-fx-background-color: -px_default");
     }
 
 }

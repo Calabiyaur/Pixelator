@@ -6,11 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.start.MainScene;
 
 public class ToggleImageButton extends ToggleButton {
 
     public ToggleImageButton(Images image) {
-        setGraphic(new ImageView(image.getImage()));
+        this(image, image);
     }
 
     public ToggleImageButton(ToggleGroup tg, Images image) {
@@ -18,16 +19,20 @@ public class ToggleImageButton extends ToggleButton {
         setToggleGroup(tg);
     }
 
-    public ToggleImageButton(Images image, Images selected) {
-        Image image1 = image.getImage();
-        Image image2 = selected.getImage();
-        ImageView imageView = new ImageView(image1);
+    public ToggleImageButton(Images off, Images on) {
+        ImageView imageView = new ImageView(off.getImage());
+
         selectedProperty().addListener((ov, o, n) -> {
             if (n) {
-                imageView.setImage(image2);
+                imageView.setImage(on.getImage());
             } else {
-                imageView.setImage(image1);
+                imageView.setImage(off.getImage());
             }
+        });
+
+        MainScene.themeProperty().addListener((ov, o, n) -> {
+            Image image = isSelected() ? on.getImage() : off.getImage();
+            ((ImageView) getGraphic()).setImage(image);
         });
 
         setGraphic(imageView);
