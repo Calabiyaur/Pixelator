@@ -6,6 +6,8 @@ Pixelator is intuitive and easy to use while providing powerful tools that will 
 
 Absolutely free and open-source.
 
+![Preview](preview.png)
+
 
 ## Features
 
@@ -48,7 +50,7 @@ Animations
 
 ## Installation
 
-1. Download current pixelator.jar
+1. Download current pixelator.jar at https://github.com/Calabiyaur/Pixelator/releases/latest
 2. Run pixelator.jar
 
 Windows:
