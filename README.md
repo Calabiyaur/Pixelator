@@ -7,6 +7,45 @@ Pixelator is intuitive and easy to use while providing powerful tools that will 
 Absolutely free and open-source.
 
 
+## Features
+
+All the tools you need:
+* Pen
+* Draw Line
+* Fill
+* Pick Color
+* Draw Rectangle
+* Draw Ellipse
+* Fill Color
+* Select
+* Magic Wand
+* Select Color
+
+Powerful Tool Configurations:
+* Replace
+* Alpha only
+* Fill shape
+* Thickness
+* Tolerance
+
+All-in-one Color Picker:
+* Graphical selection
+* Selection by Hex Code
+* Supports RGB and HSB
+
+
+## Preview Features
+
+Powerful Palette Editor
+* Automatically generate Palettes from any image
+* Save, load and edit Palettes just like images
+* Change Palette of an existing image interactively
+
+Animations
+* Work on animated and still images in parallel
+* Seamlessly transform still images into animations and vice versa
+
+
 ## Installation
 
 1. Download current pixelator.jar
