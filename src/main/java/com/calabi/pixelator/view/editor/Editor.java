@@ -5,9 +5,9 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 
+import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.ui.image.PixelatedImageView;
 import com.calabi.pixelator.ui.image.WritableImage;
-import com.calabi.pixelator.files.PixelFile;
 import com.calabi.pixelator.view.undo.UndoManager;
 import com.calabi.pixelator.view.undo.Undoable;
 

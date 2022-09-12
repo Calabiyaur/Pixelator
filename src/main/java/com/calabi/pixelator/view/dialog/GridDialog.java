@@ -8,9 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 
-import com.calabi.pixelator.ui.control.BasicIntegerField;
 import com.calabi.pixelator.res.GridConfig;
 import com.calabi.pixelator.res.GridConfig.GridMenuItem;
+import com.calabi.pixelator.ui.control.BasicIntegerField;
 
 public class GridDialog extends BasicDialog {
 

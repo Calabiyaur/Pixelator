@@ -9,8 +9,8 @@ import java.util.Set;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.CollectionUtil;
 import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.MapUtil;

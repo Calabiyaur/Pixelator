@@ -9,11 +9,11 @@ import java.util.EnumSet;
 import java.util.Properties;
 import java.util.Set;
 
-import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.files.Extension;
 import com.calabi.pixelator.files.FileConfig;
 import com.calabi.pixelator.files.PixelFileBuilder;
 import com.calabi.pixelator.logging.Logger;
+import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.FileUtil;
 
 public abstract class PixelFileReader {

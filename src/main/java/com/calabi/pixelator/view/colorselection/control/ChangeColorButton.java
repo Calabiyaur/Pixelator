@@ -5,9 +5,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.ui.window.Popup;
 import com.calabi.pixelator.files.PaletteFile;
 import com.calabi.pixelator.meta.Direction;
+import com.calabi.pixelator.ui.window.Popup;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.view.palette.PaletteEditor;

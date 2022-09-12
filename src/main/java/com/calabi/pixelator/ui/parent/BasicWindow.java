@@ -18,8 +18,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
-import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.ui.control.ImageButton;
 
 public class BasicWindow extends DraggablePane {
 
