@@ -3,7 +3,7 @@ package com.calabi.pixelator.ui.parent;
 import javafx.scene.Cursor;
 import javafx.scene.control.ToggleButton;
 
-import com.calabi.pixelator.meta.Direction;
+import com.calabi.pixelator.util.meta.Direction;
 
 public abstract class TabToggle extends ToggleButton {
 

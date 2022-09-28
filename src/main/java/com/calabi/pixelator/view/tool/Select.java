@@ -1,9 +1,9 @@
 package com.calabi.pixelator.view.tool;
 
-import com.calabi.pixelator.meta.Point;
-import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.Check;
+import com.calabi.pixelator.util.meta.Point;
+import com.calabi.pixelator.util.meta.PointArray;
 import com.calabi.pixelator.util.shape.RectangleHelper;
 import com.calabi.pixelator.view.InfoView;
 

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.util.meta.Point;
 
 public class Mapping {
 

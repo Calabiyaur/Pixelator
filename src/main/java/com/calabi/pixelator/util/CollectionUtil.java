@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.util.meta.Point;
 
 public class CollectionUtil {
 

@@ -19,13 +19,10 @@ public class BasicColorField extends BasicControl<Color> {
 
     public BasicColorField(String title, String tail, Color value) {
         super(title, tail, value);
-        init();
-    }
 
-    private void init() {
         colorButton = new ImageButton(Images.CHOOSE_COLOR);
         colorButton.getStyleClass().add("tight-button");
-        colorButton.setOnAction(e -> ColorDialog.chooseColor(getValue(), color -> setValue(color)));
+        colorButton.setOnAction(e -> ColorDialog.chooseColor(getValue(), this::setValue));
         HBox.setMargin(colorButton, new Insets(3));
         addControl(colorButton, 1);
 

@@ -1,6 +1,6 @@
 package com.calabi.pixelator.util;
 
-import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.util.meta.Point;
 
 public final class Move {
 

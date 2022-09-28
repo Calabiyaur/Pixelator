@@ -18,13 +18,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import com.calabi.pixelator.files.Files;
-import com.calabi.pixelator.files.ImageFile;
-import com.calabi.pixelator.files.PaletteFile;
-import com.calabi.pixelator.files.PixelFile;
+import com.calabi.pixelator.file.Files;
+import com.calabi.pixelator.file.ImageFile;
+import com.calabi.pixelator.file.PaletteFile;
+import com.calabi.pixelator.file.PixelFile;
+import com.calabi.pixelator.main.BasicToolBar;
 import com.calabi.pixelator.res.Action;
 import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.start.BasicToolBar;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.view.dialog.MessageDialog;
 import com.calabi.pixelator.view.dialog.NewPaletteDialog;

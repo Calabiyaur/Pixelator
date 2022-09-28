@@ -13,11 +13,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
-import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.window.Popup;
 import com.calabi.pixelator.util.Do;
+import com.calabi.pixelator.util.meta.Direction;
 
 public class PaletteToggleButton extends ToggleButton {
 

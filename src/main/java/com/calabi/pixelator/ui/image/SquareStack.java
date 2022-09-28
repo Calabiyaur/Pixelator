@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import com.calabi.pixelator.meta.PixelArray;
-import com.calabi.pixelator.meta.Point;
-import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.util.CollectionUtil;
 import com.calabi.pixelator.util.ColorUtil;
+import com.calabi.pixelator.util.meta.PixelArray;
+import com.calabi.pixelator.util.meta.Point;
+import com.calabi.pixelator.util.meta.PointArray;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.ToolView;
 

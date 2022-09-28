@@ -2,7 +2,7 @@ package com.calabi.pixelator.view.tool;
 
 import javafx.scene.input.KeyCode;
 
-import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.util.meta.Point;
 
 public abstract class ShapeTool extends Tool {
 

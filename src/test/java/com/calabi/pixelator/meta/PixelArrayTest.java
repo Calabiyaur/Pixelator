@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.calabi.pixelator.util.meta.PixelArray;
+
 class PixelArrayTest {
 
     private PixelArray matrix;

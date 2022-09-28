@@ -14,11 +14,11 @@ import javafx.scene.paint.Color;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.calabi.pixelator.meta.Direction;
-import com.calabi.pixelator.meta.Frac;
-import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.NumberUtil;
+import com.calabi.pixelator.util.meta.Direction;
+import com.calabi.pixelator.util.meta.Frac;
+import com.calabi.pixelator.util.meta.Point;
 
 public class HilbertPartition implements Partition {
 

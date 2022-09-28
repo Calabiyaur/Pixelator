@@ -4,18 +4,18 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 
-import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.util.meta.Direction;
 
-import static com.calabi.pixelator.meta.Direction.EAST;
-import static com.calabi.pixelator.meta.Direction.NONE;
-import static com.calabi.pixelator.meta.Direction.NORTH;
-import static com.calabi.pixelator.meta.Direction.NORTH_EAST;
-import static com.calabi.pixelator.meta.Direction.NORTH_WEST;
-import static com.calabi.pixelator.meta.Direction.SOUTH;
-import static com.calabi.pixelator.meta.Direction.SOUTH_EAST;
-import static com.calabi.pixelator.meta.Direction.SOUTH_WEST;
-import static com.calabi.pixelator.meta.Direction.WEST;
+import static com.calabi.pixelator.util.meta.Direction.EAST;
+import static com.calabi.pixelator.util.meta.Direction.NONE;
+import static com.calabi.pixelator.util.meta.Direction.NORTH;
+import static com.calabi.pixelator.util.meta.Direction.NORTH_EAST;
+import static com.calabi.pixelator.util.meta.Direction.NORTH_WEST;
+import static com.calabi.pixelator.util.meta.Direction.SOUTH;
+import static com.calabi.pixelator.util.meta.Direction.SOUTH_EAST;
+import static com.calabi.pixelator.util.meta.Direction.SOUTH_WEST;
+import static com.calabi.pixelator.util.meta.Direction.WEST;
 
 public class BiasButton extends GridPane {
 

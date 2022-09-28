@@ -54,7 +54,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.calabi.pixelator.start.Main</mainClass>
+                            <mainClass>com.calabi.pixelator.main.Main</mainClass>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
@@ -74,7 +74,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.calabi.pixelator.start.Main</mainClass>
+                            <mainClass>com.calabi.pixelator.main.Main</mainClass>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>

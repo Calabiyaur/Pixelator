@@ -3,7 +3,7 @@ package com.calabi.pixelator.view.undo;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.meta.PixelArray;
+import com.calabi.pixelator.util.meta.PixelArray;
 
 public class PixelChange extends PixelArray implements Undoable {
 

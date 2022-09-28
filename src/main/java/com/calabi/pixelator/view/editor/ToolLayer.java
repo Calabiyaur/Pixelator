@@ -2,9 +2,9 @@ package com.calabi.pixelator.view.editor;
 
 import javafx.scene.image.PixelReader;
 
-import com.calabi.pixelator.meta.PixelArray;
-import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.ui.image.SquareStack;
+import com.calabi.pixelator.util.meta.PixelArray;
+import com.calabi.pixelator.util.meta.PointArray;
 
 public class ToolLayer extends EditorLayer {
 

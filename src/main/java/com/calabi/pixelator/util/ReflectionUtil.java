@@ -7,7 +7,7 @@ import java.util.Arrays;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
-import com.calabi.pixelator.start.ExceptionHandler;
+import com.calabi.pixelator.main.ExceptionHandler;
 
 public final class ReflectionUtil {
 

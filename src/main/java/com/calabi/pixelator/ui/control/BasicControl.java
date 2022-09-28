@@ -54,7 +54,7 @@ public abstract class BasicControl<T> extends GridPane {
     }
 
     public final void focus() {
-        Platform.runLater(() -> control.requestFocus());
+        Platform.runLater(control::requestFocus);
     }
 
     protected abstract Control createControl();

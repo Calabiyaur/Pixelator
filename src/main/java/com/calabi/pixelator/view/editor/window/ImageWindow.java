@@ -9,15 +9,13 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import com.calabi.pixelator.files.Category;
-import com.calabi.pixelator.files.Extension;
-import com.calabi.pixelator.files.Files;
-import com.calabi.pixelator.files.PixelFile;
-import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.file.Category;
+import com.calabi.pixelator.file.Files;
+import com.calabi.pixelator.file.PixelFile;
+import com.calabi.pixelator.main.ActionManager;
+import com.calabi.pixelator.main.Pixelator;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.start.ActionManager;
-import com.calabi.pixelator.start.Pixelator;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.image.ScalableImageView;
 import com.calabi.pixelator.ui.image.WritableImage;
@@ -25,6 +23,7 @@ import com.calabi.pixelator.ui.parent.BasicScrollPane;
 import com.calabi.pixelator.ui.parent.BasicWindow;
 import com.calabi.pixelator.util.ImageUtil;
 import com.calabi.pixelator.util.NumberUtil;
+import com.calabi.pixelator.util.meta.Point;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
@@ -51,7 +50,7 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         setText(imageFile.getName());
         imageFile.nameProperty().addListener((ov, o, n) -> setText(n));
 
-        if (imageFile.getCategory() == Category.PALETTE && imageFile.getExtension() != Extension.PALI) {
+        if (imageFile.getCategory() == Category.PALETTE) {
             imageView.setZoomMinimum(4);
             imageView.setZoomMaximum(48);
             imageView.setScaleX(PaletteEditor.ZOOM_FACTOR);

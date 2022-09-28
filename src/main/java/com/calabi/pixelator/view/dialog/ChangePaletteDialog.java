@@ -19,7 +19,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.files.PaletteFile;
+import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.image.PixelatedImageView;

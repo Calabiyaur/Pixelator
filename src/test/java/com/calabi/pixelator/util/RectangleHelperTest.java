@@ -3,7 +3,7 @@ package com.calabi.pixelator.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.util.meta.Point;
 import com.calabi.pixelator.util.shape.RectangleHelper;
 
 class RectangleHelperTest {

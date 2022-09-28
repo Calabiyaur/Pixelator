@@ -6,9 +6,9 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import com.calabi.pixelator.main.MainScene;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.Theme;
-import com.calabi.pixelator.start.MainScene;
 import com.calabi.pixelator.ui.control.BasicColorField;
 import com.calabi.pixelator.ui.control.BasicComboBox;
 import com.calabi.pixelator.view.editor.IWC;

@@ -1,30 +1,31 @@
 package com.calabi.pixelator.res;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Properties;
 import java.util.prefs.Preferences;
 
-import com.calabi.pixelator.files.FileException;
-import com.calabi.pixelator.files.PixelFile;
-import com.calabi.pixelator.logging.Logger;
-import com.calabi.pixelator.meta.Direction;
-import com.calabi.pixelator.start.ExceptionHandler;
+import com.calabi.pixelator.file.PixelFile;
+import com.calabi.pixelator.log.Logger;
+import com.calabi.pixelator.main.ExceptionHandler;
+import com.calabi.pixelator.util.meta.Direction;
 
 public enum Config {
 
     // Global config
+    FULLSCREEN(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
+    PALETTE_MAX_COLORS(ConfigMode.GLOBAL, ConfigType.INT, 128),
+    SCREEN_HEIGHT(ConfigMode.GLOBAL, ConfigType.DOUBLE, 400d),
+    SCREEN_WIDTH(ConfigMode.GLOBAL, ConfigType.DOUBLE, 600d),
+    SCREEN_X(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
+    SCREEN_Y(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
+    THEME(ConfigMode.GLOBAL, ConfigType.STRING, Theme.BRIGHT.name()),
+
+    // Project config
     ALPHA_ONLY(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
     BULGE(ConfigMode.GLOBAL, ConfigType.INT, 0),
     COLOR(ConfigMode.GLOBAL, ConfigType.STRING),
     CROSSHAIR_COLOR(ConfigMode.GLOBAL, ConfigType.STRING, "#00000080"),
     FILL_SHAPE(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
-    FULLSCREEN(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
     GRID_COLOR(ConfigMode.GLOBAL, ConfigType.STRING, "#00000080"),
     GRID_CONFIG(ConfigMode.GLOBAL, ConfigType.OBJECT, GridConfig.class, GridConfig.getDefault()),
     IMAGE_BACKGROUND_COLOR(ConfigMode.GLOBAL, ConfigType.STRING, "#DDDDDD"),
@@ -33,22 +34,16 @@ public enum Config {
     NEW_IMAGE_HEIGHT(ConfigMode.GLOBAL, ConfigType.INT, 32),
     NEW_IMAGE_WIDTH(ConfigMode.GLOBAL, ConfigType.INT, 32),
     PALETTE_DIRECTORY(ConfigMode.GLOBAL, ConfigType.STRING, ""),
-    PALETTE_MAX_COLORS(ConfigMode.GLOBAL, ConfigType.INT, 128),
     REPLACE(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
     RESIZE_BIAS(ConfigMode.GLOBAL, ConfigType.STRING, Direction.NONE.name()),
     RESIZE_KEEP_RATIO(ConfigMode.GLOBAL, ConfigType.BOOLEAN, true),
     ROTATE_DEGREES(ConfigMode.GLOBAL, ConfigType.INT, 0),
-    SCREEN_HEIGHT(ConfigMode.GLOBAL, ConfigType.DOUBLE, 400d),
-    SCREEN_WIDTH(ConfigMode.GLOBAL, ConfigType.DOUBLE, 600d),
-    SCREEN_X(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
-    SCREEN_Y(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
     STRETCH_KEEP_RATIO(ConfigMode.GLOBAL, ConfigType.BOOLEAN, true),
-    THEME(ConfigMode.GLOBAL, ConfigType.STRING, Theme.BRIGHT.name()),
     THICKNESS(ConfigMode.GLOBAL, ConfigType.INT, 1),
     TOLERANCE(ConfigMode.GLOBAL, ConfigType.INT, 0),
     TOOL(ConfigMode.GLOBAL, ConfigType.INT, 0),
 
-    // Local (image) config
+    // Image config
     FRAME_INDEX(ConfigMode.IMAGE, ConfigType.INT, 0),
     GRID_SELECTION(ConfigMode.IMAGE, ConfigType.OBJECT, GridSelectionConfig.class, ""),
     IMAGE_H_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),
@@ -59,22 +54,22 @@ public enum Config {
     IMAGE_Y(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_ZOOM_LEVEL(ConfigMode.IMAGE, ConfigType.DOUBLE);
 
-    private final ConfigMode configMode;
-    private final ConfigType configType;
+    private final ConfigMode mode;
+    private final ConfigType type;
     private final Class<? extends ConfigObject> c;
     private Object def;
 
-    Config(ConfigMode configMode, ConfigType configType) {
-        this(configMode, configType, null);
+    Config(ConfigMode mode, ConfigType type) {
+        this(mode, type, null);
     }
 
-    Config(ConfigMode configMode, ConfigType configType, Object def) {
-        this(configMode, configType, null, def);
+    Config(ConfigMode mode, ConfigType type, Object def) {
+        this(mode, type, null, def);
     }
 
-    Config(ConfigMode configMode, ConfigType configType, Class<? extends ConfigObject> c, Object def) {
-        this.configMode = configMode;
-        this.configType = configType;
+    Config(ConfigMode mode, ConfigType type, Class<? extends ConfigObject> c, Object def) {
+        this.mode = mode;
+        this.type = type;
         this.c = c;
         this.def = def;
     }
@@ -118,11 +113,29 @@ public enum Config {
         return (T) def;
     }
 
-    private Object get(ConfigType configType, Object def) {
-        if (ConfigMode.IMAGE.equals(configMode) || !configType.equals(this.configType)) {
+    private Object get(ConfigType type, Object def) {
+        Object result = null;
+        if (ConfigMode.PROJECT.equals(mode) && Project.active()) {
+            result = getProjectConfig(type);
+        }
+        if (result == null) {
+            result = getGlobalConfig(type, def);
+        }
+        return result;
+    }
+
+    private Object getProjectConfig(ConfigType type) {
+        if (ConfigMode.IMAGE.equals(mode) || !type.equals(this.type)) {
             throw new UnsupportedOperationException();
         }
-        return switch(configType) {
+        return Project.get().getConfig(name(), type);
+    }
+
+    private Object getGlobalConfig(ConfigType type, Object def) {
+        if (ConfigMode.IMAGE.equals(mode) || !type.equals(this.type)) {
+            throw new UnsupportedOperationException();
+        }
+        return switch(type) {
             case BOOLEAN -> Preferences.userRoot().getBoolean(name(), (boolean) def);
             case DOUBLE -> Preferences.userRoot().getDouble(name(), (double) def);
             case INT -> Preferences.userRoot().getInt(name(), (int) def);
@@ -152,11 +165,26 @@ public enum Config {
         put(ConfigType.OBJECT, value);
     }
 
-    private void put(ConfigType configType, Object value) {
-        if (ConfigMode.IMAGE.equals(configMode) || !configType.equals(this.configType)) {
+    private void put(ConfigType type, Object value) {
+        if (ConfigMode.PROJECT.equals(mode) && Project.active()) {
+            putProjectConfig(type, value);
+        } else {
+            putGlobalConfig(type, value);
+        }
+    }
+
+    private void putProjectConfig(ConfigType type, Object value) {
+        if (ConfigMode.IMAGE.equals(mode) || !type.equals(this.type)) {
             throw new UnsupportedOperationException();
         }
-        switch(configType) {
+        Project.get().putConfig(name(), type, value);
+    }
+
+    private void putGlobalConfig(ConfigType type, Object value) {
+        if (ConfigMode.IMAGE.equals(mode) || !type.equals(this.type)) {
+            throw new UnsupportedOperationException();
+        }
+        switch(type) {
             case BOOLEAN -> Preferences.userRoot().putBoolean(name(), (boolean) value);
             case DOUBLE -> Preferences.userRoot().putDouble(name(), (double) value);
             case INT -> Preferences.userRoot().putInt(name(), (int) value);
@@ -166,27 +194,27 @@ public enum Config {
     }
 
     public boolean getBoolean(PixelFile file, boolean def) {
-        return (boolean) get(file, ConfigType.BOOLEAN, def);
+        return (boolean) getImageConfig(file, ConfigType.BOOLEAN, def);
     }
 
     public boolean getBoolean(PixelFile file) {
-        return (boolean) get(file, ConfigType.BOOLEAN, def);
+        return (boolean) getImageConfig(file, ConfigType.BOOLEAN, def);
     }
 
     public double getDouble(PixelFile file, double def) {
-        return (double) get(file, ConfigType.DOUBLE, def);
+        return (double) getImageConfig(file, ConfigType.DOUBLE, def);
     }
 
     public int getInt(PixelFile file) {
-        return (int) get(file, ConfigType.INT, def);
+        return (int) getImageConfig(file, ConfigType.INT, def);
     }
 
     public String getString(PixelFile file, String def) {
-        return (String) get(file, ConfigType.STRING, def);
+        return (String) getImageConfig(file, ConfigType.STRING, def);
     }
 
     public <T extends ConfigObject> T getObject(PixelFile file) {
-        String string = (String) get(file, ConfigType.OBJECT, def);
+        String string = (String) getImageConfig(file, ConfigType.OBJECT, def);
         if (string != null) {
             try {
                 Constructor<T> constructor = (Constructor<T>) c.getConstructor();
@@ -200,15 +228,12 @@ public enum Config {
         return (T) def;
     }
 
-    private Object get(PixelFile file, ConfigType configType, Object def) {
-        if (ConfigMode.GLOBAL.equals(configMode) || !configType.equals(this.configType)) {
+    private Object getImageConfig(PixelFile file, ConfigType configType, Object def) {
+        if (!ConfigMode.IMAGE.equals(mode) || !configType.equals(this.type)) {
             Logger.log(name() + "(" + configType.name() + ")");
             throw new UnsupportedOperationException();
         }
         String stringValue = file.getProperties().getProperty(name());
-        if (stringValue == null) {
-            stringValue = getLocalConfig(file.getName(), name());
-        }
         if (stringValue == null) {
             return def;
         }
@@ -241,65 +266,10 @@ public enum Config {
     }
 
     private void put(PixelFile file, ConfigType configType, Object value) {
-        if (ConfigMode.GLOBAL.equals(configMode) || !configType.equals(this.configType)) {
+        if (ConfigMode.GLOBAL.equals(mode) || !configType.equals(this.type)) {
             throw new UnsupportedOperationException();
-        } else if (file != null) {
-            file.getProperties().put(name(), String.valueOf(value));
-            putLocalConfig(file.getName(), name(), String.valueOf(value));
         }
-    }
-
-    private String getLocalConfig(String hash, String key) {
-        String home = System.getProperty("user.home");
-        String s = File.separator;
-        File dir = new File(home + s + "AppData" + s + "Local" + s + "Pixelator" + s + "config");
-        if (!dir.exists()) {
-            return null;
-        }
-
-        File file = new File(dir.getPath() + s + hash);
-        if (!file.exists() || !file.isFile()) {
-            return null;
-        }
-
-        Properties properties = new Properties();
-        try (InputStream inputStream = new FileInputStream(file)) {
-            properties.load(inputStream);
-        } catch (IOException e) {
-            throw new FileException(e);
-        }
-        return properties.getProperty(key);
-    }
-
-    private void putLocalConfig(String hash, String key, String value) {
-        String home = System.getProperty("user.home");
-        String s = File.separator;
-        File dir = new File(home + s + "AppData" + s + "Local" + s + "Pixelator" + s + "config");
-        if (!dir.exists() && !dir.mkdirs()) {
-            throw new FileException("Failed to create config directory");
-        }
-
-        File file = new File(dir.getPath() + s + hash);
-        try {
-            boolean preExisting;
-            if ((preExisting = !file.exists()) && !file.createNewFile()) {
-                throw new FileException("Failed to create local config");
-            }
-
-            Properties properties = new Properties();
-            if (!preExisting) {
-                try (InputStream inputStream = new FileInputStream(file)) {
-                    properties.load(inputStream);
-                }
-            }
-            properties.put(key, value);
-            try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                properties.store(outputStream, "");
-            }
-
-        } catch (IOException e) {
-            throw new FileException(e);
-        }
+        file.getProperties().put(name(), String.valueOf(value));
     }
 
 }

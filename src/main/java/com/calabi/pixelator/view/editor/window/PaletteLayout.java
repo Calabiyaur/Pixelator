@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
-import com.calabi.pixelator.files.PaletteFile;
+import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.view.ColorView;
 

@@ -5,8 +5,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import com.calabi.pixelator.main.MainScene;
 import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.start.MainScene;
 
 public class ToggleImageButton extends ToggleButton {
 

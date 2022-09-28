@@ -40,6 +40,7 @@ public enum Action {
     MOVE_IMAGE("Move image..."),
     NEW("New...", true, false, false, KeyCode.N),
     NEW_PALETTE("New...", true, false, true, KeyCode.N),
+    NEW_PROJECT("New..."),
     OPEN("Open...", true, false, false, KeyCode.O),
     OPEN_PALETTE("Open...", true, false, true, KeyCode.O),
     OUTLINE("Outline..."),

@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import com.calabi.pixelator.start.Pixelator;
+import com.calabi.pixelator.main.Pixelator;
 
 public class SaveRequestDialog extends BasicDialog {
 

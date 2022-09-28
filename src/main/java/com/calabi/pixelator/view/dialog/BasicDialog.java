@@ -14,8 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
-import com.calabi.pixelator.start.MainScene;
-import com.calabi.pixelator.start.Pixelator;
+import com.calabi.pixelator.main.MainScene;
+import com.calabi.pixelator.main.Pixelator;
 
 public abstract class BasicDialog extends Dialog<Button> {
 

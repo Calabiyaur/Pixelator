@@ -1,7 +1,7 @@
 package com.calabi.pixelator.util.shape;
 
-import com.calabi.pixelator.meta.Point;
-import com.calabi.pixelator.meta.PointArray;
+import com.calabi.pixelator.util.meta.Point;
+import com.calabi.pixelator.util.meta.PointArray;
 
 public final class EllipseHelper {
 

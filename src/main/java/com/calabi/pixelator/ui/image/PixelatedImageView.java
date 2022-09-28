@@ -16,7 +16,7 @@ import com.sun.prism.Texture;
 import com.sun.prism.impl.BaseResourceFactory;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
-import com.calabi.pixelator.start.ExceptionHandler;
+import com.calabi.pixelator.main.ExceptionHandler;
 import com.calabi.pixelator.util.ReflectionUtil;
 
 public class PixelatedImageView extends ImageView { //FIXME: Horizontally, pixels vary in size (e.g. 2, 2, 2, 3, 1, 2, ...)

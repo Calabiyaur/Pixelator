@@ -3,12 +3,12 @@ package com.calabi.pixelator.util.shape;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.meta.Point;
-import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.util.Check;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.Move;
 import com.calabi.pixelator.util.Rotate;
+import com.calabi.pixelator.util.meta.Point;
+import com.calabi.pixelator.util.meta.PointArray;
 import com.calabi.pixelator.view.ToolSettings;
 
 public final class ShapeMaster {

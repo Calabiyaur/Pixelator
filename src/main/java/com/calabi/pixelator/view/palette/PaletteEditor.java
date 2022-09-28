@@ -12,12 +12,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.files.Extension;
-import com.calabi.pixelator.files.PaletteFile;
-import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.ui.image.ScalableImageView;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.ImageUtil;
+import com.calabi.pixelator.util.meta.Point;
 import com.calabi.pixelator.view.editor.Editor;
 import com.calabi.pixelator.view.tool.Pick;
 
@@ -35,13 +34,8 @@ public class PaletteEditor extends Editor {
         getFile().setImage(getImage());
 
         ScalableImageView imageView = (ScalableImageView) getImageView();
-        if (file.getExtension() == Extension.PALI) {
-            imageView.setZoomMinimum(1);
-            imageView.setZoomMaximum(4);
-        } else {
-            imageView.setZoomMinimum(4);
-            imageView.setZoomMaximum(24);
-        }
+        imageView.setZoomMinimum(4);
+        imageView.setZoomMaximum(24);
         setOnScroll(e -> {
             imageView.scroll(e);
             requestLayout();
@@ -49,10 +43,8 @@ public class PaletteEditor extends Editor {
 
         undirty();
 
-        if (file.getExtension() != Extension.PALI) {
-            imageView.setScaleX(ZOOM_FACTOR);
-            imageView.setScaleY(ZOOM_FACTOR);
-        }
+        imageView.setScaleX(ZOOM_FACTOR);
+        imageView.setScaleY(ZOOM_FACTOR);
 
         ChangeListener<Image> imageChangeListener = (ov, o, n) -> {
             imageView.translateXProperty().bind(n.widthProperty()
@@ -65,8 +57,8 @@ public class PaletteEditor extends Editor {
 
         imageView.setPickOnBounds(true);
         imageView.setOnMouseEntered(e -> setCursor(Pick.getMe().getCursor()));
-        imageView.setOnMousePressed(e -> onMousePressed(e));
-        imageView.setOnMouseDragged(e -> onMouseDragged(e));
+        imageView.setOnMousePressed(this::onMousePressed);
+        imageView.setOnMouseDragged(this::onMouseDragged);
         imageView.setOnMouseExited(e -> setCursor(Cursor.DEFAULT));
 
         getChildren().addAll(imageView);

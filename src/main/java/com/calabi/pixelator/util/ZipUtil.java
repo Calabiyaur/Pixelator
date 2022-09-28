@@ -10,8 +10,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import com.calabi.pixelator.files.FileException;
-import com.calabi.pixelator.logging.Logger;
+import com.calabi.pixelator.file.FileException;
+import com.calabi.pixelator.log.Logger;
 
 public final class ZipUtil {
 

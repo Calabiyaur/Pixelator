@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import com.calabi.pixelator.meta.Point;
+import com.calabi.pixelator.util.meta.Point;
 
 public class Crosshair extends ShapeStack {
 

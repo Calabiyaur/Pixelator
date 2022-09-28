@@ -25,8 +25,8 @@ import javafx.util.Duration;
 import com.sun.javafx.tk.PlatformImage;
 import org.apache.commons.lang3.NotImplementedException;
 
-import com.calabi.pixelator.files.Category;
-import com.calabi.pixelator.files.PixelFile;
+import com.calabi.pixelator.file.Category;
+import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.util.Check;
 import com.calabi.pixelator.util.Param;
 import com.calabi.pixelator.util.ReflectionUtil;

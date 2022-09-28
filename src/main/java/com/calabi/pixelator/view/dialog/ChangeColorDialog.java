@@ -2,7 +2,7 @@ package com.calabi.pixelator.view.dialog;
 
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.logging.Logger;
+import com.calabi.pixelator.log.Logger;
 import com.calabi.pixelator.ui.control.BasicCheckBox;
 import com.calabi.pixelator.ui.control.BasicIntegerField;
 import com.calabi.pixelator.ui.image.WritableImage;

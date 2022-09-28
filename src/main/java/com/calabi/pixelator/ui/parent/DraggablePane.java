@@ -10,8 +10,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
-import com.calabi.pixelator.meta.Direction;
 import com.calabi.pixelator.util.NumberUtil;
+import com.calabi.pixelator.util.meta.Direction;
 
 public abstract class DraggablePane extends GridPane {
 

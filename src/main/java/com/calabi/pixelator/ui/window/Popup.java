@@ -7,7 +7,7 @@ import javafx.scene.control.PopupControl;
 import javafx.scene.control.Skin;
 import javafx.scene.control.Skinnable;
 
-import com.calabi.pixelator.meta.Direction;
+import com.calabi.pixelator.util.meta.Direction;
 
 public class Popup extends PopupControl {
 

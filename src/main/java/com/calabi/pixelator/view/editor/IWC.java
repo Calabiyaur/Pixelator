@@ -12,12 +12,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.Pane;
 
-import com.calabi.pixelator.files.Category;
-import com.calabi.pixelator.files.PixelFile;
-import com.calabi.pixelator.meta.CompoundBooleanProperty;
+import com.calabi.pixelator.file.Category;
+import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.ui.image.ScalableImageView;
 import com.calabi.pixelator.ui.image.WritableImage;
+import com.calabi.pixelator.util.meta.CompoundBooleanProperty;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;

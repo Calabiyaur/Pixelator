@@ -10,10 +10,10 @@ import javafx.scene.paint.Color;
 
 import com.sun.javafx.tk.PlatformImage;
 
-import com.calabi.pixelator.meta.Pixel;
-import com.calabi.pixelator.meta.PixelArray;
-import com.calabi.pixelator.meta.Point;
 import com.calabi.pixelator.ui.image.WritableImage;
+import com.calabi.pixelator.util.meta.Pixel;
+import com.calabi.pixelator.util.meta.PixelArray;
+import com.calabi.pixelator.util.meta.Point;
 import com.calabi.pixelator.view.palette.SortMaster;
 
 public class ImageUtil {

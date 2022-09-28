@@ -3,7 +3,7 @@ package com.calabi.pixelator.util.shape;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.calabi.pixelator.meta.PointArray;
+import com.calabi.pixelator.util.meta.PointArray;
 
 class EllipseHelperTest {
 

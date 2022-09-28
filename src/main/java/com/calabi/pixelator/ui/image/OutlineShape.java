@@ -17,9 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
-import com.calabi.pixelator.meta.Point;
-import com.calabi.pixelator.meta.PointArray;
 import com.calabi.pixelator.util.CollectionUtil;
+import com.calabi.pixelator.util.meta.Point;
+import com.calabi.pixelator.util.meta.PointArray;
 
 public class OutlineShape extends ShapeStack {
 

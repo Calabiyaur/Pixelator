@@ -3,8 +3,8 @@ package com.calabi.pixelator.ui.control;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 
+import com.calabi.pixelator.main.MainScene;
 import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.start.MainScene;
 
 public class ImageButton extends Button {
 

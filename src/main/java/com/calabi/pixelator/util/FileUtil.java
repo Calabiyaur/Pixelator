@@ -6,7 +6,7 @@ import java.nio.file.Files;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.calabi.pixelator.files.Extension;
+import com.calabi.pixelator.file.Extension;
 
 public class FileUtil {
 
