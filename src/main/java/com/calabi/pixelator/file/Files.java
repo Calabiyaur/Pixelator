@@ -14,6 +14,7 @@ import javafx.stage.FileChooser;
 import com.calabi.pixelator.file.io.PixelFileReader;
 import com.calabi.pixelator.file.io.PixelFileWriter;
 import com.calabi.pixelator.main.Pixelator;
+import com.calabi.pixelator.res.Project;
 import com.calabi.pixelator.util.FileUtil;
 
 public class Files {
@@ -93,6 +94,20 @@ public class Files {
         } catch (IOException e) {
             throw new FileException("Failed to save preview " + paletteFile, e);
         }
+    }
+
+    public Project openProject() {
+        File fileDirectory = Category.PROJECT.getDirectory();
+        FileChooser dialog = new FileChooser();
+        dialog.setInitialDirectory(fileDirectory);
+        dialog.getExtensionFilters().addAll(Category.PROJECT.getExtensionFiltersToOpen());
+        File file = dialog.showOpenDialog(Pixelator.getPrimaryStage());
+        if (file == null) {
+            return null;
+        }
+
+        updateDirectory(Category.PROJECT, file);
+        return new Project(file.getParentFile().getParentFile());
     }
 
     public List<ImageFile> openImages() {

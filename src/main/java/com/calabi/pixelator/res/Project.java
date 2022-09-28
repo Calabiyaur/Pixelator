@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.Properties;
 
 import com.calabi.pixelator.main.ExceptionHandler;
+import com.calabi.pixelator.main.Pixelator;
 
 public final class Project {
 
@@ -31,6 +32,9 @@ public final class Project {
 
     public static void set(Project project) {
         INSTANCE = project;
+        INSTANCE.saveConfig();
+
+        Pixelator.getPrimaryStage().setTitle(Pixelator.TITLE + " " + BuildInfo.getVersion() + " - " + project.getName());
     }
 
     public static boolean active() {
@@ -92,6 +96,9 @@ public final class Project {
     private void writeProperties(File file, Properties properties) {
         try {
             if (!file.exists()) {
+                if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
+                    throw new IOException("Failed to create directory: '" + file.getParentFile().getAbsolutePath() + "'");
+                }
                 if (!file.createNewFile()) {
                     throw new IOException("Failed to create file: '" + file.getAbsolutePath() + "'");
                 }

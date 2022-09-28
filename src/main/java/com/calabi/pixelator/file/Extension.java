@@ -5,7 +5,8 @@ public enum Extension {
     GIF("GIF", "*.gif"),
     JPEG("JPEG", "*.jpeg"),
     JPG("JPG", "*.jpg"),
-    PNG("PNG", "*.png");
+    PNG("PNG", "*.png"),
+    PROJECT("Project", ".project");
 
     private final String notation;
     private final String suffix;

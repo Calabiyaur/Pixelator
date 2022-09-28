@@ -39,7 +39,6 @@ import com.calabi.pixelator.file.Files;
 import com.calabi.pixelator.file.ImageFile;
 import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.file.PixelFile;
-import com.calabi.pixelator.res.BuildInfo;
 import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.res.GridConfig;
 import com.calabi.pixelator.res.GridSelectionConfig;
@@ -169,7 +168,7 @@ public class MainScene extends Scene {
 
         BasicMenu projectMenu = new BasicMenu("Project");
         projectMenu.addItem(NEW_PROJECT, e -> newProject());
-        //TODO: projectMenu.addItem(OPEN_PROJECT);
+        projectMenu.addItem(OPEN_PROJECT, e -> openProject());
         //TODO: projectMenu.addItem(OPEN_RECENT_PROJECT);
         //TODO: projectMenu.addItem(CLOSE_PROJECT);
         projectMenu.addSeparator();
@@ -339,8 +338,14 @@ public class MainScene extends Scene {
             }
             dialog.close();
             Project.set(dialog.getProject());
-            Pixelator.getPrimaryStage().setTitle(Pixelator.TITLE + " " + BuildInfo.getVersion() + " - " + dialog.getProject().getName());
         });
+    }
+
+    private void openProject() {
+        Project project = Files.get().openProject();
+        if (project != null) {
+            Project.set(project);
+        }
     }
 
     private void move(int right, int down) {

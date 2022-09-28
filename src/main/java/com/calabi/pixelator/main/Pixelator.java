@@ -19,7 +19,7 @@ import com.calabi.pixelator.res.Images;
 
 public class Pixelator extends Application {
 
-    static final String TITLE = "Pixelator";
+    public static final String TITLE = "Pixelator";
     static Stage primaryStage;
     static List<Stage> stages = new ArrayList<>();
     static BooleanProperty clipboardActive = new SimpleBooleanProperty();

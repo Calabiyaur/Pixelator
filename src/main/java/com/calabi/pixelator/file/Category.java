@@ -39,6 +39,15 @@ public enum Category {
                     new Filter("Palette files", Extension.JPG, Extension.JPEG, Extension.PNG),
                     new Filter("All", Extension.values())
             }
+    ),
+    PROJECT(
+            Config.PROJECT_DIRECTORY,
+            new Filter[] {
+                    new Filter(Extension.PROJECT),
+            },
+            new Filter[] {
+                    new Filter("Project files", Extension.PROJECT)
+            }
     );
 
     private final Config config;
