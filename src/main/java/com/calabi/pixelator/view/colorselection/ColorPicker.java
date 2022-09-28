@@ -23,8 +23,8 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 
-import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Config;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.util.BackgroundBuilder;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.NumberUtil;

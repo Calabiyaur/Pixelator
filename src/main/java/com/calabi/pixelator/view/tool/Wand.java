@@ -1,6 +1,6 @@
 package com.calabi.pixelator.view.tool;
 
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.util.meta.PointArray;
 
 public class Wand extends SelectionTool {

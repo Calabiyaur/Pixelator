@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import com.calabi.pixelator.file.PixelFileBuilder;
-import com.calabi.pixelator.res.Project;
+import com.calabi.pixelator.project.Project;
 import com.calabi.pixelator.ui.image.WritableImage;
 
 public class PixelFileReader extends PixelFileHandler {

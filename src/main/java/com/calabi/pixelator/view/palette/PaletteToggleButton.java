@@ -13,7 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.window.Popup;
 import com.calabi.pixelator.util.Do;

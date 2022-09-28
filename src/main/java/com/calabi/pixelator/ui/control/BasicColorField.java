@@ -5,7 +5,7 @@ import javafx.scene.control.Control;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.view.dialog.ColorDialog;
 
 public class BasicColorField extends BasicControl<Color> {

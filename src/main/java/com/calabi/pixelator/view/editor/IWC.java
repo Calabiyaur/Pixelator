@@ -12,9 +12,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.Pane;
 
+import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.file.Category;
 import com.calabi.pixelator.file.PixelFile;
-import com.calabi.pixelator.res.Config;
 import com.calabi.pixelator.ui.image.ScalableImageView;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.meta.CompoundBooleanProperty;
@@ -219,14 +219,14 @@ public class IWC extends Pane {
                     });
                     return true;
                 case NO:
-                    children.forEach(window -> window.close());
+                    children.forEach(ImageWindow::close);
                     return true;
                 case CANCEL:
                 default:
                     return false;
             }
         } else {
-            children.forEach(window -> window.close());
+            children.forEach(ImageWindow::close);
             return true;
         }
     }

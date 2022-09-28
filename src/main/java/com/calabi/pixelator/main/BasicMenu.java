@@ -11,8 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
-import com.calabi.pixelator.res.Action;
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Action;
+import com.calabi.pixelator.config.Images;
 
 public class BasicMenu extends Menu {
 

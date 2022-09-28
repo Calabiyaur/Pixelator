@@ -13,8 +13,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.log.Logger;
-import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.util.meta.Point;
 import com.calabi.pixelator.view.editor.ImageEditor;
 import com.calabi.pixelator.view.editor.SelectionLayer;

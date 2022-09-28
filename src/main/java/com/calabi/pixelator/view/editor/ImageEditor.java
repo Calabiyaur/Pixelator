@@ -26,9 +26,9 @@ import javafx.scene.paint.Color;
 import com.sun.javafx.tk.PlatformImage;
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.calabi.pixelator.config.Config;
+import com.calabi.pixelator.config.GridSelectionConfig;
 import com.calabi.pixelator.file.PixelFile;
-import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.res.GridSelectionConfig;
 import com.calabi.pixelator.ui.image.Crosshair;
 import com.calabi.pixelator.ui.image.Grid;
 import com.calabi.pixelator.ui.image.ImageBackground;
@@ -113,12 +113,13 @@ public class ImageEditor extends Editor {
         GridSelectionConfig gridSelectionConfig = Config.GRID_SELECTION.getObject(file);
         Color gridColor = Color.valueOf(Config.GRID_COLOR.getString());
         grid = new Grid(width.get(), height.get(), gridColor);
-        grid.setXInterval(gridSelectionConfig.getXInterval());
-        grid.setYInterval(gridSelectionConfig.getYInterval());
         grid.draw();
         grid.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         grid.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
-        setShowGrid(gridSelectionConfig.isSelected());
+        if (gridSelectionConfig != null) {
+            grid.setXInterval(gridSelectionConfig.getXInterval());
+            grid.setYInterval(gridSelectionConfig.getYInterval());
+        }
 
         Color crosshairColor = Color.valueOf(Config.CROSSHAIR_COLOR.getString());
         crosshair = new Crosshair(width.get(), height.get(), crosshairColor);
@@ -153,7 +154,7 @@ public class ImageEditor extends Editor {
                 outlineRect
         );
 
-        setShowGrid(gridSelectionConfig.isSelected());
+        setShowGrid(gridSelectionConfig != null);
         setShowCrosshair(false);
         setShowBackground(false);
 

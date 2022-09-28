@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 
 import org.apache.logging.log4j.util.TriConsumer;
 
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.control.ToggleImageButton;
 import com.calabi.pixelator.ui.image.ScalableImageView;

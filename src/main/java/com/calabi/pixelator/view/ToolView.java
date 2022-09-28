@@ -26,8 +26,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
-import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Config;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.ui.control.BasicCheckBox;
 import com.calabi.pixelator.ui.control.BasicIntegerField;
 import com.calabi.pixelator.ui.control.ToggleImageButton;

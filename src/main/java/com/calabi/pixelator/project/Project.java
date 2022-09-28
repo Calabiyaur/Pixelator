@@ -1,4 +1,4 @@
-package com.calabi.pixelator.res;
+package com.calabi.pixelator.project;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,8 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
+import com.calabi.pixelator.config.BuildInfo;
+import com.calabi.pixelator.config.Config;
+import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.main.ExceptionHandler;
 import com.calabi.pixelator.main.Pixelator;
+import com.calabi.pixelator.view.editor.IWC;
 
 public final class Project {
 
@@ -20,6 +24,8 @@ public final class Project {
     private final File propertiesFile;
     private final Properties properties;
 
+    private OpenedImagesConfig openedImages;
+
     public Project(File location) {
         this.location = location;
         this.propertiesFile = new File(location + "/" + FOLDER_NAME + PROPERTIES_FILENAME);
@@ -30,41 +36,35 @@ public final class Project {
         return INSTANCE;
     }
 
+    public static void setSilently(Project project) {
+        INSTANCE = project;
+    }
+
     public static void set(Project project) {
         INSTANCE = project;
-        INSTANCE.saveConfig();
 
-        Pixelator.getPrimaryStage().setTitle(Pixelator.TITLE + " " + BuildInfo.getVersion() + " - " + project.getName());
+        if (project != null) {
+
+            project.load();
+            project.saveConfig();
+
+            Pixelator.getPrimaryStage().setTitle(Pixelator.TITLE + " " + BuildInfo.getVersion() + " - " + project.getName());
+
+        } else {
+            Pixelator.getPrimaryStage().setTitle(Pixelator.TITLE + " " + BuildInfo.getVersion());
+        }
     }
 
     public static boolean active() {
         return INSTANCE != null;
     }
 
-    public Object getConfig(String key, ConfigType type) {
-        String stringValue = properties.getProperty(key);
-        if (stringValue == null) {
-            return null;
-        }
-
-        return switch(type) {
-            case BOOLEAN -> Boolean.valueOf(stringValue);
-            case DOUBLE -> Double.valueOf(stringValue);
-            case INT -> Integer.valueOf(stringValue);
-            case STRING, OBJECT -> stringValue;
-        };
+    public String getConfig(String key) {
+        return properties.getProperty(key);
     }
 
-    public void putConfig(String key, ConfigType type, Object value) {
-        properties.setProperty(key,
-                switch(type) {
-                    case BOOLEAN -> Boolean.toString((Boolean) value);
-                    case DOUBLE -> Double.toString((Double) value);
-                    case INT -> Integer.toString((Integer) value);
-                    case STRING -> (String) value;
-                    case OBJECT -> ((ConfigObject) value).toConfig();
-                }
-        );
+    public void putConfig(String key, String value) {
+        properties.setProperty(key, value);
         saveConfig();
     }
 
@@ -115,6 +115,14 @@ public final class Project {
         return new File(location, FOLDER_NAME + location.toPath().relativize(Path.of(filename)));
     }
 
+    private void load() {
+        this.openedImages = Config.OPENED_IMAGES.getObject();
+
+        for (PixelFile file : openedImages.getFiles()) {
+            IWC.get().addImage(file);
+        }
+    }
+
     private Properties loadConfig() {
         return readProperties(propertiesFile);
     }
@@ -129,6 +137,16 @@ public final class Project {
 
     public String getName() {
         return location.getAbsolutePath();
+    }
+
+    public void addOpenedImage(PixelFile file) {
+        openedImages.getFiles().add(file);
+        Config.OPENED_IMAGES.putObject(openedImages);
+    }
+
+    public void removeOpenedImage(PixelFile file) {
+        openedImages.getFiles().remove(file);
+        Config.OPENED_IMAGES.putObject(openedImages);
     }
 
 }

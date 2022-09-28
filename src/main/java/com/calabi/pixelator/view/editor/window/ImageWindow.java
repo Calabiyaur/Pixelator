@@ -9,13 +9,14 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import com.calabi.pixelator.config.Config;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.file.Category;
 import com.calabi.pixelator.file.Files;
 import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.main.ActionManager;
 import com.calabi.pixelator.main.Pixelator;
-import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.project.Project;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.image.ScalableImageView;
 import com.calabi.pixelator.ui.image.WritableImage;
@@ -78,6 +79,10 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         //popup.setOnAction(e -> popupAction());
 
         //popup.setDisable(true);
+
+        if (Project.active()) {
+            Project.get().addOpenedImage(imageFile);
+        }
     }
 
     public void dispose() {
@@ -254,6 +259,10 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
     public void close() {
         updateConfig();
         Files.get().saveConfig(getFile());
+        if (Project.active()) {
+            Project.get().removeOpenedImage(imageFile);
+        }
+
         super.close();
     }
 

@@ -2,7 +2,7 @@ package com.calabi.pixelator.ui.control;
 
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Images;
 
 public class SwapColorButton extends ImageButton {
 

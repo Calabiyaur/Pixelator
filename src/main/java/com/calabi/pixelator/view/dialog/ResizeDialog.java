@@ -4,7 +4,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.GridPane;
 
-import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.ui.control.BasicCheckBox;
 import com.calabi.pixelator.ui.control.BasicIntegerField;
 import com.calabi.pixelator.ui.control.BiasButton;

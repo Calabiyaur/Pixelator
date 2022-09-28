@@ -22,7 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.util.BackgroundBuilder;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.view.ColorView;

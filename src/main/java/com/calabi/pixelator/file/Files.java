@@ -14,7 +14,7 @@ import javafx.stage.FileChooser;
 import com.calabi.pixelator.file.io.PixelFileReader;
 import com.calabi.pixelator.file.io.PixelFileWriter;
 import com.calabi.pixelator.main.Pixelator;
-import com.calabi.pixelator.res.Project;
+import com.calabi.pixelator.project.Project;
 import com.calabi.pixelator.util.FileUtil;
 
 public class Files {
@@ -136,7 +136,7 @@ public class Files {
         return result;
     }
 
-    private PixelFile openFile(File file, Category category) {
+    public PixelFile openFile(File file, Category category) {
         PixelFileReader reader = getReader(FileUtil.getExtension(file));
         try {
             return reader.read(file)

@@ -33,18 +33,18 @@ import javafx.stage.DirectoryChooser;
 
 import com.sun.javafx.tk.PlatformImage;
 
+import com.calabi.pixelator.config.Config;
+import com.calabi.pixelator.config.GridConfig;
+import com.calabi.pixelator.config.GridSelectionConfig;
+import com.calabi.pixelator.config.Images;
+import com.calabi.pixelator.config.Theme;
 import com.calabi.pixelator.file.Category;
 import com.calabi.pixelator.file.FileException;
 import com.calabi.pixelator.file.Files;
 import com.calabi.pixelator.file.ImageFile;
 import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.file.PixelFile;
-import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.res.GridConfig;
-import com.calabi.pixelator.res.GridSelectionConfig;
-import com.calabi.pixelator.res.Images;
-import com.calabi.pixelator.res.Project;
-import com.calabi.pixelator.res.Theme;
+import com.calabi.pixelator.project.Project;
 import com.calabi.pixelator.ui.control.BasicMenuBar;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.ColorUtil;
@@ -68,7 +68,7 @@ import com.calabi.pixelator.view.editor.ImageEditor;
 import com.calabi.pixelator.view.palette.PaletteMaster;
 import com.calabi.pixelator.view.palette.PaletteSelection;
 
-import static com.calabi.pixelator.res.Action.*;
+import static com.calabi.pixelator.config.Action.*;
 
 public class MainScene extends Scene {
 
@@ -179,12 +179,14 @@ public class MainScene extends Scene {
         BasicMenu fileMenu = new BasicMenu("File");
         fileMenu.addItem(NEW, e -> newImage());
         fileMenu.addItem(OPEN, e -> openImages());
-        fileMenu.addItem(SAVE, e -> IWC.get().saveCurrentFile(), IWC.get().imageSelectedProperty().and(IWC.get().dirtyProperty()));
+        fileMenu.addItem(SAVE, e -> IWC.get().saveCurrentFile(),
+                IWC.get().imageSelectedProperty().and(IWC.get().dirtyProperty()));
         fileMenu.addItem(SAVE_AS, e -> Files.get().create(IWC.get().getCurrentFile()), IWC.get().imageSelectedProperty());
         fileMenu.addItem(SAVE_ALL, e -> IWC.get().saveAll(), IWC.get().overallDirtyProperty());
         fileMenu.addItem(CREATE_FROM_CLIPBOARD, e -> createFromClipboard(), Pixelator.clipboardActiveProperty());
         //TODO: IMPORT_STRIP
-        fileMenu.addItem(EXPORT_STRIP, e -> exportStrip(), IWC.get().imageSelectedProperty().and(IWC.get().imageAnimatedProperty()));
+        fileMenu.addItem(EXPORT_STRIP, e -> exportStrip(),
+                IWC.get().imageSelectedProperty().and(IWC.get().imageAnimatedProperty()));
         fileMenu.addItem(CLOSE, e -> IWC.get().closeCurrent(), IWC.get().imageSelectedProperty());
         fileMenu.addItem(CLOSE_ALL, e -> IWC.get().closeAll(), IWC.get().imageSelectedProperty());
         fileMenu.addItem(SETTINGS, e -> showSettings());
@@ -205,10 +207,12 @@ public class MainScene extends Scene {
                 e -> IWC.get().setShowGrid(!IWC.get().showGridProperty().get()), IWC.get().imageSelectedProperty());
         IWC.get().showGridProperty().addListener((ov, o, n) -> gridItem.setSelected(n));
         CheckMenuItem crossHairItem = viewMenu.addCheckItem(CROSSHAIR,
-                e -> IWC.get().setShowCrosshair(!IWC.get().showCrosshairProperty().get()), IWC.get().imageSelectedProperty());
+                e -> IWC.get().setShowCrosshair(!IWC.get().showCrosshairProperty().get()),
+                IWC.get().imageSelectedProperty());
         IWC.get().showCrosshairProperty().addListener((ov, o, n) -> crossHairItem.setSelected(n));
         CheckMenuItem backgroundItem = viewMenu.addCheckItem(BACKGROUND,
-                e -> IWC.get().setShowBackground(!IWC.get().showBackgroundProperty().get()), IWC.get().imageSelectedProperty());
+                e -> IWC.get().setShowBackground(!IWC.get().showBackgroundProperty().get()),
+                IWC.get().imageSelectedProperty());
         IWC.get().showBackgroundProperty().addListener((ov, o, n) -> backgroundItem.setSelected(n));
         viewMenu.addItem(ZOOM_IN, e -> IWC.get().zoomIn(), IWC.get().imageSelectedProperty());
         viewMenu.addItem(ZOOM_ZERO, e -> IWC.get().zoomZero(), IWC.get().imageSelectedProperty());
@@ -253,7 +257,8 @@ public class MainScene extends Scene {
         toolMenu.addItem(EXTRACT_PALETTE, e -> extractPalette(), IWC.get().imageSelectedProperty());
         toolMenu.addItem(CHANGE_PALETTE, e -> changePalette(), IWC.get().imageSelectedProperty());
 
-        menuBar.getMenus().setAll(projectMenu, fileMenu, editMenu, viewMenu, imageMenu, animationMenu, paletteMenu, toolMenu);
+        menuBar.getMenus()
+                .setAll(projectMenu, fileMenu, editMenu, viewMenu, imageMenu, animationMenu, paletteMenu, toolMenu);
         return menuBar;
     }
 
@@ -282,10 +287,9 @@ public class MainScene extends Scene {
                 if (selected) {
                     getEditor().setGridInterval(xInterval, yInterval);
                     Config.GRID_SELECTION.putObject(getEditor().getPixelFile(),
-                            GridSelectionConfig.selected(xInterval, yInterval));
+                            new GridSelectionConfig(xInterval, yInterval));
                 } else {
-                    Config.GRID_SELECTION.putObject(getEditor().getPixelFile(),
-                            GridSelectionConfig.unselected(xInterval, yInterval));
+                    Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), null);
                     IWC.get().setShowGrid(false);
                 }
             }
@@ -294,16 +298,14 @@ public class MainScene extends Scene {
             if (getEditor() != null) {
                 GridSelectionConfig config = Config.GRID_SELECTION.getObject(getEditor().getPixelFile());
                 for (MenuItem item : gridConfig.getContextMenu().getItems()) {
-                    if (item instanceof GridConfig.GridMenuItem) {
-                        GridConfig.GridMenuItem gridMenuItem = (GridConfig.GridMenuItem) item;
+                    if (item instanceof GridConfig.GridMenuItem gridMenuItem) {
                         if (config.getXInterval() == gridMenuItem.getXInterval()
                                 && config.getYInterval() == gridMenuItem.getYInterval()) {
                             gridMenuItem.setSelected(n);
                         }
                     }
                 }
-                config.setSelected(n);
-                Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), config);
+                Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), n ? config : null);
             }
         });
 
@@ -330,21 +332,31 @@ public class MainScene extends Scene {
     }
 
     private void newProject() {
+        Project project = Project.get();
+        Project.setSilently(null);
+
         NewProjectDialog dialog = new NewProjectDialog();
         dialog.showAndFocus();
         dialog.setOnOk(e -> {
             if (dialog.getProject() == null) {
+                Project.setSilently(project);
                 return;
             }
             dialog.close();
-            Project.set(dialog.getProject());
+            if (closeAll()) {
+                Project.set(dialog.getProject());
+            } else {
+                Project.setSilently(project);
+            }
         });
     }
 
     private void openProject() {
-        Project project = Files.get().openProject();
-        if (project != null) {
-            Project.set(project);
+        if (closeAll()) {
+            Project project = Files.get().openProject();
+            if (project != null) {
+                Project.set(project);
+            }
         }
     }
 

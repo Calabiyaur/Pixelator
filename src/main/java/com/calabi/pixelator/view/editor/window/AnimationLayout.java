@@ -21,8 +21,8 @@ import javafx.scene.paint.Color;
 import com.sun.javafx.scene.DirtyBits;
 import com.sun.javafx.scene.NodeHelper;
 
-import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Config;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.control.ToggleImageButton;
 import com.calabi.pixelator.ui.image.PlatformImageList;

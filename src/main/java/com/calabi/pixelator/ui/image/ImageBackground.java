@@ -3,8 +3,8 @@ package com.calabi.pixelator.ui.image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Config;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.util.BackgroundBuilder;
 
 public class ImageBackground extends Pane {

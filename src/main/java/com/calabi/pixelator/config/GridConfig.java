@@ -1,4 +1,4 @@
-package com.calabi.pixelator.res;
+package com.calabi.pixelator.config;
 
 import java.util.List;
 import java.util.stream.Collectors;

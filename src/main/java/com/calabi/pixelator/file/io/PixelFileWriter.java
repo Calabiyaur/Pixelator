@@ -21,7 +21,7 @@ import com.calabi.pixelator.file.FileException;
 import com.calabi.pixelator.file.Metadata;
 import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.file.PixelFile;
-import com.calabi.pixelator.res.Project;
+import com.calabi.pixelator.project.Project;
 import com.calabi.pixelator.ui.image.WritableImage;
 
 public class PixelFileWriter extends PixelFileHandler {

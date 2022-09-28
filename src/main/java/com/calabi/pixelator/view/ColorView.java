@@ -13,10 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.main.ActionManager;
 import com.calabi.pixelator.main.Pixelator;
-import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.view.colorselection.ColorSelection;

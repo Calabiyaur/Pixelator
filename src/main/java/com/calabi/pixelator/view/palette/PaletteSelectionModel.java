@@ -5,9 +5,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.main.MainScene;
-import com.calabi.pixelator.res.Images;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.view.ColorView;

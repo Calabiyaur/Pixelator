@@ -4,7 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.input.KeyCode;
 
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Images;
 
 public abstract class SelectionTool extends Tool {
 

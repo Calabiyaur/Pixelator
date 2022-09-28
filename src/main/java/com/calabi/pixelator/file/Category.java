@@ -6,7 +6,7 @@ import java.util.List;
 
 import javafx.stage.FileChooser;
 
-import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.config.Config;
 
 public enum Category {
 

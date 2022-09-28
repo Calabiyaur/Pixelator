@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.util.CollectionUtil;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.meta.PixelArray;

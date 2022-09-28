@@ -10,7 +10,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 
-import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.ui.control.BasicNumberField;
 import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.MapUtil;

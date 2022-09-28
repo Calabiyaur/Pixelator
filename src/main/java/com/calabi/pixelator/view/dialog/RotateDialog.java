@@ -1,6 +1,6 @@
 package com.calabi.pixelator.view.dialog;
 
-import com.calabi.pixelator.res.Config;
+import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.ui.control.BasicIntegerField;
 
 public class RotateDialog extends BasicDialog {

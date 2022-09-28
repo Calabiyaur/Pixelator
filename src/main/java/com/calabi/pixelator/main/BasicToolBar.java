@@ -5,8 +5,8 @@ import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 
-import com.calabi.pixelator.res.Action;
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Action;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.control.ToggleImageButton;
 

@@ -4,7 +4,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.util.meta.Direction;
 
 import static com.calabi.pixelator.util.meta.Direction.EAST;

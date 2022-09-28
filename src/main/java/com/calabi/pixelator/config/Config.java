@@ -1,4 +1,4 @@
-package com.calabi.pixelator.res;
+package com.calabi.pixelator.config;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -6,7 +6,8 @@ import java.util.prefs.Preferences;
 
 import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.log.Logger;
-import com.calabi.pixelator.main.ExceptionHandler;
+import com.calabi.pixelator.project.OpenedImagesConfig;
+import com.calabi.pixelator.project.Project;
 import com.calabi.pixelator.util.meta.Direction;
 
 public enum Config {
@@ -34,6 +35,7 @@ public enum Config {
     IMAGE_DIRECTORY(ConfigMode.PROJECT, ConfigType.STRING, ""),
     NEW_IMAGE_HEIGHT(ConfigMode.PROJECT, ConfigType.INT, 32),
     NEW_IMAGE_WIDTH(ConfigMode.PROJECT, ConfigType.INT, 32),
+    OPENED_IMAGES(ConfigMode.PROJECT, ConfigType.OBJECT, OpenedImagesConfig.class, new OpenedImagesConfig()),
     PALETTE_DIRECTORY(ConfigMode.PROJECT, ConfigType.STRING, ""),
     REPLACE(ConfigMode.PROJECT, ConfigType.BOOLEAN, false),
     RESIZE_BIAS(ConfigMode.PROJECT, ConfigType.STRING, Direction.NONE.name()),
@@ -46,7 +48,7 @@ public enum Config {
 
     // Image config
     FRAME_INDEX(ConfigMode.IMAGE, ConfigType.INT, 0),
-    GRID_SELECTION(ConfigMode.IMAGE, ConfigType.OBJECT, GridSelectionConfig.class, ""),
+    GRID_SELECTION(ConfigMode.IMAGE, ConfigType.OBJECT, GridSelectionConfig.class, null),
     IMAGE_H_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_HEIGHT(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_V_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),
@@ -75,6 +77,17 @@ public enum Config {
         this.def = def;
     }
 
+    public static <T extends ConfigObject> T toObject(String string, Class<T> c) {
+        try {
+            Constructor<T> constructor = c.getConstructor();
+            T instance = constructor.newInstance();
+            instance.build(string);
+            return instance;
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void setDef(Object def) {
         this.def = def;
     }
@@ -100,36 +113,35 @@ public enum Config {
     }
 
     public <T extends ConfigObject> T getObject() {
-        String string = (String) get(ConfigType.OBJECT, def);
-        if (string != null) {
-            try {
-                Constructor<T> constructor = (Constructor<T>) c.getConstructor();
-                T instance = constructor.newInstance();
-                instance.build(string);
-                return instance;
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                ExceptionHandler.handle(e);
-            }
-        }
-        return (T) def;
+        return (T) get(ConfigType.OBJECT, def);
     }
 
     private Object get(ConfigType type, Object def) {
         Object result = null;
         if (ConfigMode.PROJECT.equals(mode) && Project.active()) {
-            result = getProjectConfig(type);
+            result = getProjectConfig(type, def);
         }
         if (result == null) {
             result = getGlobalConfig(type, def);
         }
-        return result;
+        return result != null ? result : def;
     }
 
-    private Object getProjectConfig(ConfigType type) {
+    private Object getProjectConfig(ConfigType type, Object def) {
         if (ConfigMode.IMAGE.equals(mode) || !type.equals(this.type)) {
             throw new UnsupportedOperationException();
         }
-        return Project.get().getConfig(name(), type);
+        String stringValue = Project.get().getConfig(name());
+        if (stringValue == null) {
+            return def;
+        }
+        return switch(type) {
+            case BOOLEAN -> Boolean.valueOf(stringValue);
+            case DOUBLE -> Double.valueOf(stringValue);
+            case INT -> Integer.valueOf(stringValue);
+            case STRING -> stringValue;
+            case OBJECT -> toObject(stringValue, c);
+        };
     }
 
     private Object getGlobalConfig(ConfigType type, Object def) {
@@ -141,7 +153,10 @@ public enum Config {
             case DOUBLE -> Preferences.userRoot().getDouble(name(), (double) def);
             case INT -> Preferences.userRoot().getInt(name(), (int) def);
             case STRING -> Preferences.userRoot().get(name(), (String) def);
-            case OBJECT -> Preferences.userRoot().get(name(), null);
+            case OBJECT -> {
+                String stringValue = Preferences.userRoot().get(name(), null);
+                yield stringValue == null ? null : toObject(stringValue, c);
+            }
         };
     }
 
@@ -178,7 +193,14 @@ public enum Config {
         if (ConfigMode.IMAGE.equals(mode) || !type.equals(this.type)) {
             throw new UnsupportedOperationException();
         }
-        Project.get().putConfig(name(), type, value);
+        String stringValue = switch(type) {
+            case BOOLEAN -> Boolean.toString((boolean) value);
+            case DOUBLE -> Double.toString((double) value);
+            case INT -> Integer.toString((int) value);
+            case STRING -> (String) value;
+            case OBJECT -> ((ConfigObject) value).toConfig();
+        };
+        Project.get().putConfig(name(), stringValue);
     }
 
     private void putGlobalConfig(ConfigType type, Object value) {
@@ -215,18 +237,7 @@ public enum Config {
     }
 
     public <T extends ConfigObject> T getObject(PixelFile file) {
-        String string = (String) getImageConfig(file, ConfigType.OBJECT, def);
-        if (string != null) {
-            try {
-                Constructor<T> constructor = (Constructor<T>) c.getConstructor();
-                T instance = constructor.newInstance();
-                instance.build(string);
-                return instance;
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                ExceptionHandler.handle(e);
-            }
-        }
-        return (T) def;
+        return (T) getImageConfig(file, ConfigType.OBJECT, def);
     }
 
     private Object getImageConfig(PixelFile file, ConfigType configType, Object def) {
@@ -242,31 +253,32 @@ public enum Config {
             case BOOLEAN -> Boolean.valueOf(stringValue);
             case DOUBLE -> Double.valueOf(stringValue);
             case INT -> Integer.valueOf(stringValue);
-            case STRING, OBJECT -> stringValue;
+            case STRING -> stringValue;
+            case OBJECT -> toObject(stringValue, c);
         };
     }
 
     public void putBoolean(PixelFile file, boolean value) {
-        put(file, ConfigType.BOOLEAN, value);
+        putImageConfig(file, ConfigType.BOOLEAN, value);
     }
 
     public void putDouble(PixelFile file, double value) {
-        put(file, ConfigType.DOUBLE, value);
+        putImageConfig(file, ConfigType.DOUBLE, value);
     }
 
     public void putInt(PixelFile file, int value) {
-        put(file, ConfigType.INT, value);
+        putImageConfig(file, ConfigType.INT, value);
     }
 
     public void putString(PixelFile file, String value) {
-        put(file, ConfigType.STRING, value);
+        putImageConfig(file, ConfigType.STRING, value);
     }
 
     public void putObject(PixelFile file, ConfigObject value) {
-        put(file, ConfigType.OBJECT, value);
+        putImageConfig(file, ConfigType.OBJECT, value);
     }
 
-    private void put(PixelFile file, ConfigType configType, Object value) {
+    private void putImageConfig(PixelFile file, ConfigType configType, Object value) {
         if (ConfigMode.GLOBAL.equals(mode) || !configType.equals(this.type)) {
             throw new UnsupportedOperationException();
         }

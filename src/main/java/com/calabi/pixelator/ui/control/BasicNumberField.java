@@ -25,7 +25,7 @@ import com.sun.javafx.scene.control.inputmap.InputMap;
 import com.sun.javafx.scene.control.inputmap.InputMap.Mapping;
 import com.sun.javafx.scene.control.inputmap.KeyBinding;
 
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.util.ReflectionUtil;
 
 public abstract class BasicNumberField<T extends Number> extends BasicControl<T> {

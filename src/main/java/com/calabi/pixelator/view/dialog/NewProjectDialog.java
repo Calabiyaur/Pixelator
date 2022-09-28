@@ -5,7 +5,7 @@ import java.io.File;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
-import com.calabi.pixelator.res.Project;
+import com.calabi.pixelator.project.Project;
 import com.calabi.pixelator.ui.control.BasicDirectoryField;
 import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.editor.window.ImageWindow;

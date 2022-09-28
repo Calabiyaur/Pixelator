@@ -9,8 +9,8 @@ import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyEvent;
 
+import com.calabi.pixelator.config.Action;
 import com.calabi.pixelator.log.Logger;
-import com.calabi.pixelator.res.Action;
 
 public class ActionManager {
 

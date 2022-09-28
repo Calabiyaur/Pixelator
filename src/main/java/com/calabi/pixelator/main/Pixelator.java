@@ -9,13 +9,15 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import com.sun.glass.ui.ClipboardAssistance;
 
+import com.calabi.pixelator.config.BuildInfo;
+import com.calabi.pixelator.config.Config;
+import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.log.Logger;
-import com.calabi.pixelator.res.BuildInfo;
-import com.calabi.pixelator.res.Config;
-import com.calabi.pixelator.res.Images;
+import com.calabi.pixelator.project.Project;
 
 public class Pixelator extends Application {
 
@@ -59,18 +61,9 @@ public class Pixelator extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.setTitle(title);
-        primaryStage.setOnCloseRequest(e -> {
-            if (!scene.closeAll()) {
-                // If closing the scene is unsuccessful, don't close the stage.
-                e.consume();
-                return;
-            }
-            updateConfig(primaryStage);
-            stages.forEach(s -> s.close());
-        });
+        primaryStage.setOnCloseRequest(e -> onCloseRequest(primaryStage, scene, e));
 
-        List<String> files = getParameters().getRaw();
-        scene.openFiles(files);
+        scene.openFiles(getParameters().getRaw());
 
         primaryStage.show();
     }
@@ -87,6 +80,20 @@ public class Pixelator extends Application {
                 clipboardActive.set(clipboard.hasImage());
             }
         };
+    }
+
+    private void onCloseRequest(Stage primaryStage, MainScene scene, WindowEvent e) {
+        Project project = Project.get();
+        Project.setSilently(null);
+
+        if (!scene.closeAll()) {
+            // If closing the scene is unsuccessful, don't close the stage.
+            e.consume();
+            Project.setSilently(project);
+            return;
+        }
+        updateConfig(primaryStage);
+        stages.forEach(Stage::close);
     }
 
     /**
@@ -111,6 +118,7 @@ public class Pixelator extends Application {
             Config.FULLSCREEN.putBoolean(fullscreen);
             Config.SCREEN_X.putDouble(x);
             Config.SCREEN_Y.putDouble(y);
+
         } catch (Exception e) {
             Logger.log(e.getMessage() + "\nError while trying to close application. Closing anyway.");
         }

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.calabi.pixelator.res.Action;
+import com.calabi.pixelator.config.Action;
 
 class ActionManagerTest {
 
