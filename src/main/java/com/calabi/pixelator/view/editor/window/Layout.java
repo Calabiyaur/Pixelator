@@ -30,6 +30,7 @@ public abstract class Layout {
             case ANIMATION -> new AnimationLayout(imageWindow);
             case IMAGE -> new ImageLayout(imageWindow);
             case PALETTE -> new PaletteLayout(imageWindow);
+            case PROJECT -> throw new UnsupportedOperationException();
         };
     }
 

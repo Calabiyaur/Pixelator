@@ -286,12 +286,11 @@ public class MainScene extends Scene {
             if (getEditor() != null) {
                 if (selected) {
                     getEditor().setGridInterval(xInterval, yInterval);
-                    Config.GRID_SELECTION.putObject(getEditor().getPixelFile(),
-                            new GridSelectionConfig(xInterval, yInterval));
                 } else {
-                    Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), null);
                     IWC.get().setShowGrid(false);
                 }
+                GridSelectionConfig config = new GridSelectionConfig(selected, xInterval, yInterval);
+                Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), config);
             }
         });
         IWC.get().showGridProperty().addListener((ov, o, n) -> {
@@ -305,7 +304,8 @@ public class MainScene extends Scene {
                         }
                     }
                 }
-                Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), n ? config : null);
+                config.setSelected(n);
+                Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), config);
             }
         });
 

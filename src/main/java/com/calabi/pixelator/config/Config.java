@@ -48,7 +48,7 @@ public enum Config {
 
     // Image config
     FRAME_INDEX(ConfigMode.IMAGE, ConfigType.INT, 0),
-    GRID_SELECTION(ConfigMode.IMAGE, ConfigType.OBJECT, GridSelectionConfig.class, null),
+    GRID_SELECTION(ConfigMode.IMAGE, ConfigType.OBJECT, GridSelectionConfig.class, new GridSelectionConfig(false, 1, 1)),
     IMAGE_H_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_HEIGHT(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_V_SCROLL(ConfigMode.IMAGE, ConfigType.DOUBLE),

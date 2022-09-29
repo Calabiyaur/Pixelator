@@ -116,10 +116,8 @@ public class ImageEditor extends Editor {
         grid.draw();
         grid.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         grid.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
-        if (gridSelectionConfig != null) {
-            grid.setXInterval(gridSelectionConfig.getXInterval());
-            grid.setYInterval(gridSelectionConfig.getYInterval());
-        }
+        grid.setXInterval(gridSelectionConfig.getXInterval());
+        grid.setYInterval(gridSelectionConfig.getYInterval());
 
         Color crosshairColor = Color.valueOf(Config.CROSSHAIR_COLOR.getString());
         crosshair = new Crosshair(width.get(), height.get(), crosshairColor);
