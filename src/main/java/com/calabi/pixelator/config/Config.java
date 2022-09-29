@@ -55,7 +55,8 @@ public enum Config {
     IMAGE_WIDTH(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_X(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_Y(ConfigMode.IMAGE, ConfigType.DOUBLE),
-    IMAGE_ZOOM_LEVEL(ConfigMode.IMAGE, ConfigType.DOUBLE);
+    IMAGE_ZOOM_LEVEL(ConfigMode.IMAGE, ConfigType.DOUBLE),
+    PREVIEW_ZOOM_LEVEL(ConfigMode.IMAGE, ConfigType.DOUBLE);
 
     private final ConfigMode mode;
     private final ConfigType type;

@@ -6,6 +6,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -557,7 +558,7 @@ public class BasicScrollPaneSkin extends SkinBase<BasicScrollPane> {
         });
 
         consumeMouseEvents(false);
-        scrollNode.addEventHandler(MouseEvent.ANY, e -> e.consume());
+        scrollNode.addEventHandler(MouseEvent.ANY, Event::consume);
 
         hsb.setValue(control.getHvalue());
         vsb.setValue(control.getVvalue());

@@ -11,7 +11,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleButton;
@@ -24,7 +23,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 
 import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.config.Images;
@@ -33,8 +31,11 @@ import com.calabi.pixelator.ui.control.BasicIntegerField;
 import com.calabi.pixelator.ui.control.ToggleImageButton;
 import com.calabi.pixelator.ui.control.UndeselectableToggleGroup;
 import com.calabi.pixelator.ui.image.PixelatedImageView;
+import com.calabi.pixelator.ui.image.ScalableImageView;
+import com.calabi.pixelator.ui.parent.BasicScrollPane;
 import com.calabi.pixelator.ui.region.BalloonRegion;
 import com.calabi.pixelator.util.Do;
+import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.tool.Select;
 import com.calabi.pixelator.view.tool.Tool;
 import com.calabi.pixelator.view.tool.Tools;
@@ -52,10 +53,10 @@ public class ToolView extends VBox {
     private final IntegerProperty thickness = new SimpleIntegerProperty();
     private final IntegerProperty bulge = new SimpleIntegerProperty();
     private final IntegerProperty tolerance = new SimpleIntegerProperty();
+    private final BasicScrollPane previewContainer;
     private final Label preview = new Label();
     private final Label previewTool = new Label();
     private final Label previewSelection = new Label();
-    private final Pane clipWrapper;
     private final Label sizeText = new Label();
     private final Label zoomText = new Label();
     private final Label frameIndexText = new Label();
@@ -85,25 +86,21 @@ public class ToolView extends VBox {
 
         getChildren().add(6, new Separator());
 
-        clipWrapper = new Pane();
-        VBox.setVgrow(clipWrapper, Priority.ALWAYS);
-
-        Rectangle clip = new Rectangle();
-        clip.widthProperty().bind(clipWrapper.widthProperty());
-        clip.heightProperty().bind(clipWrapper.heightProperty());
-
         StackPane previewStack = new StackPane(preview, previewTool, previewSelection);
-        clipWrapper.getChildren().add(previewStack);
-        previewStack.setClip(clip);
-        previewStack.setAlignment(Pos.TOP_LEFT);
-
-        clipWrapper.maxWidthProperty().bind(previewStack.widthProperty());
-        clipWrapper.maxHeightProperty().bind(previewStack.heightProperty());
+        previewContainer = new BasicScrollPane(previewStack);
 
         HBox detailBoxTop = new HBox(sizeText, new BalloonRegion(), zoomText);
         VBox detailBox = new VBox(detailBoxTop, frameIndexText);
-        VBox previewGrid = new VBox(new Label("PREVIEW"), clipWrapper, detailBox);
+        VBox previewGrid = new VBox(new Label("PREVIEW"), previewContainer, detailBox);
         VBox.setVgrow(previewGrid, Priority.ALWAYS);
+
+        previewContainer.setOnScroll(e -> {
+            ScalableImageView graphic = (ScalableImageView) preview.getGraphic();
+            if (graphic != null) {
+                graphic.scroll(e);
+                Config.PREVIEW_ZOOM_LEVEL.putDouble(IWC.get().getCurrentFile(), graphic.getZoom());
+            }
+        });
 
         previewGrid.visibleProperty().bind(preview.graphicProperty().isNotNull());
         getChildren().add(7, previewGrid);
@@ -251,13 +248,13 @@ public class ToolView extends VBox {
         tolerance.addListener((ov, o, n) -> Config.TOLERANCE.putInt(n.intValue()));
     }
 
-    public void setPreview(Image image, Image toolImage, Image selectionImage) {
+    public void setPreview(Image image, Image toolImage, Image selectionImage, double zoom) {
         if (image == null) {
             preview.setGraphic(null);
             previewTool.setGraphic(null);
             previewSelection.setGraphic(null);
         } else {
-            preview.setGraphic(new PixelatedImageView(image));
+            preview.setGraphic(new ScalableImageView(image, zoom));
             preview.setTranslateX(0);
             preview.setTranslateY(0);
             previewTool.setGraphic(new PixelatedImageView(toolImage));
@@ -271,9 +268,9 @@ public class ToolView extends VBox {
     }
 
     public void setPreviewPosition(double x, double y) {
-        if (preview.getWidth() > clipWrapper.getWidth()) {
+        if (preview.getWidth() > previewContainer.getWidth()) {
             double xTranslate =
-                    -Math.min(Math.max(0, x - clipWrapper.getWidth() / 2), preview.getWidth() - clipWrapper.getWidth());
+                    -Math.min(Math.max(0, x - previewContainer.getWidth() / 2), preview.getWidth() - previewContainer.getWidth());
             preview.setTranslateX(Math.round(xTranslate));
             previewTool.setTranslateX(Math.round(xTranslate));
             previewSelection.setTranslateX(Math.round(xTranslate));
@@ -283,9 +280,9 @@ public class ToolView extends VBox {
             previewSelection.setTranslateX(0);
         }
 
-        if (preview.getHeight() > clipWrapper.getHeight()) {
+        if (preview.getHeight() > previewContainer.getHeight()) {
             double yTranslate =
-                    -Math.min(Math.max(0, y - clipWrapper.getHeight() / 2), preview.getHeight() - clipWrapper.getHeight());
+                    -Math.min(Math.max(0, y - previewContainer.getHeight() / 2), preview.getHeight() - previewContainer.getHeight());
             preview.setTranslateY(Math.round(yTranslate));
             previewTool.setTranslateY(Math.round(yTranslate));
             previewSelection.setTranslateY(Math.round(yTranslate));

@@ -11,7 +11,12 @@ public class ScalableImageView extends PixelatedImageView {
     private double zoomMaximum = 32;
 
     public ScalableImageView(Image image) {
+        this(image, 1.0);
+    }
+
+    public ScalableImageView(Image image, double zoom) {
         super(image);
+        zoomTo(zoom);
     }
 
     public void scroll(ScrollEvent e) {
@@ -34,8 +39,7 @@ public class ScalableImageView extends PixelatedImageView {
         if (newZoom.doubleValue() > zoomMaximum) {
             newZoom = Fraction.getFraction(zoomMaximum);
         }
-        setScaleX(newZoom.doubleValue());
-        setScaleY(newZoom.doubleValue());
+        zoomTo(newZoom.doubleValue());
     }
 
     public void zoomOut() {
@@ -46,13 +50,20 @@ public class ScalableImageView extends PixelatedImageView {
         if (newZoom.doubleValue() < zoomMinimum) {
             newZoom = Fraction.getFraction(zoomMinimum);
         }
-        setScaleX(newZoom.doubleValue());
-        setScaleY(newZoom.doubleValue());
+        zoomTo(newZoom.doubleValue());
     }
 
     public void zoomZero() {
-        setScaleX(1);
-        setScaleY(1);
+        zoomTo(1);
+    }
+
+    private void zoomTo(double newZoom) {
+        setScaleX(newZoom);
+        setScaleY(newZoom);
+    }
+
+    public double getZoom() {
+        return getScaleX();
     }
 
     public double getZoomMinimum() {
@@ -70,4 +81,5 @@ public class ScalableImageView extends PixelatedImageView {
     public void setZoomMaximum(double zoomMaximum) {
         this.zoomMaximum = zoomMaximum;
     }
+
 }
