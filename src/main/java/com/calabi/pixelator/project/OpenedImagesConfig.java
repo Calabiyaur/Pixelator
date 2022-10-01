@@ -2,6 +2,7 @@ package com.calabi.pixelator.project;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ public class OpenedImagesConfig extends ConfigObject {
     public String toConfig() {
         return files.stream()
                 .map(PixelFile::getFile)
+                .filter(Objects::nonNull)
                 .map(File::getAbsolutePath)
                 .collect(Collectors.joining(","));
     }

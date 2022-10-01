@@ -242,8 +242,8 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
     }
 
     public void saveAndUndirty() {
-        updateConfig();
         Files.get().save(getFile());
+        saveConfig();
         undirty();
     }
 
@@ -257,13 +257,17 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
     }
 
     public void close() {
-        updateConfig();
-        Files.get().saveConfig(getFile());
+        saveConfig();
         if (Project.active()) {
             Project.get().removeOpenedImage(imageFile);
         }
 
         super.close();
+    }
+
+    public void saveConfig() {
+        updateConfig();
+        Files.get().saveConfig(getFile());
     }
 
     public ImageEditor getEditor() {

@@ -113,11 +113,9 @@ public class ImageEditor extends Editor {
         GridSelectionConfig gridSelectionConfig = Config.GRID_SELECTION.getObject(file);
         Color gridColor = Color.valueOf(Config.GRID_COLOR.getString());
         grid = new Grid(width.get(), height.get(), gridColor);
-        grid.draw();
+        setGridInterval(gridSelectionConfig.getXInterval(), gridSelectionConfig.getYInterval());
         grid.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         grid.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
-        grid.setXInterval(gridSelectionConfig.getXInterval());
-        grid.setYInterval(gridSelectionConfig.getYInterval());
 
         Color crosshairColor = Color.valueOf(Config.CROSSHAIR_COLOR.getString());
         crosshair = new Crosshair(width.get(), height.get(), crosshairColor);
@@ -152,7 +150,7 @@ public class ImageEditor extends Editor {
                 outlineRect
         );
 
-        setShowGrid(gridSelectionConfig != null);
+        IWC.get().setShowGrid(gridSelectionConfig.isSelected());
         setShowCrosshair(false);
         setShowBackground(false);
 
@@ -183,7 +181,7 @@ public class ImageEditor extends Editor {
             crosshair.resize(width.get(), height.get());
             crosshair2.resize(width.get(), height.get());
 
-            image.playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> stop()));
+            image.playingProperty().addListener((pov, po, pn) -> Do.when(!pn, this::stop));
             updateColorCount();
         });
 
@@ -194,7 +192,7 @@ public class ImageEditor extends Editor {
             currentTool.cursorProperty().addListener(cursorChangeListener);
         });
 
-        getImage().playingProperty().addListener((pov, po, pn) -> Do.when(!pn, () -> stop()));
+        getImage().playingProperty().addListener((pov, po, pn) -> Do.when(!pn, this::stop));
     }
 
     public boolean isShowGrid() {
