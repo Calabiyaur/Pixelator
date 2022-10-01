@@ -121,6 +121,11 @@ public final class Project {
         for (PixelFile file : openedImages.getFiles()) {
             IWC.get().addImage(file);
         }
+
+        RecentProjectsConfig recentProjects = Config.RECENT_PROJECTS.getObject();
+        recentProjects.getFiles().remove(location);
+        recentProjects.getFiles().add(0, location);
+        Config.RECENT_PROJECTS.putObject(recentProjects);
     }
 
     private Properties loadConfig() {

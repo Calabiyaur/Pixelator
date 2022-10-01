@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -58,6 +59,7 @@ import com.calabi.pixelator.view.dialog.FpsDialog;
 import com.calabi.pixelator.view.dialog.MoveImageDialog;
 import com.calabi.pixelator.view.dialog.NewImageDialog;
 import com.calabi.pixelator.view.dialog.NewProjectDialog;
+import com.calabi.pixelator.view.dialog.OpenRecentProjectDialog;
 import com.calabi.pixelator.view.dialog.OutlineDialog;
 import com.calabi.pixelator.view.dialog.ResizeDialog;
 import com.calabi.pixelator.view.dialog.RotateDialog;
@@ -133,6 +135,8 @@ public class MainScene extends Scene {
                 getEditor().onKeyReleased(e);
             }
         });
+
+        Platform.runLater(this::openRecentProject);
     }
 
     public static void setTheme(Theme theme) {
@@ -169,7 +173,7 @@ public class MainScene extends Scene {
         BasicMenu projectMenu = new BasicMenu("Project");
         projectMenu.addItem(NEW_PROJECT, e -> newProject());
         projectMenu.addItem(OPEN_PROJECT, e -> openProject());
-        //TODO: projectMenu.addItem(OPEN_RECENT_PROJECT);
+        projectMenu.addItem(OPEN_RECENT_PROJECT, e -> openRecentProject());
         //TODO: projectMenu.addItem(CLOSE_PROJECT);
         projectMenu.addSeparator();
         //TODO: projectMenu.addItem(PROJECT_STRETCH);
@@ -349,6 +353,10 @@ public class MainScene extends Scene {
                 Project.setSilently(project);
             }
         });
+        dialog.setOnCancel(e -> {
+            Project.setSilently(project);
+            dialog.close();
+        });
     }
 
     private void openProject() {
@@ -358,6 +366,30 @@ public class MainScene extends Scene {
                 Project.set(project);
             }
         }
+    }
+
+    private void openRecentProject() {
+        Project project = Project.get();
+        Project.setSilently(null);
+
+        OpenRecentProjectDialog dialog = new OpenRecentProjectDialog();
+        dialog.showAndFocus();
+        dialog.setOnOk(e -> {
+            if (dialog.getProject() == null) {
+                Project.setSilently(project);
+                return;
+            }
+            dialog.close();
+            if (closeAll()) {
+                Project.set(dialog.getProject());
+            } else {
+                Project.setSilently(project);
+            }
+        });
+        dialog.setOnCancel(e -> {
+            Project.setSilently(project);
+            dialog.close();
+        });
     }
 
     private void move(int right, int down) {

@@ -8,6 +8,7 @@ import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.log.Logger;
 import com.calabi.pixelator.project.OpenedImagesConfig;
 import com.calabi.pixelator.project.Project;
+import com.calabi.pixelator.project.RecentProjectsConfig;
 import com.calabi.pixelator.util.meta.Direction;
 
 public enum Config {
@@ -16,6 +17,7 @@ public enum Config {
     FULLSCREEN(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
     PALETTE_MAX_COLORS(ConfigMode.GLOBAL, ConfigType.INT, 128),
     PROJECT_DIRECTORY(ConfigMode.GLOBAL, ConfigType.STRING, ""),
+    RECENT_PROJECTS(ConfigMode.GLOBAL, ConfigType.OBJECT, RecentProjectsConfig.class, new RecentProjectsConfig()),
     SCREEN_HEIGHT(ConfigMode.GLOBAL, ConfigType.DOUBLE, 400d),
     SCREEN_WIDTH(ConfigMode.GLOBAL, ConfigType.DOUBLE, 600d),
     SCREEN_X(ConfigMode.GLOBAL, ConfigType.DOUBLE, 0d),
@@ -27,6 +29,7 @@ public enum Config {
     BULGE(ConfigMode.PROJECT, ConfigType.INT, 0),
     COLOR(ConfigMode.PROJECT, ConfigType.STRING),
     CROSSHAIR_COLOR(ConfigMode.PROJECT, ConfigType.STRING, "#00000080"),
+    DEFAULT_PREVIEW_ZOOM_LEVEL(ConfigMode.PROJECT, ConfigType.DOUBLE, 1),
     FILL_SHAPE(ConfigMode.PROJECT, ConfigType.BOOLEAN, false),
     GRID_COLOR(ConfigMode.PROJECT, ConfigType.STRING, "#00000080"),
     GRID_CONFIG(ConfigMode.PROJECT, ConfigType.OBJECT, GridConfig.class, GridConfig.getDefault()),

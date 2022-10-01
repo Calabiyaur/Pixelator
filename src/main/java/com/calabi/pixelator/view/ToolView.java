@@ -99,6 +99,8 @@ public class ToolView extends VBox {
             if (graphic != null) {
                 graphic.scroll(e);
                 Config.PREVIEW_ZOOM_LEVEL.putDouble(IWC.get().getCurrentFile(), graphic.getZoom());
+                previewStack.setPrefWidth(graphic.getScaleX() * graphic.getWidth());
+                previewStack.setPrefHeight(graphic.getScaleY() * graphic.getHeight());
             }
         });
 

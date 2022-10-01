@@ -44,6 +44,7 @@ public enum Action {
     OPEN("Open...", true, false, false, KeyCode.O),
     OPEN_PALETTE("Open...", true, false, true, KeyCode.O),
     OPEN_PROJECT("Open..."),
+    OPEN_RECENT_PROJECT("Open recent..."),
     OUTLINE("Outline..."),
     P_DOWN("P down", false, false, true, KeyCode.DOWN),
     P_LEFT("P left", false, false, true, KeyCode.LEFT),
