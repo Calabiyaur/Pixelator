@@ -301,7 +301,7 @@ public class ImageEditor extends Editor {
     private ImageWindow getParentWindow() {
         for (Parent parent = getParent(); parent != null; parent = parent.getParent()) {
             if (parent instanceof ImageWindow) {
-                return  (ImageWindow) parent;
+                return (ImageWindow) parent;
             }
         }
         throw new IllegalStateException();
@@ -433,7 +433,9 @@ public class ImageEditor extends Editor {
     }
 
     public void paintPoint(Point point) {
-        paintPoints(RectangleHelper.getCirclePoints(point.getX(), point.getY(), ToolView.get().getThickness(), getImageWidth(), getImageHeight()));
+        paintPoints(
+                RectangleHelper.getCirclePoints(point.getX(), point.getY(), ToolView.get().getThickness(), getImageWidth(),
+                        getImageHeight()));
     }
 
     public void paintPoints(PointArray points) {
@@ -516,8 +518,9 @@ public class ImageEditor extends Editor {
 
     public void flipHorizontally() {
         changeImage(width.get(), height.get(), (o, n, reader, writer) -> {
+            boolean skip = skipFrame((WritableImage) o, reader);
             for (int i = 0; i < width.get(); i++) {
-                int ni = width.get() - i - 1;
+                int ni = skip ? i : width.get() - i - 1;
                 for (int j = 0; j < height.get(); j++) {
                     writer.setColor(i, j, reader.getColor(ni, j));
                 }
@@ -527,8 +530,9 @@ public class ImageEditor extends Editor {
 
     public void flipVertically() {
         changeImage(width.get(), height.get(), (o, n, reader, writer) -> {
+            boolean skip = skipFrame((WritableImage) o, reader);
             for (int j = 0; j < height.get(); j++) {
-                int nj = height.get() - j - 1;
+                int nj = skip ? j : height.get() - j - 1;
                 for (int i = 0; i < width.get(); i++) {
                     writer.setColor(i, j, reader.getColor(i, nj));
                 }
@@ -538,10 +542,15 @@ public class ImageEditor extends Editor {
 
     public void rotateClockwise() {
         changeImage(height.get(), width.get(), (o, n, reader, writer) -> {
+            boolean skip = skipFrame((WritableImage) o, reader);
             for (int j = 0; j < height.get(); j++) {
-                int nj = height.get() - j - 1;
+                int nj = skip ? j : height.get() - j - 1;
                 for (int i = 0; i < width.get(); i++) {
-                    writer.setColor(j, i, reader.getColor(i, nj));
+                    if (skip) {
+                        writer.setColor(i, j, reader.getColor(i, j));
+                    } else {
+                        writer.setColor(j, i, reader.getColor(i, nj));
+                    }
                 }
             }
         });
@@ -549,10 +558,15 @@ public class ImageEditor extends Editor {
 
     public void rotateCounterClockwise() {
         changeImage(height.get(), width.get(), (o, n, reader, writer) -> {
+            boolean skip = skipFrame((WritableImage) o, reader);
             for (int i = 0; i < width.get(); i++) {
-                int ni = width.get() - i - 1;
+                int ni = skip ? i : width.get() - i - 1;
                 for (int j = 0; j < height.get(); j++) {
-                    writer.setColor(j, i, reader.getColor(ni, j));
+                    if (skip) {
+                        writer.setColor(i, j, reader.getColor(i, j));
+                    } else {
+                        writer.setColor(j, i, reader.getColor(ni, j));
+                    }
                 }
             }
         });
@@ -560,15 +574,20 @@ public class ImageEditor extends Editor {
 
     public void rotate(int degrees) {
         changeImage(height.get(), width.get(), (o, n, reader, writer) -> {
+            boolean skip = skipFrame((WritableImage) o, reader);
             for (int i = 0; i < width.get(); i++) {
                 for (int j = 0; j < width.get(); j++) {
-                    double radians = degrees / 180d * Math.PI;
-                    int oi = i - width.get() / 2;
-                    int oj = j - height.get() / 2;
-                    int ni = (int) (oi * Math.cos(radians) - oj * Math.sin(radians)) + width.get() / 2;
-                    int nj = (int) (oi * Math.sin(radians) + oj * Math.cos(radians)) + height.get() / 2;
-                    if (0 <= ni && ni < width.get() && 0 <= nj && nj < height.get()) {
-                        writer.setColor(i, j, reader.getColor(ni, nj));
+                    if (skip) {
+                        writer.setColor(i, j, reader.getColor(i, j));
+                    } else {
+                        double radians = degrees / 180d * Math.PI;
+                        int oi = i - width.get() / 2;
+                        int oj = j - height.get() / 2;
+                        int ni = (int) (oi * Math.cos(radians) - oj * Math.sin(radians)) + width.get() / 2;
+                        int nj = (int) (oi * Math.sin(radians) + oj * Math.cos(radians)) + height.get() / 2;
+                        if (0 <= ni && ni < width.get() && 0 <= nj && nj < height.get()) {
+                            writer.setColor(i, j, reader.getColor(ni, nj));
+                        }
                     }
                 }
             }
@@ -581,9 +600,7 @@ public class ImageEditor extends Editor {
         int posV = Math.floorMod(v, height.get());
 
         changeImage(width.get(), height.get(), (o, n, reader, writer) -> {
-            boolean skip = !Config.ALL_FRAMES.getBoolean()
-                    && reader instanceof FrameReader
-                    && ((FrameReader) reader).getIndex() != ((WritableImage) o).getIndex();
+            boolean skip = skipFrame((WritableImage) o, reader);
             for (int i = 0; i < width.get(); i++) {
                 int di = skip ? i : (i + posH) % width.get();
                 for (int j = 0; j < height.get(); j++) {
@@ -665,6 +682,12 @@ public class ImageEditor extends Editor {
         getImageView().setImage(imageChange.getImage());
 
         register(imageChange);
+    }
+
+    private static boolean skipFrame(WritableImage o, PixelReader reader) {
+        return !Config.ALL_FRAMES.getBoolean()
+                && reader instanceof FrameReader
+                && ((FrameReader) reader).getIndex() != o.getIndex();
     }
 
     public void selectAll() {
