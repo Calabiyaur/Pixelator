@@ -122,6 +122,13 @@ public final class Project {
     private void load() {
         ToolView.get().reload();
 
+        if (Config.IMAGE_DIRECTORY.getString().isBlank()) {
+            Config.IMAGE_DIRECTORY.putString(location.getAbsolutePath());
+        }
+        if (Config.PALETTE_DIRECTORY.getString().isBlank()) {
+            Config.PALETTE_DIRECTORY.putString(location.getAbsolutePath());
+        }
+
         openedImages = Config.OPENED_IMAGES.getObject();
         for (PixelFile file : openedImages.getFiles()) {
             IWC.get().addImage(file);

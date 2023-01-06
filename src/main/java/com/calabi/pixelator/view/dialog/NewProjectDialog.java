@@ -29,7 +29,7 @@ public class NewProjectDialog extends BasicDialog {
             }
         }
 
-        File location = file == null ? new File("") : file.getParentFile();
+        File location = file == null ? new File(".") : file.getParentFile();
 
         locationField = new BasicDirectoryField("Project location", location);
         GridPane.setHgrow(locationField, Priority.ALWAYS);
