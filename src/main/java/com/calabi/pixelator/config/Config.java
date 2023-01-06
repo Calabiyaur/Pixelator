@@ -7,6 +7,7 @@ import java.util.prefs.Preferences;
 import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.log.Logger;
 import com.calabi.pixelator.project.OpenedImagesConfig;
+import com.calabi.pixelator.project.OpenedPalettesConfig;
 import com.calabi.pixelator.project.Project;
 import com.calabi.pixelator.project.RecentProjectsConfig;
 import com.calabi.pixelator.util.meta.Direction;
@@ -39,6 +40,7 @@ public enum Config {
     NEW_IMAGE_HEIGHT(ConfigMode.PROJECT, ConfigType.INT, 32),
     NEW_IMAGE_WIDTH(ConfigMode.PROJECT, ConfigType.INT, 32),
     OPENED_IMAGES(ConfigMode.PROJECT, ConfigType.OBJECT, OpenedImagesConfig.class, new OpenedImagesConfig()),
+    OPENED_PALETTES(ConfigMode.PROJECT, ConfigType.OBJECT, OpenedPalettesConfig.class, new OpenedPalettesConfig()),
     PALETTE_DIRECTORY(ConfigMode.PROJECT, ConfigType.STRING, ""),
     REPLACE(ConfigMode.PROJECT, ConfigType.BOOLEAN, false),
     RESIZE_BIAS(ConfigMode.PROJECT, ConfigType.STRING, Direction.NONE.name()),

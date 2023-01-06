@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
 import com.calabi.pixelator.config.Images;
+import com.calabi.pixelator.project.Project;
 import com.calabi.pixelator.ui.control.ImageButton;
 import com.calabi.pixelator.ui.window.Popup;
 import com.calabi.pixelator.util.Do;
@@ -94,6 +95,9 @@ public class PaletteToggleButton extends ToggleButton {
     }
 
     private void close(MouseEvent e) {
+        if (Project.active()) {
+            Project.get().removeOpenedPalette(editor.getFile());
+        }
         onClose.handle(e);
         popup.hide();
     }

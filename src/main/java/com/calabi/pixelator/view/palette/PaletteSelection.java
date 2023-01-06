@@ -25,6 +25,7 @@ import com.calabi.pixelator.file.ImageFile;
 import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.main.BasicToolBar;
+import com.calabi.pixelator.project.Project;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.view.dialog.MessageDialog;
 import com.calabi.pixelator.view.dialog.NewPaletteDialog;
@@ -135,6 +136,9 @@ public class PaletteSelection extends BorderPane {
 
     public void addPalette(PaletteFile file) {
         model.addPalette(file);
+        if (Project.active()) {
+            Project.get().addOpenedPalette(file);
+        }
     }
 
     public Image getPalette() {

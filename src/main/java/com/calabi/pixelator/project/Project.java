@@ -8,9 +8,11 @@ import java.util.Properties;
 
 import com.calabi.pixelator.config.BuildInfo;
 import com.calabi.pixelator.config.Config;
+import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.main.ExceptionHandler;
 import com.calabi.pixelator.main.Pixelator;
+import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.editor.IWC;
 
 public final class Project {
@@ -25,6 +27,7 @@ public final class Project {
     private final Properties properties;
 
     private OpenedImagesConfig openedImages;
+    private OpenedPalettesConfig openedPalettes;
 
     public Project(File location) {
         this.location = location;
@@ -116,10 +119,14 @@ public final class Project {
     }
 
     private void load() {
-        this.openedImages = Config.OPENED_IMAGES.getObject();
-
+        openedImages = Config.OPENED_IMAGES.getObject();
         for (PixelFile file : openedImages.getFiles()) {
             IWC.get().addImage(file);
+        }
+
+        openedPalettes = Config.OPENED_PALETTES.getObject();
+        for (PaletteFile file : openedPalettes.getFiles()) {
+            ColorView.getPaletteSelection().addPalette(file);
         }
 
         RecentProjectsConfig recentProjects = Config.RECENT_PROJECTS.getObject();
@@ -152,6 +159,16 @@ public final class Project {
     public void removeOpenedImage(PixelFile file) {
         openedImages.getFiles().remove(file);
         Config.OPENED_IMAGES.putObject(openedImages);
+    }
+
+    public void addOpenedPalette(PaletteFile file) {
+        openedPalettes.getFiles().add(file);
+        Config.OPENED_PALETTES.putObject(openedPalettes);
+    }
+
+    public void removeOpenedPalette(PaletteFile file) {
+        openedPalettes.getFiles().remove(file);
+        Config.OPENED_PALETTES.putObject(openedPalettes);
     }
 
 }

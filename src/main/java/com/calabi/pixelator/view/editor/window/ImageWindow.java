@@ -257,7 +257,9 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
     }
 
     public void close() {
-        saveConfig();
+        if (getFile().getFile() != null) {
+            saveConfig();
+        }
         if (Project.active()) {
             Project.get().removeOpenedImage(imageFile);
         }
