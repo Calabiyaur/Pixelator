@@ -26,11 +26,11 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.input.Clipboard;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
 
 import com.sun.javafx.tk.PlatformImage;
 
@@ -39,7 +39,6 @@ import com.calabi.pixelator.config.GridConfig;
 import com.calabi.pixelator.config.GridSelectionConfig;
 import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.config.Theme;
-import com.calabi.pixelator.file.Category;
 import com.calabi.pixelator.file.FileException;
 import com.calabi.pixelator.file.Files;
 import com.calabi.pixelator.file.ImageFile;
@@ -55,6 +54,7 @@ import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.ChangeColorDialog;
 import com.calabi.pixelator.view.dialog.ChangePaletteDialog;
+import com.calabi.pixelator.view.dialog.ExportStripDialog;
 import com.calabi.pixelator.view.dialog.FpsDialog;
 import com.calabi.pixelator.view.dialog.MoveImageDialog;
 import com.calabi.pixelator.view.dialog.NewImageDialog;
@@ -443,28 +443,59 @@ public class MainScene extends Scene {
     private void exportStrip() {
         String name = IWC.get().getCurrentFile().getName();
 
-        DirectoryChooser dialog = new DirectoryChooser();
-        dialog.setInitialDirectory(Category.IMAGE.getDirectory());
-        File directory = dialog.showDialog(Pixelator.getPrimaryStage());
+        ExportStripDialog dialog = new ExportStripDialog();
+        dialog.showAndFocus();
+        dialog.setOnOk(e -> {
+            WritableImage animation = IWC.get().getCurrentImage();
 
-        WritableImage animation = IWC.get().getCurrentImage();
-        for (int i = 0; i < animation.getFrames().length; i++) {
-            PlatformImage platformImage = animation.getFrames()[i];
-            WritableImage frame = new WritableImage((com.sun.prism.Image) platformImage);
+            if (dialog.isIndividualFiles()) {
+                for (int i = 0; i < animation.getFrames().length; i++) {
+                    PlatformImage platformImage = animation.getFrames()[i];
+                    WritableImage frame = new WritableImage((com.sun.prism.Image) platformImage);
 
-            File file = new File(directory.getPath() + File.separator + name + "_" + i + ".png");
-            if (!file.exists()) {
-                try {
-                    if (!file.createNewFile()) {
-                        throw new FileException("");
+                    File file = new File(dialog.getOutput(), name + "_" + i + ".png");
+                    if (!file.exists()) {
+                        try {
+                            if (!file.createNewFile()) {
+                                throw new FileException("");
+                            }
+                        } catch (IOException ex) {
+                            throw new FileException(ex);
+                        }
                     }
-                } catch (IOException e) {
-                    throw new FileException(e);
+                    PixelFile pixelFile = new ImageFile(file, frame);
+                    Files.get().saveFile(pixelFile);
                 }
+            } else {
+                WritableImage image = new WritableImage(
+                        (int) animation.getWidth() * dialog.getHFrames(),
+                        (int) (animation.getHeight() * Math.ceil((double) animation.getFrameCount() / dialog.getHFrames()))
+                );
+                PixelWriter writer = image.getPixelWriter();
+                for (int i = 0; i < animation.getFrames().length; i++) {
+                    for (int x = 0; x < animation.getWidth(); x++) {
+                        int nx = (i * (int) animation.getWidth()) % (int) image.getWidth() + x;
+                        for (int y = 0; y < animation.getHeight(); y++) {
+                            int ny = (i / dialog.getHFrames()) * (int) animation.getHeight() + y;
+                            writer.setColor(nx, ny, animation.getPixelReader(i).getColor(x, y));
+                        }
+                    }
+                }
+                File file = new File(dialog.getOutput(), name + "_strip" + animation.getFrameCount() + ".png");
+                if (!file.exists()) {
+                    try {
+                        if (!file.createNewFile()) {
+                            throw new FileException("");
+                        }
+                    } catch (IOException ex) {
+                        throw new FileException(ex);
+                    }
+                }
+                PixelFile pixelFile = new ImageFile(file, image);
+                Files.get().saveFile(pixelFile);
             }
-            PixelFile pixelFile = new ImageFile(file, frame);
-            Files.get().saveFile(pixelFile);
-        }
+            dialog.close();
+        });
     }
 
     private void openImages() {
