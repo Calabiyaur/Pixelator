@@ -21,6 +21,8 @@ public class GridDialog extends BasicDialog {
     private final Button remove;
     private final BasicIntegerField xInterval;
     private final BasicIntegerField yInterval;
+    private final BasicIntegerField xOffset;
+    private final BasicIntegerField yOffset;
 
     public GridDialog(GridConfig gridConfig, List<GridMenuItem> items) {
         super(400, 300);
@@ -37,12 +39,20 @@ public class GridDialog extends BasicDialog {
         yInterval = new BasicIntegerField("Y-Interval");
         yInterval.setMinValue(1);
         yInterval.setMaxValue(1024);
+        xOffset = new BasicIntegerField("X-Offset");
+        xOffset.setMinValue(0);
+        xOffset.setMaxValue(1023);
+        yOffset = new BasicIntegerField("Y-Offset");
+        yOffset.setMinValue(0);
+        yOffset.setMaxValue(1023);
 
-        addContent(list, 0, 0, 2, 3);
-        addContent(add, 0, 3);
-        addContent(remove, 1, 3);
+        addContent(list, 0, 0, 2, 5);
+        addContent(add, 0, 5);
+        addContent(remove, 1, 5);
         addContent(xInterval, 2, 0);
         addContent(yInterval, 2, 1);
+        addContent(xOffset, 2, 2);
+        addContent(yOffset, 2, 3);
 
         initLayout();
         initBehavior();
@@ -75,16 +85,20 @@ public class GridDialog extends BasicDialog {
         });
         xInterval.setMinWidth(100);
         yInterval.setMinWidth(100);
+        xOffset.setMinWidth(100);
+        yOffset.setMinWidth(100);
     }
 
     private void initBehavior() {
         list.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
             xInterval.setValue(n.getXInterval());
             yInterval.setValue(n.getYInterval());
+            xOffset.setValue(n.getXOffset());
+            yOffset.setValue(n.getYOffset());
         });
 
         add.setOnAction(e -> {
-            GridMenuItem newItem = gridConfig.createItem(1, 1);
+            GridMenuItem newItem = gridConfig.createItem(1, 1, 0, 0);
             list.getItems().add(newItem);
             list.getSelectionModel().select(newItem);
         });
@@ -101,6 +115,14 @@ public class GridDialog extends BasicDialog {
         yInterval.valueProperty().addListener((ov, o, n) -> {
             GridMenuItem selectedItem = list.getSelectionModel().getSelectedItem();
             selectedItem.setYInterval(n);
+        });
+        xOffset.valueProperty().addListener((ov, o, n) -> {
+            GridMenuItem selectedItem = list.getSelectionModel().getSelectedItem();
+            selectedItem.setXOffset(n);
+        });
+        yOffset.valueProperty().addListener((ov, o, n) -> {
+            GridMenuItem selectedItem = list.getSelectionModel().getSelectedItem();
+            selectedItem.setYOffset(n);
         });
     }
 

@@ -287,14 +287,15 @@ public class MainScene extends Scene {
 
         GridConfig gridConfig = Config.GRID_CONFIG.getObject();
         grid.setContextMenu(gridConfig.getContextMenu());
-        gridConfig.setOnSelection((selected, xInterval, yInterval) -> {
+        gridConfig.setOnSelection(item -> {
             if (getEditor() != null) {
-                if (selected) {
-                    getEditor().setGridInterval(xInterval, yInterval);
+                if (item.isSelected()) {
+                    getEditor().setGridInterval(item.getXInterval(), item.getYInterval(), item.getXOffset(), item.getYOffset());
                 } else {
                     IWC.get().setShowGrid(false);
                 }
-                GridSelectionConfig config = new GridSelectionConfig(selected, xInterval, yInterval);
+                GridSelectionConfig config = new GridSelectionConfig(item.isSelected(),
+                        item.getXInterval(), item.getYInterval(), item.getXOffset(), item.getYOffset());
                 Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), config);
             }
         });

@@ -9,6 +9,8 @@ public class Grid extends ShapeStack {
 
     private int xInterval = 1;
     private int yInterval = 1;
+    private int xOffset = 0;
+    private int yOffset = 0;
     private Color color;
 
     public Grid(int pixelWidth, int pixelHeight, Color color) {
@@ -18,7 +20,7 @@ public class Grid extends ShapeStack {
 
     public void draw() {
         getChildren().clear();
-        for (int i = xInterval; i < getPixelWidth(); i += xInterval) {
+        for (int i = xOffset != 0 ? xOffset : xInterval; i < getPixelWidth(); i += xInterval) {
             Line line = new Line();
             line.setStroke(color);
 
@@ -31,7 +33,7 @@ public class Grid extends ShapeStack {
             line.visibleProperty().bind(prefWidthProperty().multiply(Math.min(2, xInterval)).greaterThan(getPixelWidth()));
             getChildren().add(line);
         }
-        for (int j = yInterval; j < getPixelHeight(); j += yInterval) {
+        for (int j = yOffset != 0 ? yOffset : yInterval; j < getPixelHeight(); j += yInterval) {
             Line line = new Line();
             line.setStroke(color);
 
@@ -52,6 +54,14 @@ public class Grid extends ShapeStack {
 
     public void setYInterval(int yInterval) {
         this.yInterval = yInterval;
+    }
+
+    public void setXOffset(int xOffset) {
+        this.xOffset = xOffset;
+    }
+
+    public void setYOffset(int yOffset) {
+        this.yOffset = yOffset;
     }
 
     @Override

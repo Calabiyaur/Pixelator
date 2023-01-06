@@ -1,14 +1,13 @@
 package com.calabi.pixelator.config;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-
-import org.apache.logging.log4j.util.TriConsumer;
 
 import com.calabi.pixelator.view.dialog.GridDialog;
 
@@ -19,7 +18,7 @@ public class GridConfig extends ConfigObject {
 
     private final ContextMenu contextMenu = new ContextMenu();
     private final MenuItem configure;
-    private TriConsumer<Boolean, Integer, Integer> onSelection;
+    private Consumer<GridMenuItem> onSelection;
 
     public GridConfig() {
         configure = new MenuItem();
@@ -51,7 +50,13 @@ public class GridConfig extends ConfigObject {
             split = stringItem.split("/");
             int xInterval = Integer.parseInt(split[0]);
             int yInterval = Integer.parseInt(split[1]);
-            GridMenuItem item = createItem(xInterval, yInterval);
+            int xOffset = 0;
+            int yOffset = 0;
+            if (split.length > 2) {
+                xOffset = Integer.parseInt(split[2]);
+                yOffset = Integer.parseInt(split[3]);
+            }
+            GridMenuItem item = createItem(xInterval, yInterval, xOffset, yOffset);
             contextMenu.getItems().add(item);
         }
         sort();
@@ -61,11 +66,16 @@ public class GridConfig extends ConfigObject {
     public String toConfig() {
         StringBuilder sb = new StringBuilder();
         for (MenuItem item : contextMenu.getItems()) {
-            if (item instanceof GridMenuItem) {
-                GridMenuItem gridItem = (GridMenuItem) item;
+            if (item instanceof GridMenuItem gridItem) {
                 sb.append(gridItem.getXInterval());
                 sb.append("/");
                 sb.append(gridItem.getYInterval());
+                if (gridItem.getXOffset() != 0 || gridItem.getYOffset() != 0) {
+                    sb.append("/");
+                    sb.append(gridItem.getXOffset());
+                    sb.append("/");
+                    sb.append(gridItem.getYOffset());
+                }
                 sb.append(";");
             }
         }
@@ -74,14 +84,14 @@ public class GridConfig extends ConfigObject {
 
     public static GridConfig getDefault() {
         GridConfig gridConfig = new GridConfig();
-        GridMenuItem item = gridConfig.createItem(1, 1);
+        GridMenuItem item = gridConfig.createItem(1, 1, 0, 0);
         gridConfig.contextMenu.getItems().add(item);
         gridConfig.sort();
         return gridConfig;
     }
 
-    public GridMenuItem createItem(int xInterval, int yInterval) {
-        return new GridMenuItem(xInterval, yInterval);
+    public GridMenuItem createItem(int xInterval, int yInterval, int xOffset, int yOffset) {
+        return new GridMenuItem(xInterval, yInterval, xOffset, yOffset);
     }
 
     private void sort() {
@@ -98,8 +108,7 @@ public class GridConfig extends ConfigObject {
             return Integer.MAX_VALUE;
         } else if (item instanceof SeparatorMenuItem) {
             return Integer.MAX_VALUE - 1;
-        } else if (item instanceof GridMenuItem) {
-            GridMenuItem gridItem = (GridMenuItem) item;
+        } else if (item instanceof GridMenuItem gridItem) {
             return gridItem.getXInterval() * 1024 + gridItem.getYInterval();
         }
         throw new IllegalStateException();
@@ -107,8 +116,7 @@ public class GridConfig extends ConfigObject {
 
     private void updateMenuItems(GridMenuItem selected) {
         for (MenuItem item : contextMenu.getItems()) {
-            if (item instanceof GridMenuItem) {
-                GridMenuItem gridItem = (GridMenuItem) item;
+            if (item instanceof GridMenuItem gridItem) {
                 gridItem.setSelected(gridItem == selected);
             }
         }
@@ -118,7 +126,7 @@ public class GridConfig extends ConfigObject {
         return contextMenu;
     }
 
-    public void setOnSelection(TriConsumer<Boolean, Integer, Integer> onSelection) {
+    public void setOnSelection(Consumer<GridMenuItem> onSelection) {
         this.onSelection = onSelection;
     }
 
@@ -126,19 +134,31 @@ public class GridConfig extends ConfigObject {
 
         private int xInterval;
         private int yInterval;
+        private int xOffset;
+        private int yOffset;
 
-        public GridMenuItem(int xInterval, int yInterval) {
+        public GridMenuItem(int xInterval, int yInterval, int xOffset, int yOffset) {
             this.xInterval = xInterval;
             this.yInterval = yInterval;
-            setText(xInterval + " / " + yInterval);
+            this.xOffset = xOffset;
+            this.yOffset = yOffset;
+
+            updateText();
+
             setOnAction(e -> {
+                onSelection.accept(this);
                 if (isSelected()) {
-                    onSelection.accept(true, this.xInterval, this.yInterval);
                     updateMenuItems(this);
-                } else {
-                    onSelection.accept(false, this.xInterval, this.yInterval);
                 }
             });
+        }
+
+        private void updateText() {
+            String text = xInterval + " / " + yInterval;
+            if (xOffset != 0 || yOffset != 0) {
+                text += " + " + xOffset + " / " + yOffset;
+            }
+            setText(text);
         }
 
         public int getXInterval() {
@@ -147,7 +167,7 @@ public class GridConfig extends ConfigObject {
 
         public void setXInterval(int xInterval) {
             this.xInterval = xInterval;
-            setText(xInterval + " / " + yInterval);
+            updateText();
         }
 
         public int getYInterval() {
@@ -156,7 +176,25 @@ public class GridConfig extends ConfigObject {
 
         public void setYInterval(int yInterval) {
             this.yInterval = yInterval;
-            setText(xInterval + " / " + yInterval);
+            updateText();
+        }
+
+        public int getXOffset() {
+            return xOffset;
+        }
+
+        public void setXOffset(int xOffset) {
+            this.xOffset = xOffset;
+            updateText();
+        }
+
+        public int getYOffset() {
+            return yOffset;
+        }
+
+        public void setYOffset(int yOffset) {
+            this.yOffset = yOffset;
+            updateText();
         }
     }
 

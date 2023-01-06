@@ -115,7 +115,8 @@ public class ImageEditor extends Editor {
         GridSelectionConfig gridSelectionConfig = Config.GRID_SELECTION.getObject(file);
         Color gridColor = Color.valueOf(Config.GRID_COLOR.getString());
         grid = new Grid(width.get(), height.get(), gridColor);
-        setGridInterval(gridSelectionConfig.getXInterval(), gridSelectionConfig.getYInterval());
+        setGridInterval(gridSelectionConfig.getXInterval(), gridSelectionConfig.getYInterval(),
+                gridSelectionConfig.getXOffset(), gridSelectionConfig.getYOffset());
         grid.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));
         grid.prefHeightProperty().bind(imageView.scaleYProperty().multiply(height));
 
@@ -225,9 +226,11 @@ public class ImageEditor extends Editor {
         return background;
     }
 
-    public void setGridInterval(int xInterval, int yInterval) {
+    public void setGridInterval(int xInterval, int yInterval, int xOffset, int yOffset) {
         grid.setXInterval(xInterval);
         grid.setYInterval(yInterval);
+        grid.setXOffset(xOffset);
+        grid.setYOffset(yOffset);
         grid.draw();
         IWC.get().setShowGrid(true);
     }
