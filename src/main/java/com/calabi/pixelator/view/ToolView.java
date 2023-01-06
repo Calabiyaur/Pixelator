@@ -249,6 +249,16 @@ public class ToolView extends VBox {
         allFrames.addListener((ov, o, n) -> Config.ALL_FRAMES.putBoolean(n));
     }
 
+    public void reload() {
+        replaceColor.set(Config.REPLACE.getBoolean());
+        alphaOnly.set(Config.ALPHA_ONLY.getBoolean());
+        fillShape.set(Config.FILL_SHAPE.getBoolean());
+        //TODO: thickness.set(Config.THICKNESS.getInt());
+        //TODO: bulge.set(Config.BULGE.getInt());
+        //TODO: tolerance.set(Config.TOLERANCE.getInt());
+        allFrames.set(Config.ALL_FRAMES.getBoolean());
+    }
+
     public void setPreview(Image image, Image toolImage, Image selectionImage, double zoom) {
         if (image == null) {
             preview.setGraphic(null);

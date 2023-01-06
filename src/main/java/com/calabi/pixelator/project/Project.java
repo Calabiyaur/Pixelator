@@ -13,6 +13,7 @@ import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.main.ExceptionHandler;
 import com.calabi.pixelator.main.Pixelator;
 import com.calabi.pixelator.view.ColorView;
+import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.editor.IWC;
 
 public final class Project {
@@ -119,6 +120,8 @@ public final class Project {
     }
 
     private void load() {
+        ToolView.get().reload();
+
         openedImages = Config.OPENED_IMAGES.getObject();
         for (PixelFile file : openedImages.getFiles()) {
             IWC.get().addImage(file);
