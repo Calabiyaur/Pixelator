@@ -30,6 +30,7 @@ import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.config.GridSelectionConfig;
 import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.ui.image.Crosshair;
+import com.calabi.pixelator.ui.image.FrameReader;
 import com.calabi.pixelator.ui.image.Grid;
 import com.calabi.pixelator.ui.image.ImageBackground;
 import com.calabi.pixelator.ui.image.OutlineRect;
@@ -51,6 +52,7 @@ import com.calabi.pixelator.util.shape.RectangleHelper;
 import com.calabi.pixelator.util.shape.ShapeMaster;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
+import com.calabi.pixelator.view.ToolSettings;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.editor.window.ImageWindow;
 import com.calabi.pixelator.view.palette.PaletteMaster;
@@ -579,10 +581,13 @@ public class ImageEditor extends Editor {
         int posV = Math.floorMod(v, height.get());
 
         changeImage(width.get(), height.get(), (o, n, reader, writer) -> {
+            boolean skip = !Config.ALL_FRAMES.getBoolean()
+                    && reader instanceof FrameReader
+                    && ((FrameReader) reader).getIndex() != ((WritableImage) o).getIndex();
             for (int i = 0; i < width.get(); i++) {
-                int di = (i + posH) % width.get();
+                int di = skip ? i : (i + posH) % width.get();
                 for (int j = 0; j < height.get(); j++) {
-                    int dj = (j + posV) % height.get();
+                    int dj = skip ? j : (j + posV) % height.get();
                     writer.setColor(di, dj, reader.getColor(i, j));
                 }
             }
@@ -666,8 +671,8 @@ public class ImageEditor extends Editor {
         currentTool.lockAndReset();
         selectionLayer.definePixels(ShapeMaster.getRectanglePoints(
                 new Point(0, 0),
-                new Point(width.get() - 1, height.get() - 1),
-                ToolView.get().getDefaultSettings()));
+                new Point(getImageWidth() - 1, getImageHeight() - 1),
+                new ToolSettings(getImageWidth(), getImageHeight(), false, false, true, 1, 0, 0, false)));
     }
 
     public void invertSelection() {

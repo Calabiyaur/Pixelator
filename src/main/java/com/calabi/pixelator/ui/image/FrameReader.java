@@ -70,4 +70,8 @@ public class FrameReader implements PixelReader {
         pimg.getPixels(x, y, w, h, pixelformat, buffer, offset, scanlineStride);
     }
 
+    public int getIndex() {
+        return index;
+    }
+
 }

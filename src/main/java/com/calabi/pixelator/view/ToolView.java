@@ -53,6 +53,7 @@ public class ToolView extends VBox {
     private final IntegerProperty thickness = new SimpleIntegerProperty();
     private final IntegerProperty bulge = new SimpleIntegerProperty();
     private final IntegerProperty tolerance = new SimpleIntegerProperty();
+    private final BooleanProperty allFrames = new SimpleBooleanProperty();
     private final BasicScrollPane previewContainer;
     private final Label preview = new Label();
     private final Label previewTool = new Label();
@@ -121,12 +122,7 @@ public class ToolView extends VBox {
 
     public ToolSettings getSettings() {
         return new ToolSettings(maxX, maxY, replaceColor.get(), alphaOnly.get(), fillShape.get(), thickness.get(),
-                bulge.get(),
-                tolerance.get());
-    }
-
-    public ToolSettings getDefaultSettings() {
-        return new ToolSettings(maxX, maxY, false, false, true, 1, 0, 0);
+                bulge.get(), tolerance.get(), allFrames.get());
     }
 
     private FlowPane createFirstToolLayer(ToggleGroup tg) {
@@ -179,10 +175,10 @@ public class ToolView extends VBox {
         BasicCheckBox fillShapeField = new BasicCheckBox("Fill shape", Config.FILL_SHAPE.getBoolean());
         BasicIntegerField thicknessField = new BasicIntegerField("Thickness", Config.THICKNESS.getInt());
         BasicIntegerField toleranceField = new BasicIntegerField("Tolerance", "%", Config.TOLERANCE.getInt());
+        BasicCheckBox allFramesField = new BasicCheckBox("All frames", Config.ALL_FRAMES.getBoolean());
 
-        Arrays.asList(replaceColorField, alphaOnlyField, fillShapeField, thicknessField, toleranceField).forEach(field -> {
-            field.getControlWrapper().setPrefWidth(45);
-        });
+        List.of(replaceColorField, alphaOnlyField, fillShapeField, thicknessField, toleranceField, allFramesField)
+                .forEach(field -> field.getControlWrapper().setPrefWidth(45));
 
         thicknessField.setMinValue(1);
         thicknessField.setMaxValue(10);
@@ -209,6 +205,7 @@ public class ToolView extends VBox {
         }
         bulgeButtons.forEach(b -> b.setDisable(getThickness() == 1));
         tolerance.bind(toleranceField.valueProperty());
+        allFrames.bindBidirectional(allFramesField.valueProperty());
 
         GridPane prefBox = new GridPane();
         prefBox.addRow(0, replaceColorField.getFrontLabel(), replaceColorField.getControlWrapper());
@@ -217,6 +214,7 @@ public class ToolView extends VBox {
         prefBox.addRow(3, thicknessField.getFrontLabel(), thicknessField.getControlWrapper(),
                 new HBox(bulgeLeft, bulgeCenter, bulgeRight));
         prefBox.addRow(4, toleranceField.getFrontLabel(), toleranceField.getControlWrapper(), toleranceField.getBackLabel());
+        prefBox.addRow(5, allFramesField.getFrontLabel(), allFramesField.getControlWrapper());
         prefBox.setVgap(4);
         HBox.setMargin(bulgeLeft, new Insets(0, 0, 0, 3));
         HBox.setMargin(bulgeCenter, new Insets(0, 1, 0, 1));
@@ -248,6 +246,7 @@ public class ToolView extends VBox {
         thickness.addListener((ov, o, n) -> Config.THICKNESS.putInt(n.intValue()));
         bulge.addListener((ov, o, n) -> Config.BULGE.putInt(n.intValue()));
         tolerance.addListener((ov, o, n) -> Config.TOLERANCE.putInt(n.intValue()));
+        allFrames.addListener((ov, o, n) -> Config.ALL_FRAMES.putBoolean(n));
     }
 
     public void setPreview(Image image, Image toolImage, Image selectionImage, double zoom) {
@@ -351,6 +350,10 @@ public class ToolView extends VBox {
 
     public int getBulge() {
         return bulge.get();
+    }
+
+    public boolean isAllFrames() {
+        return allFrames.get();
     }
 
 }

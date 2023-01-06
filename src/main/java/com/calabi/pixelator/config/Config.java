@@ -26,6 +26,7 @@ public enum Config {
     THEME(ConfigMode.GLOBAL, ConfigType.STRING, Theme.BRIGHT.name()),
 
     // Project config
+    ALL_FRAMES(ConfigMode.PROJECT, ConfigType.BOOLEAN, true),
     ALPHA_ONLY(ConfigMode.PROJECT, ConfigType.BOOLEAN, false),
     BULGE(ConfigMode.PROJECT, ConfigType.INT, 0),
     COLOR(ConfigMode.PROJECT, ConfigType.STRING),
