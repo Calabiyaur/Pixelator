@@ -6,6 +6,8 @@ import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.ListChangeListener;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -20,6 +22,7 @@ import javafx.scene.paint.Color;
 
 import com.sun.javafx.scene.DirtyBits;
 import com.sun.javafx.scene.NodeHelper;
+import com.sun.javafx.tk.PlatformImage;
 
 import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.config.Images;
@@ -60,9 +63,9 @@ public class AnimationLayout extends Layout {
 
     private final ObjectProperty<FrameCell> selectedFrame = new SimpleObjectProperty<>();
 
-    private final ChangeListener<Boolean> expandListener = (ov, o, n) -> Do.when(n, () -> expand(), () -> collapse());
+    private final ChangeListener<Boolean> expandListener = (ov, o, n) -> Do.when(n, this::expand, this::collapse);
 
-    private final ChangeListener<Boolean> playListener = (ov, o, n) -> Do.when(n, () -> editor.play(), () -> editor.stop());
+    private final ChangeListener<Boolean> playListener = (ov, o, n) -> Do.when(n, editor::play, editor::stop);
 
     private final ChangeListener<FrameCell> frameCellChangeListener = (ov, o, n) -> {
         editor.setFrameIndex(flowPane.getChildren().indexOf(n));
@@ -80,14 +83,22 @@ public class AnimationLayout extends Layout {
     private final ChangeListener<Number> indexChangeListener = (pov, po, pn) -> {
         selectedFrame.set(((FrameCell) flowPane.getChildren().get(pn.intValue())));
     };
+    private final ListChangeListener<PlatformImage> frameListListener = new ListChangeListener<>() {
+        @Override
+        public void onChanged(Change<? extends PlatformImage> change) {
+            frameList.reload(change.getList());
+        }
+    };
     private final ChangeListener<Image> imageChangeListener = (ov, o, n) -> {
         if (o instanceof WritableImage) {
-            ((WritableImage) o).playingProperty().removeListener(playListener);
+            ((WritableImage) o).playingProperty().removeListener(playingListener);
             ((WritableImage) o).indexProperty().removeListener(indexChangeListener);
+            ((WritableImage) o).getFrameList().removeListener(frameListListener);
         }
         frameList.reload(((WritableImage) n).getFrameList());
         ((WritableImage) n).playingProperty().addListener(playingListener);
         ((WritableImage) n).indexProperty().addListener(indexChangeListener);
+        ((WritableImage) n).getFrameList().addListener(frameListListener);
     };
 
     public AnimationLayout(ImageWindow view) {
@@ -198,7 +209,7 @@ public class AnimationLayout extends Layout {
         flowWrapper.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         flowWrapper.setFitToWidth(true);
         flowWrapper.setCenterContent(false);
-        flowWrapper.setOnScrollFinished(e -> e.consume());
+        flowWrapper.setOnScrollFinished(Event::consume);
     }
 
     private void initBehavior() {
