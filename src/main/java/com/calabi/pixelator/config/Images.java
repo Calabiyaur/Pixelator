@@ -31,6 +31,7 @@ public enum Images {
     CUT,
     DROP_ARROW_DOWN,
     DROP_ARROW_UP,
+    DUPLICATE_FRAME,
     ELLIPSE,
     EDIT,
     EDIT_PALETTE("edit"),

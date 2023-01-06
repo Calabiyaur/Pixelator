@@ -23,6 +23,7 @@ public enum Action {
     CUT("Cut", true, false, false, KeyCode.X),
     DELETE("Delete", false, false, false, KeyCode.DELETE),
     DOWN("Down", false, false, false, KeyCode.DOWN),
+    DUPLICATE_FRAME("Copy frame", true, false, false, KeyCode.D),
     EDIT_PALETTE("Edit palette"),
     ESCAPE("Escape", false, false, false, KeyCode.ESCAPE),
     EXPORT_STRIP("Export strip"),

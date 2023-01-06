@@ -10,6 +10,10 @@ public abstract class FrameChange implements Undoable {
         return new FrameAdd(image, index);
     }
 
+    public static FrameChange copy(WritableImage image, int index) {
+        return new FrameCopy(image, index);
+    }
+
     public static FrameChange remove(WritableImage image, int index) {
         return new FrameRemove(image, index);
     }
@@ -47,6 +51,28 @@ public abstract class FrameChange implements Undoable {
         @Override
         public void redo() {
             image.addFrame(index);
+        }
+    }
+
+    private static class FrameCopy extends FrameChange {
+
+        private final WritableImage image;
+        private final int index;
+
+        public FrameCopy(WritableImage image, int index) {
+            this.image = image;
+            this.index = index;
+            image.copyFrame(index);
+        }
+
+        @Override
+        public void undo() {
+            image.removeFrame(index);
+        }
+
+        @Override
+        public void redo() {
+            image.copyFrame(index);
         }
     }
 

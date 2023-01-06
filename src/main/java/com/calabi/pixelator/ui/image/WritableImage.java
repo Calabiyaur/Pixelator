@@ -11,6 +11,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
@@ -285,6 +286,16 @@ public class WritableImage extends javafx.scene.image.WritableImage {
         frameList.add(index, frame);
 
         next();
+    }
+
+    public void copyFrame(int index) {
+        PlatformImage copy;
+        if (isAnimated()) {
+            copy = ((com.sun.prism.Image) frames[index - 1]).createSubImage(0, 0, (int) getWidth(), (int) getHeight());
+        } else {
+            copy = ((ReadOnlyProperty<PlatformImage>) ReflectionUtil.getField(this, "platformImage")).getValue();
+        }
+        addFrame(index, copy);
     }
 
     public PlatformImage removeFrame(int index) {

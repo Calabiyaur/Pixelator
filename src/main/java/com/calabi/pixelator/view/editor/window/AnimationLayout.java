@@ -44,6 +44,7 @@ public class AnimationLayout extends Layout {
     private static final int MAX_FRAME_HEIGHT = 100;
 
     private ImageButton addFrame;
+    private ImageButton copyFrame;
     private ImageButton deleteFrame;
 
     private ImageButton previousFrame;
@@ -117,7 +118,7 @@ public class AnimationLayout extends Layout {
         initBehavior();
 
         // Create content
-        HBox frameButtonsPane = new HBox(addFrame, deleteFrame,
+        HBox frameButtonsPane = new HBox(addFrame, copyFrame, deleteFrame,
                 new BalloonRegion(), previousFrame, nextFrame, play,
                 new BalloonRegion(), expand);
         frameButtonsPane.setMinWidth(0);
@@ -191,6 +192,7 @@ public class AnimationLayout extends Layout {
     private void createNodes() {
         // Button pane nodes that are always visible:
         addFrame = new ImageButton(Images.ADD_FRAME);
+        copyFrame = new ImageButton(Images.DUPLICATE_FRAME);
         deleteFrame = new ImageButton(Images.REMOVE_FRAME);
 
         previousFrame = new ImageButton(Images.PREVIOUS_FRAME);
@@ -214,6 +216,7 @@ public class AnimationLayout extends Layout {
 
     private void initBehavior() {
         addFrame.setOnAction(e -> editor.addFrame());
+        copyFrame.setOnAction(e -> editor.duplicateFrame());
         deleteFrame.setOnAction(e -> editor.removeFrame());
 
         previousFrame.setOnAction(e -> editor.previousFrame());

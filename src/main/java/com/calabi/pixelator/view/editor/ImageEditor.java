@@ -837,6 +837,11 @@ public class ImageEditor extends Editor {
         register(change);
     }
 
+    public void duplicateFrame() {
+        FrameChange change = FrameChange.copy(getImage(), getImage().getIndex() + 1);
+        register(change);
+    }
+
     public void removeFrame() {
         FrameChange change = FrameChange.remove(getImage(), getImage().getIndex());
         register(change);
