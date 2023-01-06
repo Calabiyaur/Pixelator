@@ -583,7 +583,7 @@ public class ImageEditor extends Editor {
                 int di = (i + posH) % width.get();
                 for (int j = 0; j < height.get(); j++) {
                     int dj = (j + posV) % height.get();
-                    pixels.add(di, dj, reader.getColor(di, dj), reader.getColor(i, j));
+                    writer.setColor(di, dj, reader.getColor(i, j));
                 }
             }
         });
