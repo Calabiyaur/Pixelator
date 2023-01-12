@@ -15,16 +15,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.Clipboard;
@@ -35,9 +30,6 @@ import javafx.scene.layout.VBox;
 import com.sun.javafx.tk.PlatformImage;
 
 import com.calabi.pixelator.config.Config;
-import com.calabi.pixelator.config.GridConfig;
-import com.calabi.pixelator.config.GridSelectionConfig;
-import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.config.Theme;
 import com.calabi.pixelator.file.FileException;
 import com.calabi.pixelator.file.Files;
@@ -51,6 +43,7 @@ import com.calabi.pixelator.util.ColorUtil;
 import com.calabi.pixelator.util.meta.Direction;
 import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
+import com.calabi.pixelator.view.ToolBar;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.ChangeColorDialog;
 import com.calabi.pixelator.view.dialog.ChangePaletteDialog;
@@ -113,7 +106,7 @@ public class MainScene extends Scene {
         center.setBottom(infoView);
 
         MenuBar menuBar = createMenuBar();
-        ToolBar toolBar = createToolBar();
+        ToolBar toolBar = ToolBar.get();
         barBox.getChildren().addAll(menuBar, toolBar);
 
         root.getChildren().add(splitPane);
@@ -164,6 +157,10 @@ public class MainScene extends Scene {
      */
     public boolean closeAll() {
         return IWC.get().closeAll();
+    }
+
+    public boolean cleanAll() {
+        return IWC.get().cleanAll(false);
     }
 
     private MenuBar createMenuBar() {
@@ -265,67 +262,6 @@ public class MainScene extends Scene {
         menuBar.getMenus()
                 .setAll(projectMenu, fileMenu, editMenu, viewMenu, imageMenu, animationMenu, paletteMenu, toolMenu);
         return menuBar;
-    }
-
-    private ToolBar createToolBar() {
-        BasicToolBar toolBar = new BasicToolBar();
-        toolBar.setOnMouseEntered(e -> toolBar.setCursor(Cursor.DEFAULT));
-
-        toolBar.addButton(NEW);
-        toolBar.addButton(OPEN);
-        toolBar.addButton(SAVE);
-        toolBar.getItems().add(new Separator(Orientation.VERTICAL));
-        toolBar.addButton(UNDO);
-        toolBar.addButton(REDO);
-        toolBar.getItems().add(new Separator(Orientation.VERTICAL));
-        toolBar.addButton(CUT);
-        toolBar.addButton(COPY);
-        toolBar.addButton(PASTE);
-        toolBar.getItems().add(new Separator(Orientation.VERTICAL));
-        ToggleButton grid = toolBar.addToggle(GRID, Images.GRID);
-        IWC.get().showGridProperty().addListener((ov, o, n) -> grid.setSelected(n));
-
-        GridConfig gridConfig = Config.GRID_CONFIG.getObject();
-        grid.setContextMenu(gridConfig.getContextMenu());
-        gridConfig.setOnSelection(item -> {
-            if (getEditor() != null) {
-                if (item.isSelected()) {
-                    getEditor().setGridInterval(item.getXInterval(), item.getYInterval(), item.getXOffset(), item.getYOffset());
-                } else {
-                    IWC.get().setShowGrid(false);
-                }
-                GridSelectionConfig config = new GridSelectionConfig(item.isSelected(),
-                        item.getXInterval(), item.getYInterval(), item.getXOffset(), item.getYOffset());
-                Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), config);
-            }
-        });
-        IWC.get().showGridProperty().addListener((ov, o, n) -> {
-            if (getEditor() != null) {
-                GridSelectionConfig config = Config.GRID_SELECTION.getObject(getEditor().getPixelFile());
-                for (MenuItem item : gridConfig.getContextMenu().getItems()) {
-                    if (item instanceof GridConfig.GridMenuItem gridMenuItem) {
-                        if (config.getXInterval() == gridMenuItem.getXInterval()
-                                && config.getYInterval() == gridMenuItem.getYInterval()) {
-                            gridMenuItem.setSelected(n);
-                        }
-                    }
-                }
-                config.setSelected(n);
-                Config.GRID_SELECTION.putObject(getEditor().getPixelFile(), config);
-            }
-        });
-
-        ToggleButton crosshair = toolBar.addToggle(CROSSHAIR, Images.CROSSHAIR);
-        IWC.get().showCrosshairProperty().addListener((ov, o, n) -> crosshair.setSelected(n));
-        ToggleButton background = toolBar.addToggle(BACKGROUND, Images.BACKGROUND);
-        IWC.get().showBackgroundProperty().addListener((ov, o, n) -> background.setSelected(n));
-
-        toolBar.getItems().add(new Separator(Orientation.VERTICAL));
-        toolBar.addButton(ZOOM_IN);
-        toolBar.addButton(ZOOM_ZERO);
-        toolBar.addButton(ZOOM_OUT);
-
-        return toolBar;
     }
 
     private void createKeyListener() {

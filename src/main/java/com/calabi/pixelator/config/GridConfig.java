@@ -147,9 +147,7 @@ public class GridConfig extends ConfigObject {
 
             setOnAction(e -> {
                 onSelection.accept(this);
-                if (isSelected()) {
-                    updateMenuItems(this);
-                }
+                updateMenuItems(isSelected() ? this : null);
             });
         }
 

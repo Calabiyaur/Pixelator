@@ -13,6 +13,7 @@ import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.main.ExceptionHandler;
 import com.calabi.pixelator.main.Pixelator;
 import com.calabi.pixelator.view.ColorView;
+import com.calabi.pixelator.view.ToolBar;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.editor.IWC;
 
@@ -121,6 +122,7 @@ public final class Project {
 
     private void load() {
         ToolView.get().reload();
+        ToolBar.get().reload();
 
         if (Config.IMAGE_DIRECTORY.getString().isBlank()) {
             Config.IMAGE_DIRECTORY.putString(location.getAbsolutePath());

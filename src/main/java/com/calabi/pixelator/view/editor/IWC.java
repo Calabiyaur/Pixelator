@@ -19,6 +19,7 @@ import com.calabi.pixelator.ui.image.ScalableImageView;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.meta.CompoundBooleanProperty;
 import com.calabi.pixelator.view.InfoView;
+import com.calabi.pixelator.view.ToolBar;
 import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
 import com.calabi.pixelator.view.editor.window.ImageWindow;
@@ -79,6 +80,7 @@ public class IWC extends Pane {
                 showBackground.setValue(window.getEditor().isShowBackground());
                 updateImage(o == null ? null : o.getImage(), window);
                 window.toFront();
+                ToolBar.get().reloadGridMenu();
                 Platform.runLater(() -> window.getEditor().updateColorCount());
             }
         });
@@ -200,6 +202,10 @@ public class IWC extends Pane {
     }
 
     public boolean closeAll() {
+        return cleanAll(true);
+    }
+
+    public boolean cleanAll(boolean close) {
         boolean dirty = false;
 
         List<ImageWindow> children = imageWindows();
@@ -215,23 +221,32 @@ public class IWC extends Pane {
                 case OK:
                     children.forEach(window -> {
                         if (window.isDirty()) {
-                            window.saveAndClose();
-                        } else {
+                            if (close) {
+                                window.saveAndClose();
+                            } else {
+                                window.saveAndUndirty();
+                            }
+                        } else if (close) {
                             window.close();
                         }
                     });
                     return true;
                 case NO:
-                    children.forEach(ImageWindow::close);
+                    if (close) {
+                        children.forEach(ImageWindow::close);
+                    } else {
+                        children.forEach(ImageWindow::saveConfig);
+                    }
                     return true;
                 case CANCEL:
-                default:
                     return false;
             }
-        } else {
+        } else if (close) {
             children.forEach(ImageWindow::close);
-            return true;
+        } else {
+            children.forEach(ImageWindow::saveConfig);
         }
+        return true;
     }
 
     public List<ImageWindow> imageWindows() {

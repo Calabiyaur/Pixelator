@@ -17,7 +17,6 @@ import com.calabi.pixelator.config.BuildInfo;
 import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.log.Logger;
-import com.calabi.pixelator.project.Project;
 
 public class Pixelator extends Application {
 
@@ -83,13 +82,9 @@ public class Pixelator extends Application {
     }
 
     private void onCloseRequest(Stage primaryStage, MainScene scene, WindowEvent e) {
-        Project project = Project.get();
-        Project.setSilently(null);
-
-        if (!scene.closeAll()) {
+        if (!scene.cleanAll()) {
             // If closing the scene is unsuccessful, don't close the stage.
             e.consume();
-            Project.setSilently(project);
             return;
         }
         updateConfig(primaryStage);

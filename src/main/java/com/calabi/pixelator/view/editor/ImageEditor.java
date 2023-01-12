@@ -232,7 +232,6 @@ public class ImageEditor extends Editor {
         grid.setXOffset(xOffset);
         grid.setYOffset(yOffset);
         grid.draw();
-        IWC.get().setShowGrid(true);
     }
 
     public void setGridColor(Color color) {
