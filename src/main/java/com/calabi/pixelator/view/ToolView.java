@@ -31,6 +31,7 @@ import com.calabi.pixelator.ui.control.BasicCheckBox;
 import com.calabi.pixelator.ui.control.BasicIntegerField;
 import com.calabi.pixelator.ui.control.ToggleImageButton;
 import com.calabi.pixelator.ui.control.UndeselectableToggleGroup;
+import com.calabi.pixelator.ui.image.ImageBackground;
 import com.calabi.pixelator.ui.image.ScalableImageView;
 import com.calabi.pixelator.ui.parent.BasicScrollPane;
 import com.calabi.pixelator.ui.region.BalloonRegion;
@@ -55,6 +56,7 @@ public class ToolView extends VBox {
     private final IntegerProperty tolerance = new SimpleIntegerProperty();
     private final BooleanProperty allFrames = new SimpleBooleanProperty();
     private final BasicScrollPane previewContainer;
+    private final ImageBackground previewBackground;
     private final Label preview = new Label();
     private final Label sizeText = new Label();
     private final Label zoomText = new Label();
@@ -86,13 +88,14 @@ public class ToolView extends VBox {
 
         getChildren().add(6, new Separator());
 
+        previewBackground = new ImageBackground();
         StackPane previewStack = new StackPane(preview);
         previewContainer = new BasicScrollPane(previewStack);
 
         HBox previewTitleBox = new HBox(new Label("PREVIEW"), new BalloonRegion(), previewZoomText);
         HBox detailBoxTop = new HBox(sizeText, new BalloonRegion(), zoomText);
         VBox detailBox = new VBox(detailBoxTop, frameIndexText);
-        VBox previewGrid = new VBox(previewTitleBox, previewContainer, detailBox);
+        VBox previewGrid = new VBox(previewTitleBox, new StackPane(previewBackground, previewContainer), detailBox);
         VBox.setVgrow(previewGrid, Priority.ALWAYS);
 
         previewContainer.setOnScroll(e -> {
@@ -265,6 +268,12 @@ public class ToolView extends VBox {
             preview.setGraphic(new ScalableImageView(image, zoom));
             preview.setTranslateX(0);
             preview.setTranslateY(0);
+
+            ImageBackground background = IWC.get().getEditor().getImageBackground();
+            previewBackground.setColor(background.getColor());
+            previewBackground.setBorderColor(background.getBorderColor());
+            previewBackground.setType(background.getType());
+
             updatePreviewZoom();
         }
     }
@@ -275,6 +284,7 @@ public class ToolView extends VBox {
         double scale = Math.max(1, graphic.getScaleX());
         previewStack.setPrefWidth(scale * graphic.getWidth());
         previewStack.setPrefHeight(scale * graphic.getHeight());
+        previewContainer.setPrefHeight(previewStack.getPrefHeight() + (previewStack.getPrefWidth() > previewContainer.getWidth() ? 8 : 0));
         previewZoomText.setText(Math.round(graphic.getZoom() * 100) + " %");
     }
 
@@ -292,6 +302,10 @@ public class ToolView extends VBox {
         } else {
             preview.setTranslateY(0);
         }
+    }
+
+    public ImageBackground getPreviewBackground() {
+        return previewBackground;
     }
 
     public void setSize(int width, int height) {

@@ -220,7 +220,9 @@ public class ImageEditor extends Editor {
     }
 
     public void setShowBackground(boolean showBackground) {
-        background.setType(showBackground ? ImageBackground.FillType.CHECKERS : ImageBackground.FillType.SINGLE_COLOR);
+        ImageBackground.FillType type = showBackground ? ImageBackground.FillType.CHECKERS : ImageBackground.FillType.SINGLE_COLOR;
+        background.setType(type);
+        ToolView.get().getPreviewBackground().setType(type);
     }
 
     public ImageBackground getImageBackground() {

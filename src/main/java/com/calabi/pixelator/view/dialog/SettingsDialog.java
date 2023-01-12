@@ -11,6 +11,7 @@ import com.calabi.pixelator.config.Theme;
 import com.calabi.pixelator.main.MainScene;
 import com.calabi.pixelator.ui.control.BasicColorField;
 import com.calabi.pixelator.ui.control.BasicComboBox;
+import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.editor.window.ImageWindow;
 
@@ -99,6 +100,10 @@ public class SettingsDialog extends BasicDialog {
 
         // Update application
         MainScene.setTheme(theme);
+
+        ToolView.get().getPreviewBackground().setColor(color);
+        ToolView.get().getPreviewBackground().setBorderColor(borderColor);
+        ToolView.get().getPreviewBackground().refresh();
 
         // Update open windows
         for (ImageWindow imageWindow : IWC.get().imageWindows()) {

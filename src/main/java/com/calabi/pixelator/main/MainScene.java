@@ -176,6 +176,7 @@ public class MainScene extends Scene {
         //TODO: projectMenu.addItem(PROJECT_STRETCH);
         //TODO: projectMenu.addItem(PROJECT_CHANGE_PALETTE);
         //TODO: projectMenu.addItem(PROJECT_OUTLINE);
+        projectMenu.addItem(SETTINGS, e -> showSettings());
 
         BasicMenu fileMenu = new BasicMenu("File");
         fileMenu.addItem(NEW, e -> newImage());
@@ -190,7 +191,6 @@ public class MainScene extends Scene {
                 IWC.get().imageSelectedProperty().and(IWC.get().imageAnimatedProperty()));
         fileMenu.addItem(CLOSE, e -> IWC.get().closeCurrent(), IWC.get().imageSelectedProperty());
         fileMenu.addItem(CLOSE_ALL, e -> IWC.get().closeAll(), IWC.get().imageSelectedProperty());
-        fileMenu.addItem(SETTINGS, e -> showSettings());
 
         BasicMenu editMenu = new BasicMenu("Edit");
         editMenu.addItem(UNDO, e -> IWC.get().undo(), IWC.get().undoEnabledProperty());
