@@ -21,6 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -60,6 +61,7 @@ public class ToolView extends VBox {
     private final Label previewSelection = new Label();
     private final Label sizeText = new Label();
     private final Label zoomText = new Label();
+    private final Label previewZoomText = new Label();
     private final Label frameIndexText = new Label();
 
     private ToolView() {
@@ -90,9 +92,10 @@ public class ToolView extends VBox {
         StackPane previewStack = new StackPane(preview, previewTool, previewSelection);
         previewContainer = new BasicScrollPane(previewStack);
 
+        HBox previewTitleBox = new HBox(new Label("PREVIEW"), new BalloonRegion(), previewZoomText);
         HBox detailBoxTop = new HBox(sizeText, new BalloonRegion(), zoomText);
         VBox detailBox = new VBox(detailBoxTop, frameIndexText);
-        VBox previewGrid = new VBox(new Label("PREVIEW"), previewContainer, detailBox);
+        VBox previewGrid = new VBox(previewTitleBox, previewContainer, detailBox);
         VBox.setVgrow(previewGrid, Priority.ALWAYS);
 
         previewContainer.setOnScroll(e -> {
@@ -100,8 +103,7 @@ public class ToolView extends VBox {
             if (graphic != null) {
                 graphic.scroll(e);
                 Config.PREVIEW_ZOOM_LEVEL.putDouble(IWC.get().getCurrentFile(), graphic.getZoom());
-                previewStack.setPrefWidth(graphic.getScaleX() * graphic.getWidth());
-                previewStack.setPrefHeight(graphic.getScaleY() * graphic.getHeight());
+                updatePreviewZoom();
             }
         });
 
@@ -274,8 +276,17 @@ public class ToolView extends VBox {
             previewSelection.setGraphic(new PixelatedImageView(selectionImage));
             previewSelection.setTranslateX(0);
             previewSelection.setTranslateY(0);
-            preview.requestLayout();
+            updatePreviewZoom();
         }
+    }
+
+    private void updatePreviewZoom() {
+        Region previewStack = (Region) previewContainer.getContent();
+        ScalableImageView graphic = (ScalableImageView) preview.getGraphic();
+        double scale = Math.max(1, graphic.getScaleX());
+        previewStack.setPrefWidth(scale * graphic.getWidth());
+        previewStack.setPrefHeight(scale * graphic.getHeight());
+        previewZoomText.setText(Math.round(graphic.getZoom() * 100) + " %");
     }
 
     public void setPreviewPosition(double x, double y) {

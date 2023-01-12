@@ -68,7 +68,11 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         getEditor().setOnMouseExited(e -> updateMouse(null));
         getClose().setOnAction(e -> closeIfClean());
         getEditor().dirtyProperty().addListener((ov, o, n) -> updateDirtyText());
-        getImageView().scaleXProperty().addListener((ov, o, n) -> ToolView.get().setZoom(n.doubleValue()));
+        getImageView().scaleXProperty().addListener((ov, o, n) -> {
+            if (IWC.get().getCurrentWindow() == this) {
+                ToolView.get().setZoom(n.doubleValue());
+            }
+        });
 
         ImageButton adjustSize = new ImageButton(Images.FULL_SCREEN);
         addButton(adjustSize);
