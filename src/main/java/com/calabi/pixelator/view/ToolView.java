@@ -31,7 +31,6 @@ import com.calabi.pixelator.ui.control.BasicCheckBox;
 import com.calabi.pixelator.ui.control.BasicIntegerField;
 import com.calabi.pixelator.ui.control.ToggleImageButton;
 import com.calabi.pixelator.ui.control.UndeselectableToggleGroup;
-import com.calabi.pixelator.ui.image.PixelatedImageView;
 import com.calabi.pixelator.ui.image.ScalableImageView;
 import com.calabi.pixelator.ui.parent.BasicScrollPane;
 import com.calabi.pixelator.ui.region.BalloonRegion;
@@ -57,8 +56,6 @@ public class ToolView extends VBox {
     private final BooleanProperty allFrames = new SimpleBooleanProperty();
     private final BasicScrollPane previewContainer;
     private final Label preview = new Label();
-    private final Label previewTool = new Label();
-    private final Label previewSelection = new Label();
     private final Label sizeText = new Label();
     private final Label zoomText = new Label();
     private final Label previewZoomText = new Label();
@@ -89,7 +86,7 @@ public class ToolView extends VBox {
 
         getChildren().add(6, new Separator());
 
-        StackPane previewStack = new StackPane(preview, previewTool, previewSelection);
+        StackPane previewStack = new StackPane(preview);
         previewContainer = new BasicScrollPane(previewStack);
 
         HBox previewTitleBox = new HBox(new Label("PREVIEW"), new BalloonRegion(), previewZoomText);
@@ -261,21 +258,13 @@ public class ToolView extends VBox {
         allFrames.set(Config.ALL_FRAMES.getBoolean());
     }
 
-    public void setPreview(Image image, Image toolImage, Image selectionImage, double zoom) {
+    public void setPreview(Image image, double zoom) {
         if (image == null) {
             preview.setGraphic(null);
-            previewTool.setGraphic(null);
-            previewSelection.setGraphic(null);
         } else {
             preview.setGraphic(new ScalableImageView(image, zoom));
             preview.setTranslateX(0);
             preview.setTranslateY(0);
-            previewTool.setGraphic(new PixelatedImageView(toolImage));
-            previewTool.setTranslateX(0);
-            previewTool.setTranslateY(0);
-            previewSelection.setGraphic(new PixelatedImageView(selectionImage));
-            previewSelection.setTranslateX(0);
-            previewSelection.setTranslateY(0);
             updatePreviewZoom();
         }
     }
@@ -291,27 +280,17 @@ public class ToolView extends VBox {
 
     public void setPreviewPosition(double x, double y) {
         if (preview.getWidth() > previewContainer.getWidth()) {
-            double xTranslate =
-                    -Math.min(Math.max(0, x - previewContainer.getWidth() / 2), preview.getWidth() - previewContainer.getWidth());
+            double xTranslate = -Math.min(Math.max(0, x - previewContainer.getWidth() / 2), preview.getWidth() - previewContainer.getWidth());
             preview.setTranslateX(Math.round(xTranslate));
-            previewTool.setTranslateX(Math.round(xTranslate));
-            previewSelection.setTranslateX(Math.round(xTranslate));
         } else {
             preview.setTranslateX(0);
-            previewTool.setTranslateX(0);
-            previewSelection.setTranslateX(0);
         }
 
         if (preview.getHeight() > previewContainer.getHeight()) {
-            double yTranslate =
-                    -Math.min(Math.max(0, y - previewContainer.getHeight() / 2), preview.getHeight() - previewContainer.getHeight());
+            double yTranslate = -Math.min(Math.max(0, y - previewContainer.getHeight() / 2), preview.getHeight() - previewContainer.getHeight());
             preview.setTranslateY(Math.round(yTranslate));
-            previewTool.setTranslateY(Math.round(yTranslate));
-            previewSelection.setTranslateY(Math.round(yTranslate));
         } else {
             preview.setTranslateY(0);
-            previewTool.setTranslateY(0);
-            previewSelection.setTranslateY(0);
         }
     }
 

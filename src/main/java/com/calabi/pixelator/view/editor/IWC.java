@@ -66,7 +66,7 @@ public class IWC extends Pane {
                 showBackground.unbind();
                 showBackground.set(false);
                 updateImage(o.getImage(), null);
-                ToolView.get().setPreview(null, null, null, 1.0);
+                ToolView.get().setPreview(null, 1.0);
                 InfoView.setMousePosition(null);
                 InfoView.setColorCount(null);
             } else {
@@ -167,11 +167,7 @@ public class IWC extends Pane {
     private void updateImage(WritableImage oldImage, ImageWindow window) {
         if (window != null) {
             if (window.getFile().getCategory() != Category.PALETTE) {
-                ToolView.get().setPreview(
-                        window.getImage(),
-                        window.getEditor().getToolImage(),
-                        window.getEditor().getSelectionImage(),
-                        Config.PREVIEW_ZOOM_LEVEL.getDouble(window.getFile(), 1.0)
+                ToolView.get().setPreview(window.getImage(), Config.PREVIEW_ZOOM_LEVEL.getDouble(window.getFile(), 1.0)
                 );
                 ToolView.get().setSize(window.getEditor().getImageWidth(), window.getEditor().getImageHeight());
                 ToolView.get().setZoom(window.getImageView().scaleXProperty().doubleValue());
