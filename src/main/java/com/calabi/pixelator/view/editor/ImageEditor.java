@@ -115,6 +115,7 @@ public class ImageEditor extends Editor {
         GridSelectionConfig gridSelectionConfig = Config.GRID_SELECTION.getObject(file);
         Color gridColor = Color.valueOf(Config.GRID_COLOR.getString());
         grid = new Grid(width.get(), height.get(), gridColor);
+        grid.setVisible(gridSelectionConfig.isSelected());
         setGridInterval(gridSelectionConfig.getXInterval(), gridSelectionConfig.getYInterval(),
                 gridSelectionConfig.getXOffset(), gridSelectionConfig.getYOffset());
         grid.prefWidthProperty().bind(imageView.scaleXProperty().multiply(width));

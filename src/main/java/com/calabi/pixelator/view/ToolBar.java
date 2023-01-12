@@ -64,19 +64,19 @@ public class ToolBar extends BasicToolBar {
         ImageEditor editor = IWC.get().getEditor();
         if (editor != null) {
             GridSelectionConfig config = Config.GRID_SELECTION.getObject(editor.getPixelFile());
+            config.setSelected(IWC.get().showGridProperty().get());
             for (MenuItem item : gridToggle.getContextMenu().getItems()) {
                 if (item instanceof GridConfig.GridMenuItem gridMenuItem) {
                     if (config.getXInterval() == gridMenuItem.getXInterval()
                             && config.getYInterval() == gridMenuItem.getYInterval()
                             && config.getXOffset() == gridMenuItem.getXOffset()
                             && config.getYOffset() == gridMenuItem.getYOffset()) {
-                        gridMenuItem.setSelected(IWC.get().showGridProperty().get());
+                        gridMenuItem.setSelected(config.isSelected());
                     } else {
                         gridMenuItem.setSelected(false);
                     }
                 }
             }
-            config.setSelected(IWC.get().showGridProperty().get());
             Config.GRID_SELECTION.putObject(editor.getPixelFile(), config);
         }
     }
