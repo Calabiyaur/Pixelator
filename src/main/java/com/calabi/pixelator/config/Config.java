@@ -62,6 +62,7 @@ public enum Config {
     IMAGE_X(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_Y(ConfigMode.IMAGE, ConfigType.DOUBLE),
     IMAGE_ZOOM_LEVEL(ConfigMode.IMAGE, ConfigType.DOUBLE),
+    PALETTE_ZOOM_LEVEL(ConfigMode.IMAGE, ConfigType.DOUBLE, 10.0),
     PREVIEW_ZOOM_LEVEL(ConfigMode.IMAGE, ConfigType.DOUBLE);
 
     private final ConfigMode mode;
@@ -232,6 +233,10 @@ public enum Config {
     }
 
     public double getDouble(PixelFile file, double def) {
+        return (double) getImageConfig(file, ConfigType.DOUBLE, def);
+    }
+
+    public double getDouble(PixelFile file) {
         return (double) getImageConfig(file, ConfigType.DOUBLE, def);
     }
 

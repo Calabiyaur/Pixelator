@@ -30,7 +30,6 @@ import com.calabi.pixelator.view.ToolView;
 import com.calabi.pixelator.view.dialog.SaveRequestDialog;
 import com.calabi.pixelator.view.editor.IWC;
 import com.calabi.pixelator.view.editor.ImageEditor;
-import com.calabi.pixelator.view.palette.PaletteEditor;
 
 public class ImageWindow extends BasicWindow { //TODO: Extract models for image / palette / animation window
 
@@ -54,8 +53,8 @@ public class ImageWindow extends BasicWindow { //TODO: Extract models for image 
         if (imageFile.getCategory() == Category.PALETTE) {
             imageView.setZoomMinimum(4);
             imageView.setZoomMaximum(48);
-            imageView.setScaleX(PaletteEditor.ZOOM_FACTOR);
-            imageView.setScaleY(PaletteEditor.ZOOM_FACTOR);
+            imageView.setScaleX(Config.PALETTE_ZOOM_LEVEL.getDouble(imageFile));
+            imageView.setScaleY(Config.PALETTE_ZOOM_LEVEL.getDouble(imageFile));
         }
 
         setContent(imageEditor);

@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
+import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.ui.image.ScalableImageView;
 import com.calabi.pixelator.ui.image.WritableImage;
@@ -24,8 +25,6 @@ public class PaletteEditor extends Editor {
 
     public static int DEFAULT_WIDTH = 8;
     public static int DEFAULT_HEIGHT = 5;
-
-    public static int ZOOM_FACTOR = 10;
 
     private final ObjectProperty<Color> selectedColor = new SimpleObjectProperty<>();
 
@@ -43,8 +42,8 @@ public class PaletteEditor extends Editor {
 
         undirty();
 
-        imageView.setScaleX(ZOOM_FACTOR);
-        imageView.setScaleY(ZOOM_FACTOR);
+        imageView.setScaleX(Config.PALETTE_ZOOM_LEVEL.getDouble(file));
+        imageView.setScaleY(Config.PALETTE_ZOOM_LEVEL.getDouble(file));
 
         ChangeListener<Image> imageChangeListener = (ov, o, n) -> {
             imageView.translateXProperty().bind(n.widthProperty()

@@ -10,6 +10,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +20,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import com.calabi.pixelator.config.Action;
+import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.file.Files;
 import com.calabi.pixelator.file.ImageFile;
@@ -68,6 +70,16 @@ public class PaletteSelection extends BorderPane {
         palettePane.visibleProperty().bind(paletteSelectedProperty());
 
         model.editorProperty().addListener((ov, o, n) -> defaultPaletteSelected.set(n != null && n == getDefaultEditor()));
+    }
+
+    public void saveConfig() {
+        for (Node child : model.getTabButtons().getChildren()) {
+            if (child instanceof PaletteToggleButton button && button.getEditor() != model.getDefaultEditor()) {
+                PaletteEditor editor = button.getEditor();
+                Config.PALETTE_ZOOM_LEVEL.putDouble(editor.getFile(), editor.getImageView().getScaleX());
+                Files.get().saveConfig(editor.getFile());
+            }
+        }
     }
 
     public void createPalette() {

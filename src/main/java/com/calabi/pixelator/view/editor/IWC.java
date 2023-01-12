@@ -18,6 +18,7 @@ import com.calabi.pixelator.file.PixelFile;
 import com.calabi.pixelator.ui.image.ScalableImageView;
 import com.calabi.pixelator.ui.image.WritableImage;
 import com.calabi.pixelator.util.meta.CompoundBooleanProperty;
+import com.calabi.pixelator.view.ColorView;
 import com.calabi.pixelator.view.InfoView;
 import com.calabi.pixelator.view.ToolBar;
 import com.calabi.pixelator.view.ToolView;
@@ -207,6 +208,8 @@ public class IWC extends Pane {
 
     public boolean cleanAll(boolean close) {
         boolean dirty = false;
+
+        ColorView.getPaletteSelection().saveConfig();
 
         List<ImageWindow> children = imageWindows();
 
