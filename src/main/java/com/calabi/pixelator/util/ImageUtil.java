@@ -29,7 +29,7 @@ public class ImageUtil {
             x2 = Math.max(pixel.getX(), x2);
             y2 = Math.max(pixel.getY(), y2);
         }
-        if (x1 >= x2 || y1 >= y2) {
+        if (x1 > x2 || y1 > y2) {
             throw new IllegalStateException("Failed converting pixels to Image");
         }
         WritableImage image = new WritableImage(x2 - x1 + 1, y2 - y1 + 1);
