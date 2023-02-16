@@ -37,8 +37,6 @@ import com.calabi.pixelator.ui.parent.BasicScrollPane;
 import com.calabi.pixelator.ui.region.BalloonRegion;
 import com.calabi.pixelator.util.Do;
 import com.calabi.pixelator.view.editor.IWC;
-import com.calabi.pixelator.view.tool.Select;
-import com.calabi.pixelator.view.tool.Tool;
 import com.calabi.pixelator.view.tool.Tools;
 
 public class ToolView extends VBox {
@@ -109,8 +107,6 @@ public class ToolView extends VBox {
 
         previewGrid.visibleProperty().bind(preview.graphicProperty().isNotNull());
         getChildren().add(7, previewGrid);
-
-        //getChildren().add(8, createTextView());
 
         initConfig();
     }
@@ -224,22 +220,6 @@ public class ToolView extends VBox {
         return prefBox;
     }
 
-    private Pane createTextView() {
-        GridPane grid = new GridPane();
-        grid.setVgap(6);
-        grid.setHgap(6);
-
-        Label actingText = new Label();
-        Tool.actingToolProperty().addListener((ov, o, n) -> actingText.setText(n.toString()));
-        grid.addRow(0, new Label("actingTool ="), actingText);
-
-        Label selectText = new Label();
-        Select.getMe().typeProperty().addListener((ov, o, n) -> selectText.setText(n.name()));
-        grid.addRow(1, new Label("select.type ="), selectText);
-
-        return grid;
-    }
-
     private void initConfig() {
         currentTool.addListener((ov, o, n) -> Config.TOOL.putInt(tools.indexOf(n)));
         replaceColor.addListener((ov, o, n) -> Config.REPLACE.putBoolean(n));
@@ -281,26 +261,26 @@ public class ToolView extends VBox {
     private void updatePreviewZoom() {
         Region previewStack = (Region) previewContainer.getContent();
         ScalableImageView graphic = (ScalableImageView) preview.getGraphic();
-        double scale = Math.max(1, graphic.getScaleX());
-        previewStack.setPrefWidth(scale * graphic.getWidth());
-        previewStack.setPrefHeight(scale * graphic.getHeight());
+        previewStack.setPrefWidth(Math.max(100, graphic.getScaleX() * graphic.getWidth()));
+        previewStack.setPrefHeight(Math.max(100, graphic.getScaleY() * graphic.getHeight()));
         previewContainer.setPrefHeight(previewStack.getPrefHeight() + (previewStack.getPrefWidth() > previewContainer.getWidth() ? 8 : 0));
         previewZoomText.setText(Math.round(graphic.getZoom() * 100) + " %");
+
+        previewStack.setMinHeight(previewStack.getPrefHeight());
+        previewStack.setMinWidth(previewStack.getPrefWidth());
     }
 
     public void setPreviewPosition(double x, double y) {
-        if (preview.getWidth() > previewContainer.getWidth()) {
-            double xTranslate = -Math.min(Math.max(0, x - previewContainer.getWidth() / 2), preview.getWidth() - previewContainer.getWidth());
-            preview.setTranslateX(Math.round(xTranslate));
-        } else {
-            preview.setTranslateX(0);
+        ScalableImageView graphic = (ScalableImageView) preview.getGraphic();
+
+        if (preview.getWidth() * graphic.getScaleX() > previewContainer.getWidth()) {
+            double hValue = (x * graphic.getScaleX() - previewContainer.getWidth() / 2) / (preview.getWidth() * graphic.getScaleX() - previewContainer.getWidth());
+            previewContainer.setHvalue(hValue);
         }
 
-        if (preview.getHeight() > previewContainer.getHeight()) {
-            double yTranslate = -Math.min(Math.max(0, y - previewContainer.getHeight() / 2), preview.getHeight() - previewContainer.getHeight());
-            preview.setTranslateY(Math.round(yTranslate));
-        } else {
-            preview.setTranslateY(0);
+        if (preview.getHeight() * graphic.getScaleY() > previewContainer.getHeight()) {
+            double vValue = (y * graphic.getScaleY() - previewContainer.getHeight() / 2) / (preview.getHeight() * graphic.getScaleY() - previewContainer.getHeight());
+            previewContainer.setVvalue(vValue);
         }
     }
 
