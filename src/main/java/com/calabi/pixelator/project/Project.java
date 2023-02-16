@@ -126,6 +126,15 @@ public final class Project {
             Config.PALETTE_DIRECTORY.putString(location.getAbsolutePath());
         }
 
+        open();
+
+        RecentProjectsConfig recentProjects = Config.RECENT_PROJECTS.getObject();
+        recentProjects.getFiles().remove(location);
+        recentProjects.getFiles().add(0, location);
+        Config.RECENT_PROJECTS.putObject(recentProjects);
+    }
+
+    public void open() {
         openedImages = Config.OPENED_IMAGES.getObject();
         for (PixelFile file : openedImages.getFiles()) {
             IWC.get().addImage(file);
@@ -135,11 +144,6 @@ public final class Project {
         for (PaletteFile file : openedPalettes.getFiles()) {
             ColorView.getPaletteSelection().addPalette(file);
         }
-
-        RecentProjectsConfig recentProjects = Config.RECENT_PROJECTS.getObject();
-        recentProjects.getFiles().remove(location);
-        recentProjects.getFiles().add(0, location);
-        Config.RECENT_PROJECTS.putObject(recentProjects);
     }
 
     private Properties loadConfig() {

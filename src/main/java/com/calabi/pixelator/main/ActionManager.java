@@ -32,6 +32,7 @@ public class ActionManager {
             MenuItem control = controlMap.get(action);
             if (control == null || control.getAccelerator() == null || forceFire || action.isSecondary(event.getCode())) {
                 fire(action);
+                event.consume();
             }
         }
     }

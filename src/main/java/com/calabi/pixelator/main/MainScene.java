@@ -265,7 +265,10 @@ public class MainScene extends Scene {
         ActionManager.registerAction(ESCAPE, e -> IWC.get().escape());
         ActionManager.registerAction(FIT_WINDOW, e -> IWC.get().fitWindow());
         ActionManager.registerAction(RANDOM_COLOR, e -> ColorView.setColor(ColorUtil.getRandomPleasant()));
-        //ActionManager.registerAction(RIGHT, e -> ...); //TODO: move mouse
+        ActionManager.registerAction(RIGHT, e -> move(1, 0));
+        ActionManager.registerAction(UP, e -> move(0, -1));
+        ActionManager.registerAction(LEFT, e -> move(-1, 0));
+        ActionManager.registerAction(DOWN, e -> move(0, 1));
         ActionManager.registerAction(SWITCH_TAB, e -> IWC.get().selectNextWindow());
         ActionManager.registerAction(SWITCH_TAB_BACK, e -> IWC.get().selectPreviousWindow());
     }
@@ -328,12 +331,15 @@ public class MainScene extends Scene {
     }
 
     private void move(int right, int down) {
-        if (getEditor() != null && getEditor().selectionActiveProperty().get()) {
+        if (getEditor() != null && !getEditor().getSelectionLayer().isEmpty()) {
             getEditor().moveSelection(right, down);
         } else {
             try {
                 Point location = MouseInfo.getPointerInfo().getLocation();
-                new Robot().mouseMove((int) location.getX() + right, (int) location.getY() + down);
+                int scale = Math.max(1, (int) getEditor().getImageView().getScaleX());
+                int x = (int) location.getX() + right * scale;
+                int y = (int) location.getY() + down * scale;
+                new Robot().mouseMove(x, y);
             } catch (AWTException e) {
                 ExceptionHandler.handle(e);
             }

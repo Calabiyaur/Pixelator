@@ -72,6 +72,9 @@ public class Pixelator extends Application {
         updateTitle();
         primaryStage.setOnCloseRequest(e -> onCloseRequest(primaryStage, scene, e));
 
+        if (Project.active()) {
+            Project.get().open();
+        }
         scene.openFiles(getParameters().getRaw());
 
         primaryStage.show();
