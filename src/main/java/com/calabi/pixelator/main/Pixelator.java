@@ -1,5 +1,6 @@
 package com.calabi.pixelator.main;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.calabi.pixelator.config.BuildInfo;
 import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.config.Images;
 import com.calabi.pixelator.log.Logger;
+import com.calabi.pixelator.project.Project;
 
 public class Pixelator extends Application {
 
@@ -24,6 +26,10 @@ public class Pixelator extends Application {
     static Stage primaryStage;
     static List<Stage> stages = new ArrayList<>();
     static BooleanProperty clipboardActive = new SimpleBooleanProperty();
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     public static Stage getPrimaryStage() {
         return primaryStage;
@@ -37,19 +43,23 @@ public class Pixelator extends Application {
         return clipboardActive;
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public static void updateTitle() {
+        primaryStage.setTitle(TITLE + " " + BuildInfo.getVersion()
+                + (Project.active() ? " - " + Project.get().getName() : ""));
     }
 
     @Override
     public void start(Stage primaryStage) {
-
-        String title = TITLE + " " + BuildInfo.getVersion();
-        Logger.log("Started " + title);
+        Logger.log("Started " + TITLE + " " + BuildInfo.getVersion());
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> ExceptionHandler.handle(e));
         initClipboardListener();
 
         Pixelator.primaryStage = primaryStage;
+        File projectFile = new File(Config.PROJECT.getString());
+        if (projectFile.exists()) {
+            Project.setSilently(new Project(projectFile));
+        }
+
         MainScene scene = new MainScene();
         primaryStage.getIcons().add(Images.ICON.getImage());
         primaryStage.setMaximized(Config.FULLSCREEN.getBoolean());
@@ -59,7 +69,7 @@ public class Pixelator extends Application {
         primaryStage.setMinHeight(530);
 
         primaryStage.setScene(scene);
-        primaryStage.setTitle(title);
+        updateTitle();
         primaryStage.setOnCloseRequest(e -> onCloseRequest(primaryStage, scene, e));
 
         scene.openFiles(getParameters().getRaw());

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -128,8 +127,6 @@ public class MainScene extends Scene {
                 getEditor().onKeyReleased(e);
             }
         });
-
-        Platform.runLater(this::openRecentProject);
     }
 
     public static void setTheme(Theme theme) {

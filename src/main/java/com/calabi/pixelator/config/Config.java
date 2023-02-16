@@ -16,6 +16,7 @@ public enum Config {
 
     // Global config
     FULLSCREEN(ConfigMode.GLOBAL, ConfigType.BOOLEAN, false),
+    PROJECT(ConfigMode.GLOBAL, ConfigType.STRING, ""),
     PALETTE_MAX_COLORS(ConfigMode.GLOBAL, ConfigType.INT, 128),
     PROJECT_DIRECTORY(ConfigMode.GLOBAL, ConfigType.STRING, ""),
     RECENT_PROJECTS(ConfigMode.GLOBAL, ConfigType.OBJECT, RecentProjectsConfig.class, new RecentProjectsConfig()),

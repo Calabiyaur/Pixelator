@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
-import com.calabi.pixelator.config.BuildInfo;
 import com.calabi.pixelator.config.Config;
 import com.calabi.pixelator.file.PaletteFile;
 import com.calabi.pixelator.file.PixelFile;
@@ -49,15 +48,11 @@ public final class Project {
         INSTANCE = project;
 
         if (project != null) {
-
             project.load();
             project.saveConfig();
-
-            Pixelator.getPrimaryStage().setTitle(Pixelator.TITLE + " " + BuildInfo.getVersion() + " - " + project.getName());
-
-        } else {
-            Pixelator.getPrimaryStage().setTitle(Pixelator.TITLE + " " + BuildInfo.getVersion());
         }
+
+        Pixelator.updateTitle();
     }
 
     public static boolean active() {
