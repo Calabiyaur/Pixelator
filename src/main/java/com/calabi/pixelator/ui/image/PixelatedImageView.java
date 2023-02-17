@@ -78,7 +78,7 @@ public class PixelatedImageView extends ImageView { //FIXME: Horizontally, pixel
 
             @Override
             public boolean doComputeContains(Node node, double localX, double localY) {
-                return (boolean) ReflectionUtil.invokeMethod(node, "doComputeContains", localX, localY);
+                return ReflectionUtil.invokeMethod(node, "doComputeContains", localX, localY);
             }
         });
     }

@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
+import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -101,12 +102,11 @@ public abstract class BasicNumberField<T extends Number> extends BasicControl<T>
     }
 
     private InputMap.KeyMapping keyMapping(KeyBinding keyBinding, final EventHandler<KeyEvent> eventHandler) {
-        TextFieldBehavior behavior = ReflectionUtil.getField(textField.getSkin(), "behavior");
         return new InputMap.KeyMapping(keyBinding,
                 e -> {
-                    ReflectionUtil.invokeMethod(behavior, "setCaretAnimating", false);
+                    ((TextInputControlSkin<?>) textField.getSkin()).setCaretAnimating(false);
                     eventHandler.handle(e);
-                    ReflectionUtil.invokeMethod(behavior, "setCaretAnimating", true);
+                    ((TextInputControlSkin<?>) textField.getSkin()).setCaretAnimating(true);
                 });
     }
 
