@@ -112,18 +112,21 @@ public class SelectionLayer extends EditorLayer {
         outlineShape.define(points);
     }
 
-    public void defineImage(Image image, boolean pasted) {
+    public void pasteImage(Image image, Point position) {
         clear();
         PointArray points = new PointArray();
 
         PixelReader reader = image.getPixelReader();
-        int xMin = Integer.MAX_VALUE, yMin = Integer.MAX_VALUE, xMax = 0, yMax = 0;
-        for (int i = 0; i < image.getWidth(); i++) {
-            for (int j = 0; j < image.getHeight(); j++) {
+        int xMin = Integer.MAX_VALUE;
+        int yMin = Integer.MAX_VALUE;
+        int xMax = 0;
+        int yMax = 0;
+        for (int i = position.getX(); i < Math.min(getImageWidth(), position.getX() + image.getWidth()); i++) {
+            for (int j = position.getY(); j < Math.min(getImageHeight(), position.getY() + image.getHeight()); j++) {
                 if (ImageUtil.outOfBounds(getImage(), i, j)) {
                     continue;
                 }
-                Color color = reader.getColor(i, j);
+                Color color = reader.getColor(i - position.getX(), j - position.getY());
                 getWriter().setColor(i, j, color);
                 getPixels().add(i, j, Color.TRANSPARENT, color);
                 if (!Color.TRANSPARENT.equals(color)) {
@@ -136,7 +139,7 @@ public class SelectionLayer extends EditorLayer {
             }
         }
         active.set(true);
-        this.pasted = pasted;
+        pasted = true;
         outlineShape.define(points);
         InfoView.setSelectionSize(new Point(xMin, yMin), new Point(xMax, yMax));
     }

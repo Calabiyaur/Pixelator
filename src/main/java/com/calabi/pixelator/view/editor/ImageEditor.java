@@ -845,7 +845,11 @@ public class ImageEditor extends Editor {
         if (clipboard.hasImage()) {
             Image image = clipboard.getImage();
             lockSelection();
-            selectionLayer.defineImage(image, true);
+
+            int x = (int) Math.ceil(-getParent().getLayoutX() / getImageView().getScaleX());
+            int y = (int) Math.ceil(-getParent().getLayoutY() / getImageView().getScaleY());
+
+            selectionLayer.pasteImage(image, new Point(x, y));
         }
     }
 
